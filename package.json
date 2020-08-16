@@ -1,0 +1,109 @@
+{
+  "name": "app-name",
+  "productName": "App Name",
+  "version": "0.0.0",
+  "description": "The best app ever",
+  "license": "MIT",
+  "repository": "sindresorhus/electron-boilerplate",
+  "author": {
+    "name": "Your Name",
+    "email": "user@gmail.com",
+    "url": "https://sindresorhus.com"
+  },
+  "scripts": {
+    "dev": "poi -s",
+    "start": "electron .",
+    "postinstall": "electron-builder install-app-deps",
+    "lint": "xo",
+    "test": "npm run lint",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --macos --linux --windows",
+    "release": "np"
+  },
+  "dependencies": {
+    "@rematch/core": "^2.0.0-next.1",
+    "ahooks": "^2.5.0",
+    "antd": "^4.5.4",
+    "electron-context-menu": "^0.15.0",
+    "electron-debug": "^3.0.0",
+    "electron-store": "^5.1.0",
+    "electron-unhandled": "^3.0.0",
+    "electron-updater": "^4.0.6",
+    "electron-util": "^0.13.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5",
+    "umi-request": "^1.3.5"
+  },
+  "devDependencies": {
+    "@magicdawn/eslint-config": "latest",
+    "@magicdawn/prettier-config": "latest",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.1",
+    "@rematch/immer": "^2.0.0-next.1",
+    "electron": "^7.1.1",
+    "electron-builder": "^21.2.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.20.6",
+    "husky": "latest",
+    "less": "^3.12.2",
+    "less-loader": "^6.2.0",
+    "lint-staged": "latest",
+    "np": "^5.0.3",
+    "poi": "^12.9.0",
+    "prettier": "latest",
+    "react-refresh": "^0.8.3",
+    "xo": "^0.25.3"
+  },
+  "xo": {
+    "envs": [
+      "node",
+      "browser"
+    ]
+  },
+  "np": {
+    "publish": false,
+    "releaseDraft": false
+  },
+  "build": {
+    "appId": "com.company.AppName",
+    "mac": {
+      "category": "public.app-category.social-networking",
+      "darkModeSupport": true
+    },
+    "dmg": {
+      "iconSize": 160,
+      "contents": [
+        {
+          "x": 180,
+          "y": 170
+        },
+        {
+          "x": 480,
+          "y": 170,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Network;Chat"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,less,vue}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
