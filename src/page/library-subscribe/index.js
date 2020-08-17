@@ -1,48 +1,179 @@
-import React, {useState, useCallback} from 'react'
-import {Button, DatePicker, version, Layout, Menu} from 'antd'
+import React, {useState, useCallback, useEffect} from 'react'
+import {Button, DatePicker, version, Layout, Menu, Modal, Input, message} from 'antd'
 import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons'
+import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
 import styles from './index.module.less'
+import storage from '../../storage/index'
+import plug from '../../util/plug'
+import {compose} from 'recompose'
 
 const {Header, Footer, Sider, Content} = Layout
 const {SubMenu} = Menu
-
 import {List, Typography, Divider, Space} from 'antd'
 
-const data = [
-  'Racing car sprays burning fuel into crowd.',
-  'Japanese princess to wed commoner.',
-  'Australian walks 100km after outback crash.',
-  'Man charged over missing wedding girl.',
-  'Los Angeles battles huge wildfires.',
-]
+export default compose(
+  plug({
+    namespace: 'librarySubscribe',
+    state: ['list'],
+  })
+)(LibrarySubscribe)
 
-export default function LibrarySubscribe() {
+function LibrarySubscribe({effects, state}) {
+  useMount(() => {
+    effects.init()
+  })
+
+  const [showModal, setShowModal] = useState(false)
+  const [editItem, setEditItem] = useState(null)
+  const [editItemIndex, setEditItemIndex] = useState(null)
+
+  const add = useCallback(() => {
+    setEditItem(null)
+    setEditItemIndex(null)
+    setShowModal(true)
+  }, [])
+
+  const edit = usePersistFn((item, index) => {
+    setEditItem(item)
+    setEditItemIndex(index)
+    setShowModal(true)
+  })
+
+  const update = usePersistFn((item, index) => {})
+
+  const del = usePersistFn((item, index) => {
+    Modal.confirm({
+      title: 'Do you Want to delete these items?',
+      content: 'Some descriptions',
+      onOk() {
+        effects.del(index)
+      },
+      onCancel() {
+        console.log('Cancel')
+      },
+    })
+  })
+
   return (
     <div className={styles.page}>
       <h1>订阅管理</h1>
 
+      <ModalAdd
+        {...{visible: showModal, setVisible: setShowModal, editItem, editItemIndex}}
+      ></ModalAdd>
+
       <List
         size='large'
         header={
-          <div>
+          <div className='header'>
             <h4>订阅管理</h4>
+            <Button type='primary' onClick={add}>
+              +
+            </Button>
           </div>
         }
-        footer={<div>Footer</div>}
         bordered
-        dataSource={data}
-        renderItem={(item) => (
-          <List.Item style={{display: 'flex'}}>
-            {item}
-            {/* <br /> */}
-            <Space style={{alignSelf: 'flex-end'}}>
-              <Button type='primary'>编辑</Button>
-              <Button type='primary'>更新</Button>
-              <Button type='danger'>删除</Button>
-            </Space>
-          </List.Item>
-        )}
+        dataSource={state.list}
+        renderItem={(item, index) => {
+          const {url, name} = item
+          return (
+            <List.Item style={{display: 'flex'}}>
+              <div className='list-item'>
+                <div className='name'>{name}</div>
+                <div className='url'>{url}</div>
+              </div>
+
+              <Space style={{alignSelf: 'flex-end'}}>
+                <Button type='primary' onClick={() => edit(item, index)}>
+                  编辑
+                </Button>
+                <Button type='primary' onClick={() => update(item, index)}>
+                  更新
+                </Button>
+                <Button type='danger' onClick={() => del(item, index)}>
+                  删除
+                </Button>
+              </Space>
+            </List.Item>
+          )
+        }}
       />
     </div>
   )
 }
+
+const ModalAdd = plug({
+  namespace: 'librarySubscribe',
+  state: ['list'],
+})(function ModalAdd({effects, visible, setVisible, editItem, editItemIndex}) {
+  const [url, setUrl] = useState(editItem?.url || '')
+  const [name, setName] = useState(editItem?.name || '')
+
+  const onUrlChange = useCallback((e) => {
+    setUrl(e.target.value)
+  }, [])
+  const onNameChange = useCallback((e) => {
+    setName(e.target.value)
+  }, [])
+
+  useUpdateEffect(() => {
+    setUrl(editItem?.url || '')
+    setName(editItem?.name || '')
+  }, [editItem, visible])
+
+  const clean = () => {
+    setUrl('')
+    setName('')
+  }
+
+  const handleCancel = useCallback(() => {
+    setVisible(false)
+    clean()
+  }, [])
+
+  const handleOk = usePersistFn(() => {
+    if (!url || !name) {
+      return message.warn('url & name 不能为空')
+    }
+
+    const err = effects.check({url, name, editItemIndex})
+    if (err) {
+      return message.error(err)
+    }
+
+    const mode = editItem ? 'edit' : 'add'
+    if (mode === 'add') {
+      effects.add({url, name})
+    } else {
+      effects.edit({url, name, editItemIndex})
+    }
+
+    setVisible(false)
+    clean()
+  })
+
+  return (
+    <Modal
+      className={styles.modal}
+      title='添加'
+      visible={visible}
+      onOk={handleOk}
+      onCancel={handleCancel}
+    >
+      <Input
+        className='input-row'
+        prefix={<label className='label'>name</label>}
+        value={name}
+        onChange={onNameChange}
+        onPressEnter={handleOk}
+      />
+      <Input
+        className='input-row'
+        prefix={<label className='label'>URL</label>}
+        value={url}
+        onChange={onUrlChange}
+        onPressEnter={handleOk}
+      />
+    </Modal>
+  )
+})
