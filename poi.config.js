@@ -7,15 +7,17 @@ module.exports = {
     port: 7749,
   },
 
+  babel: {
+    transpileModules: ['@x'],
+  },
+
   output: {
     target: 'electron-renderer',
   },
 
-  configureWebpack(config) {
-    if (process.env.NODE_ENV === 'development') {
-      config.plugins.push(new ReactRefreshWebpackPlugin())
-    }
+  reactRefresh: true,
 
-    return config
-  },
+  // configureWebpack(config) {
+  //   return config
+  // },
 }

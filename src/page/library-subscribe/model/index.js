@@ -1,8 +1,10 @@
 import _ from 'lodash'
 import storage from '../../../storage/index'
+import {subscribeToClash} from '../../../util/fn/clash'
 
-const STORAGE_KEY = 'subscribe_list'
 const nsp = 'librarySubscribe'
+const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
+const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
 
 export default {
   name: nsp,
@@ -12,32 +14,26 @@ export default {
     list: [],
   },
 
-  reducers: {
-    set(state, payload) {
-      Object.assign(state, payload)
-    },
-  },
-
   effects: (dispatch) => {
     return {
       load() {
-        const list = storage.get(STORAGE_KEY)
-        this.set({list, inited: true})
+        const list = storage.get(SUBSCRIBE_LIST_STORAGE_KEY)
+        this.setState({list, inited: true})
       },
 
       persist(payload, rootState) {
-        const {list} = rootState[nsp]
-        storage.set(STORAGE_KEY, list)
+        const {list} = this.state
+        storage.set(SUBSCRIBE_LIST_STORAGE_KEY, list)
       },
 
       init(payload, rootState) {
-        const {inited} = rootState[nsp]
+        const {inited} = this.state
         if (inited) return
         this.load()
       },
 
       check({url, name, editItemIndex}, rootState) {
-        let {list} = rootState[nsp]
+        let {list} = this.state
 
         if (editItemIndex || editItemIndex === 0) {
           list = _.filter(list, (i, index) => index !== editItemIndex)
@@ -53,31 +49,34 @@ export default {
       },
 
       add(item, rootState) {
-        const {list} = rootState[nsp]
+        const {list} = this.state
         const newlist = [...list, item]
-        this.set({list: newlist})
+        this.setState({list: newlist})
         this.persist()
       },
 
       edit(item, rootState) {
-        const {list} = rootState[nsp]
+        const {list} = this.state
         const newlist = [...list]
         const {url, name, editItemIndex} = item
         newlist[editItemIndex] = {url, name}
 
-        this.set({list: newlist})
+        this.setState({list: newlist})
         this.persist()
       },
 
-      update(payload, rootState) {
-        //
+      async update(payload, rootState) {
+        const {item, index} = payload
+        const {url, name} = item
+        const servers = await subscribeToClash({url, force: true})
+        console.log(servers)
       },
 
       del(index, rootState) {
-        const {list} = rootState[nsp]
+        const {list} = this.state
         const newlist = [...list]
         newlist.splice(index, 1)
-        this.set({list: newlist})
+        this.setState({list: newlist})
       },
     }
   },

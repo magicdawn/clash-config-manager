@@ -11,6 +11,7 @@
     "url": "https://sindresorhus.com"
   },
   "scripts": {
+    "install": "napa",
     "dev": "poi -s",
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
@@ -20,16 +21,23 @@
     "dist": "electron-builder --macos --linux --windows",
     "release": "np"
   },
+  "napa": {
+    "@x": "magicdawn/x#master"
+  },
   "dependencies": {
     "@rematch/core": "^2.0.0-next.1",
     "ahooks": "^2.5.0",
     "antd": "^4.5.4",
+    "dl-vampire": "^0.5.0",
     "electron-context-menu": "^0.15.0",
     "electron-debug": "^3.0.0",
     "electron-store": "^5.1.0",
     "electron-unhandled": "^3.0.0",
     "electron-updater": "^4.0.6",
     "electron-util": "^0.13.0",
+    "fs-extra": "^9.0.1",
+    "ms": "^2.1.2",
+    "napa": "^3.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",
@@ -52,7 +60,7 @@
     "less-loader": "^6.2.0",
     "lint-staged": "latest",
     "np": "^5.0.3",
-    "poi": "^12.9.0",
+    "poi": "^12.10.2",
     "prettier": "latest",
     "react-refresh": "^0.8.3",
     "xo": "^0.25.3"

@@ -39,7 +39,9 @@ function LibrarySubscribe({effects, state}) {
     setShowModal(true)
   })
 
-  const update = usePersistFn((item, index) => {})
+  const update = usePersistFn((item, index) => {
+    effects.update({item, index})
+  })
 
   const del = usePersistFn((item, index) => {
     Modal.confirm({

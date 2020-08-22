@@ -38,6 +38,7 @@ const createMainWindow = async () => {
     height: 400,
     webPreferences: {
       nodeIntegration: true,
+      webSecurity: false,
     },
   })
 
@@ -54,7 +55,9 @@ const createMainWindow = async () => {
   if (process.env.NODE_ENV === 'production') {
     await win.loadFile(path.join(__dirname, 'dist/index.html'))
   } else {
-    await win.loadURL('http://localhost:7749')
+    await win.loadURL('http://localhost:7749', {
+      userAgent: 'electron',
+    })
   }
 
   return win
