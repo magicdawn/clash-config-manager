@@ -1,4 +1,3 @@
-'use strict'
 const path = require('path')
 const {app, BrowserWindow, Menu} = require('electron')
 /// const {autoUpdater} = require('electron-updater');
@@ -8,6 +7,8 @@ const debug = require('electron-debug')
 const contextMenu = require('electron-context-menu')
 const config = require('./config')
 const menu = require('./menu')
+const os = require('os')
+const {load: loadDevExt} = require('./main-process/dev/ext')
 
 unhandled()
 debug()
@@ -92,9 +93,10 @@ app.on('activate', async () => {
 ;(async () => {
   await app.whenReady()
   Menu.setApplicationMenu(menu)
+  loadDevExt()
   mainWindow = await createMainWindow()
 
-  const favoriteAnimal = config.get('favoriteAnimal')
+  // const favoriteAnimal = config.get('favoriteAnimal')
   // mainWindow.webContents.executeJavaScript(
   //   `document.querySelector('header p').textContent = 'Your favorite animal is ${favoriteAnimal}'`
   // )
