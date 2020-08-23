@@ -27,11 +27,12 @@ function LibrarySubscribe({effects, state}) {
   const [editItem, setEditItem] = useState(null)
   const [editItemIndex, setEditItemIndex] = useState(null)
 
-  const add = useCallback(() => {
+  const add = usePersistFn(() => {
+    console.log('add')
     setEditItem(null)
     setEditItemIndex(null)
     setShowModal(true)
-  }, [])
+  })
 
   const edit = usePersistFn((item, index) => {
     setEditItem(item)
@@ -42,6 +43,13 @@ function LibrarySubscribe({effects, state}) {
   const update = usePersistFn((item, index) => {
     effects.update({item, index})
   })
+
+  const disableEnterAsClick = useCallback((e) => {
+    // disable enter
+    if (e.keyCode === 13) {
+      e.preventDefault()
+    }
+  }, [])
 
   const del = usePersistFn((item, index) => {
     Modal.confirm({
@@ -86,13 +94,25 @@ function LibrarySubscribe({effects, state}) {
               </div>
 
               <Space style={{alignSelf: 'flex-end'}}>
-                <Button type='primary' onClick={() => edit(item, index)}>
+                <Button
+                  type='primary'
+                  onClick={(e) => edit(item, index)}
+                  onKeyDown={disableEnterAsClick}
+                >
                   编辑
                 </Button>
-                <Button type='primary' onClick={() => update(item, index)}>
+                <Button
+                  type='primary'
+                  onClick={() => update(item, index)}
+                  onKeyDown={disableEnterAsClick}
+                >
                   更新
                 </Button>
-                <Button type='danger' onClick={() => del(item, index)}>
+                <Button
+                  type='danger'
+                  onClick={() => del(item, index)}
+                  onKeyDown={disableEnterAsClick}
+                >
                   删除
                 </Button>
               </Space>
@@ -110,6 +130,8 @@ const ModalAdd = plug({
 })(function ModalAdd({effects, visible, setVisible, editItem, editItemIndex}) {
   const [url, setUrl] = useState(editItem?.url || '')
   const [name, setName] = useState(editItem?.name || '')
+
+  console.log('rendering ModalAdd: visible = %s', visible)
 
   const onUrlChange = useCallback((e) => {
     setUrl(e.target.value)
@@ -133,7 +155,10 @@ const ModalAdd = plug({
     clean()
   }, [])
 
-  const handleOk = usePersistFn(() => {
+  const handleOk = usePersistFn((e) => {
+    e?.preventDefault()
+    e?.stopPropagation()
+
     if (!url || !name) {
       return message.warn('url & name 不能为空')
     }

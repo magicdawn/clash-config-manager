@@ -44,14 +44,13 @@ function Routes() {
           <Link to='/'>Home</Link>
         </Menu.Item>
 
-        <SubMenu icon={<SettingOutlined />} title='资源管理'>
-          <Menu.Item key='library:subscribe'>
-            <Link to='/library/subscribe'>订阅管理</Link>
-          </Menu.Item>
-          <Menu.Item key='library:rule-list'>
-            <Link to='/library/rule-list'>规则列表管理</Link>
-          </Menu.Item>
-        </SubMenu>
+        <Menu.Item key='library:subscribe'>
+          <Link to='/library/subscribe'>订阅管理</Link>
+        </Menu.Item>
+
+        <Menu.Item key='library:rule-list'>
+          <Link to='/library/rule-list'>规则列表管理</Link>
+        </Menu.Item>
       </Menu>
 
       {/* A <Switch> looks through its children <Route>s and renders the first one that matches the current URL. */}

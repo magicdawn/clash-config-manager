@@ -3,9 +3,8 @@ import storage from '../../../storage/index'
 import {subscribeToClash} from '../../../util/fn/clash'
 import {message} from 'antd'
 
-const nsp = 'librarySubscribe'
-const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
-const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
+const nsp = 'libraryRuleList'
+const SUBSCRIBE_LIST_STORAGE_KEY = 'rule_list'
 
 export default {
   name: nsp,
@@ -13,21 +12,18 @@ export default {
   state: {
     inited: false,
     list: [],
-    detail: {},
   },
 
   effects: (dispatch) => {
     return {
       load() {
         const list = storage.get(SUBSCRIBE_LIST_STORAGE_KEY)
-        const detail = storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY)
-        this.setState({inited: true, list, detail})
+        this.setState({inited: true, list})
       },
 
       persist(payload, rootState) {
         const {list, detail} = this.state
         storage.set(SUBSCRIBE_LIST_STORAGE_KEY, list)
-        storage.set(SUBSCRIBE_DETAIL_STORAGE_KEY, detail)
       },
 
       init(payload, rootState) {

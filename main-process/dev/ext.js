@@ -21,6 +21,6 @@ exports.load = () => {
   // redux
   load('lmhkpmbekcpmknklioeibfkpmmfibljd')
 
-  // redux
+  // vue
   load('nhdogjmejiglipccpnnnanhbledajbpd')
 }

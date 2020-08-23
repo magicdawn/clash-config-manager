@@ -7,5 +7,7 @@ export default new Store({
   defaults: {
     subscribe_list: [],
     subscribe_detail: {},
+
+    rule_list: [],
   },
 })

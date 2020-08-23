@@ -12,9 +12,9 @@
   },
   "scripts": {
     "install": "napa",
+    "postinstall": "electron-builder install-app-deps",
     "dev": "poi -s",
     "start": "electron .",
-    "postinstall": "electron-builder install-app-deps",
     "lint": "xo",
     "test": "npm run lint",
     "pack": "electron-builder --dir",
@@ -25,6 +25,7 @@
     "@x": "magicdawn/x#master"
   },
   "dependencies": {
+    "@monaco-editor/react": "^3.6.2",
     "@rematch/core": "^2.0.0-next.1",
     "ahooks": "^2.5.0",
     "antd": "^4.5.4",
