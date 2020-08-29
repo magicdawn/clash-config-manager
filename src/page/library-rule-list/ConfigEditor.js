@@ -14,7 +14,7 @@ import style from './ConfigEditor.module.less'
 export default forwardRef(ConfigEditor)
 
 function ConfigEditor(props, ref) {
-  const {value, onChange} = props
+  const {value, onChange, readonly} = props
 
   const editorWillMount = usePersistFn((editor, monaco) => {})
 
@@ -51,10 +51,15 @@ function ConfigEditor(props, ref) {
     fontFamily: 'Hack, Menlo, "Ubuntu Mono"',
     automaticLayout: true,
     renderFinalNewline: true,
+    readOnly: readonly,
   }
 
+  useUpdateEffect(() => {
+    ref.current?.updateOptions({...options, readOnly: readonly})
+  }, [readonly, ref])
+
   return (
-    <div style={{width: '100%', height: '300px'}} className={style.editor}>
+    <div style={{width: '100%', height: '50vh'}} className={style.editor}>
       <MonacoEditor
         language='yaml'
         theme='quite-light'

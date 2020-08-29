@@ -6,6 +6,9 @@ const fse = require('fs-extra')
 const ms = require('ms')
 const request = require('umi-request').default
 
+const envPaths = require('env-paths')
+const appCacheDir = envPaths('clash-config-manager', {suffix: ''}).cache
+
 const Base64 = {
   encode: (s) => Buffer.from(s, 'utf-8').toString('base64'),
   decode: (s) => Buffer.from(s, 'base64').toString('utf-8'),
@@ -34,7 +37,7 @@ const readUrl = async ({url, file}) => {
 }
 
 const urlToSubscribe = async ({url, force}) => {
-  const file = path.join(tmpdir(), md5(url))
+  const file = path.join(appCacheDir, 'readUrl', md5(url))
 
   let shouldReuse = false
   let stat
