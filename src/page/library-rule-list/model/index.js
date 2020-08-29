@@ -32,36 +32,43 @@ export default {
         this.load()
       },
 
-      check({url, name, editItemIndex}, rootState) {
+      check({item, editItemIndex}, rootState) {
         let {list} = this.state
 
         if (editItemIndex || editItemIndex === 0) {
           list = _.filter(list, (i, index) => index !== editItemIndex)
         }
 
-        if (_.find(list, {url})) {
-          return 'url已存在'
-        }
+        const {type, name, url, content} = item
 
         if (_.find(list, {name})) {
           return 'name已存在'
         }
+
+        if (type === 'remote') {
+          if (_.find(list, {url})) {
+            return 'url已存在'
+          }
+        }
+
+        if (type === 'local') {
+          // do not check content
+          // we don't care
+        }
       },
 
-      add(item, rootState) {
-        const {list} = this.state
-        const newlist = [...list, item]
-        this.setState({list: newlist})
+      add({item}, rootState) {
+        this.setState(({list}) => void list.push(item))
         this.persist()
       },
 
-      edit(item, rootState) {
-        const {list} = this.state
-        const newlist = [...list]
-        const {url, name, editItemIndex} = item
-        newlist[editItemIndex] = {url, name}
+      edit({item, editItemIndex}, rootState) {
+        this.setState(({list}) => void (list[editItemIndex] = item))
+        this.persist()
+      },
 
-        this.setState({list: newlist})
+      del(index, rootState) {
+        this.setState(({list}) => void list.splice(index, 1))
         this.persist()
       },
 
@@ -82,13 +89,6 @@ export default {
           detail[url] = servers
         })
         this.persist()
-      },
-
-      del(index, rootState) {
-        const {list} = this.state
-        const newlist = [...list]
-        newlist.splice(index, 1)
-        this.setState({list: newlist})
       },
     }
   },

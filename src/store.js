@@ -1,6 +1,6 @@
 import {init} from '@rematch/core'
 import immerPlugin from '@rematch/immer'
-import statePlugin from './util/state-plugin'
+import statePlugin from '@magicdawn/x/rematch/state-plugin'
 
 import * as models from './models'
 import librarySubscribe from './page/library-subscribe/model/index'

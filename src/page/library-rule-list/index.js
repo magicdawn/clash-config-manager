@@ -1,25 +1,26 @@
-import React, {useState, useCallback, useEffect} from 'react'
+import React, {useState, useCallback, useEffect, useRef} from 'react'
 import {Button, DatePicker, version, Layout, Menu, Modal, Input, message} from 'antd'
 import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons'
-import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
+import {useMount, usePersistFn, useUpdateEffect, useSetState} from 'ahooks'
+import {compose} from 'recompose'
+import usePlug from '@x/rematch/usePlug'
+import {v4 as uuid} from 'uuid'
+
 import styles from './index.module.less'
 import storage from '../../storage/index'
-import plug from '../../util/plug'
-import {compose} from 'recompose'
-
 import {List, Typography, Divider, Space, Form, Checkbox, Select} from 'antd'
 const {Header, Footer, Sider, Content} = Layout
 const {SubMenu} = Menu
 const {Option} = Select
 
-export default compose(
-  plug({
-    namespace: 'libraryRuleList',
+const namespace = 'libraryRuleList'
+
+export default function LibraryRuleList(props) {
+  const {effects, state, setState} = usePlug({
+    nsp: namespace,
     state: ['list'],
   })
-)(LibraryRuleList)
 
-function LibraryRuleList({effects, state}) {
   useMount(() => {
     effects.init()
   })
@@ -29,7 +30,6 @@ function LibraryRuleList({effects, state}) {
   const [editItemIndex, setEditItemIndex] = useState(null)
 
   const add = usePersistFn(() => {
-    console.log('add')
     setEditItem(null)
     setEditItemIndex(null)
     setShowModal(true)
@@ -125,31 +125,49 @@ function LibraryRuleList({effects, state}) {
   )
 }
 
-const ModalAdd = plug({
-  namespace: 'libraryRuleList',
-  state: ['list'],
-})(function ModalAdd({effects, visible, setVisible, editItem, editItemIndex}) {
-  const [url, setUrl] = useState(editItem?.url || '')
-  const [name, setName] = useState(editItem?.name || '')
+import ConfigEditor from './ConfigEditor'
 
-  console.log('rendering ModalAdd: visible = %s', visible)
+function ModalAdd({visible, setVisible, editItem, editItemIndex}) {
+  const {state, effects} = usePlug({nsp: namespace, state: ['list']})
 
-  const onUrlChange = useCallback((e) => {
-    setUrl(e.target.value)
-  }, [])
-  const onNameChange = useCallback((e) => {
-    setName(e.target.value)
-  }, [])
+  const defaultItem = {
+    type: 'local',
+    name: '',
+    url: '',
+    content: '',
+  }
 
+  const [item, setItem] = useSetState(editItem || {...defaultItem})
   useUpdateEffect(() => {
-    setUrl(editItem?.url || '')
-    setName(editItem?.name || '')
+    setItem(editItem || defaultItem)
   }, [editItem, visible])
 
+  const onUrlChange = useCallback((e) => {
+    setItem({url: e.target.value})
+  }, [])
+  const onNameChange = useCallback((e) => {
+    setItem({name: e.target.value})
+  }, [])
+
   const clean = () => {
-    setUrl('')
-    setName('')
+    setItem(defaultItem)
   }
+
+  const layout = {
+    labelCol: {span: 4},
+    wrapperCol: {span: 20},
+  }
+  const tailLayout = {
+    wrapperCol: {offset: 5, span: 16},
+  }
+
+  const configEditorRef = useRef(null)
+
+  useUpdateEffect(() => {
+    configEditorRef.current?.focus()
+  }, [visible])
+
+  const [form] = Form.useForm()
 
   const handleCancel = useCallback(() => {
     setVisible(false)
@@ -159,47 +177,42 @@ const ModalAdd = plug({
   const handleOk = usePersistFn((e) => {
     e?.preventDefault()
     e?.stopPropagation()
+    form.submit()
+  })
 
-    if (!url || !name) {
-      return message.warn('url & name 不能为空')
+  const onInputPressEnter = usePersistFn((e) => {
+    e?.preventDefault()
+    e?.stopPropagation()
+    form.submit()
+  })
+
+  const handleSubmit = usePersistFn(() => {
+    const {type, name, url, content} = item
+
+    if (type === 'local' && !content) {
+      return message.error('content can not be empty')
     }
 
-    const err = effects.check({url, name, editItemIndex})
-    if (err) {
-      return message.error(err)
-    }
+    const err = effects.check({item, editItemIndex})
+    if (err) return message.error(err)
 
     const mode = editItem ? 'edit' : 'add'
     if (mode === 'add') {
-      effects.add({url, name})
+      effects.add({item})
     } else {
-      effects.edit({url, name, editItemIndex})
+      effects.edit({item, editItemIndex})
     }
 
     setVisible(false)
     clean()
   })
 
-  const layout = {
-    labelCol: {span: 3},
-    // wrapperCol: {span: 20},
-  }
-  const tailLayout = {
-    wrapperCol: {offset: 5, span: 16},
-  }
-
   const onFinish = (values) => {
-    console.log('Success:', values)
+    handleSubmit(values)
   }
-
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
   }
-
-  const handleChange = () => {}
-
-  const [ruleType, setRuleType] = useState('local')
-  console.log('type = %s', ruleType)
 
   return (
     <Modal
@@ -208,64 +221,67 @@ const ModalAdd = plug({
       visible={visible}
       onOk={handleOk}
       onCancel={handleCancel}
+      width={'90vw'}
     >
       <Form
         {...layout}
+        form={form}
         name='basic'
-        initialValues={{remember: true}}
+        initialValues={item}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
         <Form.Item
           label='类型'
           name='type'
-          rules={[{required: true, message: 'Please input your username!'}]}
+          rules={[{required: true, message: '类型不能为空'}]}
+          value={item.type}
         >
           <Select
-            defaultValue={ruleType}
-            value={ruleType}
+            value={item.type}
             style={{width: '200px'}}
-            onChange={setRuleType}
+            onChange={(val) => setItem({type: val})}
           >
             <Option value='local'>本地存储</Option>
             <Option value='remote'>远程规则列表</Option>
           </Select>
         </Form.Item>
 
-        <Form.Item
-          label='名称'
-          name='name'
-          rules={[{required: true, message: 'Please input your username!'}]}
-        >
+        <Form.Item label='名称' name='name' rules={[{required: true, message: '名称不能为空'}]}>
           <Input
             className='input-row'
-            value={name}
+            value={item.name}
             onChange={onNameChange}
-            onPressEnter={handleOk}
+            onPressEnter={onInputPressEnter}
             style={{width: '200px'}}
           />
         </Form.Item>
 
-        <Form.Item
-          label='URL'
-          name='url'
-          rules={[{required: true, message: 'Please input your username!'}]}
-        >
-          <Input.TextArea
-            className='input-row'
-            value={url}
-            onChange={onUrlChange}
-            onPressEnter={handleOk}
-            autoSize={{minRows: 3, maxRows: 10}}
-          ></Input.TextArea>
-        </Form.Item>
-
-        <Form.Item {...tailLayout}>
-          <Button type='primary' htmlType='submit'>
-            Submit
-          </Button>
-        </Form.Item>
+        {do {
+          if (item.type === 'local') {
+            ;<Form.Item label='content' name='content'>
+              <>
+                <ConfigEditor
+                  ref={configEditorRef}
+                  id={item.id}
+                  value={item.content}
+                  onChange={(val) => setItem({content: val})}
+                />
+              </>
+            </Form.Item>
+          } else if (item.type === 'remote') {
+            ;<Form.Item label='URL' name='url' rules={[{required: true, message: 'url不能为空'}]}>
+              <Input.TextArea
+                className='input-row'
+                value={item.url}
+                onChange={onUrlChange}
+                onPressEnter={onInputPressEnter}
+                autoSize={{minRows: 3, maxRows: 10}}
+              ></Input.TextArea>
+            </Form.Item>
+          }
+        }}
       </Form>
     </Modal>
   )
-})
+}

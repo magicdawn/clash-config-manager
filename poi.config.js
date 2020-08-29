@@ -1,4 +1,37 @@
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+const path = require('path')
+const merge = require('webpack-merge')
+const xDeps = require('@magicdawn/x/deps')
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
+
+const MONACO_DIR = path.dirname(require.resolve('monaco-editor/package.json'))
+
+const common = {
+  resolve: {
+    alias: {
+      // make it short
+      '@x': '@magicdawn/x',
+
+      // when npmlink @magicdawn/x
+      // ...xDeps.reduce((o, m) => {
+      //   o[m] = path.join(__dirname, 'node_modules', m)
+      //   return o
+      // }, {}),
+    },
+  },
+
+  plugins: [
+    new MonacoWebpackPlugin({
+      // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
+      languages: ['json', 'javascript', 'yaml'],
+    }),
+  ],
+}
+
+const dev = {}
+
+const prod = {}
+
+console.log(common)
 
 module.exports = {
   entry: 'src/index.js',
@@ -8,7 +41,7 @@ module.exports = {
   },
 
   babel: {
-    transpileModules: ['@x'],
+    transpileModules: ['@magicdawn/x'],
   },
 
   output: {
@@ -17,7 +50,11 @@ module.exports = {
 
   reactRefresh: true,
 
-  // configureWebpack(config) {
-  //   return config
-  // },
+  configureWebpack(config) {
+    if (process.env.NODE_ENV === 'production') {
+      return merge(config, common, prod)
+    } else {
+      return merge(config, common, dev)
+    }
+  },
 }

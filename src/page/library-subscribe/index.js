@@ -2,23 +2,22 @@ import React, {useState, useCallback, useEffect} from 'react'
 import {Button, DatePicker, version, Layout, Menu, Modal, Input, message} from 'antd'
 import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons'
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
+import usePlug from '@x/rematch/usePlug'
+
 import styles from './index.module.less'
 import storage from '../../storage/index'
-import plug from '../../util/plug'
 import {compose} from 'recompose'
 
 const {Header, Footer, Sider, Content} = Layout
 const {SubMenu} = Menu
 import {List, Typography, Divider, Space} from 'antd'
 
-export default compose(
-  plug({
-    namespace: 'librarySubscribe',
-    state: ['list'],
-  })
-)(LibrarySubscribe)
+const nsp = 'librarySubscribe'
+const stateKeys = ['list']
 
-function LibrarySubscribe({effects, state}) {
+export default function LibrarySubscribe() {
+  const {state, effects} = usePlug({nsp, state: stateKeys})
+
   useMount(() => {
     effects.init()
   })
@@ -124,14 +123,10 @@ function LibrarySubscribe({effects, state}) {
   )
 }
 
-const ModalAdd = plug({
-  namespace: 'librarySubscribe',
-  state: ['list'],
-})(function ModalAdd({effects, visible, setVisible, editItem, editItemIndex}) {
+function ModalAdd({visible, setVisible, editItem, editItemIndex}) {
+  const {state, effects} = usePlug({nsp, state: stateKeys})
   const [url, setUrl] = useState(editItem?.url || '')
   const [name, setName] = useState(editItem?.name || '')
-
-  console.log('rendering ModalAdd: visible = %s', visible)
 
   const onUrlChange = useCallback((e) => {
     setUrl(e.target.value)
@@ -203,4 +198,4 @@ const ModalAdd = plug({
       />
     </Modal>
   )
-})
+}

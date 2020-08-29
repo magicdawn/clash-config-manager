@@ -6,4 +6,6 @@ module.exports = {
   ],
 
   sourceType: 'unambiguous',
+
+  plugins: ['@babel/plugin-proposal-do-expressions'],
 }
