@@ -11,6 +11,7 @@ import _ from 'lodash'
 import Home from './page/home/index'
 import LibrarySubscribe from './page/library-subscribe/index'
 import LibraryRuleList from './page/library-rule-list/index'
+import ConfigList from './page/config-list/index'
 
 const {SubMenu} = Menu
 
@@ -49,7 +50,11 @@ function Routes() {
         </Menu.Item>
 
         <Menu.Item key='library:rule-list'>
-          <Link to='/library/rule-list'>规则列表管理</Link>
+          <Link to='/library/rule-list'>配置源管理</Link>
+        </Menu.Item>
+
+        <Menu.Item key='config-list'>
+          <Link to='/config-list'>配置管理</Link>
         </Menu.Item>
       </Menu>
 
@@ -59,6 +64,7 @@ function Routes() {
           <Route exact path='/' component={Home}></Route>
           <Route exact path='/library/subscribe' component={LibrarySubscribe}></Route>
           <Route exact path='/library/rule-list' component={LibraryRuleList}></Route>
+          <Route exact path='/config-list' component={ConfigList}></Route>
         </Switch>
       </div>
     </>
