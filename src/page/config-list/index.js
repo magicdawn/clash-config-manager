@@ -10,6 +10,8 @@ import {firstLine} from '../../util/text-util'
 import styles from './index.module.less'
 import storage from '../../storage/index'
 import {List, Typography, Divider, Space, Form, Checkbox, Select} from 'antd'
+import DndPlaygroud from './DndPlayground'
+
 const {Header, Footer, Sider, Content} = Layout
 const {SubMenu} = Menu
 const {Option} = Select
@@ -79,6 +81,8 @@ export default function LibraryRuleList(props) {
   return (
     <div className={styles.page}>
       <h1>配置管理</h1>
+
+      <DndPlaygroud></DndPlaygroud>
 
       <ModalAdd
         {...{visible: showModal, setVisible: setShowModal, editItem, editItemIndex, editMode}}
