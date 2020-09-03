@@ -12,10 +12,10 @@ const common = {
       '@x': '@magicdawn/x',
 
       // when npmlink @magicdawn/x
-      // ...xDeps.reduce((o, m) => {
-      //   o[m] = path.join(__dirname, 'node_modules', m)
-      //   return o
-      // }, {}),
+      ...xDeps.reduce((o, m) => {
+        o[m] = path.join(__dirname, 'node_modules', m)
+        return o
+      }, {}),
     },
   },
 
