@@ -1,5 +1,5 @@
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
-import React, {useMemo} from 'react'
+import React, {useMemo, useState} from 'react'
 import {usePersistFn, useMount} from 'ahooks'
 import {useModifyState, useShallowEqualSelector} from '@x/react/hooks'
 import {useSelector, useDispatch} from 'react-redux'
@@ -46,10 +46,31 @@ export default function DndPlaygroud(props) {
     return new Set(resultIdList)
   }, [resultIdList])
 
+  const [trashDropDisabled, setTrashDropDisabled] = useState(true)
+
+  const onDragStart = usePersistFn((start) => {
+    const droppableId = start.source.droppableId
+    if (droppableId === 'result-list') {
+      console.log('setTrashDropDisabled to false')
+      setTrashDropDisabled(false)
+    }
+  })
+
   const onDragEnd = usePersistFn((result, provided) => {
+    setTrashDropDisabled(true)
+
     // console.log(result)
     const {draggableId, type, source, destination, reason} = result
     if (!destination || !destination.droppableId) return
+
+    // from result-list to trash
+    if (source.droppableId === 'result-list' && destination.droppableId === 'trash') {
+      const delIndex = source.index
+      modifyResultIdList((l) => {
+        l.splice(delIndex, 1) // remove
+      })
+      return
+    }
 
     let id
     const modifyActions = []
@@ -77,7 +98,7 @@ export default function DndPlaygroud(props) {
 
   return (
     <div className={styles.dndPlayground}>
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
         <div className='col-left'>
           <h1>当前配置</h1>
           <Droppable droppableId={'result-list'} direction='vertical'>
@@ -95,6 +116,23 @@ export default function DndPlaygroud(props) {
         </div>
 
         <div className='col-right'>
+          <h1>垃圾桶</h1>
+          <Droppable
+            droppableId={'trash'}
+            direction='horizontal'
+            isDropDisabled={trashDropDisabled}
+          >
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className={cx('trash-wrapper', {'dragging-over': snapshot.isDraggingOver})}
+              >
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
           <h1>可用配置</h1>
           <Droppable droppableId={'source-list'} direction='horizontal' isDropDisabled={true}>
             {(provided, snapshot) => (
