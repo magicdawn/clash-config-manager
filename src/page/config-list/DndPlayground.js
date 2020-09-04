@@ -28,7 +28,6 @@ export default function DndPlaygroud(props) {
       item = list[source.index]
     }
     if (source.droppableId === 'result-list') {
-      debugger
       item = resultList[source.index]
       modifyActions.push((l) => l.splice(source.index, 1)) // remove source
     }
