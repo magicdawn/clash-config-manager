@@ -18,7 +18,7 @@ const {Option} = Select
 
 const namespace = 'configList'
 
-export default function LibraryRuleList(props) {
+export default function ConfigList(props) {
   const {effects, state, setState} = usePlug({
     nsp: namespace,
     state: ['list'],

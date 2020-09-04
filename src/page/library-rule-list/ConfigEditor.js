@@ -47,8 +47,8 @@ function ConfigEditor(props, ref) {
     scrollbar: {
       horizontal: 'hidden',
     },
-    fontSize: 16,
-    fontFamily: 'Hack, Menlo, "Ubuntu Mono"',
+    fontSize: 14,
+    fontFamily: 'Menlo, Hack, "Ubuntu Mono"',
     automaticLayout: true,
     renderFinalNewline: true,
     readOnly: readonly,

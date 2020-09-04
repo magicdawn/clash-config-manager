@@ -7,6 +7,7 @@ import 'antd/dist/antd.css'
 import {Menu} from 'antd'
 import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons'
 import _ from 'lodash'
+import './page/common/styles/index.less'
 
 import Home from './page/home/index'
 import LibrarySubscribe from './page/library-subscribe/index'

@@ -4,6 +4,7 @@ import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons
 import {useMount, usePersistFn, useUpdateEffect, useSetState} from 'ahooks'
 import {compose} from 'recompose'
 import usePlug from '@x/rematch/usePlug'
+import {useModifyState} from '@x/react/hooks'
 import {v4 as uuid} from 'uuid'
 import {firstLine} from '../../util/text-util'
 
@@ -175,19 +176,26 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
 
   const readonly = editMode === 'readonly'
 
-  const defaultItem = {
+  const getDefaultItem = () => ({
+    id: uuid(),
     type: 'local',
     name: '',
     url: '',
     content: '',
-  }
+  })
 
   const [form] = Form.useForm()
+  const [otherFormData, modifyOtherFormData] = useModifyState({})
+
   const configEditorRef = useRef(null)
 
   useUpdateEffect(() => {
-    const val = editItem || defaultItem
+    let val = editItem || getDefaultItem()
+
     form.setFieldsValue(val)
+    modifyOtherFormData((o) => {
+      o.id = val.id
+    })
 
     if (visible) {
       configEditorRef.current?.setSelections([])
@@ -226,6 +234,10 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
 
   const handleSubmit = usePersistFn((item) => {
     const {type, name, url, content} = item
+
+    // add more data
+    const {id} = otherFormData
+    item.id = id
 
     if (type === 'local' && !content) {
       return message.error('content can not be empty')

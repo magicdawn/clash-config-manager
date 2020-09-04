@@ -3,15 +3,10 @@
   flex-direction: row;
 
   :global {
-    .source-list {
-      width: 50%;
-      order: 2;
-      padding: 0 10px;
-    }
-    .result-list {
+    .col-left,
+    .col-right {
       width: 50%;
       padding: 0 10px;
-      order: 1;
     }
 
     .source-wrapper {
@@ -26,9 +21,18 @@
         margin-bottom: 10px;
         margin-right: 10px;
 
+        &.disabled {
+          background-color: fade(yellow, 50%);
+        }
+
         display: flex;
         align-items: center;
         justify-content: center;
+
+        .help-icon {
+          margin-left: 5px;
+          cursor: pointer;
+        }
       }
     }
 
@@ -51,7 +55,22 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        .help-icon {
+          margin-left: 5px;
+          cursor: pointer;
+        }
       }
     }
   }
+}
+
+.tooltip-detail {
+  max-height: 50vh;
+  overflow-y: scroll;
+  white-space: pre;
+}
+
+.tooltip-detail-overlay {
+  max-width: 60vw;
 }
