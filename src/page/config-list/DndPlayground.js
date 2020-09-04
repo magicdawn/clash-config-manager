@@ -2,7 +2,7 @@ import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
 import React, {useMemo} from 'react'
 import {usePersistFn} from 'ahooks'
 import {useModifyState} from '@x/react/hooks'
-import './DndPlayground.less'
+import styles from './DndPlayground.module.less'
 
 export default function DndPlaygroud(props) {
   const list = new Array(10).fill(0).map((_, index) => {
@@ -47,47 +47,45 @@ export default function DndPlaygroud(props) {
   })
 
   return (
-    <div className='dnd-playdround'>
+    <div className={styles.dndPlayground}>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div>
-          <Droppable droppableId={'source-list'} direction='horizontal' isDropDisabled={true}>
-            {(provided, snapshot) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                <h1>All available sources</h1>
+        <Droppable droppableId={'source-list'} direction='horizontal' isDropDisabled={true}>
+          {(provided, snapshot) => (
+            <div ref={provided.innerRef} {...provided.droppableProps} className='source-list'>
+              <h1>All available sources</h1>
 
-                <div className='source-wrapper'>
-                  {provided.placeholder}
-                  {list.map((item, index) => {
-                    return (
-                      <Source
-                        type='source'
-                        key={item.id}
-                        item={item}
-                        index={index}
-                        isDragDisabled={resultListIdSet.has(item.id)}
-                      ></Source>
-                    )
-                  })}
-                </div>
+              <div className='source-wrapper'>
+                {provided.placeholder}
+                {list.map((item, index) => {
+                  return (
+                    <Source
+                      type='source'
+                      key={item.id}
+                      item={item}
+                      index={index}
+                      isDragDisabled={resultListIdSet.has(item.id)}
+                    ></Source>
+                  )
+                })}
               </div>
-            )}
-          </Droppable>
+            </div>
+          )}
+        </Droppable>
 
-          <Droppable droppableId={'result-list'} direction='horizontal'>
-            {(provided, snapshot) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                <h1>using config</h1>
+        <Droppable droppableId={'result-list'} direction='vertical'>
+          {(provided, snapshot) => (
+            <div ref={provided.innerRef} {...provided.droppableProps} className='result-list'>
+              <h1>using config</h1>
 
-                <div className='using-config-wrapper'>
-                  {resultList.map((item, index) => {
-                    return <Source type='result' key={item.id} item={item} index={index}></Source>
-                  })}
-                  {provided.placeholder}
-                </div>
+              <div className='using-config-wrapper'>
+                {resultList.map((item, index) => {
+                  return <Source type='result' key={item.id} item={item} index={index}></Source>
+                })}
+                {provided.placeholder}
               </div>
-            )}
-          </Droppable>
-        </div>
+            </div>
+          )}
+        </Droppable>
       </DragDropContext>
     </div>
   )
