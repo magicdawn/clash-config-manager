@@ -67,10 +67,7 @@ export default {
         this.persist()
       },
 
-      async update(payload, rootState) {
-        const {item, index} = payload
-        const {url, name} = item
-
+      async update({url}, rootState) {
         let servers
         try {
           servers = await subscribeToClash({url, force: true})

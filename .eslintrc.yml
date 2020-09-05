@@ -6,3 +6,4 @@ extends:
 
 rules:
   react/prop-types: off
+  brace-style: off

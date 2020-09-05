@@ -41,7 +41,7 @@ export default function LibrarySubscribe() {
   })
 
   const update = usePersistFn((item, index) => {
-    effects.update({item, index})
+    effects.update({url: item.url})
   })
 
   const disableEnterAsClick = useCallback((e) => {

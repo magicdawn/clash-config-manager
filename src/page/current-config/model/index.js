@@ -4,41 +4,42 @@ import {subscribeToClash} from '../../../util/fn/clash'
 import {message} from 'antd'
 
 const nsp = 'currentConfig'
-const CURRENT_CONFIG_STORAGE_KEY = 'current_config'
+const CURRENT_CONFIG_STORAGE_KEY = 'current_config_v2'
 
 export default {
   name: nsp,
 
   state: {
     inited: false,
-    config: {
-      subscribe: [],
-      rules: [],
-    },
+    list: [],
+    name: '',
+    forceUpdate: true,
   },
 
   effects: (dispatch) => {
     return {
       load() {
-        const config = storage.get(CURRENT_CONFIG_STORAGE_KEY)
-        this.setState({inited: true, config})
+        const storeValues = storage.get(CURRENT_CONFIG_STORAGE_KEY)
+        this.setState({inited: true, ...storeValues})
       },
-
       persist(payload, rootState) {
-        const {config} = this.state
-        storage.set(CURRENT_CONFIG_STORAGE_KEY, config)
+        storage.set(CURRENT_CONFIG_STORAGE_KEY, _.omit(this.state, ['inited']))
       },
-
       init(payload, rootState) {
         const {inited} = this.state
         if (inited) return
         this.load()
       },
 
-      modifyConfig(payload, rootState) {
+      modifyList(payload, rootState) {
         this.setState((slice) => {
-          payload(slice.config)
+          payload(slice.list)
         })
+        this.persist()
+      },
+
+      changeState(payload) {
+        this.setState(payload)
         this.persist()
       },
     }

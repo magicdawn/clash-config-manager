@@ -14,4 +14,5 @@ const store = init({
 
 export default store
 
-window.store = store
+// fixme
+// window.store = store

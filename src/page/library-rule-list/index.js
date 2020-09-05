@@ -7,6 +7,7 @@ import usePlug from '@x/rematch/usePlug'
 import {useModifyState} from '@x/react/hooks'
 import {v4 as uuid} from 'uuid'
 import {firstLine} from '../../util/text-util'
+import Yaml from 'js-yaml'
 
 import styles from './index.module.less'
 import storage from '../../storage/index'
@@ -239,8 +240,20 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     const {id} = otherFormData
     item.id = id
 
-    if (type === 'local' && !content) {
-      return message.error('content can not be empty')
+    if (type === 'local') {
+      if (!content) {
+        return message.error('content can not be empty')
+      }
+
+      let err
+      try {
+        Yaml.safeLoad(content)
+      } catch (e) {
+        err = e
+      }
+      if (err) {
+        return message.error('yaml load fail: ' + err.stack || err.message)
+      }
     }
 
     const err = effects.check({item, editItemIndex})

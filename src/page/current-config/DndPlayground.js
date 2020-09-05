@@ -10,12 +10,32 @@ import usePlug from '@x/rematch/usePlug'
 import styles from './DndPlayground.module.less'
 
 export default function DndPlaygroud(props) {
-  const {effects, state} = usePlug({nsp: 'currentConfig', state: ['config']})
+  const {effects, state} = usePlug({nsp: 'currentConfig', state: ['list']})
 
+  // load el-store data
+  const dispatch = useDispatch()
+  useMount(() => {
+    dispatch.librarySubscribe.init()
+    dispatch.libraryRuleList.init()
+    dispatch.currentConfig.init()
+  }, [])
+
+  // subscribe
+  const subscribeList = useSelector((state) => state.librarySubscribe.list)
+  const subscribeSourceList = useMemo(() => {
+    return subscribeList.map((item) => {
+      return {
+        ...item,
+        text: item.name,
+        content: item.url,
+      }
+    })
+  }, [subscribeList])
+
+  // rule
   const ruleList = useSelector((state) => {
     return state.libraryRuleList.list
   })
-
   const ruleSourceList = useMemo(() => {
     return ruleList.map((item) => {
       return {
@@ -27,33 +47,28 @@ export default function DndPlaygroud(props) {
     })
   }, [ruleList])
 
-  const dispatch = useDispatch()
-  useMount(() => {
-    dispatch.libraryRuleList.init()
-    dispatch.currentConfig.init()
-  }, [])
-
-  // 只放 id
-  const resultIdList = state.config.rules
-  const modifyResultIdList = useCallback((modify) => {
-    effects.modifyConfig((config) => {
-      modify(config.rules)
-    })
-  }, [])
+  // 只放 {type, id}
+  const resultList = state.list
+  const modifyResultList = effects.modifyList
 
   // 具体 item
   const resultItemList = useMemo(() => {
-    return resultIdList
-      .map((id) => {
-        return ruleSourceList.find((x) => x.id === id)
+    return resultList
+      .map(({type, id}) => {
+        if (type === 'subscribe') {
+          return subscribeSourceList.find((x) => x.id === id)
+        }
+        if (type === 'rule') {
+          return ruleSourceList.find((x) => x.id === id)
+        }
       })
       .filter(Boolean)
-  }, [resultIdList, ruleSourceList])
+  }, [resultList, ruleSourceList])
 
   // id set
   const resultIdSet = useMemo(() => {
-    return new Set(resultIdList)
-  }, [resultIdList])
+    return new Set(resultList.map((x) => x.id))
+  }, [resultList])
 
   const [trashDropDisabled, setTrashDropDisabled] = useState(true)
 
@@ -74,32 +89,38 @@ export default function DndPlaygroud(props) {
     // from result-list to trash
     if (source.droppableId === 'result-list' && destination.droppableId === 'trash') {
       const delIndex = source.index
-      modifyResultIdList((l) => {
+      modifyResultList((l) => {
         l.splice(delIndex, 1) // remove
       })
       return
     }
 
-    let id
+    let addItem
     const modifyActions = []
-    if (source.droppableId === 'source-list') {
-      id = ruleSourceList[source.index].id
+    if (source.droppableId === 'rule-source-list') {
+      const id = ruleSourceList[source.index].id
+      addItem = {type: 'rule', id}
     }
+    if (source.droppableId === 'subscribe-source-list') {
+      const id = subscribeSourceList[source.index].id
+      addItem = {type: 'subscribe', id}
+    }
+
     if (source.droppableId === 'result-list') {
-      id = resultIdList[source.index]
+      addItem = resultList[source.index]
       modifyActions.push((l) => l.splice(source.index, 1)) // remove source
     }
 
-    if (!id) {
+    if (!addItem) {
       console.log('no item, result = ', result)
     }
 
     const newindex = destination.index
-    modifyResultIdList((list) => {
+    modifyResultList((list) => {
       for (let action of modifyActions) {
         action(list)
       }
-      list.splice(newindex, 0, id)
+      list.splice(newindex, 0, addItem)
     })
   })
 
@@ -123,7 +144,6 @@ export default function DndPlaygroud(props) {
         </div>
 
         <div className='col-right'>
-          <h1>垃圾桶</h1>
           <Droppable
             droppableId={'trash'}
             direction='horizontal'
@@ -140,8 +160,34 @@ export default function DndPlaygroud(props) {
             )}
           </Droppable>
 
+          <h1>可用订阅</h1>
+          <Droppable
+            droppableId={'subscribe-source-list'}
+            direction='horizontal'
+            isDropDisabled={true}
+          >
+            {(provided, snapshot) => (
+              <div ref={provided.innerRef} {...provided.droppableProps} className='source-list'>
+                <div className='source-wrapper'>
+                  {provided.placeholder}
+                  {subscribeSourceList.map((item, index) => {
+                    return (
+                      <Source
+                        type='source'
+                        key={item.id}
+                        item={item}
+                        index={index}
+                        isDragDisabled={resultIdSet.has(item.id)}
+                      ></Source>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+          </Droppable>
+
           <h1>可用配置</h1>
-          <Droppable droppableId={'source-list'} direction='horizontal' isDropDisabled={true}>
+          <Droppable droppableId={'rule-source-list'} direction='horizontal' isDropDisabled={true}>
             {(provided, snapshot) => (
               <div ref={provided.innerRef} {...provided.droppableProps} className='source-list'>
                 <div className='source-wrapper'>

@@ -10,9 +10,9 @@ export default new Store({
 
     rule_list: [],
 
-    current_config: {
-      rules: [],
-      subscribe: [],
+    current_config_v2: {
+      list: [],
+      name: 'clash-config-manager',
     },
   },
 })

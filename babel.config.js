@@ -2,7 +2,16 @@
 module.exports = {
   presets: [
     // Our default preset
-    'poi/babel',
+    [
+      'poi/babel',
+      {
+        env: {
+          targets: {
+            electron: '7',
+          },
+        },
+      },
+    ],
   ],
 
   sourceType: 'unambiguous',
