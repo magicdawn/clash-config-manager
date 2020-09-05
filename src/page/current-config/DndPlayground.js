@@ -8,6 +8,7 @@ import {Tooltip} from 'antd'
 import cx from 'classnames'
 import usePlug from '@x/rematch/usePlug'
 import styles from './DndPlayground.module.less'
+import {limitLines} from '../../util/text-util'
 
 export default function DndPlaygroud(props) {
   const {effects, state} = usePlug({nsp: 'currentConfig', state: ['list']})
@@ -41,7 +42,7 @@ export default function DndPlaygroud(props) {
       return {
         id: item.id,
         text: item.name,
-        content: item.content,
+        content: limitLines(item.content, 100),
         type: item.type, // rule-type
       }
     })
