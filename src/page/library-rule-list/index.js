@@ -1,12 +1,12 @@
 import React, {useState, useCallback, useEffect, useRef} from 'react'
-import {Button, DatePicker, version, Layout, Menu, Modal, Input, message} from 'antd'
+import {Button, DatePicker, version, Layout, Menu, Modal, Input, message, Tooltip} from 'antd'
 import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons'
 import {useMount, usePersistFn, useUpdateEffect, useSetState} from 'ahooks'
 import {compose} from 'recompose'
 import usePlug from '@x/rematch/usePlug'
 import {useModifyState} from '@x/react/hooks'
 import {v4 as uuid} from 'uuid'
-import {firstLine} from '../../util/text-util'
+import {firstLine, limitLines} from '../../util/text-util'
 import Yaml from 'js-yaml'
 
 import styles from './index.module.less'
@@ -108,7 +108,11 @@ export default function LibraryRuleList(props) {
                 <div className='info'>
                   {do {
                     if (type === 'local') {
-                      ;<div>内容: {firstLine(content)}</div>
+                      ;<Tooltip
+                        title={<div style={{whiteSpace: 'pre'}}>{limitLines(content, 10)}</div>}
+                      >
+                        <div style={{color: 'blue'}}>内容: {firstLine(content)}</div>
+                      </Tooltip>
                     } else {
                       ;<div className='url'>链接: {url}</div>
                     }

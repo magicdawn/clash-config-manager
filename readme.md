@@ -1,53 +1,16 @@
-# electron-boilerplate
+# clash-config-manager
 
-> Boilerplate to kickstart creating an app with [Electron](https://github.com/electron/electron)
+> a clash config manager
 
-See [awesome-electron](https://github.com/sindresorhus/awesome-electron) for more useful Electron resources.
+## Todo
 
-See [Caprine](https://github.com/sindresorhus/caprine) for a production app based on this boilerplate.
-
-
-## Features
-
-- [`electron-builder`](https://www.electron.build) fully set up to create cross-platform builds
-- [Builds the app on Travis](https://www.electron.build/multi-platform-build.html)
-- [Silent auto-updates](https://www.electron.build/auto-update.html)
-- App menu that adheres to the system user interface guidelines
-- [Config handling](https://github.com/sindresorhus/electron-store)
-- [Context menu](https://github.com/sindresorhus/electron-context-menu)
-- [User-friendly handling of unhandled errors](https://github.com/sindresorhus/electron-unhandled)
-- Easily publish new versions to GitHub Releases
-- And much more!
-
-
-## Getting started
-
-**Click the "Use this template" button.**
-
-Alternatively, create a new directory and then run:
-
-```
-$ curl -fsSL https://github.com/sindresorhus/electron-boilerplate/archive/master.tar.gz | tar -xz --strip-components 1
-```
-
-There's also a [Yeoman generator](https://github.com/sindresorhus/generator-electron).
-
-
----
-
-**Remove everything from here and above**
-
----
-
-
-# App Name
-
-> The best app ever
-
+- [ ] 配置, 在 vscode 中打开
+- [ ] 添加配置
+- [ ] mc socks clash
 
 ## Install
 
-*macOS 10.10+, Linux, and Windows 7+ are supported (64-bit only).*
+_macOS 10.10+, Linux, and Windows 7+ are supported (64-bit only)._
 
 **macOS**
 
@@ -57,15 +20,13 @@ There's also a [Yeoman generator](https://github.com/sindresorhus/generator-elec
 
 [**Download**](https://github.com/user/repo/releases/latest) the `.AppImage` or `.deb` file.
 
-*The AppImage needs to be [made executable](http://discourse.appimage.org/t/how-to-make-an-appimage-executable/80) after download.*
+_The AppImage needs to be [made executable](http://discourse.appimage.org/t/how-to-make-an-appimage-executable/80) after download._
 
 **Windows**
 
 [**Download**](https://github.com/user/repo/releases/latest) the `.exe` file.
 
-
 ---
-
 
 ## Dev
 
