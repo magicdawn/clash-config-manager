@@ -53,19 +53,17 @@ export default {
       },
 
       add(item, rootState) {
-        const {list} = this.state
-        const newlist = [...list, item]
-        this.setState({list: newlist})
+        this.setState(({list}) => {
+          list.push(item)
+        })
         this.persist()
       },
 
       edit(item, rootState) {
-        const {list} = this.state
-        const newlist = [...list]
-        const {url, name, editItemIndex} = item
-        newlist[editItemIndex] = {url, name}
-
-        this.setState({list: newlist})
+        const {url, name, id, editItemIndex} = item
+        this.setState(({list}) => {
+          list[editItemIndex] = {url, name, id}
+        })
         this.persist()
       },
 
@@ -89,10 +87,10 @@ export default {
       },
 
       del(index, rootState) {
-        const {list} = this.state
-        const newlist = [...list]
-        newlist.splice(index, 1)
-        this.setState({list: newlist})
+        this.setState(({list}) => {
+          list.splice(index, 1)
+        })
+        this.persist()
       },
     }
   },

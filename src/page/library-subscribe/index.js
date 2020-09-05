@@ -3,6 +3,7 @@ import {Button, DatePicker, version, Layout, Menu, Modal, Input, message} from '
 import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons'
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
 import usePlug from '@x/rematch/usePlug'
+import {v4 as uuid} from 'uuid'
 
 import styles from './index.module.less'
 import storage from '../../storage/index'
@@ -127,6 +128,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex}) {
   const {state, effects} = usePlug({nsp, state: stateKeys})
   const [url, setUrl] = useState(editItem?.url || '')
   const [name, setName] = useState(editItem?.name || '')
+  const [id, setId] = useState(editItem?.id || uuid())
 
   const onUrlChange = useCallback((e) => {
     setUrl(e.target.value)
@@ -138,11 +140,13 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex}) {
   useUpdateEffect(() => {
     setUrl(editItem?.url || '')
     setName(editItem?.name || '')
+    setId(editItem?.id || uuid())
   }, [editItem, visible])
 
   const clean = () => {
     setUrl('')
     setName('')
+    setId('')
   }
 
   const handleCancel = useCallback(() => {
@@ -165,9 +169,9 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex}) {
 
     const mode = editItem ? 'edit' : 'add'
     if (mode === 'add') {
-      effects.add({url, name})
+      effects.add({url, name, id})
     } else {
-      effects.edit({url, name, editItemIndex})
+      effects.edit({url, name, id, editItemIndex})
     }
 
     setVisible(false)
