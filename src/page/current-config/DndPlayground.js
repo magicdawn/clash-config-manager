@@ -1,14 +1,17 @@
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
-import React, {useMemo, useState} from 'react'
+import React, {useMemo, useState, useCallback} from 'react'
 import {usePersistFn, useMount} from 'ahooks'
 import {useModifyState, useShallowEqualSelector} from '@x/react/hooks'
 import {useSelector, useDispatch} from 'react-redux'
 import {InfoCircleOutlined} from '@ant-design/icons'
 import {Tooltip} from 'antd'
 import cx from 'classnames'
+import usePlug from '@x/rematch/usePlug'
 import styles from './DndPlayground.module.less'
 
 export default function DndPlaygroud(props) {
+  const {effects, state} = usePlug({nsp: 'currentConfig', state: ['config']})
+
   const ruleList = useSelector((state) => {
     return state.libraryRuleList.list
   })
@@ -27,10 +30,16 @@ export default function DndPlaygroud(props) {
   const dispatch = useDispatch()
   useMount(() => {
     dispatch.libraryRuleList.init()
+    dispatch.currentConfig.init()
   }, [])
 
   // 只放 id
-  const [resultIdList, modifyResultIdList] = useModifyState([])
+  const resultIdList = state.config.rules
+  const modifyResultIdList = useCallback((modify) => {
+    effects.modifyConfig((config) => {
+      modify(config.rules)
+    })
+  }, [])
 
   // 具体 item
   const resultItemList = useMemo(() => {
@@ -51,7 +60,6 @@ export default function DndPlaygroud(props) {
   const onDragStart = usePersistFn((start) => {
     const droppableId = start.source.droppableId
     if (droppableId === 'result-list') {
-      console.log('setTrashDropDisabled to false')
       setTrashDropDisabled(false)
     }
   })
@@ -83,8 +91,7 @@ export default function DndPlaygroud(props) {
     }
 
     if (!id) {
-      console.log('no item')
-      console.log(result)
+      console.log('no item, result = ', result)
     }
 
     const newindex = destination.index
@@ -163,12 +170,7 @@ export default function DndPlaygroud(props) {
 const Source = ({item, type, isDragDisabled, index}) => {
   const {text, id} = item
   return (
-    <Draggable
-      draggableId={`${type}-${id}`}
-      index={index}
-      type={type}
-      isDragDisabled={isDragDisabled}
-    >
+    <Draggable draggableId={`${type}-${id}`} index={index} isDragDisabled={isDragDisabled}>
       {(provided, snapshot) => (
         <div
           className={cx('item', {disabled: isDragDisabled})}

@@ -12,7 +12,7 @@ import './page/common/styles/index.less'
 import Home from './page/home/index'
 import LibrarySubscribe from './page/library-subscribe/index'
 import LibraryRuleList from './page/library-rule-list/index'
-import ConfigList from './page/config-list/index'
+import CurrentConfig from './page/current-config/index'
 
 const {SubMenu} = Menu
 
@@ -54,8 +54,8 @@ function Routes() {
           <Link to='/library/rule-list'>配置源管理</Link>
         </Menu.Item>
 
-        <Menu.Item key='config-list'>
-          <Link to='/config-list'>配置管理</Link>
+        <Menu.Item key='current-config'>
+          <Link to='/current-config'>配置管理</Link>
         </Menu.Item>
       </Menu>
 
@@ -65,7 +65,7 @@ function Routes() {
           <Route exact path='/' component={Home}></Route>
           <Route exact path='/library/subscribe' component={LibrarySubscribe}></Route>
           <Route exact path='/library/rule-list' component={LibraryRuleList}></Route>
-          <Route exact path='/config-list' component={ConfigList}></Route>
+          <Route exact path='/current-config' component={CurrentConfig}></Route>
         </Switch>
       </div>
     </>

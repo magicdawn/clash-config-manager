@@ -9,5 +9,10 @@ export default new Store({
     subscribe_detail: {},
 
     rule_list: [],
+
+    current_config: {
+      rules: [],
+      subscribe: [],
+    },
   },
 })
