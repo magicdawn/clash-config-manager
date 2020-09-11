@@ -13,6 +13,7 @@ import Home from './page/home/index'
 import LibrarySubscribe from './page/library-subscribe/index'
 import LibraryRuleList from './page/library-rule-list/index'
 import CurrentConfig from './page/current-config/index'
+import Preference from './page/preference/index'
 
 const {SubMenu} = Menu
 
@@ -57,6 +58,10 @@ function Routes() {
         <Menu.Item key='current-config'>
           <Link to='/current-config'>配置管理</Link>
         </Menu.Item>
+
+        <Menu.Item key='preference'>
+          <Link to='/preference'>偏好设置</Link>
+        </Menu.Item>
       </Menu>
 
       {/* A <Switch> looks through its children <Route>s and renders the first one that matches the current URL. */}
@@ -66,6 +71,7 @@ function Routes() {
           <Route exact path='/library/subscribe' component={LibrarySubscribe}></Route>
           <Route exact path='/library/rule-list' component={LibraryRuleList}></Route>
           <Route exact path='/current-config' component={CurrentConfig}></Route>
+          <Route exact path='/preference' component={Preference}></Route>
         </Switch>
       </div>
     </>

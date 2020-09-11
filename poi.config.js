@@ -46,6 +46,7 @@ module.exports = {
 
   output: {
     target: 'electron-renderer',
+    publicUrl: './',
   },
 
   reactRefresh: true,

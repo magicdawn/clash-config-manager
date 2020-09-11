@@ -14,5 +14,13 @@ export default new Store({
       list: [],
       name: 'clash-config-manager',
     },
+
+    preference: {
+      syncConfig: {
+        davServerUrl: '',
+        user: '',
+        pass: '',
+      },
+    },
   },
 })

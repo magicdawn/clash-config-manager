@@ -4,7 +4,8 @@ const fs = require('fs-extra')
 const {BrowserWindow} = require('electron')
 
 const load = (id) => {
-  const extDir = os.homedir() + `/Library/ApplicationSupport/Google/Chrome/Default/Extensions/${id}`
+  const extDir =
+    os.homedir() + `/Library/Application Support/Google/Chrome/Default/Extensions/${id}`
   if (!fs.existsSync(extDir)) return
 
   const ver = fs.readdirSync(extDir)[0]
