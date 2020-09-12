@@ -1,6 +1,19 @@
 import React, {useState, useCallback, useEffect} from 'react'
-import {Button, DatePicker, version, Layout, Menu, Modal, Input, message, Space} from 'antd'
-import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons'
+import {
+  Button,
+  DatePicker,
+  version,
+  Layout,
+  Menu,
+  Modal,
+  Input,
+  message,
+  Space,
+  Row,
+  Col,
+  Card,
+} from 'antd'
+import {SettingFilled, CloudUploadOutlined, CloudDownloadOutlined} from '@ant-design/icons'
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
 import usePlug from '@x/rematch/usePlug'
 import {useModifyState} from '@x/react/hooks'
@@ -9,7 +22,7 @@ import {v4 as uuid} from 'uuid'
 import styles from './index.module.less'
 import storage from '../../storage/index'
 import {compose} from 'recompose'
-import {getClient, upload, download} from '../../util/sync/webdav/index.js'
+import helper from '../../util/sync/webdav/helper'
 
 const {Header, Footer, Sider, Content} = Layout
 const {SubMenu} = Menu
@@ -28,35 +41,76 @@ export default function Preference() {
   const [showModal, setShowModal] = useState(false)
 
   const onUpload = usePersistFn(async () => {
-    await upload()
+    await helper.upload()
   })
+
+  const onForceUpload = usePersistFn(async () => {
+    await helper.forceUpload()
+  })
+
   const onDownload = usePersistFn(async () => {
-    await download()
+    await helper.download()
   })
 
   return (
     <div className={styles.page}>
       <ModalSyncConfig {...{visible: showModal, setVisible: setShowModal}} />
 
-      <Space direction='vertical'>
-        <Button
-          type='primary'
-          block
-          onClick={() => {
-            setShowModal(true)
-          }}
-        >
-          config
-        </Button>
+      <Row>
+        <Col span={4} offset={20}>
+          <Button
+            type='primary'
+            block
+            onClick={() => {
+              setShowModal(true)
+            }}
+          >
+            <SettingFilled />
+            配置同步参数
+          </Button>
+        </Col>
+      </Row>
 
-        <Button type='primary' block onClick={onUpload}>
-          上传
-        </Button>
+      <Row gutter={{xs: 8, sm: 16, md: 24}} style={{marginTop: 10}}>
+        {/* 上传区 */}
+        <Col span={12}>
+          <Card
+            title={
+              <>
+                <CloudUploadOutlined /> 上传
+              </>
+            }
+          >
+            <Space direction='vertical' size={20} style={{width: '100%'}}>
+              <Button type='primary' size='large' block onClick={onUpload}>
+                <CloudUploadOutlined />
+                上传
+              </Button>
 
-        <Button type='primary' block onClick={onDownload}>
-          下载
-        </Button>
-      </Space>
+              <Button type='primary' size='large' danger block onClick={onForceUpload}>
+                <CloudUploadOutlined />
+                上传 (覆盖远程版本)
+              </Button>
+            </Space>
+          </Card>
+        </Col>
+
+        {/* 下载区 */}
+        <Col span={12}>
+          <Card
+            title={
+              <>
+                <CloudDownloadOutlined /> 下载
+              </>
+            }
+          >
+            <Button type='primary' block onClick={onDownload}>
+              <CloudDownloadOutlined />
+              下载
+            </Button>
+          </Card>
+        </Col>
+      </Row>
     </div>
   )
 }

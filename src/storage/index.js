@@ -1,9 +1,11 @@
 import Store from 'electron-store'
-
 /* eslint camelcase: off */
 
-export default new Store({
+const storage = new Store({
   name: 'data',
+  encryptionKey: 'clash-config-manager@@secret',
+  clearInvalidConfig: true,
+
   defaults: {
     subscribe_list: [],
     subscribe_detail: {},
@@ -24,3 +26,7 @@ export default new Store({
     },
   },
 })
+
+// fixme
+window.estore = storage
+export default storage
