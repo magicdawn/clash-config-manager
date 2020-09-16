@@ -78,27 +78,6 @@ class DavHelper {
     }
   }
 
-  download = async () => {
-    const remoteHasData = await this.exists()
-
-    // 远程无数据
-    if (!remoteHasData) {
-      console.error('remoteData is empty')
-      return
-    }
-
-    const values = await this.read()
-    // TODO: 合并策略
-
-    // set to electron-store
-    storage.store = values
-
-    window.location.reload()
-
-    // redux-store
-    // store.dispatch('global/reload')
-  }
-
   upload = async () => {
     const localData = storage.store
     const remoteHasData = await this.exists()
@@ -138,6 +117,39 @@ class DavHelper {
 
     await this.write(data)
     message.success('备份成功')
+  }
+
+  download = async () => {
+    const remoteHasData = await this.exists()
+
+    // 远程无数据
+    if (!remoteHasData) {
+      console.error('remoteData is empty')
+      return
+    }
+
+    const remoteData = await this.read()
+    const localData = {...storage.store}
+    const merged = customMerge(localData, remoteData)
+    console.log('customMerge', {remoteData, localData, merged})
+
+    // set to electron-store
+    storage.store = merged
+    message.success('下载成功')
+
+    // redux-store
+    // store.dispatch('global/reload')
+  }
+
+  forceDownload = async () => {
+    const yes = await this.#confirm('确认要上传并覆盖')
+    if (!yes) {
+      return
+    }
+
+    const data = await this.read()
+    storage.store = data
+    message.success('下载成功')
   }
 }
 

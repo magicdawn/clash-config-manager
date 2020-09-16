@@ -43,13 +43,15 @@ export default function Preference() {
   const onUpload = usePersistFn(async () => {
     await helper.upload()
   })
-
   const onForceUpload = usePersistFn(async () => {
     await helper.forceUpload()
   })
 
   const onDownload = usePersistFn(async () => {
     await helper.download()
+  })
+  const onForceDownload = usePersistFn(async () => {
+    await helper.forceDownload()
   })
 
   return (
@@ -104,10 +106,16 @@ export default function Preference() {
               </>
             }
           >
-            <Button type='primary' block onClick={onDownload}>
-              <CloudDownloadOutlined />
-              下载
-            </Button>
+            <Space direction='vertical' size={20} style={{width: '100%'}}>
+              <Button type='primary' size='large' block onClick={onDownload}>
+                <CloudDownloadOutlined />
+                下载
+              </Button>
+              <Button type='primary' size='large' danger block onClick={onForceDownload}>
+                <CloudDownloadOutlined />
+                下载(覆盖本地版本)
+              </Button>
+            </Space>
           </Card>
         </Col>
       </Row>
