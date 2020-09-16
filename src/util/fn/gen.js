@@ -37,13 +37,14 @@ export default async function genConfig() {
     .filter(Boolean)
   console.log(resultItemList)
 
-  const config = {}
+  // reverse: GUI最前面的优先
   const subscribeArr = resultItemList.filter((x) => x.type === 'subscribe')
   const ruleArr = resultItemList.filter((x) => x.type === 'rule')
 
   /**
    * config merge
    */
+  let config = {}
 
   for (let r of ruleArr) {
     const {item} = r
@@ -57,7 +58,8 @@ export default async function genConfig() {
     // local: use content
     if (type === 'local') {
       const cur = Yaml.load(content)
-      Object.assign(config, cur)
+      const {Rule, ...otherConfig} = cur
+      config = {...otherConfig, ...config, Rule: [...(config.Rule || []), ...(Rule || [])]}
     }
   }
 
