@@ -33,4 +33,9 @@ module.exports = {
     console.log('[build ui]')
     sh('yarn build:ui')
   },
+
+  mac: {
+    category: 'public.app-category.developer-tools',
+    target: ['dmg'],
+  },
 }
