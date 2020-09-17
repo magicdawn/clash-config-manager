@@ -128,6 +128,9 @@ class DavHelper {
       return
     }
 
+    const yes = await this.#confirm('将智能合并, 确认继续?')
+    if (!yes) return
+
     const remoteData = await this.read()
     const localData = {...storage.store}
     const merged = customMerge(localData, remoteData)
