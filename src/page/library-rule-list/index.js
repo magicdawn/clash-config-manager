@@ -289,6 +289,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
       onOk={handleOk}
       onCancel={handleCancel}
       width={'90vw'}
+      centered
     >
       <Form
         {...layout}

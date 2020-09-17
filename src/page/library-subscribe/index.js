@@ -185,6 +185,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex}) {
       visible={visible}
       onOk={handleOk}
       onCancel={handleCancel}
+      centered
     >
       <Input
         className='input-row'
