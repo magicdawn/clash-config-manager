@@ -5,17 +5,23 @@ const {is} = require('electron-util')
 const unhandled = require('electron-unhandled')
 const debug = require('electron-debug')
 const contextMenu = require('electron-context-menu')
-const config = require('./config')
 const menu = require('./menu')
 const os = require('os')
 const {load: loadDevExt} = require('./main-process/dev/ext')
+const pkg = require('./package.json')
 
 unhandled()
 debug()
 contextMenu()
 
 // Note: Must match `build.appId` in package.json
-app.setAppUserModelId('com.company.AppName')
+app.setAppUserModelId(pkg.bundleId)
+
+const prod = process.env.NODE_ENV === 'production'
+
+const appDataPath = app.getPath('appData')
+const userDataPath = path.join(appDataPath, prod ? pkg.name : pkg.name)
+app.setPath('userData', userDataPath)
 
 // Uncomment this before publishing your first version.
 // It's commented out as it throws an error if there are no published versions.
@@ -98,14 +104,11 @@ app.on('activate', async () => {
 //
 // engine: start
 //
-;(async () => {
+
+async function main() {
   await app.whenReady()
   Menu.setApplicationMenu(menu)
   loadDevExt()
   mainWindow = await createMainWindow()
-
-  // const favoriteAnimal = config.get('favoriteAnimal')
-  // mainWindow.webContents.executeJavaScript(
-  //   `document.querySelector('header p').textContent = 'Your favorite animal is ${favoriteAnimal}'`
-  // )
-})()
+}
+main()

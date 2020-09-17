@@ -1,16 +1,18 @@
 const {execSync} = require('child_process')
 const path = require('path')
+const pkg = require('./package.json')
 
 const sh = (cmd) => {
   console.log('[exec]: %s', cmd)
   execSync(cmd, {stdio: 'inherit'})
 }
 
+// env
 process.env.NODE_ENV = 'production'
 
 module.exports = {
-  appId: 'fun.magicdawn.clash-config-manager',
-  productName: 'Clash Config Manager',
+  appId: pkg.bundleId,
+  productName: pkg.productName,
 
   directories: {
     // output: '',
