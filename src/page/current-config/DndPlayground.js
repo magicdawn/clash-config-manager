@@ -156,6 +156,11 @@ export default function DndPlaygroud(props) {
                 {...provided.droppableProps}
                 className={cx('trash-wrapper', {'dragging-over': snapshot.isDraggingOver})}
               >
+                <div className='text'>
+                  <div>垃</div>
+                  <div>圾</div>
+                  <div>桶</div>
+                </div>
                 {provided.placeholder}
               </div>
             )}

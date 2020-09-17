@@ -120,27 +120,25 @@ export default function LibraryRuleList(props) {
                 </div>
               </div>
 
-              <Space style={{alignSelf: 'flex-end', display: 'flex', alignItems: 'flex-start'}}>
-                <div style={{display: 'flex', flexDirection: 'column'}}>
-                  <Button
-                    type='primary'
-                    onClick={(e) => edit(item, index)}
-                    onKeyDown={disableEnterAsClick}
-                  >
-                    编辑
-                  </Button>
+              <Space style={{display: 'flex', alignItems: 'center'}}>
+                <Button
+                  type='primary'
+                  onClick={(e) => edit(item, index)}
+                  onKeyDown={disableEnterAsClick}
+                >
+                  编辑
+                </Button>
 
-                  <Button
-                    type='success'
-                    onClick={(e) => view(item, index)}
-                    onKeyDown={disableEnterAsClick}
-                    style={{marginTop: 10}}
-                  >
-                    查看
-                  </Button>
-                </div>
+                <Button
+                  type='success'
+                  onClick={(e) => view(item, index)}
+                  onKeyDown={disableEnterAsClick}
+                >
+                  查看
+                </Button>
 
-                <div style={{display: 'flex', flexDirection: 'column'}}>
+                {/* not implemented */}
+                {/* <div style={{display: 'flex', flexDirection: 'column'}}>
                   <Button
                     type='primary'
                     onClick={(e) => edit(item, index)}
@@ -148,16 +146,18 @@ export default function LibraryRuleList(props) {
                   >
                     编辑规则(可视化)
                   </Button>
-                </div>
+                </div> */}
 
-                <Button
+                {/* remote config not supported */}
+                {/* <Button
                   type='primary'
                   disabled={type !== 'remote'}
                   onClick={() => update(item, index)}
                   onKeyDown={disableEnterAsClick}
                 >
                   更新
-                </Button>
+                </Button> */}
+
                 <Button
                   type='danger'
                   onClick={() => del(item, index)}
@@ -301,7 +301,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
         <Form.Item label='类型' name='type' rules={[{required: true, message: '类型不能为空'}]}>
           <Select style={{width: '200px'}} disabled={readonly}>
             <Option value='local'>本地存储</Option>
-            <Option value='remote'>远程规则列表</Option>
+            {/* <Option value='remote'>远程规则列表</Option> */}
           </Select>
         </Form.Item>
 
