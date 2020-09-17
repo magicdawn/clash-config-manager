@@ -54,7 +54,11 @@ const createMainWindow = async () => {
   })
 
   if (process.env.NODE_ENV === 'production') {
-    await win.loadFile(path.join(__dirname, 'dist/index.html'))
+    console.log('__dirname = %s', __dirname)
+    console.log('__filename = %s', __filename)
+    console.log('resolve filename = %s', path.resolve(__dirname))
+
+    await win.loadFile(path.join(__dirname, '../renderer/index.html'))
   } else {
     await win.loadURL('http://localhost:7749', {
       userAgent: 'electron',

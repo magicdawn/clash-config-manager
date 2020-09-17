@@ -5,6 +5,7 @@
   "description": "The best app ever",
   "license": "MIT",
   "repository": "sindresorhus/electron-boilerplate",
+  "main": "main/index.js",
   "author": {
     "name": "Your Name",
     "email": "user@gmail.com",
@@ -13,13 +14,18 @@
   "scripts": {
     "install": "napa",
     "postinstall": "electron-builder install-app-deps",
-    "dev": "poi -s",
+    "dev:ui": "poi -s",
+    "dev:main": "poi --config poi-main.config.js --watch",
+    "dev:start-main": "nodemon --exec electron --watch bundle/main/ bundle/main/index.js",
+    "build": "yarn build:ui && yarn build:main",
     "build:ui": "poi --prod",
+    "build:main": "poi --prod --config poi-main.config.js",
     "start": "electron .",
     "lint": "xo",
     "test": "npm run lint",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder --macos --linux --windows",
+    "pack": "electron-builder -c electron-builder.config.js --dir",
+    "dist:mac": "electron-builder -c electron-builder.config.js --macos",
+    "dist": "electron-builder -c electron-builder.config.js --macos --linux --windows",
     "release": "np"
   },
   "napa": {

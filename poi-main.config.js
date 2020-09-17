@@ -1,9 +1,6 @@
 const path = require('path')
 const merge = require('webpack-merge')
 const xDeps = require('@magicdawn/x/deps')
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
-
-const MONACO_DIR = path.dirname(require.resolve('monaco-editor/package.json'))
 
 const common = {
   resolve: {
@@ -18,42 +15,34 @@ const common = {
       }, {}),
     },
   },
-
-  plugins: [
-    new MonacoWebpackPlugin({
-      // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
-      languages: ['json', 'javascript', 'yaml'],
-    }),
-  ],
+  plugins: [],
 }
 
 const dev = {}
 
 const prod = {}
 
-console.log(common)
-
 module.exports = {
-  entry: 'src/index.js',
-
-  devServer: {
-    port: 7749,
-  },
+  entry: 'index.js',
 
   babel: {
     transpileModules: ['@magicdawn/x'],
   },
 
   output: {
-    target: 'electron-renderer',
-    publicUrl: './',
+    target: 'electron-main',
+    format: 'cjs',
     minimize: false,
-    dir: path.join(__dirname, 'bundle', process.env.NODE_ENV, 'renderer'),
+    dir: path.join(__dirname, 'bundle', process.env.NODE_ENV, 'main'),
   },
 
-  reactRefresh: true,
-
   configureWebpack(config) {
+    config.node = {
+      global: false,
+      __dirname: false,
+      __filename: false,
+    }
+
     if (process.env.NODE_ENV === 'production') {
       return merge(config, common, prod)
     } else {

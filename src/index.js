@@ -1,6 +1,6 @@
 import React, {useState, useCallback} from 'react'
 import {render} from 'react-dom'
-import {BrowserRouter as Router, Switch, Route, Link, useLocation} from 'react-router-dom'
+import {HashRouter as Router, Switch, Route, Link, useLocation} from 'react-router-dom'
 import {Provider} from 'react-redux'
 import store from './store'
 import 'antd/dist/antd.css'

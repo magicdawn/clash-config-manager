@@ -1,4 +1,9 @@
 node_modules
 yarn.lock
-/dist
 report.*.json
+
+# build
+/bundle
+
+# the package
+/dist
