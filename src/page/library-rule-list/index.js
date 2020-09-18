@@ -275,9 +275,26 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   }
 
   const [ruleAddVisible, setRuleAddVisible] = useState(false)
+
   const handleAddRuleChrome = useCallback(() => {
     setRuleAddVisible(true)
   }, [])
+
+  const onAddRule = usePersistFn(
+    (rule) => {
+      // debugger
+      let content = form.getFieldValue('content') || ''
+
+      if (content.split('\n').find((x) => x.includes(rule) && !x.trim().startsWith('#'))) {
+        return message.error(`rule ${rule} 已存在`)
+      }
+
+      content = content.trimEnd() + '\n' + `  - ${rule}` + '\n'
+      form.setFieldsValue({content})
+      message.success(`已添加规则 ${rule}`)
+    },
+    [form]
+  )
 
   return (
     <Modal
@@ -292,7 +309,14 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
       keyboard={false}
       footer={
         <div className='footer'>
-          <RuleAddModal visible={ruleAddVisible} setVisible={setRuleAddVisible} />
+          {ruleAddVisible && (
+            <RuleAddModal
+              visible={ruleAddVisible}
+              setVisible={setRuleAddVisible}
+              onOk={onAddRule}
+            />
+          )}
+
           <Button onClick={handleAddRuleChrome}>从 Chrome 添加规则</Button>
 
           <div className='btn-wrapper'>
