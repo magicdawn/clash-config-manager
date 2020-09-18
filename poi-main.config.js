@@ -32,7 +32,7 @@ module.exports = {
   output: {
     target: 'electron-main',
     format: 'cjs',
-    minimize: false,
+    // minimize: false,
     dir: path.join(__dirname, 'bundle', process.env.NODE_ENV, 'main'),
   },
 

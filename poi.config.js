@@ -47,7 +47,7 @@ module.exports = {
   output: {
     target: 'electron-renderer',
     publicUrl: './',
-    minimize: false,
+    // minimize: false,
     dir: path.join(__dirname, 'bundle', process.env.NODE_ENV, 'renderer'),
   },
 
