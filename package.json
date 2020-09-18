@@ -24,9 +24,9 @@
     "start": "electron .",
     "lint": "xo",
     "test": "npm run lint",
-    "pack": "electron-builder -c electron-builder.config.js --dir",
-    "dist:mac": "electron-builder -c electron-builder.config.js --macos",
-    "dist": "electron-builder -c electron-builder.config.js --macos --linux --windows",
+    "pack": "electron-builder --dir",
+    "dist:mac": "electron-builder --macos",
+    "dist": "electron-builder --macos --linux --windows",
     "release": "np"
   },
   "napa": {
@@ -92,35 +92,6 @@
   "np": {
     "publish": false,
     "releaseDraft": false
-  },
-  "build": {
-    "appId": "com.company.AppName",
-    "mac": {
-      "category": "public.app-category.social-networking",
-      "darkModeSupport": true
-    },
-    "dmg": {
-      "iconSize": 160,
-      "contents": [
-        {
-          "x": 180,
-          "y": 170
-        },
-        {
-          "x": 480,
-          "y": 170,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ],
-      "category": "Network;Chat"
-    }
   },
   "husky": {
     "hooks": {

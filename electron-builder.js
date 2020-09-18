@@ -38,4 +38,20 @@ module.exports = {
     category: 'public.app-category.developer-tools',
     target: ['dmg'],
   },
+
+  dmg: {
+    iconSize: 160,
+    contents: [
+      {
+        x: 180,
+        y: 170,
+      },
+      {
+        x: 480,
+        y: 170,
+        type: 'link',
+        path: '/Applications',
+      },
+    ],
+  },
 }
