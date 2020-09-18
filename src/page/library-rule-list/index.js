@@ -1,8 +1,6 @@
-import React, {useState, useCallback, useEffect, useRef} from 'react'
-import {Button, DatePicker, version, Layout, Menu, Modal, Input, message, Tooltip} from 'antd'
-import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons'
-import {useMount, usePersistFn, useUpdateEffect, useSetState} from 'ahooks'
-import {compose} from 'recompose'
+import React, {useState, useCallback, useRef} from 'react'
+import {Button, Modal, Input, message, Tooltip} from 'antd'
+import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
 import usePlug from '@x/rematch/usePlug'
 import {useModifyState} from '@x/react/hooks'
 import {v4 as uuid} from 'uuid'
@@ -10,16 +8,13 @@ import {firstLine, limitLines} from '../../util/text-util'
 import Yaml from 'js-yaml'
 
 import styles from './index.module.less'
-import storage from '../../storage/index'
-import {List, Typography, Divider, Space, Form, Checkbox, Select} from 'antd'
-const {Header, Footer, Sider, Content} = Layout
-const {SubMenu} = Menu
+import {List, Space, Form, Select} from 'antd'
 const {Option} = Select
 
 const namespace = 'libraryRuleList'
 
-export default function LibraryRuleList(props) {
-  const {effects, state, setState} = usePlug({
+export default function LibraryRuleList() {
+  const {effects, state} = usePlug({
     nsp: namespace,
     state: ['list'],
   })
@@ -54,9 +49,9 @@ export default function LibraryRuleList(props) {
     setShowModal(true)
   })
 
-  const update = usePersistFn((item, index) => {
-    effects.update({item, index})
-  })
+  // const update = usePersistFn((item, index) => {
+  //   effects.update({item, index})
+  // })
 
   const disableEnterAsClick = useCallback((e) => {
     // disable enter
@@ -175,9 +170,10 @@ export default function LibraryRuleList(props) {
 }
 
 import ConfigEditor from './ConfigEditor'
+import RuleAddModal from './AddRuleModal'
 
 function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
-  const {state, effects} = usePlug({nsp: namespace, state: ['list']})
+  const {effects} = usePlug({nsp: namespace, state: ['list']})
 
   const readonly = editMode === 'readonly'
 
@@ -213,11 +209,8 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   }
 
   const layout = {
-    labelCol: {span: 4},
-    wrapperCol: {span: 20},
-  }
-  const tailLayout = {
-    wrapperCol: {offset: 5, span: 16},
+    labelCol: {span: 3},
+    wrapperCol: {span: 21},
   }
 
   const handleCancel = useCallback(() => {
@@ -238,7 +231,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   })
 
   const handleSubmit = usePersistFn((item) => {
-    const {type, name, url, content} = item
+    const {type, content} = item
 
     // add more data
     const {id} = otherFormData
@@ -281,6 +274,11 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     console.log('Failed:', errorInfo)
   }
 
+  const [ruleAddVisible, setRuleAddVisible] = useState(false)
+  const handleAddRuleChrome = useCallback(() => {
+    setRuleAddVisible(true)
+  }, [])
+
   return (
     <Modal
       className={styles.modal}
@@ -290,6 +288,21 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
       onCancel={handleCancel}
       width={'90vw'}
       centered
+      maskClosable={false}
+      keyboard={false}
+      footer={
+        <div className='footer'>
+          <RuleAddModal visible={ruleAddVisible} setVisible={setRuleAddVisible} />
+          <Button onClick={handleAddRuleChrome}>从 Chrome 添加规则</Button>
+
+          <div className='btn-wrapper'>
+            <Button onClick={handleCancel}>取消</Button>
+            <Button type='primary' onClick={handleOk}>
+              确定
+            </Button>
+          </div>
+        </div>
+      }
     >
       <Form
         {...layout}

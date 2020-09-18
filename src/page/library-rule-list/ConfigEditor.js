@@ -7,7 +7,7 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from 'react'
-import {usePersistFn, useWhyDidYouUpdate, useUpdateEffect} from 'ahooks'
+import {usePersistFn, useUpdateEffect} from 'ahooks'
 
 import style from './ConfigEditor.module.less'
 
@@ -36,7 +36,7 @@ function ConfigEditor(props, ref) {
   })
 
   const editorOnChange = usePersistFn((newValue, e) => {
-    props.onChange(newValue)
+    onChange(newValue)
   })
 
   const options = {
