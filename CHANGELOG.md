@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.5 2020-09-19
+
+- fix error can not find command `atom` / `code`
+
 ## v0.0.4 2020-09-19
 
 - [x] 快速添加规则, mc clash add-rule GUI version
