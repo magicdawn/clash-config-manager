@@ -3,6 +3,7 @@ const {join: pathjoin} = require('path')
 const fse = require('fs-extra')
 const Yaml = require('js-yaml')
 import store from '../../store'
+import request from 'umi-request'
 
 export default async function genConfig() {
   const rootState = store.getState()
@@ -48,18 +49,19 @@ export default async function genConfig() {
   for (let r of ruleArr) {
     const {item} = r
     const {type, url, content} = item
+    let usingContent = content
 
     // remote: url -> content
     if (type === 'remote') {
-      // TODO: 支持 remote
+      usingContent = await request.get(url, {
+        responseType: 'text',
+        headers: {'x-extra-headers': JSON.stringify({'user-agent': 'clash'})},
+      })
     }
 
-    // local: use content
-    if (type === 'local') {
-      const cur = Yaml.load(content)
-      const {rules, ...otherConfig} = cur
-      config = {...otherConfig, ...config, rules: [...(config.rules || []), ...(rules || [])]}
-    }
+    const cur = Yaml.load(usingContent)
+    const {rules, ...otherConfig} = cur
+    config = {...otherConfig, ...config, rules: [...(config.rules || []), ...(rules || [])]}
   }
 
   /**
@@ -68,6 +70,9 @@ export default async function genConfig() {
 
   if (!config.proxies || !Array.isArray(config.proxies)) {
     config.proxies = []
+  }
+  if (!config['proxy-groups'] || !Array.isArray(config['proxy-groups'])) {
+    config['proxy-groups'] = []
   }
 
   for (let s of subscribeArr) {
@@ -101,7 +106,7 @@ export default async function genConfig() {
   for (let line of config.rules) {
     const use = line.split(',').slice(-1)[0]
     if (!use) continue
-    if (['DIRECT', 'REJECT'].includes(use)) continue
+    if (['DIRECT', 'REJECT', 'no-resolve'].includes(use)) continue
     if (existNames.includes(use)) continue
 
     // - {name: Others, type: select, proxies: [DIRECT, Proxy]}

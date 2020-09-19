@@ -28,7 +28,7 @@ export default function DndPlaygroud(props) {
       return {
         ...item,
         text: item.name,
-        content: item.url,
+        tooltip: item.url,
       }
     })
   }, [subscribeList])
@@ -42,7 +42,7 @@ export default function DndPlaygroud(props) {
       return {
         id: item.id,
         text: item.name,
-        content: limitLines(item.content, 100),
+        tooltip: item.type === 'local' ? limitLines(item.content, 100) : item.url,
         type: item.type, // rule-type
       }
     })
@@ -234,7 +234,7 @@ const Source = ({item, type, isDragDisabled, index}) => {
             {text}
             <Tooltip
               overlayClassName={styles.tooltipDetailOverlay}
-              title={<div className={styles.tooltipDetail}>{item.content}</div>}
+              title={<div className={styles.tooltipDetail}>{item.tooltip}</div>}
             >
               <InfoCircleOutlined className='help-icon' />
             </Tooltip>

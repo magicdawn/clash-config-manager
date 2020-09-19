@@ -1,5 +1,5 @@
 const path = require('path')
-const {app, BrowserWindow, Menu} = require('electron')
+import {app, BrowserWindow, Menu, session} from 'electron'
 /// const {autoUpdater} = require('electron-updater');
 const {is} = require('electron-util')
 const unhandled = require('electron-unhandled')
@@ -113,12 +113,25 @@ async function main() {
   loadDevExt()
   mainWindow = await createMainWindow()
 
+  // with this, we can set user-agent in front-end
+  // https://stackoverflow.com/a/35672988/2822866
+  session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+    let extraHeaders = {}
+    if (details.requestHeaders['x-extra-headers']) {
+      try {
+        extraHeaders = JSON.parse(details.requestHeaders['x-extra-headers'])
+      } catch (e) {
+        // noop
+      }
+    }
+    callback({cancel: false, requestHeaders: {...details.requestHeaders, ...extraHeaders}})
+  })
+
   if (process.env.NODE_ENV === 'production') {
     await mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
   } else {
-    await mainWindow.loadURL('http://localhost:7749', {
-      userAgent: 'electron',
-    })
+    await mainWindow.loadURL('http://localhost:7749')
   }
 }
+
 main()
