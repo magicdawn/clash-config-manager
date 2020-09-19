@@ -46,6 +46,7 @@
     "electron-updater": "^4.0.6",
     "electron-util": "^0.13.0",
     "env-paths": "^2.2.0",
+    "execa": "^4.0.3",
     "fs-extra": "^9.0.1",
     "js-yaml": "^3.14.0",
     "launch-editor": "^2.2.1",

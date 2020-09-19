@@ -1,3 +1,8 @@
+import {remote} from 'electron'
+import path from 'path'
+import fse from 'fs-extra'
+import execa from 'execa'
+import debugFactory from 'debug'
 import React, {useState, useCallback, useRef} from 'react'
 import {Button, Modal, Input, message, Tooltip} from 'antd'
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
@@ -10,8 +15,10 @@ import Yaml from 'js-yaml'
 import styles from './index.module.less'
 import {List, Space, Form, Select} from 'antd'
 const {Option} = Select
+const debug = debugFactory('app:libraryRuleList')
 
 const namespace = 'libraryRuleList'
+const TEMP_EDITING_FILE = path.join(remote.app.getPath('userData'), 'temp', '临时文件-关闭生效.yml')
 
 export default function LibraryRuleList() {
   const {effects, state} = usePlug({
@@ -214,6 +221,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   }
 
   const handleCancel = useCallback(() => {
+    if (editInEditorMaskVisible) return
     setVisible(false)
     clean()
   }, [])
@@ -296,6 +304,39 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     [form]
   )
 
+  const [editInEditorMaskVisible, setEditInEditorMaskVisible] = useState(false)
+  const editInEditor = usePersistFn(async (editor = 'code') => {
+    const content = form.getFieldValue('content')
+    await fse.outputFile(TEMP_EDITING_FILE, content, 'utf8')
+
+    // wait edit
+    setEditInEditorMaskVisible(true)
+    let execResults
+    const cmd = `${editor} --wait '${TEMP_EDITING_FILE}'`
+    try {
+      execResults = await execa.command(cmd, {shell: true})
+    } catch (e) {
+      message.error('执行命令出错: ' + e.message)
+      return
+    } finally {
+      setEditInEditorMaskVisible(false)
+    }
+
+    debug('exec: %o', {cmd, execResults})
+    const {exitCode} = execResults || {}
+    if (exitCode !== 0) {
+      message.error(`执行命令出错: exitCode = ${exitCode}`)
+      return
+    }
+
+    // read & set
+    const newContent = await fse.readFile(TEMP_EDITING_FILE, 'utf8')
+    if (newContent !== content) {
+      form.setFieldsValue({content: newContent})
+      message.success('文件内容已更新')
+    }
+  })
+
   return (
     <Modal
       className={styles.modal}
@@ -317,11 +358,23 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
             />
           )}
 
-          <Button onClick={handleAddRuleChrome}>从 Chrome 添加规则</Button>
+          <Space direction='horizontal'>
+            <Button disabled={editInEditorMaskVisible} onClick={handleAddRuleChrome}>
+              从 Chrome 添加规则
+            </Button>
+            <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('code')}>
+              使用 vscode 编辑
+            </Button>
+            <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('atom')}>
+              使用 Atom 编辑
+            </Button>
+          </Space>
 
           <div className='btn-wrapper'>
-            <Button onClick={handleCancel}>取消</Button>
-            <Button type='primary' onClick={handleOk}>
+            <Button disabled={editInEditorMaskVisible} onClick={handleCancel}>
+              取消
+            </Button>
+            <Button disabled={editInEditorMaskVisible} type='primary' onClick={handleOk}>
               确定
             </Button>
           </div>
@@ -362,7 +415,21 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
                 name='content'
                 rules={[{required: true, message: '内容不能为空'}]}
               >
-                <ConfigEditor ref={configEditorRef} readonly={readonly} />
+                <ConfigEditor
+                  ref={configEditorRef}
+                  readonly={readonly}
+                  spinProps={{
+                    size: 'large',
+                    spinning: editInEditorMaskVisible,
+                    tip: (
+                      <>
+                        文件已经在编辑器中打开
+                        <br />
+                        在编辑器中关闭文件生效
+                      </>
+                    ),
+                  }}
+                />
               </Form.Item>
             ) : (
               <Form.Item label='URL' name='url' rules={[{required: true, message: 'url不能为空'}]}>
