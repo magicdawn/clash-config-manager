@@ -1,18 +1,16 @@
 import React, {useState, useCallback, useEffect, useRef} from 'react'
-import {useMount, usePersistFn, useUpdateEffect, useSetState} from 'ahooks'
-import {compose} from 'recompose'
+import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
 import usePlug from '@x/rematch/usePlug'
 import {Button, Input, Row, Col, Divider, message} from 'antd'
 import styles from './index.module.less'
 import DndPlaygroud from './DndPlayground'
 import gen, {getConfigFileDisplay, getConfigFile, DEFAULT_NAME} from '../../util/fn/gen'
-import {shell} from 'electron'
-const launch = require('launch-editor')
+import launch from 'launch-editor'
 
 const namespace = 'currentConfig'
 
 export default function ConfigList(props) {
-  const {effects, state, setState} = usePlug({
+  const {effects, state} = usePlug({
     nsp: namespace,
     state: ['list', 'name'],
   })
