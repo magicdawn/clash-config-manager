@@ -9,6 +9,7 @@ const {
   openNewGitHubIssue,
   debugInfo,
 } = require('electron-util')
+import storage from '../src/storage/index'
 
 const showPreferences = () => {
   // Show the app's preferences here
@@ -17,26 +18,25 @@ const showPreferences = () => {
 const helpSubmenu = [
   openUrlMenuItem({
     label: 'Website',
-    url: 'https://github.com/sindresorhus/electron-boilerplate',
+    url: 'https://github.com/magicdawn/clash-config-manager',
   }),
   openUrlMenuItem({
     label: 'Source Code',
-    url: 'https://github.com/sindresorhus/electron-boilerplate',
+    url: 'https://github.com/magicdawn/clash-config-manager',
   }),
   {
     label: 'Report an Issue…',
+    url: 'https://github.com/magicdawn/clash-config-manager/issues',
     click() {
       const body = `
 <!-- Please succinctly describe your issue and steps to reproduce it. -->
 
-
 ---
-
 ${debugInfo()}`
 
       openNewGitHubIssue({
-        user: 'sindresorhus',
-        repo: 'electron-boilerplate',
+        user: 'magicdawn',
+        repo: 'clash-config-manager',
         body,
       })
     },
@@ -55,40 +55,6 @@ if (!is.macos) {
   )
 }
 
-const debugSubmenu = [
-  {
-    label: 'Show Settings',
-    click() {
-      // config.openInEditor()
-    },
-  },
-  {
-    label: 'Show App Data',
-    click() {
-      shell.openItem(app.getPath('userData'))
-    },
-  },
-  {
-    type: 'separator',
-  },
-  {
-    label: 'Delete Settings',
-    click() {
-      // config.clear()
-      // app.relaunch()
-      // app.quit()
-    },
-  },
-  {
-    label: 'Delete App Data',
-    click() {
-      shell.moveItemToTrash(app.getPath('userData'))
-      app.relaunch()
-      app.quit()
-    },
-  },
-]
-
 const macosTemplate = [
   appMenu([
     {
@@ -100,21 +66,23 @@ const macosTemplate = [
     },
   ]),
   {
-    role: 'fileMenu',
+    label: '文件',
     submenu: [
       {
-        label: 'Custom',
+        label: '在 Finder 中打开数据目录',
+        click() {
+          const dir = app.getPath('userData')
+          console.log('userData', dir)
+          shell.showItemInFolder(dir)
+        },
       },
       {
-        type: 'separator',
-      },
-      {
-        role: 'close',
+        label: '在 Finder 中打开数据文件',
+        click() {
+          shell.showItemInFolder(storage.path)
+        },
       },
     ],
-  },
-  {
-    role: 'editMenu',
   },
   {
     role: 'viewMenu',
@@ -168,11 +136,4 @@ const otherTemplate = [
 
 const template = process.platform === 'darwin' ? macosTemplate : otherTemplate
 
-if (is.development) {
-  template.push({
-    label: 'Debug',
-    submenu: debugSubmenu,
-  })
-}
-
-module.exports = Menu.buildFromTemplate(template)
+export default Menu.buildFromTemplate(template)

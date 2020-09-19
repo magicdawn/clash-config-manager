@@ -1,5 +1,4 @@
 const {execSync} = require('child_process')
-const path = require('path')
 const pkg = require('./package.json')
 
 const sh = (cmd) => {

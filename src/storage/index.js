@@ -28,5 +28,5 @@ const storage = new Store({
 })
 
 // fixme
-window.estore = storage
+global.estore = storage
 export default storage

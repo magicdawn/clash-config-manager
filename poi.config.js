@@ -3,7 +3,7 @@ const merge = require('webpack-merge')
 const xDeps = require('@magicdawn/x/deps')
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
-const MONACO_DIR = path.dirname(require.resolve('monaco-editor/package.json'))
+// const MONACO_DIR = path.dirname(require.resolve('monaco-editor/package.json'))
 
 const common = {
   resolve: {
