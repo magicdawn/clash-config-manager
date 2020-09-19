@@ -6,6 +6,7 @@ const unhandled = require('electron-unhandled')
 const debug = require('electron-debug')
 const contextMenu = require('electron-context-menu')
 import _ from 'lodash'
+import fixPath from 'fix-path'
 
 import './main-process/init/meta'
 const {load: loadDevExt} = require('./main-process/dev/ext')
@@ -16,6 +17,7 @@ import './main-process/ipc/index'
 unhandled()
 debug()
 contextMenu()
+fixPath()
 
 // Uncomment this before publishing your first version.
 // It's commented out as it throws an error if there are no published versions.
