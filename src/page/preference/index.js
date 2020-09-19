@@ -2,17 +2,17 @@ import {tmpDir} from 'os'
 import moment from 'moment'
 import path from 'path'
 import fse from 'fs-extra'
-import {shell} from 'electron'
+import {shell, ipcRenderer} from 'electron'
 import launch from 'launch-editor'
 
 import React, {useState, useCallback, useEffect} from 'react'
 import {Button, Modal, Input, message, Space, Row, Col, Card} from 'antd'
 import {SettingFilled, CloudUploadOutlined, CloudDownloadOutlined} from '@ant-design/icons'
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
-import usePlug from '@x/rematch/usePlug'
+import usePlug from '@magicdawn/x/rematch/usePlug'
 import {useModifyState} from '@x/react/hooks'
-// import {v4 as uuid} from 'uuid'
 import storage from '../../storage/index'
+import customMerge from '../../util/sync/webdav/customMerge'
 
 import styles from './index.module.less'
 import helper from '../../util/sync/webdav/helper'
@@ -21,7 +21,7 @@ const nsp = 'preference'
 const stateKeys = ['list']
 
 export default function Preference() {
-  const {effects} = usePlug({nsp, state: stateKeys})
+  const {effects, dispatch} = usePlug({nsp, state: stateKeys})
 
   useMount(() => {
     effects.init()
@@ -47,14 +47,36 @@ export default function Preference() {
   const [exportFile, setExportFile] = useState('')
 
   const onExport = usePersistFn(async () => {
-    const file = path.join(tmpDir(), 'cfm', `${moment().format('YYYY-MM-DD HH:mm')}.yml`)
+    const file = path.join(tmpDir(), 'cfm', `${moment().format('YYYY-MM-DD HH:mm')}.json`)
     await fse.outputJson(file, storage.store, {spaces: 2})
     setExportHelperVisible(true)
     setExportFile(file)
   })
 
   const onImport = usePersistFn(() => {
-    //
+    ;(async () => {
+      const file = await ipcRenderer.invoke('select-file')
+
+      let importData
+      try {
+        importData = await fse.readJson(file)
+      } catch (e) {
+        console.log(e.stack || e)
+        return message.error('readJson fail: ' + '\n' + e.stack || e)
+      }
+
+      const localData = {...storage.store}
+      const merged = customMerge(localData, importData)
+      console.log('customMerge', {localData, importData, merged})
+
+      // reload electron-store
+      storage.store = merged
+
+      // reload redux
+      dispatch({type: 'global/reload'})
+
+      message.success('导入成功: 已与本地配置合并')
+    })()
   })
 
   const openInEditor = usePersistFn((editor) => {

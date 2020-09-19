@@ -16,6 +16,12 @@ export default {
     detail: {},
   },
 
+  listen: {
+    'global/reload'() {
+      this.load()
+    },
+  },
+
   effects: (dispatch) => {
     return {
       load() {

@@ -1,10 +1,11 @@
 import _ from 'lodash'
-import storage from '../../../storage/index'
-import {subscribeToClash} from '../../../util/fn/clash'
 import {message} from 'antd'
+import storage from '../../../storage/index'
 
 const nsp = 'preference'
 const STORAGE_KEY = nsp
+
+// console.log(1);
 
 export default {
   name: nsp,
@@ -15,6 +16,12 @@ export default {
       davServerUrl: '',
       user: '',
       pass: '',
+    },
+  },
+
+  listen: {
+    'global/reload'() {
+      this.load()
     },
   },
 

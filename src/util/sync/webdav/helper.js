@@ -136,12 +136,10 @@ class DavHelper {
     const merged = customMerge(localData, remoteData)
     console.log('customMerge', {remoteData, localData, merged})
 
-    // set to electron-store
+    // reload electron-store & redux
     storage.store = merged
+    store.dispatch({type: 'global/reload'})
     message.success('下载成功')
-
-    // redux-store
-    // store.dispatch('global/reload')
   }
 
   forceDownload = async () => {
@@ -151,7 +149,10 @@ class DavHelper {
     }
 
     const data = await this.read()
+
+    // reload electron-store & redux
     storage.store = data
+    store.dispatch({type: 'global/reload'})
     message.success('下载成功')
   }
 }

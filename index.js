@@ -11,6 +11,7 @@ import './main-process/init/meta'
 const {load: loadDevExt} = require('./main-process/dev/ext')
 import {loadWindowState, saveWindowState} from './main-process/initWindowState'
 import menu from './main-process/menu'
+import './main-process/ipc/index'
 
 unhandled()
 debug()

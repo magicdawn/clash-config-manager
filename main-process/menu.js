@@ -64,26 +64,24 @@ const macosTemplate = [
         showPreferences()
       },
     },
+    {
+      type: 'separator',
+    },
+    {
+      label: '在 Finder 中打开数据目录',
+      click() {
+        const dir = app.getPath('userData')
+        console.log('userData', dir)
+        shell.showItemInFolder(dir)
+      },
+    },
+    {
+      label: '在 Finder 中打开数据文件',
+      click() {
+        shell.showItemInFolder(storage.path)
+      },
+    },
   ]),
-  {
-    label: '文件',
-    submenu: [
-      {
-        label: '在 Finder 中打开数据目录',
-        click() {
-          const dir = app.getPath('userData')
-          console.log('userData', dir)
-          shell.showItemInFolder(dir)
-        },
-      },
-      {
-        label: '在 Finder 中打开数据文件',
-        click() {
-          shell.showItemInFolder(storage.path)
-        },
-      },
-    ],
-  },
   {
     role: 'viewMenu',
   },
