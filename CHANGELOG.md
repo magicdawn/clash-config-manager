@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.7 2020-09-19
+
+- support remote config file
+
 ## v0.0.6 2020-09-19
 
 - 适配 clash core 1.0, see https://github.com/Dreamacro/clash/wiki/breaking-changes-in-1.0.0
