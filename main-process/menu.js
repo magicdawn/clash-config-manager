@@ -86,6 +86,9 @@ const macosTemplate = [
     role: 'viewMenu',
   },
   {
+    role: 'editMenu',
+  },
+  {
     role: 'windowMenu',
   },
   {
