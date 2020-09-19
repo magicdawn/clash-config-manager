@@ -1,7 +1,6 @@
 const {homedir} = require('os')
 const {join: pathjoin} = require('path')
 const fse = require('fs-extra')
-const _ = require('lodash')
 const Yaml = require('js-yaml')
 import store from '../../store'
 
@@ -58,8 +57,8 @@ export default async function genConfig() {
     // local: use content
     if (type === 'local') {
       const cur = Yaml.load(content)
-      const {Rule, ...otherConfig} = cur
-      config = {...otherConfig, ...config, Rule: [...(config.Rule || []), ...(Rule || [])]}
+      const {rules, ...otherConfig} = cur
+      config = {...otherConfig, ...config, rules: [...(config.rules || []), ...(rules || [])]}
     }
   }
 
@@ -67,13 +66,13 @@ export default async function genConfig() {
    * subscribe
    */
 
-  if (!config['Proxy'] || !Array.isArray(config['Proxy'])) {
-    config['Proxy'] = []
+  if (!config.proxies || !Array.isArray(config.proxies)) {
+    config.proxies = []
   }
 
   for (let s of subscribeArr) {
     const {item} = s
-    const {name, url} = item
+    const {url} = item
     let servers
 
     // update subscribe
@@ -87,11 +86,11 @@ export default async function genConfig() {
       servers = subscribeDetail[url]
     }
 
-    config['Proxy'] = config['Proxy'].concat(servers)
+    config.proxies = config.proxies.concat(servers)
   }
 
-  const proxyGroups = config['Proxy Group']
-  const allProxies = config['Proxy'].map((row) => row.name)
+  const proxyGroups = config['proxy-groups']
+  const allProxies = config.proxies.map((row) => row.name)
   proxyGroups
     .filter((item) => !item.proxies || !Array.isArray(item.proxies) || !item.proxies.length)
     .forEach((item) => {
@@ -99,7 +98,7 @@ export default async function genConfig() {
     })
 
   const existNames = proxyGroups.map((i) => i.name)
-  for (let line of config.Rule) {
+  for (let line of config.rules) {
     const use = line.split(',').slice(-1)[0]
     if (!use) continue
     if (['DIRECT', 'REJECT'].includes(use)) continue
@@ -111,7 +110,7 @@ export default async function genConfig() {
       type: 'select',
       proxies: ['DIRECT', 'Proxy', 'REJECT'],
     }
-    config['Proxy Group'].push(newgroup)
+    config['proxy-groups'].push(newgroup)
     existNames.push(use)
   }
 
@@ -124,19 +123,6 @@ export default async function genConfig() {
     success: true,
     msg: `${file} writed`,
   }
-
-  // const ruleByGithubContent = await readUrl({
-  //   // url: 'https://raw.githubusercontent.com/lhie1/Rules/master/Clash/Rule.yml',
-  //   https://raw.githubusercontent.com/lhie1/Rules/master/Clash/Rule.yaml
-  //   // url: 'https://cdn.jsdelivr.net/gh/lhie1/Rules@master/Clash/Rule.yaml',
-  //   // url: 'https://raw.githubusercontent.com/lhie1/Rules/master/Clash/Rule.yaml',
-  //   url: 'https://cdn.jsdelivr.net/gh/lhie1/Rules@master/Clash/Rule.yaml',
-  //   encoding: 'utf8',
-  // })
-  // const ruleByGithubContent = fse.readFileSync(__dirname + '/../remote/Rule.yml', 'utf8')
-  // const ruleByGithub = {
-  //   Rule: Yaml.load(ruleByGithubContent),
-  // }
 }
 
 export const DEFAULT_NAME = 'clash-config-manager'

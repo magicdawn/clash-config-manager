@@ -87,6 +87,7 @@
     "poi": "^12.10.2",
     "prettier": "latest",
     "react-refresh": "^0.8.3",
+    "shelljs": "^0.8.4",
     "xo": "^0.25.3"
   },
   "xo": {
