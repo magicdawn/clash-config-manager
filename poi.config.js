@@ -3,7 +3,7 @@ const merge = require('webpack-merge')
 const xDeps = require('@magicdawn/x/deps')
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
-const MONACO_DIR = path.dirname(require.resolve('monaco-editor/package.json'))
+// const MONACO_DIR = path.dirname(require.resolve('monaco-editor/package.json'))
 
 const common = {
   resolve: {
@@ -47,7 +47,7 @@ module.exports = {
   output: {
     target: 'electron-renderer',
     publicUrl: './',
-    minimize: false,
+    // minimize: false,
     dir: path.join(__dirname, 'bundle', process.env.NODE_ENV, 'renderer'),
   },
 

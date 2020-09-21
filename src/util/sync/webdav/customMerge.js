@@ -24,13 +24,6 @@ import produce from 'immer'
 export default function mergeStore(a, b) {
   let ret = {...a}
 
-  const objectPath = [
-    //
-    'subscribe_detail',
-    'current_config_v2.name',
-    'preference',
-  ]
-
   ret = produce(ret, (draft) => {
     // 'subscribe_detail',
     Object.assign(draft.subscribe_detail, b.subscribe_detail)

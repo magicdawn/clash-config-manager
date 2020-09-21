@@ -6,8 +6,6 @@ import store from './store'
 import 'antd/dist/antd.css'
 import {Menu} from 'antd'
 import {
-  MailOutlined,
-  AppstoreOutlined,
   SettingOutlined,
   PayCircleOutlined,
   AppstoreAddOutlined,
@@ -22,8 +20,6 @@ import LibrarySubscribe from './page/library-subscribe/index'
 import LibraryRuleList from './page/library-rule-list/index'
 import CurrentConfig from './page/current-config/index'
 import Preference from './page/preference/index'
-
-const {SubMenu} = Menu
 
 const routes = [
   {

@@ -1,8 +1,11 @@
-import React, {useState, useCallback, useEffect, useRef} from 'react'
-import {Button, DatePicker, version, Layout, Menu, Modal, Input, message, Tooltip} from 'antd'
-import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons'
-import {useMount, usePersistFn, useUpdateEffect, useSetState} from 'ahooks'
-import {compose} from 'recompose'
+import {remote} from 'electron'
+import path from 'path'
+import fse from 'fs-extra'
+import execa from 'execa'
+import debugFactory from 'debug'
+import React, {useState, useCallback, useRef} from 'react'
+import {Button, Modal, Input, message, Tooltip} from 'antd'
+import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
 import usePlug from '@x/rematch/usePlug'
 import {useModifyState} from '@x/react/hooks'
 import {v4 as uuid} from 'uuid'
@@ -10,16 +13,15 @@ import {firstLine, limitLines} from '../../util/text-util'
 import Yaml from 'js-yaml'
 
 import styles from './index.module.less'
-import storage from '../../storage/index'
-import {List, Typography, Divider, Space, Form, Checkbox, Select} from 'antd'
-const {Header, Footer, Sider, Content} = Layout
-const {SubMenu} = Menu
+import {List, Space, Form, Select} from 'antd'
 const {Option} = Select
+const debug = debugFactory('app:libraryRuleList')
 
 const namespace = 'libraryRuleList'
+const TEMP_EDITING_FILE = path.join(remote.app.getPath('userData'), 'temp', '临时文件-关闭生效.yml')
 
-export default function LibraryRuleList(props) {
-  const {effects, state, setState} = usePlug({
+export default function LibraryRuleList() {
+  const {effects, state} = usePlug({
     nsp: namespace,
     state: ['list'],
   })
@@ -54,9 +56,9 @@ export default function LibraryRuleList(props) {
     setShowModal(true)
   })
 
-  const update = usePersistFn((item, index) => {
-    effects.update({item, index})
-  })
+  // const update = usePersistFn((item, index) => {
+  //   effects.update({item, index})
+  // })
 
   const disableEnterAsClick = useCallback((e) => {
     // disable enter
@@ -175,10 +177,10 @@ export default function LibraryRuleList(props) {
 }
 
 import ConfigEditor from './ConfigEditor'
+import RuleAddModal from './AddRuleModal'
 
 function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
-  const {state, effects} = usePlug({nsp: namespace, state: ['list']})
-
+  const {effects} = usePlug({nsp: namespace, state: ['list']})
   const readonly = editMode === 'readonly'
 
   const getDefaultItem = () => ({
@@ -191,6 +193,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
 
   const [form] = Form.useForm()
   const [otherFormData, modifyOtherFormData] = useModifyState({})
+  const [type, setType] = useModifyState({value: editItem?.type || 'local'})
 
   const configEditorRef = useRef(null)
 
@@ -198,9 +201,8 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     let val = editItem || getDefaultItem()
 
     form.setFieldsValue(val)
-    modifyOtherFormData((o) => {
-      o.id = val.id
-    })
+    modifyOtherFormData({id: val.id})
+    setType({value: val.type})
 
     if (visible) {
       configEditorRef.current?.setSelections([])
@@ -213,14 +215,12 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   }
 
   const layout = {
-    labelCol: {span: 4},
-    wrapperCol: {span: 20},
-  }
-  const tailLayout = {
-    wrapperCol: {offset: 5, span: 16},
+    labelCol: {span: 3},
+    wrapperCol: {span: 21},
   }
 
   const handleCancel = useCallback(() => {
+    if (editInEditorMaskVisible) return
     setVisible(false)
     clean()
   }, [])
@@ -238,13 +238,15 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   })
 
   const handleSubmit = usePersistFn((item) => {
-    const {type, name, url, content} = item
+    const {content, url} = item
 
     // add more data
     const {id} = otherFormData
     item.id = id
+    item.type = type.value
 
-    if (type === 'local') {
+    const typeValue = type.value
+    if (typeValue === 'local') {
       if (!content) {
         return message.error('content can not be empty')
       }
@@ -258,6 +260,10 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
       if (err) {
         return message.error('yaml load fail: ' + err.stack || err.message)
       }
+    }
+
+    if (typeValue === 'remote') {
+      item.content = ''
     }
 
     const err = effects.check({item, editItemIndex})
@@ -281,6 +287,61 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     console.log('Failed:', errorInfo)
   }
 
+  const [ruleAddVisible, setRuleAddVisible] = useState(false)
+
+  const handleAddRuleChrome = useCallback(() => {
+    setRuleAddVisible(true)
+  }, [])
+
+  const onAddRule = usePersistFn(
+    (rule) => {
+      // debugger
+      let content = form.getFieldValue('content') || ''
+
+      if (content.split('\n').find((x) => x.includes(rule) && !x.trim().startsWith('#'))) {
+        return message.error(`rule ${rule} 已存在`)
+      }
+
+      content = content.trimEnd() + '\n' + `  - ${rule}` + '\n'
+      form.setFieldsValue({content})
+      message.success(`已添加规则 ${rule}`)
+    },
+    [form]
+  )
+
+  const [editInEditorMaskVisible, setEditInEditorMaskVisible] = useState(false)
+  const editInEditor = usePersistFn(async (editor = 'code') => {
+    const content = form.getFieldValue('content')
+    await fse.outputFile(TEMP_EDITING_FILE, content, 'utf8')
+
+    // wait edit
+    setEditInEditorMaskVisible(true)
+    let execResults
+    const cmd = `${editor} --wait '${TEMP_EDITING_FILE}'`
+    try {
+      execResults = await execa.command(cmd, {shell: true})
+    } catch (e) {
+      message.error('执行命令出错: ' + e.message)
+      return
+    } finally {
+      setEditInEditorMaskVisible(false)
+    }
+
+    debug('exec: %o', {cmd, execResults})
+    const {exitCode} = execResults || {}
+    if (exitCode !== 0) {
+      message.error(`执行命令出错: exitCode = ${exitCode}`)
+      return
+    }
+
+    // read & set
+    const newContent = await fse.readFile(TEMP_EDITING_FILE, 'utf8')
+    if (newContent !== content) {
+      form.setFieldsValue({content: newContent})
+      message.success('文件内容已更新')
+    }
+  })
+
   return (
     <Modal
       className={styles.modal}
@@ -290,6 +351,46 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
       onCancel={handleCancel}
       width={'90vw'}
       centered
+      maskClosable={false}
+      keyboard={false}
+      footer={
+        <div className='footer'>
+          {type.value === 'local' && (
+            <>
+              {ruleAddVisible && (
+                <RuleAddModal
+                  visible={ruleAddVisible}
+                  setVisible={setRuleAddVisible}
+                  onOk={onAddRule}
+                />
+              )}
+
+              <Space direction='horizontal'>
+                <Button disabled={editInEditorMaskVisible} onClick={handleAddRuleChrome}>
+                  从 Chrome 添加规则
+                </Button>
+                <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('code')}>
+                  使用 vscode 编辑
+                </Button>
+                <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('atom')}>
+                  使用 Atom 编辑
+                </Button>
+              </Space>
+            </>
+          )}
+
+          <div style={{flex: 1}}></div>
+
+          <div className='btn-wrapper'>
+            <Button disabled={editInEditorMaskVisible} onClick={handleCancel}>
+              取消
+            </Button>
+            <Button disabled={editInEditorMaskVisible} type='primary' onClick={handleOk}>
+              确定
+            </Button>
+          </div>
+        </div>
+      }
     >
       <Form
         {...layout}
@@ -299,9 +400,14 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
         onFinishFailed={onFinishFailed}
       >
         <Form.Item label='类型' name='type' rules={[{required: true, message: '类型不能为空'}]}>
-          <Select style={{width: '200px'}} disabled={readonly}>
+          <Select
+            style={{width: '200px'}}
+            disabled={readonly}
+            value={type.value}
+            onChange={(value) => setType({value})}
+          >
             <Option value='local'>本地存储</Option>
-            {/* <Option value='remote'>远程规则列表</Option> */}
+            <Option value='remote'>远程规则列表</Option>
           </Select>
         </Form.Item>
 
@@ -314,31 +420,38 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
           />
         </Form.Item>
 
-        <Form.Item
-          noStyle
-          shouldUpdate={(prevValues, currentValues) => prevValues.type !== currentValues.type}
-        >
-          {({getFieldValue}) =>
-            getFieldValue('type') === 'local' ? (
-              <Form.Item
-                label='content'
-                name='content'
-                rules={[{required: true, message: '内容不能为空'}]}
-              >
-                <ConfigEditor ref={configEditorRef} readonly={readonly} />
-              </Form.Item>
-            ) : (
-              <Form.Item label='URL' name='url' rules={[{required: true, message: 'url不能为空'}]}>
-                <Input.TextArea
-                  className='input-row'
-                  onPressEnter={onInputPressEnter}
-                  autoSize={{minRows: 3, maxRows: 10}}
-                  disabled={readonly}
-                ></Input.TextArea>
-              </Form.Item>
-            )
-          }
-        </Form.Item>
+        {type.value === 'local' ? (
+          <Form.Item
+            label='content'
+            name='content'
+            rules={[{required: true, message: '内容不能为空'}]}
+          >
+            <ConfigEditor
+              ref={configEditorRef}
+              readonly={readonly}
+              spinProps={{
+                size: 'large',
+                spinning: editInEditorMaskVisible,
+                tip: (
+                  <>
+                    文件已经在编辑器中打开
+                    <br />
+                    在编辑器中关闭文件生效
+                  </>
+                ),
+              }}
+            />
+          </Form.Item>
+        ) : (
+          <Form.Item label='URL' name='url' rules={[{required: true, message: 'url不能为空'}]}>
+            <Input.TextArea
+              className='input-row'
+              onPressEnter={onInputPressEnter}
+              autoSize={{minRows: 3, maxRows: 10}}
+              disabled={readonly}
+            ></Input.TextArea>
+          </Form.Item>
+        )}
       </Form>
     </Modal>
   )

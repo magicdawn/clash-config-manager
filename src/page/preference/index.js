@@ -1,38 +1,27 @@
+import {tmpDir} from 'os'
+import moment from 'moment'
+import path from 'path'
+import fse from 'fs-extra'
+import {shell, ipcRenderer} from 'electron'
+import launch from 'launch-editor'
+
 import React, {useState, useCallback, useEffect} from 'react'
-import {
-  Button,
-  DatePicker,
-  version,
-  Layout,
-  Menu,
-  Modal,
-  Input,
-  message,
-  Space,
-  Row,
-  Col,
-  Card,
-} from 'antd'
+import {Button, Modal, Input, message, Space, Row, Col, Card} from 'antd'
 import {SettingFilled, CloudUploadOutlined, CloudDownloadOutlined} from '@ant-design/icons'
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
-import usePlug from '@x/rematch/usePlug'
+import usePlug from '@magicdawn/x/rematch/usePlug'
 import {useModifyState} from '@x/react/hooks'
-import {v4 as uuid} from 'uuid'
+import storage from '../../storage/index'
+import customMerge from '../../util/sync/webdav/customMerge'
 
 import styles from './index.module.less'
-import storage from '../../storage/index'
-import {compose} from 'recompose'
 import helper from '../../util/sync/webdav/helper'
-
-const {Header, Footer, Sider, Content} = Layout
-const {SubMenu} = Menu
-import {List, Typography, Divider} from 'antd'
 
 const nsp = 'preference'
 const stateKeys = ['list']
 
 export default function Preference() {
-  const {state, effects} = usePlug({nsp, state: stateKeys})
+  const {effects, dispatch} = usePlug({nsp, state: stateKeys})
 
   useMount(() => {
     effects.init()
@@ -54,9 +43,94 @@ export default function Preference() {
     await helper.forceDownload()
   })
 
+  const [exportHelperVisible, setExportHelperVisible] = useState(false)
+  const [exportFile, setExportFile] = useState('')
+
+  const onExport = usePersistFn(async () => {
+    const file = path.join(tmpDir(), 'cfm', `${moment().format('YYYY-MM-DD HH:mm')}.json`)
+    await fse.outputJson(file, storage.store, {spaces: 2})
+    setExportHelperVisible(true)
+    setExportFile(file)
+  })
+
+  const onImport = usePersistFn(() => {
+    ;(async () => {
+      const file = await ipcRenderer.invoke('select-file')
+
+      let importData
+      try {
+        importData = await fse.readJson(file)
+      } catch (e) {
+        console.log(e.stack || e)
+        return message.error('readJson fail: ' + '\n' + e.stack || e)
+      }
+
+      const localData = {...storage.store}
+      const merged = customMerge(localData, importData)
+      console.log('customMerge', {localData, importData, merged})
+
+      // reload electron-store
+      storage.store = merged
+
+      // reload redux
+      dispatch({type: 'global/reload'})
+
+      message.success('导入成功: 已与本地配置合并')
+    })()
+  })
+
+  const openInEditor = usePersistFn((editor) => {
+    launch(
+      // file
+      exportFile,
+      // try specific editor bin first (optional)
+      editor,
+      (fileName, errorMsg) => {
+        message.error(errorMsg)
+      }
+    )
+  }, [])
+
+  const rowGutter = {xs: 8, sm: 16, md: 24}
+
   return (
     <div className={styles.page}>
       <ModalSyncConfig {...{visible: showModal, setVisible: setShowModal}} />
+
+      <Modal
+        title='已导出'
+        visible={exportHelperVisible}
+        onOk={() => setExportHelperVisible(false)}
+        onCancel={() => setExportHelperVisible(false)}
+        centered
+        maskClosable={false}
+        keyborad={true}
+      >
+        <div style={{marginBottom: 12}}>文件位置: {exportFile}</div>
+        <Space>
+          <Button
+            onClick={() => {
+              shell.showItemInFolder(exportFile)
+            }}
+          >
+            在 Finder 中展示
+          </Button>
+          <Button
+            onClick={() => {
+              openInEditor('code')
+            }}
+          >
+            在 vscode 中打开
+          </Button>
+          <Button
+            onClick={() => {
+              openInEditor('atom')
+            }}
+          >
+            在 Atom 中打开
+          </Button>
+        </Space>
+      </Modal>
 
       <Row>
         <Col span={4} offset={20}>
@@ -73,7 +147,7 @@ export default function Preference() {
         </Col>
       </Row>
 
-      <Row gutter={{xs: 8, sm: 16, md: 24}} style={{marginTop: 10}}>
+      <Row gutter={rowGutter} style={{marginTop: 10}}>
         {/* 上传区 */}
         <Col span={12}>
           <Card
@@ -89,7 +163,7 @@ export default function Preference() {
                 上传
               </Button>
 
-              <Button type='primary' size='large' danger block onClick={onForceUpload}>
+              <Button type='primary' danger block onClick={onForceUpload}>
                 <CloudUploadOutlined />
                 上传 (覆盖远程版本)
               </Button>
@@ -111,11 +185,37 @@ export default function Preference() {
                 <CloudDownloadOutlined />
                 下载
               </Button>
-              <Button type='primary' size='large' danger block onClick={onForceDownload}>
+              <Button type='primary' danger block onClick={onForceDownload}>
                 <CloudDownloadOutlined />
                 下载(覆盖本地版本)
               </Button>
             </Space>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row gutter={rowGutter} style={{marginTop: 10}}>
+        {/* 导出区 */}
+        <Col span={24}>
+          <Card
+            title={
+              <>
+                <CloudUploadOutlined /> export or import
+              </>
+            }
+          >
+            <Row gutter={24}>
+              <Col span={12}>
+                <Button block onClick={onExport}>
+                  <CloudUploadOutlined /> 导出到 JSON
+                </Button>
+              </Col>
+              <Col span={12}>
+                <Button type='primary' block onClick={onImport}>
+                  <CloudUploadOutlined /> 从 JSON 导入
+                </Button>
+              </Col>
+            </Row>
           </Card>
         </Col>
       </Row>

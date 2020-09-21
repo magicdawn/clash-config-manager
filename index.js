@@ -1,27 +1,23 @@
 const path = require('path')
-const {app, BrowserWindow, Menu} = require('electron')
+import {app, BrowserWindow, Menu, session} from 'electron'
 /// const {autoUpdater} = require('electron-updater');
 const {is} = require('electron-util')
 const unhandled = require('electron-unhandled')
 const debug = require('electron-debug')
 const contextMenu = require('electron-context-menu')
-const menu = require('./menu')
-const os = require('os')
+import _ from 'lodash'
+import fixPath from 'fix-path'
+
+import './main-process/init/meta'
 const {load: loadDevExt} = require('./main-process/dev/ext')
-const pkg = require('./package.json')
+import {loadWindowState, saveWindowState} from './main-process/initWindowState'
+import menu from './main-process/menu'
+import './main-process/ipc/index'
 
 unhandled()
 debug()
 contextMenu()
-
-// Note: Must match `build.appId` in package.json
-app.setAppUserModelId(pkg.bundleId)
-
-const prod = process.env.NODE_ENV === 'production'
-
-const appDataPath = app.getPath('appData')
-const userDataPath = path.join(appDataPath, prod ? pkg.name : pkg.name)
-app.setPath('userData', userDataPath)
+fixPath()
 
 // Uncomment this before publishing your first version.
 // It's commented out as it throws an error if there are no published versions.
@@ -38,11 +34,15 @@ app.setPath('userData', userDataPath)
 let mainWindow
 
 const createMainWindow = async () => {
+  const {bounds} = await loadWindowState()
+
   const win = new BrowserWindow({
     title: app.name,
     show: false,
-    width: 1000,
-    height: 800,
+    x: bounds.x,
+    y: bounds.y,
+    width: bounds.width,
+    height: bounds.height,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false,
@@ -55,21 +55,18 @@ const createMainWindow = async () => {
 
   win.on('closed', () => {
     // Dereference the window
-    // For multiple windows store them in an array
     mainWindow = undefined
   })
 
-  if (process.env.NODE_ENV === 'production') {
-    console.log('__dirname = %s', __dirname)
-    console.log('__filename = %s', __filename)
-    console.log('resolve filename = %s', path.resolve(__dirname))
-
-    await win.loadFile(path.join(__dirname, '../renderer/index.html'))
-  } else {
-    await win.loadURL('http://localhost:7749', {
-      userAgent: 'electron',
-    })
-  }
+  const saveWindowStateHandler = _.throttle(() => {
+    saveWindowState({bounds: mainWindow.getBounds()})
+  }, 1000)
+  win.on('resize', () => {
+    saveWindowStateHandler()
+  })
+  win.on('move', () => {
+    saveWindowStateHandler()
+  })
 
   return win
 }
@@ -84,7 +81,6 @@ app.on('second-instance', () => {
     if (mainWindow.isMinimized()) {
       mainWindow.restore()
     }
-
     mainWindow.show()
   }
 })
@@ -101,6 +97,12 @@ app.on('activate', async () => {
   }
 })
 
+app.on('before-quit', async () => {
+  await saveWindowState({
+    bounds: mainWindow.getBounds(),
+  })
+})
+
 //
 // engine: start
 //
@@ -110,5 +112,26 @@ async function main() {
   Menu.setApplicationMenu(menu)
   loadDevExt()
   mainWindow = await createMainWindow()
+
+  // with this, we can set user-agent in front-end
+  // https://stackoverflow.com/a/35672988/2822866
+  session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+    let extraHeaders = {}
+    if (details.requestHeaders['x-extra-headers']) {
+      try {
+        extraHeaders = JSON.parse(details.requestHeaders['x-extra-headers'])
+      } catch (e) {
+        // noop
+      }
+    }
+    callback({cancel: false, requestHeaders: {...details.requestHeaders, ...extraHeaders}})
+  })
+
+  if (process.env.NODE_ENV === 'production') {
+    await mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
+  } else {
+    await mainWindow.loadURL('http://localhost:7749')
+  }
 }
+
 main()
