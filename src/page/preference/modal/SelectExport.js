@@ -177,6 +177,7 @@ export function SelectExportForStaticMethod() {
 }
 
 export async function pick(obj) {
+  const originalObj = obj
   obj = _.cloneDeep(obj)
   obj?.current_config_v2?.list?.forEach((item, i) => {
     const {id} = item
@@ -195,7 +196,7 @@ export async function pick(obj) {
   }
 
   // sleect
-  const data = _.pick(obj, keys)
+  const data = _.pick(originalObj, keys)
 
   // clean
   clean(data)
