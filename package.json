@@ -2,7 +2,7 @@
   "name": "clash-config-manager",
   "productName": "clash-config-manager",
   "bundleId": "fun.magicdawn.clash-config-manager",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "The best app ever",
   "license": "MIT",
   "repository": "sindresorhus/electron-boilerplate",
