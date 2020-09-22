@@ -59,7 +59,9 @@ const createMainWindow = async () => {
   })
 
   const saveWindowStateHandler = _.throttle(() => {
-    saveWindowState({bounds: mainWindow.getBounds()})
+    const bounds = mainWindow?.getBounds()
+    if (!bounds) return
+    saveWindowState({bounds})
   }, 1000)
   win.on('resize', () => {
     saveWindowStateHandler()

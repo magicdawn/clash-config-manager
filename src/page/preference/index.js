@@ -4,6 +4,7 @@ import path from 'path'
 import fse from 'fs-extra'
 import {shell, ipcRenderer} from 'electron'
 import launch from 'launch-editor'
+import _ from 'lodash'
 
 import React, {useState, useCallback, useEffect} from 'react'
 import {Button, Modal, Input, message, Space, Row, Col, Card} from 'antd'
@@ -13,6 +14,8 @@ import usePlug from '@magicdawn/x/rematch/usePlug'
 import {useModifyState} from '@x/react/hooks'
 import storage from '../../storage/index'
 import customMerge from '../../util/sync/webdav/customMerge'
+import {pick as pickSelectExport, SelectExportForStaticMethod} from './modal/SelectExport'
+import PRESET_JSON_DATA from '../../assets/基本数据规则.json'
 
 import styles from './index.module.less'
 import helper from '../../util/sync/webdav/helper'
@@ -47,36 +50,63 @@ export default function Preference() {
   const [exportFile, setExportFile] = useState('')
 
   const onExport = usePersistFn(async () => {
-    const file = path.join(tmpDir(), 'cfm', `${moment().format('YYYY-MM-DD HH:mm')}.json`)
-    await fse.outputJson(file, storage.store, {spaces: 2})
+    const file = path.join(tmpDir(), 'cfm', `${moment().format('YYYY_MM_DD__HH_mm')}.json`)
+
+    let outputData = storage.store
+    outputData = _.omit(outputData, ['subscribe_detail'])
+
+    await fse.outputJson(file, outputData, {spaces: 2})
     setExportHelperVisible(true)
     setExportFile(file)
   })
 
-  const onImport = usePersistFn(() => {
-    ;(async () => {
-      const file = await ipcRenderer.invoke('select-file')
+  const onSelectImport = usePersistFn(async () => {
+    const file = path.join(
+      tmpDir(),
+      'cfm',
+      `${moment().format('选择导出__YYYY_MM_DD__HH_mm')}.json`
+    )
+    let outputData = storage.store
+    outputData = _.omit(outputData, ['subscribe_detail'])
 
-      let importData
-      try {
-        importData = await fse.readJson(file)
-      } catch (e) {
-        console.log(e.stack || e)
-        return message.error('readJson fail: ' + '\n' + e.stack || e)
-      }
+    // 选择数据
+    const {cancel, data} = await pickSelectExport(outputData)
+    if (cancel) return
+    console.log(data)
 
-      const localData = {...storage.store}
-      const merged = customMerge(localData, importData)
-      console.log('customMerge', {localData, importData, merged})
+    await fse.outputJson(file, data, {spaces: 2})
+    setExportHelperVisible(true)
+    setExportFile(file)
+  })
 
-      // reload electron-store
-      storage.store = merged
+  const importAction = (importData) => {
+    const localData = {...storage.store}
+    const merged = customMerge(localData, importData)
+    console.log('customMerge', {localData, importData, merged})
 
-      // reload redux
-      dispatch({type: 'global/reload'})
+    // reload electron-store
+    storage.store = merged
 
-      message.success('导入成功: 已与本地配置合并')
-    })()
+    // reload redux
+    dispatch({type: 'global/reload'})
+
+    message.success('导入成功: 已与本地配置合并')
+  }
+
+  const onImport = usePersistFn(async () => {
+    const file = await ipcRenderer.invoke('select-file')
+    let importData
+    try {
+      importData = await fse.readJson(file)
+    } catch (e) {
+      console.log(e.stack || e)
+      return message.error('readJson fail: ' + '\n' + e.stack || e)
+    }
+    importAction(importData)
+  })
+
+  const onImportPreset = usePersistFn(async () => {
+    importAction(PRESET_JSON_DATA)
   })
 
   const openInEditor = usePersistFn((editor) => {
@@ -196,26 +226,45 @@ export default function Preference() {
 
       <Row gutter={rowGutter} style={{marginTop: 10}}>
         {/* 导出区 */}
-        <Col span={24}>
+        <Col span={12}>
           <Card
             title={
               <>
-                <CloudUploadOutlined /> export or import
+                <CloudUploadOutlined /> 导出
               </>
             }
           >
-            <Row gutter={24}>
-              <Col span={12}>
-                <Button block onClick={onExport}>
-                  <CloudUploadOutlined /> 导出到 JSON
-                </Button>
-              </Col>
-              <Col span={12}>
-                <Button type='primary' block onClick={onImport}>
-                  <CloudUploadOutlined /> 从 JSON 导入
-                </Button>
-              </Col>
-            </Row>
+            <Space direction='vertical' size={20} style={{width: '100%'}}>
+              <Button block type='primary' onClick={onExport}>
+                <CloudUploadOutlined /> 导出到 JSON
+              </Button>
+
+              <Button block onClick={onSelectImport}>
+                <CloudUploadOutlined /> 高级导出
+              </Button>
+              <SelectExportForStaticMethod />
+            </Space>
+          </Card>
+        </Col>
+
+        {/* 导入区 */}
+        <Col span={12}>
+          <Card
+            title={
+              <>
+                <CloudUploadOutlined /> 导入
+              </>
+            }
+          >
+            <Space direction='vertical' size={20} style={{width: '100%'}}>
+              <Button type='primary' block onClick={onImport}>
+                <CloudUploadOutlined /> 从 JSON 导入
+              </Button>
+
+              <Button block onClick={onImportPreset}>
+                <CloudUploadOutlined /> 导入应用内置的基本设置
+              </Button>
+            </Space>
           </Card>
         </Col>
       </Row>
