@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.0 2020-09-22
+
+- embed preset config
+- support partial export
+
 ## v0.0.8 2020-09-22
 
 - fix urlToSubscribe use ua `electron`, as the App name includes `clash`, the prod UA includes the app name
