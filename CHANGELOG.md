@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.8 2020-09-22
+
+- fix urlToSubscribe use ua `electron`, as the App name includes `clash`, the prod UA includes the app name
+
 ## v0.0.7 2020-09-19
 
 - support remote config file
