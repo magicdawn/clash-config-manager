@@ -1,7 +1,6 @@
 // const {readUrl} = require('dl-vampire')
 const {createHash} = require('crypto')
 const path = require('path')
-const {tmpdir} = require('os')
 const fse = require('fs-extra')
 const ms = require('ms')
 const request = require('umi-request').default
@@ -19,9 +18,7 @@ const md5 = (s) => createHash('md5').update(s, 'utf8').digest('hex')
 const readUrl = async ({url, file}) => {
   const text = await request.get(url, {
     responseType: 'text',
-    headers: {
-      'user-agent': 'electron',
-    },
+    headers: {'x-extra-headers': JSON.stringify({'user-agent': 'electron'})},
   })
 
   fse.outputFile(file, text).then(
