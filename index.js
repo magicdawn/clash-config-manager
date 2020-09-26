@@ -53,9 +53,14 @@ const createMainWindow = async () => {
     win.show()
   })
 
-  win.on('closed', () => {
-    // Dereference the window
-    mainWindow = undefined
+  win.on('close', (e) => {
+    e.preventDefault()
+    if (win.isFullScreen()) {
+      win.once('leave-full-screen', () => win.hide())
+      win.setFullScreen(false) // 直接 hide 全屏窗口会导致黑屏
+    } else {
+      win.hide()
+    }
   })
 
   const saveWindowStateHandler = _.throttle(() => {
@@ -94,15 +99,15 @@ app.on('window-all-closed', () => {
 })
 
 app.on('activate', async () => {
-  if (!mainWindow) {
-    mainWindow = await createMainWindow()
-  }
+  mainWindow.show()
 })
 
 app.on('before-quit', async () => {
-  await saveWindowState({
-    bounds: mainWindow.getBounds(),
-  })
+  if (mainWindow) {
+    await saveWindowState({
+      bounds: mainWindow?.getBounds(),
+    })
+  }
 })
 
 //
