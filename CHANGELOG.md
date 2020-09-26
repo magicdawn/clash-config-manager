@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.2 2020-09-26
+
+- fix can not quit problem
+
 ## v0.1.1 2020-09-26
 
 - fix some style issue

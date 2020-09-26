@@ -53,7 +53,7 @@ const createMainWindow = async () => {
     win.show()
   })
 
-  win.on('close', (e) => {
+  const preventClose = (e) => {
     e.preventDefault()
     if (win.isFullScreen()) {
       win.once('leave-full-screen', () => win.hide())
@@ -61,6 +61,10 @@ const createMainWindow = async () => {
     } else {
       win.hide()
     }
+  }
+  win.on('close', preventClose)
+  app.on('before-quit', () => {
+    win.off('close', preventClose)
   })
 
   const saveWindowStateHandler = _.throttle(() => {
