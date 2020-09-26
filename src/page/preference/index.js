@@ -162,20 +162,17 @@ export default function Preference() {
         </Space>
       </Modal>
 
-      <Row>
-        <Col span={4} offset={20}>
-          <Button
-            type='primary'
-            block
-            onClick={() => {
-              setShowModal(true)
-            }}
-          >
-            <SettingFilled />
-            配置同步参数
-          </Button>
-        </Col>
-      </Row>
+      <div style={{textAlign: 'right'}}>
+        <Button
+          type='primary'
+          onClick={() => {
+            setShowModal(true)
+          }}
+        >
+          <SettingFilled />
+          配置同步参数
+        </Button>
+      </div>
 
       <Row gutter={rowGutter} style={{marginTop: 10}}>
         {/* 上传区 */}

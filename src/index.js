@@ -21,12 +21,12 @@ import LibraryRuleList from './page/library-rule-list/index'
 import CurrentConfig from './page/current-config/index'
 import Preference from './page/preference/index'
 
-const routes = [
-  {
-    path: '/',
-    component: Home,
-  },
-]
+// const routes = [
+//   {
+//     path: '/',
+//     component: Home,
+//   },
+// ]
 
 function Root() {
   return (

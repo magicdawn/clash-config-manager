@@ -111,12 +111,26 @@ export default function LibraryRuleList() {
                   {do {
                     if (type === 'local') {
                       ;<Tooltip
-                        title={<div style={{whiteSpace: 'pre'}}>{limitLines(content, 10)}</div>}
+                        title={
+                          <div style={{whiteSpace: 'pre-wrap', wordBreak: 'break-all'}}>
+                            {limitLines(content, 10)}
+                          </div>
+                        }
                       >
-                        <div style={{color: 'blue'}}>内容: {firstLine(content)}</div>
+                        <div className='ellipsis' style={{color: 'blue'}}>
+                          内容: {firstLine(content)}
+                        </div>
                       </Tooltip>
                     } else {
-                      ;<div className='url'>链接: {url}</div>
+                      ;<Tooltip
+                        title={
+                          <div style={{whiteSpace: 'pre-wrap', wordBreak: 'break-all'}}>{url}</div>
+                        }
+                      >
+                        <div className='ellipsis' style={{color: 'blue'}}>
+                          链接: {url}
+                        </div>
+                      </Tooltip>
                     }
                   }}
                 </div>
@@ -238,7 +252,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   })
 
   const handleSubmit = usePersistFn((item) => {
-    const {content, url} = item
+    const {content} = item
 
     // add more data
     const {id} = otherFormData
