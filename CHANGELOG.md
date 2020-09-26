@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.1 2020-09-26
+
+- fix some style issue
+- fix window restore problem, fix window getBounds problem
+
 ## v0.1.0 2020-09-22
 
 - embed preset config
