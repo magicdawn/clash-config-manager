@@ -31,7 +31,7 @@ const dev = {}
 
 const prod = {}
 
-console.log(common)
+// console.log(common)
 
 module.exports = {
   entry: 'src/index.js',

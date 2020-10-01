@@ -13,7 +13,7 @@ import {
   HeartOutlined,
 } from '@ant-design/icons'
 import _ from 'lodash'
-import './page/common/styles/index.less'
+import './page/common'
 
 import Home from './page/home/index'
 import LibrarySubscribe from './page/library-subscribe/index'
