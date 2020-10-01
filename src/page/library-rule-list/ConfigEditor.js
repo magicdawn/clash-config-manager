@@ -13,7 +13,7 @@ import style from './ConfigEditor.module.less'
 
 export default forwardRef(ConfigEditor)
 function ConfigEditor(props, ref) {
-  const {value, onChange, readonly, spinProps} = props
+  const {value, onChange, readonly, spinProps, header} = props
 
   const editorWillMount = usePersistFn((editor, monaco) => {})
 
@@ -58,18 +58,21 @@ function ConfigEditor(props, ref) {
   }, [readonly, ref])
 
   return (
-    <Spin {...spinProps}>
-      <div style={{width: '100%', height: '50vh'}} className={style.editor}>
-        <MonacoEditor
-          language='yaml'
-          theme='quite-light'
-          value={value}
-          options={options}
-          onChange={editorOnChange}
-          editorWillMount={editorWillMount}
-          editorDidMount={editorDidMount}
-        />
-      </div>
-    </Spin>
+    <>
+      <Spin {...spinProps}>
+        {header}
+        <div style={{width: '100%', height: '50vh', marginTop: 10}} className={style.editor}>
+          <MonacoEditor
+            language='yaml'
+            theme='quite-light'
+            value={value}
+            options={options}
+            onChange={editorOnChange}
+            editorWillMount={editorWillMount}
+            editorDidMount={editorDidMount}
+          />
+        </div>
+      </Spin>
+    </>
   )
 }

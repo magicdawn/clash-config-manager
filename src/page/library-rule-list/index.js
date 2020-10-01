@@ -383,12 +383,6 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
                 <Button disabled={editInEditorMaskVisible} onClick={handleAddRuleChrome}>
                   从 Chrome 添加规则
                 </Button>
-                <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('code')}>
-                  使用 vscode 编辑
-                </Button>
-                <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('atom')}>
-                  使用 Atom 编辑
-                </Button>
               </Space>
             </>
           )}
@@ -443,6 +437,18 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
             <ConfigEditor
               ref={configEditorRef}
               readonly={readonly}
+              header={
+                <>
+                  <Space direction='horizontal'>
+                    <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('code')}>
+                      使用 vscode 编辑
+                    </Button>
+                    <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('atom')}>
+                      使用 Atom 编辑
+                    </Button>
+                  </Space>
+                </>
+              }
               spinProps={{
                 size: 'large',
                 spinning: editInEditorMaskVisible,
