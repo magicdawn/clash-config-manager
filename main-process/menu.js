@@ -1,6 +1,7 @@
 'use strict'
 const path = require('path')
-const {app, Menu, shell} = require('electron')
+const fse = require('fs-extra')
+const {app, Menu, shell, dialog, BrowserWindow} = require('electron')
 const {
   is,
   appMenu,
@@ -10,6 +11,10 @@ const {
   debugInfo,
 } = require('electron-util')
 import storage from '../src/storage/index'
+import debugFactory from 'debug'
+import {symlink} from 'fs'
+
+const debug = debugFactory('ccm:menu')
 
 const showPreferences = () => {
   // Show the app's preferences here
@@ -64,6 +69,19 @@ const macosTemplate = [
         showPreferences()
       },
     },
+    ...(process.env.NODE_ENV === 'production'
+      ? [
+          {
+            type: 'separator',
+          },
+          {
+            label: '安装 `clash-config-manager`/ `ccm` 命令',
+            click() {
+              installCli()
+            },
+          },
+        ]
+      : []),
     {
       type: 'separator',
     },
@@ -138,3 +156,20 @@ const otherTemplate = [
 const template = process.platform === 'darwin' ? macosTemplate : otherTemplate
 
 export default Menu.buildFromTemplate(template)
+
+async function installCli() {
+  // contents/resources/app.asar/main/index.js
+  const appContents = path.join(__dirname, '../../../')
+  const shFile = path.join(appContents, 'Resources/clash-config-manager.sh')
+  const linkSources = [`/usr/local/bin/clash-config-mamager`, `/usr/local/bin/ccm`]
+  for (let s of linkSources) {
+    debug('symlink %s -> %s', s, shFile)
+    await fse.remove(s)
+    await fse.ensureSymlink(shFile, s)
+  }
+
+  debug('installCli success')
+  dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+    message: '安装成功',
+  })
+}

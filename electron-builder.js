@@ -22,7 +22,14 @@ module.exports = {
       from: 'bundle/${env.NODE_ENV}',
       to: '.',
     },
-    'package.json',
+    './package.json',
+  ],
+
+  extraResources: [
+    {
+      from: './main-process/bin/clash-config-manager.sh',
+      to: '.',
+    },
   ],
 
   beforeBuild() {

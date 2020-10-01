@@ -1,7 +1,8 @@
-const path = require('path')
 const os = require('os')
 const fs = require('fs-extra')
 const {BrowserWindow} = require('electron')
+const debugFactory = require('debug')
+const debug = debugFactory('ccm:dev:ext')
 
 const load = (id) => {
   const extDir =
@@ -11,7 +12,7 @@ const load = (id) => {
   const ver = fs.readdirSync(extDir)[0]
   const extVerDir = extDir + '/' + ver
 
-  console.log('add %s', extVerDir)
+  debug('add %s', extVerDir)
   BrowserWindow.addDevToolsExtension(extVerDir)
 }
 
