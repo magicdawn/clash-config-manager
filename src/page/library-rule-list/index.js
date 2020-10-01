@@ -3,7 +3,7 @@ import path from 'path'
 import fse from 'fs-extra'
 import execa from 'execa'
 import debugFactory from 'debug'
-import React, {useState, useCallback, useRef} from 'react'
+import React, {useState, useCallback, useRef, useMemo} from 'react'
 import {Button, Modal, Input, message, Tooltip} from 'antd'
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
 import usePlug from '@x/rematch/usePlug'
@@ -206,6 +206,8 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   })
 
   const [form] = Form.useForm()
+  const [formFields, setFormFields] = useState([])
+
   const [otherFormData, modifyOtherFormData] = useModifyState({})
   const [type, setType] = useModifyState({value: editItem?.type || 'local'})
 
@@ -356,6 +358,11 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     }
   })
 
+  const contentField = form.getFieldValue('content')
+  const showAddRuleButton = useMemo(() => {
+    return Boolean(contentField?.indexOf?.('rules:') > -1)
+  }, [contentField])
+
   return (
     <Modal
       className={styles.modal}
@@ -380,9 +387,11 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
               )}
 
               <Space direction='horizontal'>
-                <Button disabled={editInEditorMaskVisible} onClick={handleAddRuleChrome}>
-                  从 Chrome 添加规则
-                </Button>
+                {showAddRuleButton && (
+                  <Button disabled={editInEditorMaskVisible} onClick={handleAddRuleChrome}>
+                    从 Chrome 添加规则
+                  </Button>
+                )}
               </Space>
             </>
           )}
@@ -406,6 +415,10 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
         name='basic'
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        fields={formFields}
+        onFieldsChange={(changedFields, allFields) => {
+          setFormFields(allFields)
+        }}
       >
         <Form.Item label='类型' name='type' rules={[{required: true, message: '类型不能为空'}]}>
           <Select
@@ -435,6 +448,8 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
             rules={[{required: true, message: '内容不能为空'}]}
           >
             <ConfigEditor
+              id={otherFormData.id}
+              visible={visible}
               ref={configEditorRef}
               readonly={readonly}
               header={

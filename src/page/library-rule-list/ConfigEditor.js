@@ -13,7 +13,7 @@ import style from './ConfigEditor.module.less'
 
 export default forwardRef(ConfigEditor)
 function ConfigEditor(props, ref) {
-  const {value, onChange, readonly, spinProps, header} = props
+  const {value, onChange, readonly, spinProps, header, visible} = props
 
   const editorWillMount = usePersistFn((editor, monaco) => {})
 
@@ -56,6 +56,17 @@ function ConfigEditor(props, ref) {
   useUpdateEffect(() => {
     ref.current?.updateOptions({...options, readOnly: readonly})
   }, [readonly, ref])
+
+  useUpdateEffect(() => {
+    if (visible) {
+      ref.current?.setSelection({
+        endColumn: 0,
+        endLineNumber: 0,
+        startColumn: 0,
+        startLineNumber: 0,
+      })
+    }
+  }, [visible])
 
   return (
     <>
