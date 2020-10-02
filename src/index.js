@@ -14,6 +14,7 @@ import {
 } from '@ant-design/icons'
 import _ from 'lodash'
 import './page/common'
+import Commands from './commands'
 
 import Home from './page/home/index'
 import LibrarySubscribe from './page/library-subscribe/index'
@@ -67,6 +68,8 @@ function Routes() {
           <Link to='/preference'>偏好设置</Link>
         </Menu.Item>
       </Menu>
+
+      <Commands />
 
       {/* A <Switch> looks through its children <Route>s and renders the first one that matches the current URL. */}
       <div>
