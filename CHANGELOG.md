@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.0 2020-09-26
+
+- fix #1, 消息遮挡操作问题
+- add `code` like cli (因 yargs 不能使用 webpack 打包, 现在不起作用)
+- 添加 command palette
+- 添加吃豆人(pacman) loading
+
 ## v0.1.2 2020-09-26
 
 - fix can not quit problem
