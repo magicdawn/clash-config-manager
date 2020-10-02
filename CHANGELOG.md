@@ -1,6 +1,10 @@
 # Changelog
 
-## v0.2.0 2020-09-26
+## v0.2.1 2020-10-03
+
+- fix 刚开始启动时使用 command palette, generate 出错的问题.
+
+## v0.2.0 2020-10-02
 
 - fix #1, 消息遮挡操作问题
 - add `code` like cli (因 yargs 不能使用 webpack 打包, 现在不起作用)
