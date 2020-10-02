@@ -1,13 +1,30 @@
+import React, {useState, useEffect} from 'react'
 import {Modal} from 'antd'
-import React from 'react'
 import wrap from './wrapComponent'
 import PacmanLoader from 'react-spinners/PacmanLoader'
 import styles from './loading.module.less'
+import _ from 'lodash'
 
 // import Spinner from 'react-spinkit'
-/* <Spinner name='pacman' color='#1890ff' className={styles.spin} /> */
+/* <Spinner name='pacman' color='' className={styles.spin} /> */
+
+const colors = [
+  'orange',
+  'yellow',
+  'pink',
+  '#1890ff', // antd
+]
 
 function Loading({visible}) {
+  const [color, setColor] = useState('orange')
+
+  useEffect(() => {
+    if (visible) {
+      const newColor = colors[_.random(0, colors.length - 1)]
+      setColor(newColor)
+    }
+  }, [visible])
+
   return (
     <Modal
       wrapClassName={styles.modal}
@@ -18,8 +35,7 @@ function Loading({visible}) {
       closable={false}
       bodyStyle={{padding: 0, backgroundColor: 'transparent'}}
     >
-      {/* #1890ff antd */}
-      <PacmanLoader color='orange' size={100} css={{marginLeft: -300, marginTop: -100}} />
+      <PacmanLoader color={color} size={100} css={{marginLeft: -300, marginTop: -100}} />
     </Modal>
   )
 }

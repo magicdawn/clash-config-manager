@@ -4,8 +4,9 @@ import usePlug from '@x/rematch/usePlug'
 import {Button, Input, Row, Col, Divider, message} from 'antd'
 import styles from './index.module.less'
 import DndPlaygroud from './DndPlayground'
-import gen, {getConfigFileDisplay, getConfigFile, DEFAULT_NAME} from '../../util/fn/gen'
+import {getConfigFileDisplay, getConfigFile, DEFAULT_NAME} from '../../util/fn/gen'
 import launch from 'launch-editor'
+import {runCommand} from '../../commands/run'
 
 const namespace = 'currentConfig'
 
@@ -20,12 +21,7 @@ export default function ConfigList(props) {
   })
 
   const onGenConfigClick = usePersistFn(async () => {
-    const {success, msg} = (await gen()) || {}
-    if (success) {
-      message.success(msg || '生成成功')
-    } else {
-      message.error(msg || '生成失败')
-    }
+    return runCommand('generate')
   })
 
   const onOpenConfigClick = usePersistFn((editor = 'code') => {
