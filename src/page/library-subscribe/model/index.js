@@ -73,16 +73,19 @@ export default {
         this.persist()
       },
 
-      async update({url}, rootState) {
+      async update({url, silent} = {silent: false}, rootState) {
         let servers
         try {
           servers = await subscribeToClash({url, force: true})
         } catch (e) {
-          message.error('更新出错: \n' + e.stack || e)
+          message.error('更新订阅出错: \n' + e.stack || e)
           throw e
         }
 
-        message.success('更新成功')
+        if (!silent) {
+          message.success('更新订阅成功')
+        }
+
         this.setState(({detail}) => {
           detail[url] = servers
         })

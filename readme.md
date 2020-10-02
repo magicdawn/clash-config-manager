@@ -15,6 +15,8 @@
 - [x] 支持在 vscode/Atom 中编辑规则
 - [x] 支持从 剪贴板/Chrome 快速添加规则
 - [x] 内置基础配置, 导入内置基础配置 + 添加一个 subscribe 即可开始使用.
+- [ ] 支持命令行
+- [x] 支持类似 Atom / vscode 的 command palette 快速操作
 
 ## Get Started
 

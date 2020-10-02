@@ -18,13 +18,16 @@ const commandGen = async ({forceUpdate = false} = {}) => {
   let result = {}
   try {
     result = await gen({forceUpdate})
+  } catch (e) {
+    message.error('生成失败: ', e.message)
+    throw e
   } finally {
     Loading.hide()
   }
 
-  const {success, msg} = result || {}
+  const {success, msg, filename} = result || {}
   if (success) {
-    message.success(msg || '生成成功')
+    message.success(`生成成功: ${filename} 已更新`)
   } else {
     message.error(msg || '生成失败')
   }
@@ -37,7 +40,7 @@ export const commands = [
     name: '生成配置 (generate)',
     async command() {
       await close()
-      return commandGen()
+      return commandGen({forceUpdate: true})
     },
   },
   {
@@ -46,7 +49,7 @@ export const commands = [
     name: '生成配置-强制更新 (generate forceUpdate)',
     async command() {
       await close()
-      return commandGen()
+      return commandGen({forceUpdate: true})
     },
   },
 ]

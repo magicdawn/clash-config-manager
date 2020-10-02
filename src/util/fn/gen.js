@@ -82,7 +82,7 @@ export default async function genConfig() {
 
     // update subscribe
     if (forceUpdate || !subscribeDetail[url] || !subscribeDetail[url].length) {
-      await store.dispatch.librarySubscribe.update({url})
+      await store.dispatch.librarySubscribe.update({url, silent: true})
       servers = store.getState().librarySubscribe.detail[url]
     }
 
@@ -126,6 +126,7 @@ export default async function genConfig() {
   console.log('[done]: %s writed', file)
   return {
     success: true,
+    filename: file,
     msg: `${file} writed`,
   }
 }
