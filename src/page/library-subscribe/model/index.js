@@ -20,6 +20,10 @@ export default {
     'global/reload'() {
       this.load()
     },
+
+    'global/init'() {
+      this.init()
+    },
   },
 
   effects: (dispatch) => {

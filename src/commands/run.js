@@ -2,6 +2,7 @@ import React, {useRef, createRef} from 'react'
 import {message} from 'antd'
 import Loading from '../page/common/global/loading'
 import gen from '../util/fn/gen'
+import store from '../store'
 
 export const commandPaletteRef = createRef()
 export const close = () =>
@@ -14,6 +15,9 @@ export const close = () =>
 
 const commandGen = async ({forceUpdate = false} = {}) => {
   Loading.show()
+
+  // init first
+  await store.dispatch.global.init()
 
   let result = {}
   try {

@@ -9,8 +9,23 @@ import libraryRuleList from './page/library-rule-list/model/index'
 import currentConfig from './page/current-config/model/index'
 import preference from './page/preference/model/index'
 
+const globalModule = {
+  state: {},
+  effects: {
+    init() {},
+    reload() {},
+  },
+}
+
 const store = init({
-  models: {...models, librarySubscribe, libraryRuleList, currentConfig, preference},
+  models: {
+    ...models,
+    librarySubscribe,
+    libraryRuleList,
+    currentConfig,
+    preference,
+    global: globalModule,
+  },
   plugins: [immerPlugin(), statePlugin(), listenPlugin()],
 })
 

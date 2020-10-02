@@ -1,7 +1,6 @@
 import _ from 'lodash'
-import storage from '../../../storage/index'
-import {subscribeToClash} from '../../../util/fn/clash'
 import {message} from 'antd'
+import storage from '../../../storage/index'
 
 const nsp = 'currentConfig'
 const CURRENT_CONFIG_STORAGE_KEY = 'current_config_v2'
@@ -19,6 +18,10 @@ export default {
   listen: {
     'global/reload'() {
       this.load()
+    },
+
+    'global/init'() {
+      this.init()
     },
   },
 
