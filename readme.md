@@ -6,6 +6,12 @@
 
 [**下载 .dmg 文件**](https://github.com/magicdawn/clash-config-manager/releases/latest)
 
+## 截图
+
+![](https://i.loli.net/2020/09/22/7Xwu3PBRpi6xG1Y.png)
+![](https://i.loli.net/2020/09/22/9KHJ5WTEzeFaXsP.png)
+![Xnip2020-10-03_02-12-54.png](https://i.loli.net/2020/10/03/ZPn3QraOIKWsuvR.png)
+
 ## Features
 
 - [x] 支持 v2ray 服务器订阅, e.g 手机端 ShadowRocket 的 subscribe
@@ -24,3 +30,7 @@
 2. 添加订阅
 3. 生成配置, 在 clashX 中选择的 clash-config-manager
 4. :rocket:
+
+## 其他
+
+- 使用 cmd + shift + p 打开 command palette
