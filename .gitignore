@@ -8,3 +8,6 @@ report.*.json
 
 # the package
 /dist
+
+# changelog temp
+CHANGELOG.temp.md
