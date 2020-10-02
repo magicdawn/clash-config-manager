@@ -16,6 +16,12 @@ const common = {
     },
   },
   plugins: [],
+
+  externals: {
+    'cliui': 'commonjs2 cliui',
+    'y18n': 'commonjs2 y18n',
+    'yargs-parser': 'commonjs2 yargs-parser',
+  },
 }
 
 const dev = {}
@@ -23,7 +29,7 @@ const dev = {}
 const prod = {}
 
 module.exports = {
-  entry: 'index.js',
+  entry: './main-process/index.js',
 
   babel: {
     transpileModules: ['@magicdawn/x'],

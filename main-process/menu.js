@@ -12,7 +12,6 @@ const {
 } = require('electron-util')
 import storage from '../src/storage/index'
 import debugFactory from 'debug'
-import {symlink} from 'fs'
 
 const debug = debugFactory('ccm:menu')
 

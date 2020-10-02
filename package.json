@@ -17,8 +17,8 @@
     "postinstall": "electron-builder install-app-deps",
     "dev:ui": "poi -s",
     "dev:main": "poi --config poi-main.config.js --watch",
-    "dev:start-main": "electron --watch bundle/development/main/ bundle/development/main/index.js",
-    "dev:watch-main": "nodemon --exec electron --watch bundle/development/main/ bundle/development/main/index.js",
+    "dev:start-main": "electron bundle/development/main/index.js",
+    "dev:watch-main": "nodemon bundle/development/main/index.js --exec electron --watch bundle/development/main/",
     "build": "yarn build:ui && yarn build:main",
     "build:ui": "poi --prod",
     "build:main": "poi --prod --config poi-main.config.js",
@@ -65,7 +65,8 @@
     "umi-request": "^1.3.5",
     "urijs": "^1.19.2",
     "webdav": "^3.3.0",
-    "webdav-fs": "^2.0.0"
+    "webdav-fs": "^2.0.0",
+    "yargs": "^16.0.3"
   },
   "devDependencies": {
     "@babel/plugin-proposal-do-expressions": "^7.10.4",
