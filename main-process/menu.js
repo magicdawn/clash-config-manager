@@ -12,6 +12,7 @@ const {
 } = require('electron-util')
 import storage from '../src/storage/index'
 import debugFactory from 'debug'
+import {check} from './auto-update/index'
 
 const debug = debugFactory('ccm:menu')
 
@@ -68,6 +69,13 @@ const macosTemplate = [
         showPreferences()
       },
     },
+    {
+      label: '检查更新',
+      click() {
+        check()
+      },
+    },
+
     ...(process.env.NODE_ENV === 'production'
       ? [
           {

@@ -3,10 +3,16 @@
 
 const {execSync} = require('child_process')
 const fse = require('fs-extra')
+const globby = require('globby')
+const argv = require('minimist')(process.argv.slice(2))
 
 const sh = (cmd) => {
   console.log('[exec]: %s', cmd)
-  execSync(cmd, {stdio: 'inherit'})
+  if (argv['dry-run']) {
+    // just print
+  } else {
+    execSync(cmd, {stdio: 'inherit'})
+  }
 }
 
 // 1. add Changelog
@@ -54,6 +60,7 @@ Object.assign(process.env, {
   all_proxy: 'socks5://127.0.0.1:7890',
 })
 sh(`gh release create v${version} -F ${changelogTempFile}`)
-sh(
-  `gh release upload v${version} ./dist/clash-config-manager-${version}.dmg ./dist/clash-config-manager-${version}.dmg.blockmap ./dist/latest-mac.yml`
-)
+
+// find out files
+const files = globby.sync(`./dist/clash-config-manager-${version}*`, {cwd: __dirname})
+sh(`gh release upload v${version} ./dist/latest-mac.yml ${files.join(' ')}`)

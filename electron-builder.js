@@ -42,7 +42,10 @@ module.exports = {
 
   mac: {
     category: 'public.app-category.developer-tools',
-    target: ['dmg'],
+    // target: ['dmg', 'zip'],
+    publish: {
+      provider: 'github',
+    },
   },
 
   dmg: {

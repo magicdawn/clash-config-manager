@@ -2,7 +2,6 @@ import path from 'path'
 import {app, BrowserWindow, Menu} from 'electron'
 import {is} from 'electron-util'
 import _ from 'lodash'
-// import {autoUpdater} from 'electron-updater'
 
 import './init/meta'
 import {load as loadDevExt} from './dev/ext'
@@ -28,17 +27,6 @@ async function main() {
     await mainWindow.loadURL('http://localhost:7749')
   }
 }
-
-// Uncomment this before publishing your first version.
-// It's commented out as it throws an error if there are no published versions.
-// if (!is.development) {
-// 	const FOUR_HOURS = 1000 * 60 * 60 * 4;
-// 	setInterval(() => {
-// 		autoUpdater.checkForUpdates();
-// 	}, FOUR_HOURS);
-//
-// 	autoUpdater.checkForUpdates();
-// }
 
 const createMainWindow = async () => {
   const {bounds} = await loadWindowState()
