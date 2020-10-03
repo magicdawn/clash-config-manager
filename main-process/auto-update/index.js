@@ -18,6 +18,9 @@ if (!is.development) {
 }
 
 export async function check() {
-  // return autoUpdater.checkForUpdatesAndNotify()
-  return autoUpdater.checkForUpdates()
+  if (is.development) {
+    return autoUpdater.checkForUpdates()
+  } else {
+    return autoUpdater.checkForUpdatesAndNotify()
+  }
 }
