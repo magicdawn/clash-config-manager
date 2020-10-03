@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.2 2020-10-03
+
+- try to enable auto-update
+
 ## v0.2.1 2020-10-03
 
 - fix 刚开始启动时使用 command palette, generate 出错的问题.
