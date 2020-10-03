@@ -54,4 +54,6 @@ Object.assign(process.env, {
   all_proxy: 'socks5://127.0.0.1:7890',
 })
 sh(`gh release create v${version} -F ${changelogTempFile}`)
-sh(`gh release upload v${version} ./dist/clash-config-manager-${version}.dmg`)
+sh(
+  `gh release upload v${version} ./dist/clash-config-manager-${version}.dmg ./dist/clash-config-manager-${version}.dmg.blockmap ./dist/latest-mac.yml`
+)
