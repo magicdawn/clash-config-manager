@@ -9,5 +9,5 @@ function realpath() { python -c "import os,sys; print(os.path.realpath(sys.argv[
 # ..
 CONTENTS="$(dirname "$(dirname "$(realpath "$0")")")"
 BIN="$CONTENTS/MacOS/clash-config-manager"
-"$BIN" "$@"
+CCM_RUN_MODE="cli" "$BIN" "$@"
 exit $?

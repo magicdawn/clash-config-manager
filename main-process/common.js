@@ -23,8 +23,9 @@ function checkIfCalledViaCLI(args) {
   }
 }
 
-const {isCli, restArgs} = checkIfCalledViaCLI(process.argv)
-export {isCli, restArgs}
+const isCli = process.env.CCM_RUN_MODE === 'cli'
+const {restArgs} = checkIfCalledViaCLI(process.argv)
+export {restArgs}
 debug('process.argv: %O', {
   'process.argv': process.argv,
   isCli,

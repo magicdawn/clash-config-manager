@@ -12,7 +12,7 @@ const {
 } = require('electron-util')
 import storage from '../src/storage/index'
 import debugFactory from 'debug'
-import {check} from './auto-update/index'
+import {updateMenuItem} from './auto-update/index'
 
 const debug = debugFactory('ccm:menu')
 
@@ -60,53 +60,49 @@ if (!is.macos) {
   )
 }
 
-const macosTemplate = [
-  appMenu([
-    {
-      label: 'Preferences…',
-      accelerator: 'Command+,',
-      click() {
-        showPreferences()
+const macosTemplate = (options) => [
+  appMenu(
+    [
+      {
+        label: 'Preferences…',
+        accelerator: 'Command+,',
+        click() {
+          showPreferences()
+        },
       },
-    },
-    {
-      label: '检查更新',
-      click() {
-        check()
-      },
-    },
-
-    ...(process.env.NODE_ENV === 'production'
-      ? [
-          {
-            type: 'separator',
-          },
-          {
-            label: '安装 `clash-config-manager`/ `ccm` 命令',
-            click() {
-              installCli()
+      options.updateMenuItem,
+      ...(process.env.NODE_ENV === 'production'
+        ? [
+            {
+              type: 'separator',
             },
-          },
-        ]
-      : []),
-    {
-      type: 'separator',
-    },
-    {
-      label: '在 Finder 中打开数据目录',
-      click() {
-        const dir = app.getPath('userData')
-        console.log('userData', dir)
-        shell.showItemInFolder(dir)
+            {
+              label: '安装 `clash-config-manager`/ `ccm` 命令',
+              click() {
+                installCli()
+              },
+            },
+          ]
+        : []),
+      {
+        type: 'separator',
       },
-    },
-    {
-      label: '在 Finder 中打开数据文件',
-      click() {
-        shell.showItemInFolder(storage.path)
+      {
+        label: '在 Finder 中打开数据目录',
+        click() {
+          const dir = app.getPath('userData')
+          console.log('userData', dir)
+          shell.showItemInFolder(dir)
+        },
       },
-    },
-  ]),
+      {
+        label: '在 Finder 中打开数据文件',
+        click() {
+          shell.showItemInFolder(storage.path)
+        },
+      },
+    ].filter(Boolean)
+  ),
   {
     role: 'viewMenu',
   },
@@ -123,7 +119,7 @@ const macosTemplate = [
 ]
 
 // Linux and Windows
-const otherTemplate = [
+const otherTemplate = () => [
   {
     role: 'fileMenu',
     submenu: [
@@ -160,10 +156,6 @@ const otherTemplate = [
   },
 ]
 
-const template = process.platform === 'darwin' ? macosTemplate : otherTemplate
-
-export default Menu.buildFromTemplate(template)
-
 async function installCli() {
   // contents/resources/app.asar/main/index.js
   const appContents = path.join(__dirname, '../../../')
@@ -179,4 +171,11 @@ async function installCli() {
   dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
     message: '安装成功',
   })
+}
+
+export default async function setMenu() {
+  await app.whenReady()
+  const template = process.platform === 'darwin' ? macosTemplate : otherTemplate
+  const menu = Menu.buildFromTemplate(template({updateMenuItem}))
+  Menu.setApplicationMenu(menu)
 }

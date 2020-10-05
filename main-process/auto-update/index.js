@@ -2,20 +2,62 @@ import ms from 'ms'
 import {is} from 'electron-util'
 import {autoUpdater} from 'electron-updater'
 import electronLog from 'electron-log'
+import setMenu from '../menu'
+import _ from 'lodash'
+import debugFactory from 'debug'
 
-// Uncomment this before publishing your first version.
-// It's commented out as it throws an error if there are no published versions.
-if (!is.development) {
-  autoUpdater.logger = electronLog
-  autoUpdater.logger.transports.file.level = 'debug'
+const debug = debugFactory('ccm:auto-update')
 
-  setInterval(() => {
-    autoUpdater.checkForUpdates()
-  }, ms('4h'))
-  autoUpdater.checkForUpdates()
-} else {
-  // autoUpdater.currentVersion = '0.2.0'
+const menuItem = {
+  check: {
+    label: '检查更新',
+    click() {
+      check()
+    },
+  },
+
+  downloading: {
+    label: '下载中',
+    enabled: false,
+    click() {
+      // noop
+    },
+  },
+
+  downloaded: {
+    label: '更新已下载, 重启生效',
+    click() {
+      debug('quit and install')
+
+      // remove preventClose listener
+      global.mainWindow?.stopPreventClose?.()
+
+      setImmediate(() => autoUpdater.quitAndInstall())
+    },
+  },
 }
+
+export let updateMenuItem = menuItem.check
+
+const setDownloadingMenu = _.throttle((progressObj) => {
+  const {bytesPerSecond, percent, total, transferred} = progressObj
+  const currentMenuItem = {
+    ...menuItem.downloading,
+    label: `下载中 speed:${bytesPerSecond} ${(percent * 100).toFixed(2)} ${transferred}/${total}`,
+  }
+  updateMenuItem = currentMenuItem
+  setMenu()
+}, 1000)
+
+autoUpdater.on('download-progress', (progressObj) => {
+  setDownloadingMenu(progressObj)
+})
+
+autoUpdater.on('update-downloaded', (info) => {
+  setDownloadingMenu.cancel()
+  updateMenuItem = menuItem.downloaded
+  setMenu()
+})
 
 export async function check() {
   if (is.development) {
@@ -23,4 +65,18 @@ export async function check() {
   } else {
     return autoUpdater.checkForUpdatesAndNotify()
   }
+}
+
+if (!is.development) {
+  autoUpdater.logger = electronLog
+  autoUpdater.logger.transports.file.level = 'debug'
+  autoUpdater.logger.transports.console.level = 'debug'
+
+  setInterval(() => {
+    check()
+  }, ms('4h'))
+  check()
+} else {
+  autoUpdater.currentVersion = '0.2.0'
+  autoUpdater.checkForUpdates()
 }

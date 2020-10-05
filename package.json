@@ -49,6 +49,7 @@
     "js-yaml": "^3.14.0",
     "launch-editor": "^2.2.1",
     "memoize-one": "^5.1.1",
+    "minimist": "^1.2.5",
     "monaco-editor": "^0.20.x",
     "ms": "^2.1.2",
     "napa": "^3.0.0",

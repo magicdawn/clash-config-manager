@@ -1,13 +1,13 @@
 import path from 'path'
-import {app, BrowserWindow, Menu} from 'electron'
+import {app, BrowserWindow} from 'electron'
 import {is} from 'electron-util'
 import _ from 'lodash'
 
 import './init/meta'
 import {load as loadDevExt} from './dev/ext'
 import {loadWindowState, saveWindowState} from './initWindowState'
-import menu from './menu'
 import './ipc/index'
+import setMenu from './menu'
 
 // Prevent window from being garbage collected
 let mainWindow
@@ -17,9 +17,10 @@ async function main() {
   initAppEvents()
   await app.whenReady()
 
-  Menu.setApplicationMenu(menu)
+  setMenu()
   loadDevExt()
   mainWindow = await createMainWindow()
+  global.mainWindow = mainWindow
 
   if (process.env.NODE_ENV === 'production') {
     await mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
@@ -57,10 +58,11 @@ const createMainWindow = async () => {
       win.hide()
     }
   }
+  const stopPreventClose = () => win.off('close', preventClose)
+
   win.on('close', preventClose)
-  app.on('before-quit', () => {
-    win.off('close', preventClose)
-  })
+  win.stopPreventClose = stopPreventClose
+  app.on('before-quit', stopPreventClose)
 
   const saveWindowStateHandler = _.throttle(() => {
     const bounds = mainWindow?.getBounds()
@@ -104,9 +106,13 @@ function initAppEvents() {
 
   app.on('before-quit', async () => {
     if (mainWindow) {
-      await saveWindowState({
-        bounds: mainWindow?.getBounds(),
-      })
+      try {
+        await saveWindowState({
+          bounds: mainWindow?.getBounds,
+        })
+      } catch (e) {
+        // noop
+      }
     }
   })
 }

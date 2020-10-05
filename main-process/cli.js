@@ -1,6 +1,7 @@
 import path from 'path'
 import {app, BrowserWindow} from 'electron'
 import pkg from '../package.json'
+import minimist from 'minimist'
 
 // Prevent window from being garbage collected
 let mainWindow
@@ -8,35 +9,17 @@ let mainWindow
 import './init/meta'
 import {loadWindowState} from './initWindowState'
 import './ipc/index'
-import yargs from 'yargs'
 
 // hide dock
 app.dock.hide()
 
-yargs
-  .scriptName('ccm')
-  .command({
-    command: 'generate',
-    desc: 'generate config file',
-    aliases: ['g'],
-    builder: (yargs) => {
-      return yargs.options({
-        force: {
-          type: 'boolean',
-          desc: 'forceUpdate ?',
-        },
-      })
-    },
-    handler(argv) {
-      main(argv)
-    },
-  })
-  .alias({
+const argv = minimist(process.argv, {
+  alias: {
     h: 'help',
     v: 'version',
-  })
-  .version(pkg.version)
-  .help().argv
+  },
+})
+console.log('argv = ', argv)
 
 async function main() {
   await app.whenReady()
