@@ -64,3 +64,6 @@ sh(`gh release create v${version} -F ${changelogTempFile}`)
 // find out files
 const files = globby.sync(`./dist/clash-config-manager-${version}*`, {cwd: __dirname})
 sh(`gh release upload v${version} ./dist/latest-mac.yml ${files.join(' ')}`)
+
+// notification
+sh(`say "release complete"`)
