@@ -5,6 +5,7 @@ import electronLog from 'electron-log'
 import setMenu from '../menu'
 import _ from 'lodash'
 import debugFactory from 'debug'
+import bytes from 'bytes'
 
 const debug = debugFactory('ccm:auto-update')
 
@@ -41,9 +42,12 @@ export let updateMenuItem = menuItem.check
 
 const setDownloadingMenu = _.throttle((progressObj) => {
   const {bytesPerSecond, percent, total, transferred} = progressObj
+
   const currentMenuItem = {
     ...menuItem.downloading,
-    label: `下载中 speed:${bytesPerSecond} ${(percent * 100).toFixed(2)} ${transferred}/${total}`,
+    label: `更新下载中 速度 ${bytes(bytesPerSecond)}/s ${bytes(transferred)}/${bytes(
+      total
+    )} ${percent.toFixed(0)}%`,
   }
   updateMenuItem = currentMenuItem
   setMenu()
