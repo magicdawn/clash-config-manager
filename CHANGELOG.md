@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.3 2020-10-05
+
+- 修复自动更新, 使用菜单显示, 修复 quitAndInstall
+- 使用 CCM_RUN_MODE = cli 使用 cli, 去除 yargs
+
 ## v0.2.2 2020-10-03
 
 - try to enable auto-update
