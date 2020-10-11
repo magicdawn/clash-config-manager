@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.0 2020-10-11
+
+- 使用 react-router-config
+- 修复选择导出 modal 关不掉的问题. (rxjs BehaviorSubject 状态同步问题)
+- 修复导入取消报错问题.
+- 更新内置的基础数据规则. 新增自定义规则模板
+
 ## v0.2.3 2020-10-05
 
 - 修复自动更新, 使用菜单显示, 修复 quitAndInstall
