@@ -95,6 +95,8 @@ export default function Preference() {
 
   const onImport = usePersistFn(async () => {
     const file = await ipcRenderer.invoke('select-file')
+    if (!file) return
+
     let importData
     try {
       importData = await fse.readJson(file)
