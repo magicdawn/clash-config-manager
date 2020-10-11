@@ -61,6 +61,7 @@
     "react-dom": "^16.13.1",
     "react-monaco-editor": "^0.40.0",
     "react-redux": "^7.2.1",
+    "react-router-config": "^5.1.1",
     "react-router-dom": "^5.2.0",
     "react-spinkit": "^3.0.0",
     "react-spinners": "^0.9.0",

@@ -1,6 +1,6 @@
 import React, {useState, useCallback} from 'react'
 import {render} from 'react-dom'
-import {HashRouter as Router, Switch, Route, Link, useLocation} from 'react-router-dom'
+import {HashRouter as Router, Link, useLocation} from 'react-router-dom'
 import {Provider} from 'react-redux'
 import store from './store'
 import 'antd/dist/antd.css'
@@ -12,22 +12,54 @@ import {
   UserOutlined,
   HeartOutlined,
 } from '@ant-design/icons'
+import {renderRoutes} from 'react-router-config'
 import _ from 'lodash'
+
 import './page/common'
 import Commands from './commands'
-
 import Home from './page/home/index'
 import LibrarySubscribe from './page/library-subscribe/index'
 import LibraryRuleList from './page/library-rule-list/index'
 import CurrentConfig from './page/current-config/index'
 import Preference from './page/preference/index'
 
-// const routes = [
-//   {
-//     path: '/',
-//     component: Home,
-//   },
-// ]
+const routes = [
+  {
+    path: '/',
+    exact: true,
+    component: Home,
+    title: 'Home',
+    icon: <HeartOutlined />,
+  },
+  {
+    path: '/library/subscribe',
+    exact: true,
+    component: LibrarySubscribe,
+    title: '订阅管理',
+    icon: <PayCircleOutlined />,
+  },
+  {
+    path: '/library/rule-list',
+    exact: true,
+    component: LibraryRuleList,
+    title: '配置源管理',
+    icon: <AppstoreAddOutlined />,
+  },
+  {
+    path: '/current-config',
+    exact: true,
+    component: CurrentConfig,
+    title: '配置管理',
+    icon: <SettingOutlined />,
+  },
+  {
+    path: '/preference',
+    exact: true,
+    component: Preference,
+    title: '偏好设置',
+    icon: <UserOutlined />,
+  },
+]
 
 function Root() {
   return (
@@ -43,44 +75,22 @@ function Root() {
 
 function Routes() {
   const {pathname} = useLocation()
-  const menuKey = _.trimStart(pathname, '/').replace(/\//g, ':') || 'home'
+  const getKey = (s) => _.trimStart(s, '/').replace(/\//g, ':') || 'home'
+  const menuKey = getKey(pathname)
 
   return (
     <>
       <Menu selectedKeys={[menuKey]} mode='horizontal'>
-        <Menu.Item key='home' icon={<HeartOutlined />}>
-          <Link to='/'>Home</Link>
-        </Menu.Item>
-
-        <Menu.Item key='library:subscribe' icon={<PayCircleOutlined />}>
-          <Link to='/library/subscribe'>订阅管理</Link>
-        </Menu.Item>
-
-        <Menu.Item key='library:rule-list' icon={<AppstoreAddOutlined />}>
-          <Link to='/library/rule-list'>配置源管理</Link>
-        </Menu.Item>
-
-        <Menu.Item key='current-config' icon={<SettingOutlined />}>
-          <Link to='/current-config'>配置管理</Link>
-        </Menu.Item>
-
-        <Menu.Item key='preference' icon={<UserOutlined />}>
-          <Link to='/preference'>偏好设置</Link>
-        </Menu.Item>
+        {routes.map(({path, icon, title}) => {
+          return (
+            <Menu.Item key={getKey(path)} icon={icon}>
+              <Link to={path}>{title}</Link>
+            </Menu.Item>
+          )
+        })}
       </Menu>
-
       <Commands />
-
-      {/* A <Switch> looks through its children <Route>s and renders the first one that matches the current URL. */}
-      <div>
-        <Switch>
-          <Route exact path='/' component={Home}></Route>
-          <Route exact path='/library/subscribe' component={LibrarySubscribe}></Route>
-          <Route exact path='/library/rule-list' component={LibraryRuleList}></Route>
-          <Route exact path='/current-config' component={CurrentConfig}></Route>
-          <Route exact path='/preference' component={Preference}></Route>
-        </Switch>
-      </div>
+      <div>{renderRoutes(routes)}</div>
     </>
   )
 }
