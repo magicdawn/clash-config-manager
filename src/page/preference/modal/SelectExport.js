@@ -164,7 +164,7 @@ export function SelectExportForStaticMethod() {
   }, [])
 
   const setVisible = useCallback(() => {
-    setState({visible: false})
+    subject.next({visible: false})
   }, [])
 
   if (!treeData) {
