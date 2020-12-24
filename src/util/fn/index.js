@@ -63,17 +63,21 @@ const urlToSubscribe = async ({url, force}) => {
 const textToSubscribe = (text) => {
   text = Base64.decode(text)
   const rawLines = text.split(/\r?\n/).filter(Boolean)
-  const lines = rawLines.map((line) => {
-    const idx = line.indexOf('://')
-    const type = line.slice(0, idx)
-    let text = line.slice(idx + '://'.length)
-    text = Base64.decode(text)
+  const lines = rawLines
+    .map((line) => {
+      const idx = line.indexOf('://')
+      const type = line.slice(0, idx)
+      let text = line.slice(idx + '://'.length)
+      text = Base64.decode(text)
 
-    let server
-    if (type === 'vmess') server = getVmessServer(text)
-    if (type === 'ssr') server = getSsrServer(text)
-    return {type, server}
-  })
+      let server
+      if (type === 'vmess') server = getVmessServer(text)
+      // if (type === 'ssr') server = getSsrServer(text)
+      if (!server) return
+
+      return {type, server}
+    })
+    .filter(Boolean)
 
   return lines
 }
