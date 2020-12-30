@@ -1,6 +1,7 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {
+    "baseUrl": "src",
     "rootDir": "src",
     "outDir": "lib",
     "allowJs": true,

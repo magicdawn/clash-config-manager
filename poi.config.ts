@@ -1,8 +1,9 @@
 import path from 'path'
-import {Config} from 'poi'
 import merge from 'webpack-merge'
-import xDeps from '@magicdawn/x/deps'
+import {Config} from 'poi'
 import MonacoWebpackPlugin from 'monaco-editor-webpack-plugin'
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
+import xDeps from '@magicdawn/x/deps'
 
 const common = {
   resolve: {
@@ -16,9 +17,15 @@ const common = {
         return o
       }, {}),
     },
+
+    plugins: [
+      // tsconfig
+      new TsconfigPathsPlugin({configFile: __dirname + '/tsconfig.json'}),
+    ],
   },
 
   plugins: [
+    // monaco
     new MonacoWebpackPlugin({
       // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
       languages: ['json', 'javascript', 'yaml'],
@@ -27,12 +34,10 @@ const common = {
 }
 
 const dev = {}
-
 const prod = {}
 
-// console.log(common)
-
-const config: Config & {reactRefresh: boolean} = {
+type PoiConfig = import('poi').Config & {reactRefresh?: boolean}
+const config: PoiConfig = {
   entry: 'src/index',
 
   devServer: {
@@ -46,11 +51,10 @@ const config: Config & {reactRefresh: boolean} = {
   output: {
     target: 'electron-renderer',
     publicUrl: './',
-    // minimize: false,
     dir: path.join(__dirname, 'bundle', process.env.NODE_ENV, 'renderer'),
   },
 
-  reactRefresh: true,
+  // reactRefresh: true,
 
   configureWebpack(config) {
     if (process.env.NODE_ENV === 'production') {
@@ -63,7 +67,10 @@ const config: Config & {reactRefresh: boolean} = {
   plugins: [
     {
       resolve: '@poi/plugin-typescript',
-      options: {},
+      options: {
+        lintOnSave: false,
+        babel: false,
+      },
     },
   ],
 }
