@@ -1,14 +1,14 @@
-const {urlToSubscribe} = require('./index')
+import {urlToSubscribe} from './index'
 
-exports.makeClashProxy = item => {
+export const makeClashProxy = (item) => {
   const {type} = item
-  if (type === 'sep') return exports.makeClashSepProxy(item.name)
-  if (type === 'ssr') return exports.makeClashSsrProxy(item)
-  if (type === 'vmess') return exports.makeClashVmessProxy(item)
+  if (type === 'sep') return makeClashSepProxy(item.name)
+  if (type === 'ssr') return makeClashSsrProxy(item)
+  if (type === 'vmess') return makeClashVmessProxy(item)
 }
 
 // 分隔符
-exports.makeClashSepProxy = name => {
+export const makeClashSepProxy = (name) => {
   const obj = {
     type: 'vmess',
     server: {
@@ -25,10 +25,10 @@ exports.makeClashSepProxy = name => {
       tls: '',
     },
   }
-  return exports.makeClashVmessProxy(obj)
+  return makeClashVmessProxy(obj)
 }
 
-exports.makeClashVmessProxy = item => {
+export const makeClashVmessProxy = (item) => {
   const {server: s, type} = item
 
   const clashProxyItem = {
@@ -64,7 +64,7 @@ exports.makeClashVmessProxy = item => {
   return clashProxyItem
 }
 
-exports.makeClashSsrProxy = item => {
+export const makeClashSsrProxy = (item) => {
   const {server: s, type} = item
   return null
 
@@ -79,8 +79,8 @@ exports.makeClashSsrProxy = item => {
   return clashProxyItem
 }
 
-exports.subscribeToClash = async ({url, force}) => {
+export const subscribeToClash = async ({url, force}: {url: string; force: boolean}) => {
   const servers = await urlToSubscribe({url, force})
-  const clashProxies = servers.map(exports.makeClashProxy)
+  const clashProxies = servers.map(makeClashProxy)
   return clashProxies
 }

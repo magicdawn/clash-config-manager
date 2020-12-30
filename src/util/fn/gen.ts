@@ -1,12 +1,13 @@
-const {homedir} = require('os')
-const {join: pathjoin} = require('path')
-const fse = require('fs-extra')
-const Yaml = require('js-yaml')
-import store from '../../store'
+import {homedir} from 'os'
+import {join as pathjoin} from 'path'
+import Yaml from 'js-yaml'
+import fse from 'fs-extra'
 import request from 'umi-request'
+import store from '@store'
 
 export default async function genConfig() {
-  const rootState = store.getState()
+  // TODO: add more model
+  const rootState = store.getState() as any
 
   // subscribe
   const subscribeList = rootState.librarySubscribe.list

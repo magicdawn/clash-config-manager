@@ -1,25 +1,28 @@
-// const {readUrl} = require('dl-vampire')
-const {createHash} = require('crypto')
-const path = require('path')
-const fse = require('fs-extra')
-const ms = require('ms')
-const request = require('umi-request').default
+import {createHash} from 'crypto'
+import path from 'path'
+import fse from 'fs-extra'
+import ms from 'ms'
+import request from 'umi-request'
+import envPaths from 'env-paths'
 
-const envPaths = require('env-paths')
 const appCacheDir = envPaths('clash-config-manager', {suffix: ''}).cache
 
 const Base64 = {
-  encode: (s) => Buffer.from(s, 'utf-8').toString('base64'),
-  decode: (s) => Buffer.from(s, 'base64').toString('utf-8'),
+  encode: (s: string) => Buffer.from(s, 'utf-8').toString('base64'),
+  decode: (s: string) => Buffer.from(s, 'base64').toString('utf-8'),
 }
 
-const md5 = (s) => createHash('md5').update(s, 'utf8').digest('hex')
+const md5 = (s: string) => createHash('md5').update(s, 'utf8').digest('hex')
 
-const readUrl = async ({url, file}) => {
-  const text = await request.get(url, {
+const readUrl = async ({url, file}: {url: string; file: string}) => {
+  const text = (await request.get(url, {
     responseType: 'text',
-    headers: {'x-extra-headers': JSON.stringify({'user-agent': 'electron'})},
-  })
+    headers: {
+      'x-extra-headers': JSON.stringify({
+        'user-agent': 'electron',
+      }),
+    },
+  })) as string
 
   fse.outputFile(file, text).then(
     () => {
@@ -33,13 +36,13 @@ const readUrl = async ({url, file}) => {
   return text
 }
 
-const urlToSubscribe = async ({url, force}) => {
+const urlToSubscribe = async ({url, force}: {url: string; force?: boolean}) => {
   const file = path.join(appCacheDir, 'readUrl', md5(url))
 
   let shouldReuse = false
-  let stat
+  let stat: fse.Stats
   // 5天之内不会再下载
-  const isRecent = (ts) => ts && Math.abs(Date.now() - ts) < ms('5d')
+  const isRecent = (ts: number) => ts && Math.abs(Date.now() - ts) < ms('5d')
   if (
     !force &&
     fse.existsSync(file) &&
@@ -49,7 +52,7 @@ const urlToSubscribe = async ({url, force}) => {
     shouldReuse = true
   }
 
-  let text
+  let text: string
   if (shouldReuse) {
     text = fse.readFileSync(file, 'utf8')
   } else {
@@ -60,7 +63,7 @@ const urlToSubscribe = async ({url, force}) => {
   return textToSubscribe(text)
 }
 
-const textToSubscribe = (text) => {
+const textToSubscribe = (text: string) => {
   text = Base64.decode(text)
   const rawLines = text.split(/\r?\n/).filter(Boolean)
   const lines = rawLines
@@ -82,7 +85,7 @@ const textToSubscribe = (text) => {
   return lines
 }
 
-const getVmessServer = (str) => {
+const getVmessServer = (str: string) => {
   return JSON.parse(str)
 }
 
@@ -93,6 +96,7 @@ const getSsrServer = (str) => {
   const [server, port, cipher, password, obfs] = prev.split(':')
   const params = new URLSearchParams(rest)
 
+  // @ts-ignore
   let {obfsparam, protoparam, remarks, group} = Array.from(params).reduce(
     (result, [key, value]) => {
       result[key] = value
@@ -107,10 +111,4 @@ const getSsrServer = (str) => {
   return {server, port, cipher, password, obfs, obfsparam, protoparam, remarks, group}
 }
 
-Object.assign(exports, {
-  Base64,
-  textToSubscribe,
-  urlToSubscribe,
-  getVmessServer,
-  getSsrServer,
-})
+export {Base64, textToSubscribe, urlToSubscribe, getVmessServer, getSsrServer}

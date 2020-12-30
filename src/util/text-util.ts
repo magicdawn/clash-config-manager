@@ -1,4 +1,4 @@
-export function firstLine(text) {
+export function firstLine(text: string) {
   return (text || '').split('\n')[0] || ''
 }
 
