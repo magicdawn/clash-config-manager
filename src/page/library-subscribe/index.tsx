@@ -2,14 +2,8 @@ import React, {useState, useCallback} from 'react'
 import {Button, Layout, Menu, Modal, Input, message, List, Space} from 'antd'
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
 import {v4 as uuid} from 'uuid'
-
-import styles from './index.module.less'
-import storage from '../../storage/index'
-import {compose} from 'recompose'
 import {useEasy} from '@store'
-
-const {Header, Footer, Sider, Content} = Layout
-const {SubMenu} = Menu
+import styles from './index.module.less'
 
 export default function LibrarySubscribe() {
   const subscribeModel = useEasy('librarySubscribe')
