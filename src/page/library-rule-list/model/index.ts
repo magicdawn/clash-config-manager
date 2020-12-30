@@ -60,9 +60,10 @@ const model: IModel = {
   }),
   setState: setState(),
 }
+
 export default model
 
-const x = {
+const bak = {
   name: nsp,
 
   state: {
