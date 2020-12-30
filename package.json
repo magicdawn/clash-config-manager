@@ -145,7 +145,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,less,vue}": [
+    "*.{js,less,vue,ts,tsx}": [
       "prettier --write"
     ]
   }
