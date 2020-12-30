@@ -75,7 +75,7 @@ function Root() {
 
 function Routes() {
   const {pathname} = useLocation()
-  const getKey = (s) => _.trimStart(s, '/').replace(/\//g, ':') || 'home'
+  const getKey = (s: string) => _.trimStart(s, '/').replace(/\//g, ':') || 'home'
   const menuKey = getKey(pathname)
 
   return (
@@ -95,4 +95,4 @@ function Routes() {
   )
 }
 
-render(<Root />, window.app)
+render(<Root />, (window as any).app)

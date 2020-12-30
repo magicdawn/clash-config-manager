@@ -1,9 +1,8 @@
-const path = require('path')
-const merge = require('webpack-merge')
-const xDeps = require('@magicdawn/x/deps')
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
-
-// const MONACO_DIR = path.dirname(require.resolve('monaco-editor/package.json'))
+import path from 'path'
+import {Config} from 'poi'
+import merge from 'webpack-merge'
+import xDeps from '@magicdawn/x/deps'
+import MonacoWebpackPlugin from 'monaco-editor-webpack-plugin'
 
 const common = {
   resolve: {
@@ -33,8 +32,8 @@ const prod = {}
 
 // console.log(common)
 
-module.exports = {
-  entry: 'src/index.js',
+const config: Config & {reactRefresh: boolean} = {
+  entry: 'src/index',
 
   devServer: {
     port: 7749,
@@ -60,4 +59,13 @@ module.exports = {
       return merge(config, common, dev)
     }
   },
+
+  plugins: [
+    {
+      resolve: '@poi/plugin-typescript',
+      options: {},
+    },
+  ],
 }
+
+export default config

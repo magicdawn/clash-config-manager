@@ -12,7 +12,8 @@
     "module": "CommonJS",
     "strict": false,
     "skipLibCheck": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "jsx": "react"
   },
   "ts-node": {
     "transpileOnly": true
