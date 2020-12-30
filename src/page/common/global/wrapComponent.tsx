@@ -1,11 +1,12 @@
 import React, {useEffect, useCallback, useState} from 'react'
 import {render} from 'react-dom'
 import {BehaviorSubject} from 'rxjs'
-import {useModifyState} from '@x/react/hooks'
 import {withProps} from 'recompose'
+// @ts-ignore
+import {useModifyState} from '@x/react/hooks'
 
 export default function wrap({component, defaultProps, withProps: withPropsOptions}) {
-  const subject = new BehaviorSubject()
+  const subject = new BehaviorSubject(null)
   let C = component
 
   if (withPropsOptions) {

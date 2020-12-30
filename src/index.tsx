@@ -17,11 +17,11 @@ import _ from 'lodash'
 
 import './page/common'
 import Commands from './commands'
-import Home from './page/home/index'
-import LibrarySubscribe from './page/library-subscribe/index'
-import LibraryRuleList from './page/library-rule-list/index'
-import CurrentConfig from './page/current-config/index'
-import Preference from './page/preference/index'
+import Home from './page/home'
+import LibrarySubscribe from './page/library-subscribe'
+import LibraryRuleList from './page/library-rule-list'
+import CurrentConfig from './page/current-config'
+import Preference from './page/preference'
 
 const routes = [
   {
