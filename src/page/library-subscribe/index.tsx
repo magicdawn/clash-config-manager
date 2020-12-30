@@ -1,26 +1,21 @@
-import React, {useState, useCallback, useEffect} from 'react'
-import {Button, DatePicker, version, Layout, Menu, Modal, Input, message} from 'antd'
-import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons'
+import React, {useState, useCallback} from 'react'
+import {Button, Layout, Menu, Modal, Input, message, List, Space} from 'antd'
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
-import usePlug from '@x/rematch/usePlug'
 import {v4 as uuid} from 'uuid'
 
 import styles from './index.module.less'
 import storage from '../../storage/index'
 import {compose} from 'recompose'
+import {useEasy} from '@store'
 
 const {Header, Footer, Sider, Content} = Layout
 const {SubMenu} = Menu
-import {List, Typography, Divider, Space} from 'antd'
-
-const nsp = 'librarySubscribe'
-const stateKeys = ['list']
 
 export default function LibrarySubscribe() {
-  const {state, effects} = usePlug({nsp, state: stateKeys})
+  const subscribeModel = useEasy('librarySubscribe')
 
   useMount(() => {
-    effects.init()
+    subscribeModel.init()
   })
 
   const [showModal, setShowModal] = useState(false)
@@ -41,7 +36,7 @@ export default function LibrarySubscribe() {
   })
 
   const update = usePersistFn((item, index) => {
-    effects.update({url: item.url})
+    subscribeModel.update({url: item.url})
   })
 
   const disableEnterAsClick = useCallback((e) => {
@@ -56,7 +51,7 @@ export default function LibrarySubscribe() {
       title: 'Do you Want to delete these items?',
       content: 'Some descriptions',
       onOk() {
-        effects.del(index)
+        subscribeModel.del(index)
       },
       onCancel() {
         console.log('Cancel')
@@ -83,7 +78,7 @@ export default function LibrarySubscribe() {
           </div>
         }
         bordered
-        dataSource={state.list}
+        dataSource={subscribeModel.list}
         renderItem={(item, index) => {
           const {url, name} = item
           return (
@@ -108,11 +103,7 @@ export default function LibrarySubscribe() {
                 >
                   更新
                 </Button>
-                <Button
-                  type='danger'
-                  onClick={() => del(item, index)}
-                  onKeyDown={disableEnterAsClick}
-                >
+                <Button danger onClick={() => del(item, index)} onKeyDown={disableEnterAsClick}>
                   删除
                 </Button>
               </Space>
@@ -125,7 +116,7 @@ export default function LibrarySubscribe() {
 }
 
 function ModalAdd({visible, setVisible, editItem, editItemIndex}) {
-  const {state, effects} = usePlug({nsp, state: stateKeys})
+  const subscribeModel = useEasy('librarySubscribe')
   const [url, setUrl] = useState(editItem?.url || '')
   const [name, setName] = useState(editItem?.name || '')
   const [id, setId] = useState(editItem?.id || uuid())
@@ -162,16 +153,16 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex}) {
       return message.warn('url & name 不能为空')
     }
 
-    const err = effects.check({url, name, editItemIndex})
+    const err = subscribeModel.check({url, name, editItemIndex})
     if (err) {
       return message.error(err)
     }
 
     const mode = editItem ? 'edit' : 'add'
     if (mode === 'add') {
-      effects.add({url, name, id})
+      subscribeModel.add({url, name, id})
     } else {
-      effects.edit({url, name, id, editItemIndex})
+      subscribeModel.edit({url, name, id, editItemIndex})
     }
 
     setVisible(false)

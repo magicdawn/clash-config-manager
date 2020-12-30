@@ -2,6 +2,11 @@
   "include": ["src/**/*"],
   "compilerOptions": {
     "baseUrl": "src",
+    "paths": {
+      "@store": ["store.ts"],
+      "@define": ["common/define.ts"],
+      "@/*": ["*"]
+    },
     "rootDir": "src",
     "outDir": "lib",
     "allowJs": true,
@@ -16,6 +21,14 @@
     "experimentalDecorators": true,
     "jsx": "react"
   },
+  "plugins": [
+    {
+      "name": "typescript-plugin-css-modules",
+      "options": {
+        "classnameTransform": "camelCaseOnly"
+      }
+    }
+  ],
   "ts-node": {
     "transpileOnly": true
   }

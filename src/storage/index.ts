@@ -1,5 +1,7 @@
-import Store from 'electron-store'
 /* eslint camelcase: off */
+
+import Store from 'electron-store'
+import {Subscribe} from '@define'
 
 const storage = new Store({
   name: 'data',
@@ -7,7 +9,7 @@ const storage = new Store({
   clearInvalidConfig: true,
 
   defaults: {
-    subscribe_list: [],
+    subscribe_list: [] as Subscribe[],
     subscribe_detail: {},
 
     rule_list: [],
@@ -28,5 +30,5 @@ const storage = new Store({
 })
 
 // fixme
-global.estore = storage
+;(global as any).estore = storage
 export default storage
