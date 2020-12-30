@@ -108,31 +108,29 @@ export default function LibraryRuleList() {
                 <div className='name'>名称: {name}</div>
                 <div className='type'>类型: {type === 'local' ? '本地' : '远程'}</div>
                 <div className='info'>
-                  {do {
-                    if (type === 'local') {
-                      ;<Tooltip
-                        title={
-                          <div style={{whiteSpace: 'pre-wrap', wordBreak: 'break-all'}}>
-                            {limitLines(content, 10)}
-                          </div>
-                        }
-                      >
-                        <div className='ellipsis' style={{color: 'blue'}}>
-                          内容: {firstLine(content)}
+                  {type === 'local' ? (
+                    <Tooltip
+                      title={
+                        <div style={{whiteSpace: 'pre-wrap', wordBreak: 'break-all'}}>
+                          {limitLines(content, 10)}
                         </div>
-                      </Tooltip>
-                    } else {
-                      ;<Tooltip
-                        title={
-                          <div style={{whiteSpace: 'pre-wrap', wordBreak: 'break-all'}}>{url}</div>
-                        }
-                      >
-                        <div className='ellipsis' style={{color: 'blue'}}>
-                          链接: {url}
-                        </div>
-                      </Tooltip>
-                    }
-                  }}
+                      }
+                    >
+                      <div className='ellipsis' style={{color: 'blue'}}>
+                        内容: {firstLine(content)}
+                      </div>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip
+                      title={
+                        <div style={{whiteSpace: 'pre-wrap', wordBreak: 'break-all'}}>{url}</div>
+                      }
+                    >
+                      <div className='ellipsis' style={{color: 'blue'}}>
+                        链接: {url}
+                      </div>
+                    </Tooltip>
+                  )}
                 </div>
               </div>
 

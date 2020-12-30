@@ -1,12 +1,68 @@
 import _ from 'lodash'
-import storage from '../../../storage/index'
-import {subscribeToClash} from '../../../util/fn/clash'
 import {message} from 'antd'
+import storage from '@storage'
+import {subscribeToClash} from '@util/fn/clash'
+import {action, thunk, thunkOn} from 'easy-peasy'
+import {Action, Thunk, ThunkOn} from 'easy-peasy'
+import {RuleItem} from '@define'
+import {StoreModel} from '@store'
+import {SetState, setState} from '@common/model/setState'
 
 const nsp = 'libraryRuleList'
-const SUBSCRIBE_LIST_STORAGE_KEY = 'rule_list'
+const RULE_LIST_STORAGE_KEY = 'rule_list'
 
-export default {
+interface IState {
+  inited: boolean
+  list: RuleItem[]
+}
+
+interface IModel extends IState {
+  onInit: ThunkOn<IModel, any, StoreModel>
+  onReload: ThunkOn<IModel, any, StoreModel>
+
+  init: Thunk<IModel>
+  load: Thunk<IModel>
+  persist: Thunk<IModel>
+  setState: SetState<IModel, IState>
+
+  // check: Thunk<IModel, RuleItem & {editItemIndex: number}>
+}
+
+const model: IModel = {
+  inited: false,
+  list: [],
+
+  onInit: thunkOn(
+    (_, storeActions) => storeActions.global.init,
+    (actions) => {
+      actions.init()
+    }
+  ),
+  onReload: thunkOn(
+    (_, storeActions) => storeActions.global.init,
+    (actions) => {
+      actions.load()
+    }
+  ),
+
+  init: thunk((actions, _, {getState}) => {
+    const {inited} = getState()
+    if (inited) return
+    actions.load()
+  }),
+  load: thunk((actions) => {
+    const list = storage.get(RULE_LIST_STORAGE_KEY)
+    actions.setState({inited: true, list})
+  }),
+  persist: thunk((actions, _, {getState}) => {
+    const {list} = getState()
+    storage.set(RULE_LIST_STORAGE_KEY, list)
+  }),
+  setState: setState(),
+}
+export default model
+
+const x = {
   name: nsp,
 
   state: {
@@ -27,13 +83,13 @@ export default {
   effects: (dispatch) => {
     return {
       load() {
-        const list = storage.get(SUBSCRIBE_LIST_STORAGE_KEY)
+        const list = storage.get(RULE_LIST_STORAGE_KEY)
         this.setState({inited: true, list})
       },
 
       persist(payload, rootState) {
         const {list, detail} = this.state
-        storage.set(SUBSCRIBE_LIST_STORAGE_KEY, list)
+        storage.set(RULE_LIST_STORAGE_KEY, list)
       },
 
       init(payload, rootState) {

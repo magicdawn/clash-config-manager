@@ -1,12 +1,5 @@
 import MonacoEditor from 'react-monaco-editor'
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useImperativeHandle,
-  forwardRef,
-} from 'react'
+import React, {forwardRef} from 'react'
 import {usePersistFn, useUpdateEffect} from 'ahooks'
 import {Spin} from 'antd'
 import style from './ConfigEditor.module.less'

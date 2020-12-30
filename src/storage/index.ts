@@ -1,7 +1,7 @@
 /* eslint camelcase: off */
 
 import Store from 'electron-store'
-import {Subscribe} from '@define'
+import {RuleItem, Subscribe} from '@define'
 
 const storage = new Store({
   name: 'data',
@@ -12,7 +12,7 @@ const storage = new Store({
     subscribe_list: [] as Subscribe[],
     subscribe_detail: {},
 
-    rule_list: [],
+    rule_list: [] as RuleItem[],
 
     current_config_v2: {
       list: [],

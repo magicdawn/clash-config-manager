@@ -3,3 +3,5 @@ export interface Subscribe {
   name: string
   url: string
 }
+
+export interface RuleItem {}

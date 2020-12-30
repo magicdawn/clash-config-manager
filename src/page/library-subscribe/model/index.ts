@@ -1,10 +1,10 @@
 import _ from 'lodash'
 import {message} from 'antd'
 import {Action, action, Thunk, thunk, ThunkOn, thunkOn} from 'easy-peasy'
+import {subscribeToClash} from '@util/fn/clash'
 import {Subscribe} from '@define'
 import {StoreModel} from '@store'
-import storage from '@/storage/index'
-import {subscribeToClash} from '@/util/fn/clash'
+import storage from '@storage'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'

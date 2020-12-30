@@ -1,5 +1,5 @@
-// babel.config.js
 module.exports = {
+  sourceType: 'unambiguous',
   presets: [
     // Our default preset
     [
@@ -13,8 +13,4 @@ module.exports = {
       },
     ],
   ],
-
-  sourceType: 'unambiguous',
-
-  plugins: ['@babel/plugin-proposal-do-expressions'],
 }

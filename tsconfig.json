@@ -5,7 +5,7 @@
     "paths": {
       "@store": ["store.ts"],
       "@define": ["common/define.ts"],
-      "@/*": ["*"]
+      "@*": ["*"]
     },
     "rootDir": "src",
     "outDir": "lib",
