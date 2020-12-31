@@ -1,7 +1,6 @@
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
 import React, {useMemo, useState, useCallback} from 'react'
 import {usePersistFn, useMount} from 'ahooks'
-import {useModifyState, useShallowEqualSelector} from '@x/react/hooks'
 import {useSelector, useDispatch} from 'react-redux'
 import {InfoCircleOutlined} from '@ant-design/icons'
 import {Tooltip} from 'antd'

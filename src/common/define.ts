@@ -12,3 +12,5 @@ export interface RuleItem {
 }
 
 export interface ConfigItem {}
+
+export {default as ClashConfig} from './define/ClashConfig'

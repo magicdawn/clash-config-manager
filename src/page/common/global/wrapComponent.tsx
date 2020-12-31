@@ -2,8 +2,7 @@ import React, {useEffect, useCallback, useState} from 'react'
 import {render} from 'react-dom'
 import {BehaviorSubject} from 'rxjs'
 import {withProps} from 'recompose'
-// @ts-ignore
-import {useModifyState} from '@x/react/hooks'
+import useImmerState from '@util/hooks/useImmerState'
 
 export default function wrap({component, defaultProps, withProps: withPropsOptions}) {
   const subject = new BehaviorSubject(null)
@@ -14,7 +13,7 @@ export default function wrap({component, defaultProps, withProps: withPropsOptio
   }
 
   function WrappedComponent() {
-    const [props, setProps] = useModifyState(defaultProps)
+    const [props, setProps] = useImmerState(defaultProps)
 
     useEffect(() => {
       const subscription = subject.subscribe((val) => setProps(val))

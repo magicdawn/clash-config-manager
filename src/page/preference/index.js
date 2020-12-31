@@ -10,8 +10,7 @@ import React, {useState, useCallback, useEffect} from 'react'
 import {Button, Modal, Input, message, Space, Row, Col, Card} from 'antd'
 import {SettingFilled, CloudUploadOutlined, CloudDownloadOutlined} from '@ant-design/icons'
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
-import usePlug from '@magicdawn/x/rematch/usePlug'
-import {useModifyState} from '@x/react/hooks'
+import useImmerState from '@util/hooks/useImmerState'
 import storage from '../../storage/index'
 import customMerge from '../../util/sync/webdav/customMerge'
 import {pick as pickSelectExport, SelectExportForStaticMethod} from './modal/SelectExport'
@@ -19,15 +18,14 @@ import PRESET_JSON_DATA from '../../assets/基本数据规则.json'
 
 import styles from './index.module.less'
 import helper from '../../util/sync/webdav/helper'
-
-const nsp = 'preference'
-const stateKeys = ['list']
+import {useEasy} from '@store'
 
 export default function Preference() {
-  const {effects, dispatch} = usePlug({nsp, state: stateKeys})
+  const preferenceModel = useEasy('preference')
+  const globalModel = useEasy('global')
 
   useMount(() => {
-    effects.init()
+    preferenceModel.init()
   })
 
   const [showModal, setShowModal] = useState(false)
@@ -88,7 +86,7 @@ export default function Preference() {
     storage.store = merged
 
     // reload redux
-    dispatch({type: 'global/reload'})
+    globalModel.reload()
 
     message.success('导入成功: 已与本地配置合并')
   }
@@ -272,14 +270,15 @@ export default function Preference() {
 }
 
 function ModalSyncConfig({visible, setVisible, editItem, editItemIndex}) {
-  const {state, effects} = usePlug({nsp, state: ['syncConfig']})
-  const [data, modifyData] = useModifyState(state.syncConfig)
+  const preferenceModel = useEasy('preference')
+
+  const [data, modifyData] = useImmerState(preferenceModel.syncConfig)
 
   useUpdateEffect(() => {
     if (visible) {
-      modifyData(state.syncConfig)
+      modifyData(preferenceModel.syncConfig)
     }
-  }, [visible])
+  }, [visible, preferenceModel.syncConfig])
 
   const handleCancel = useCallback(() => {
     setVisible(false)
@@ -297,8 +296,8 @@ function ModalSyncConfig({visible, setVisible, editItem, editItemIndex}) {
     }
 
     // save
-    effects.setState({syncConfig: data})
-    effects.persist()
+    preferenceModel.setState({syncConfig: data})
+    preferenceModel.persist()
 
     // close
     setVisible(false)

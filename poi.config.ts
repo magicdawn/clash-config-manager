@@ -16,6 +16,8 @@ const common = {
         o[m] = path.join(__dirname, 'node_modules', m)
         return o
       }, {}),
+
+      'easy-peasy': require.resolve('easy-peasy/src/index'),
     },
 
     plugins: [
@@ -45,7 +47,8 @@ const config: PoiConfig = {
   },
 
   babel: {
-    transpileModules: ['@magicdawn/x'],
+    // @ts-ignore
+    transpileModules: ['@magicdawn/x', /easy-peasy/],
   },
 
   output: {
@@ -54,7 +57,7 @@ const config: PoiConfig = {
     dir: path.join(__dirname, 'bundle', process.env.NODE_ENV, 'renderer'),
   },
 
-  // reactRefresh: true,
+  reactRefresh: true,
 
   configureWebpack(config) {
     if (process.env.NODE_ENV === 'production') {

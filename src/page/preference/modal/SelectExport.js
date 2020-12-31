@@ -1,7 +1,7 @@
 import React, {useCallback, useState, useEffect} from 'react'
 import {Modal, Tree} from 'antd'
 import {BehaviorSubject} from 'rxjs'
-import {useModifyState} from '@magicdawn/x/react/hooks'
+import useImmerState from '@util/hooks/useImmerState'
 import {usePersistFn, useUpdateEffect} from 'ahooks'
 import _ from 'lodash'
 
@@ -150,7 +150,7 @@ function clean(obj) {
 export const subject = new BehaviorSubject()
 
 export function SelectExportForStaticMethod() {
-  const [{treeData, visible, resolve}, setState] = useModifyState({
+  const [{treeData, visible, resolve}, setState] = useImmerState({
     treeData: null,
     visible: false,
     resove: null,

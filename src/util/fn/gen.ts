@@ -4,6 +4,8 @@ import Yaml from 'js-yaml'
 import fse from 'fs-extra'
 import request from 'umi-request'
 import store from '@store'
+import {ClashConfig} from '@define'
+import {ProxyGroupType} from '@common/define/ClashConfig'
 
 export default async function genConfig() {
   // TODO: add more model
@@ -45,7 +47,7 @@ export default async function genConfig() {
   /**
    * config merge
    */
-  let config = {}
+  let config: Partial<ClashConfig> = {}
 
   for (let r of ruleArr) {
     const {item} = r
@@ -113,7 +115,7 @@ export default async function genConfig() {
     // - {name: Others, type: select, proxies: [DIRECT, Proxy]}
     const newgroup = {
       name: use,
-      type: 'select',
+      type: ProxyGroupType.Select,
       proxies: ['DIRECT', 'Proxy', 'REJECT'],
     }
     config['proxy-groups'].push(newgroup)

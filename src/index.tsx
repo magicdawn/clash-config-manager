@@ -1,8 +1,7 @@
-import React, {useState, useCallback} from 'react'
+import React from 'react'
 import {render} from 'react-dom'
 import {HashRouter as Router, Link, useLocation} from 'react-router-dom'
-import {Provider} from 'react-redux'
-import store from './store'
+import {StoreProvider} from 'easy-peasy'
 import 'antd/dist/antd.css'
 import {Menu} from 'antd'
 import {
@@ -15,6 +14,7 @@ import {
 import {renderRoutes} from 'react-router-config'
 import _ from 'lodash'
 
+import store from './store'
 import './page/common'
 import Commands from './commands'
 import Home from './page/home'
@@ -63,13 +63,11 @@ const routes = [
 
 function Root() {
   return (
-    <>
-      <Provider store={store}>
-        <Router>
-          <Routes></Routes>
-        </Router>
-      </Provider>
-    </>
+    <StoreProvider store={store}>
+      <Router>
+        <Routes></Routes>
+      </Router>
+    </StoreProvider>
   )
 }
 

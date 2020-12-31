@@ -35,7 +35,14 @@ function Loading({visible}) {
       closable={false}
       bodyStyle={{padding: 0, backgroundColor: 'transparent'}}
     >
-      <PacmanLoader color={color} size={100} css={{marginLeft: -300, marginTop: -100}} />
+      <PacmanLoader
+        color={color}
+        size={100}
+        css={`
+          margin-left: -300px;
+          margin-top: -100px;
+        `}
+      />
     </Modal>
   )
 }
