@@ -17,6 +17,7 @@ const storage = new Store({
     current_config_v2: {
       list: [],
       name: 'clash-config-manager',
+      forceUpdate: true,
     },
 
     preference: {

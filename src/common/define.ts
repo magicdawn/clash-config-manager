@@ -4,4 +4,11 @@ export interface Subscribe {
   url: string
 }
 
-export interface RuleItem {}
+export interface RuleItem {
+  type: string
+  name: string
+  url?: string
+  content?: string
+}
+
+export interface ConfigItem {}
