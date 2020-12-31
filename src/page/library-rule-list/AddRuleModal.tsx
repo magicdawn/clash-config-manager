@@ -6,7 +6,13 @@ import URI from 'urijs'
 
 const {Option} = Select
 
-export default function AddRuleModal(props) {
+interface IProps {
+  visible: boolean
+  setVisible: (val: boolean) => void
+  onOk?: (rule: string) => void
+}
+
+export default function AddRuleModal(props: IProps) {
   /**
    * modal
    */
@@ -116,7 +122,7 @@ export default function AddRuleModal(props) {
 
       <Row gutter={8}>
         <Col {...layout[0]}>
-          <Select value={type} onChange={setType} style={{width: '100%'}}>
+          <Select value={type} onChange={(val) => setType(val)} style={{width: '100%'}}>
             {TYPES.map((t) => (
               <Option key={t} value={t}>
                 {t}
@@ -168,14 +174,14 @@ async function getChromeUrl() {
 			get URL of active tab of first window
 		end tell
 	`
-  const result = await pify(AppleScript.execString, AppleScript)(script.trim())
+  const result = (await pify(AppleScript.execString, AppleScript)(script.trim())) as string[]
   const url = result && result[0]
   return url
 }
 
 global.URI = URI
 
-function getAutoCompletes(url) {
+function getAutoCompletes(url: string) {
   const u = new URI(url)
   // const fullDomain = u.domain() // full domain, e.g www.githug.com
   // const shortDomain = u.domain(true) // without subdomain, e.g github.com
@@ -184,7 +190,7 @@ function getAutoCompletes(url) {
   const hostname = u.hostname() // www.github.com
   const tld = u.tld() // com
 
-  const suffixes = []
+  const suffixes: string[] = []
   let cur = hostname
   do {
     suffixes.push(cur)

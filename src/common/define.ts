@@ -5,6 +5,7 @@ export interface Subscribe {
 }
 
 export interface RuleItem {
+  id?: string
   type: string
   name: string
   url?: string

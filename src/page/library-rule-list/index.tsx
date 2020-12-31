@@ -4,30 +4,27 @@ import fse from 'fs-extra'
 import execa from 'execa'
 import debugFactory from 'debug'
 import React, {useState, useCallback, useRef, useMemo} from 'react'
-import {Button, Modal, Input, message, Tooltip} from 'antd'
+import {Button, Modal, Input, message, Tooltip, List, Space, Form, Select} from 'antd'
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
-import usePlug from '@x/rematch/usePlug'
-import useModifyState from '@util/hooks/useImmerState'
 import {v4 as uuid} from 'uuid'
-import {firstLine, limitLines} from '../../util/text-util'
 import Yaml from 'js-yaml'
 
+import useImmerState from '@util/hooks/useImmerState'
+import {firstLine, limitLines} from '@util/text-util'
+import {useEasy} from '@store'
+import {RuleItem} from '@define'
+
 import styles from './index.module.less'
-import {List, Space, Form, Select} from 'antd'
 const {Option} = Select
 const debug = debugFactory('app:libraryRuleList')
-
 const namespace = 'libraryRuleList'
 const TEMP_EDITING_FILE = path.join(remote.app.getPath('userData'), 'temp', '临时文件-关闭生效.yml')
 
 export default function LibraryRuleList() {
-  const {effects, state} = usePlug({
-    nsp: namespace,
-    state: ['list'],
-  })
+  const ruleListModel = useEasy('libraryRuleList')
 
   useMount(() => {
-    effects.init()
+    ruleListModel.init()
   })
 
   const [showModal, setShowModal] = useState(false)
@@ -72,7 +69,7 @@ export default function LibraryRuleList() {
       title: 'Do you Want to delete these items?',
       content: 'Some descriptions',
       onOk() {
-        effects.del(index)
+        ruleListModel.del(index)
       },
       onCancel() {
         console.log('Cancel')
@@ -99,7 +96,7 @@ export default function LibraryRuleList() {
           </div>
         }
         bordered
-        dataSource={state.list}
+        dataSource={ruleListModel.list}
         renderItem={(item, index) => {
           const {type, name, url, content} = item
           return (
@@ -144,7 +141,7 @@ export default function LibraryRuleList() {
                 </Button>
 
                 <Button
-                  type='success'
+                  type='dashed'
                   onClick={(e) => view(item, index)}
                   onKeyDown={disableEnterAsClick}
                 >
@@ -173,7 +170,8 @@ export default function LibraryRuleList() {
                 </Button> */}
 
                 <Button
-                  type='danger'
+                  type='default'
+                  danger
                   onClick={() => del(item, index)}
                   onKeyDown={disableEnterAsClick}
                 >
@@ -192,7 +190,8 @@ import ConfigEditor from './ConfigEditor'
 import RuleAddModal from './AddRuleModal'
 
 function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
-  const {effects} = usePlug({nsp: namespace, state: ['list']})
+  const ruleListModel = useEasy('libraryRuleList')
+
   const readonly = editMode === 'readonly'
 
   const getDefaultItem = () => ({
@@ -206,8 +205,8 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   const [form] = Form.useForm()
   const [formFields, setFormFields] = useState([])
 
-  const [otherFormData, modifyOtherFormData] = useModifyState({})
-  const [type, setType] = useModifyState({value: editItem?.type || 'local'})
+  const [otherFormData, modifyOtherFormData] = useImmerState<{id?: string}>({})
+  const [type, setType] = useImmerState({value: editItem?.type || 'local'})
 
   const configEditorRef = useRef(null)
 
@@ -251,7 +250,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     form.submit()
   })
 
-  const handleSubmit = usePersistFn((item) => {
+  const handleSubmit = usePersistFn((item: RuleItem) => {
     const {content} = item
 
     // add more data
@@ -265,7 +264,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
         return message.error('content can not be empty')
       }
 
-      let err
+      let err: Error
       try {
         Yaml.safeLoad(content)
       } catch (e) {
@@ -280,14 +279,14 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
       item.content = ''
     }
 
-    const err = effects.check({item, editItemIndex})
+    const err = ruleListModel.check({item, editItemIndex})
     if (err) return message.error(err)
 
     const mode = editItem ? 'edit' : 'add'
     if (mode === 'add') {
-      effects.add({item})
+      ruleListModel.add({item})
     } else {
-      effects.edit({item, editItemIndex})
+      ruleListModel.edit({item, editItemIndex})
     }
 
     setVisible(false)
@@ -307,21 +306,18 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     setRuleAddVisible(true)
   }, [])
 
-  const onAddRule = usePersistFn(
-    (rule) => {
-      // debugger
-      let content = form.getFieldValue('content') || ''
+  const onAddRule = usePersistFn((rule) => {
+    // debugger
+    let content = form.getFieldValue('content') || ''
 
-      if (content.split('\n').find((x) => x.includes(rule) && !x.trim().startsWith('#'))) {
-        return message.error(`rule ${rule} 已存在`)
-      }
+    if (content.split('\n').find((x) => x.includes(rule) && !x.trim().startsWith('#'))) {
+      return message.error(`rule ${rule} 已存在`)
+    }
 
-      content = content.trimEnd() + '\n' + `  - ${rule}` + '\n'
-      form.setFieldsValue({content})
-      message.success(`已添加规则 ${rule}`)
-    },
-    [form]
-  )
+    content = content.trimEnd() + '\n' + `  - ${rule}` + '\n'
+    form.setFieldsValue({content})
+    message.success(`已添加规则 ${rule}`)
+  })
 
   const [editInEditorMaskVisible, setEditInEditorMaskVisible] = useState(false)
   const editInEditor = usePersistFn(async (editor = 'code') => {
@@ -465,6 +461,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
               spinProps={{
                 size: 'large',
                 spinning: editInEditorMaskVisible,
+                // @ts-ignore
                 tip: (
                   <>
                     文件已经在编辑器中打开
@@ -482,7 +479,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
               onPressEnter={onInputPressEnter}
               autoSize={{minRows: 3, maxRows: 10}}
               disabled={readonly}
-            ></Input.TextArea>
+            />
           </Form.Item>
         )}
       </Form>
