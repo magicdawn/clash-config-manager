@@ -1,4 +1,4 @@
-import {tmpDir} from 'os'
+import {tmpdir} from 'os'
 import moment from 'moment'
 import path from 'path'
 import fse from 'fs-extra'
@@ -48,24 +48,23 @@ export default function Preference() {
   const [exportFile, setExportFile] = useState('')
 
   const onExport = usePersistFn(async () => {
-    const file = path.join(tmpDir(), 'cfm', `${moment().format('YYYY_MM_DD__HH_mm')}.json`)
+    const file = path.join(tmpdir(), 'cfm', `${moment().format('YYYY_MM_DD__HH_mm')}.json`)
 
     let outputData = storage.store
-    outputData = _.omit(outputData, ['subscribe_detail'])
-
-    await fse.outputJson(file, outputData, {spaces: 2})
+    let data = _.omit(outputData, ['subscribe_detail'])
+    await fse.outputJson(file, data, {spaces: 2})
     setExportHelperVisible(true)
     setExportFile(file)
   })
 
   const onSelectImport = usePersistFn(async () => {
     const file = path.join(
-      tmpDir(),
+      tmpdir(),
       'cfm',
       `${moment().format('选择导出__YYYY_MM_DD__HH_mm')}.json`
     )
-    let outputData = storage.store
-    outputData = _.omit(outputData, ['subscribe_detail'])
+    const fullData = storage.store
+    const outputData = _.omit(fullData, ['subscribe_detail'])
 
     // 选择数据
     const {cancel, data} = await pickSelectExport(outputData)
@@ -119,7 +118,7 @@ export default function Preference() {
         message.error(errorMsg)
       }
     )
-  }, [])
+  })
 
   const rowGutter = {xs: 8, sm: 16, md: 24}
 
@@ -134,7 +133,7 @@ export default function Preference() {
         onCancel={() => setExportHelperVisible(false)}
         centered
         maskClosable={false}
-        keyborad={true}
+        keyboard={true}
       >
         <div style={{marginBottom: 12}}>文件位置: {exportFile}</div>
         <Space>
@@ -269,7 +268,15 @@ export default function Preference() {
   )
 }
 
-function ModalSyncConfig({visible, setVisible, editItem, editItemIndex}) {
+interface ModalSyncConfigProps {
+  visible
+  setVisible
+  editItem?
+  editItemIndex?
+}
+
+function ModalSyncConfig(props: ModalSyncConfigProps) {
+  const {visible, setVisible, editItem, editItemIndex} = props
   const preferenceModel = useEasy('preference')
 
   const [data, modifyData] = useImmerState(preferenceModel.syncConfig)
