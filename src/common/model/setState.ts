@@ -1,21 +1,19 @@
-import {Action, action} from 'easy-peasy'
+import {Action, action, State} from 'easy-peasy'
 
-export type SetStatePayload<IState> =
-  | Partial<IState>
-  | ((state: IState) => IState | undefined | void)
+export type SetStatePayload<T> = Partial<T> | ((state: T) => T | undefined | void)
 
-export type SetState<IModel extends Object, IState> = Action<IModel, SetStatePayload<IState>>
+export type SetState<IModel extends object> = Action<IModel, SetStatePayload<State<IModel>>>
 
-export const setState = <IModel, IState>() => {
-  return action((state, payload) => {
+export const setStateFactory = <IModel extends object>() => {
+  return action<IModel, SetStatePayload<State<IModel>>>((state, payload) => {
     if (typeof payload === 'object') {
       Object.assign(state, payload)
       return
     }
 
     if (typeof payload === 'function') {
-      const ret = payload(state as IState)
+      const ret = payload(state)
       return ret
     }
-  }) as SetState<IModel, IState>
+  })
 }
