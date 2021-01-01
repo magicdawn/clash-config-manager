@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.1
+
+- 修复由于订阅中包含 ss/ssr 服务导致的生成错误. 目前是只保留 `vmess://` 服务.
+
 ## v0.3.0 2020-10-11
 
 - 使用 react-router-config
