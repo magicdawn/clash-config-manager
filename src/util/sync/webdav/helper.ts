@@ -2,8 +2,8 @@ import memo from 'memoize-one'
 import webdav from 'webdav'
 import {dirname} from 'path'
 import {Modal, message} from 'antd'
-import store from '../../../store'
-import storage from '../../../storage/index'
+import store from '@store'
+import storage from '@storage'
 import customMerge from './customMerge'
 
 const newClient = memo((davServerUrl, user, pass) => {
@@ -26,7 +26,7 @@ class DavHelper {
     return getClient()
   }
 
-  #getDirLevels = (dir) => {
+  private getDirLevels = (dir: string) => {
     const ret = []
     let cur = dir
     do {
@@ -36,7 +36,7 @@ class DavHelper {
     return ret
   }
 
-  #confirm = (what) => {
+  private confirm = (what: string) => {
     return new Promise((resolve) => {
       Modal.confirm({
         title: what,
@@ -51,7 +51,7 @@ class DavHelper {
   }
 
   ensureDir = async () => {
-    const dirs = this.#getDirLevels(APP_DATA_DIR)
+    const dirs = this.getDirLevels(APP_DATA_DIR)
     for (let d of dirs) {
       // 已存在, 不会报错
       await this.client.createDirectory(d)
@@ -90,7 +90,7 @@ class DavHelper {
       return
     }
 
-    const yes = await this.#confirm('远程已存在, 将智能合并, 确认继续?')
+    const yes = await this.confirm('远程已存在, 将智能合并, 确认继续?')
     if (!yes) return
     const remoteData = await this.read()
 
@@ -103,7 +103,7 @@ class DavHelper {
   }
 
   forceUpload = async () => {
-    const yes = await this.#confirm('确认要上传并覆盖')
+    const yes = await this.confirm('确认要上传并覆盖')
     if (!yes) {
       return
     }
@@ -128,7 +128,7 @@ class DavHelper {
       return
     }
 
-    const yes = await this.#confirm('将智能合并, 确认继续?')
+    const yes = await this.confirm('将智能合并, 确认继续?')
     if (!yes) return
 
     const remoteData = await this.read()
@@ -143,7 +143,7 @@ class DavHelper {
   }
 
   forceDownload = async () => {
-    const yes = await this.#confirm('确认要上传并覆盖')
+    const yes = await this.confirm('确认要上传并覆盖')
     if (!yes) {
       return
     }

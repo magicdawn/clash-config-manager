@@ -147,13 +147,13 @@ function clean(obj) {
   }
 }
 
-export const subject = new BehaviorSubject()
+export const subject = new BehaviorSubject(null)
 
 export function SelectExportForStaticMethod() {
   const [{treeData, visible, resolve}, setState] = useImmerState({
     treeData: null,
     visible: false,
-    resove: null,
+    resolve: null,
   })
 
   useEffect(() => {
