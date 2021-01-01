@@ -1,8 +1,8 @@
-import React, {useRef, createRef} from 'react'
+import {createRef} from 'react'
 import {message} from 'antd'
-import Loading from '../page/common/global/loading'
-import gen from '../util/fn/gen'
-import store from '../store'
+import Loading from '@page/common/global/loading'
+import gen from '@util/fn/gen'
+import store from '@store'
 
 export const commandPaletteRef = createRef<any>()
 export const close = () =>

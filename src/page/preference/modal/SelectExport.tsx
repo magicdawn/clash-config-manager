@@ -27,9 +27,9 @@ export default function SelectExport(props) {
   }, [treeData])
 
   const onExpand = (expandedKeys) => {
-    console.log('onExpand', expandedKeys) // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
-
+    console.log('onExpand', expandedKeys)
     setExpandedKeys(expandedKeys)
     setAutoExpandParent(false)
   }
