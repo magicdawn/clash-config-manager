@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.0
+
+- TypeScript 重构前端部分
+- 使用 easy-peasy 代替 reamtch
+- 配置生成区分 `forceUpdate` 和 普通生成
+- 主页添加生成按钮和快速添加规则按钮
+
 ## v0.3.1
 
 - 修复由于订阅中包含 ss/ssr 服务导致的生成错误. 目前是只保留 `vmess://` 服务.
