@@ -14,7 +14,14 @@ export const close = () =>
   })
 
 const commandGen = async ({forceUpdate = false}: {forceUpdate?: boolean} = {}) => {
-  Loading.show()
+  let delayShowTimer: NodeJS.Timeout
+  if (forceUpdate) {
+    Loading.show()
+  } else {
+    delayShowTimer = setTimeout(() => {
+      Loading.show()
+    }, 100)
+  }
 
   // init first
   await store.dispatch.global.init()
@@ -26,6 +33,7 @@ const commandGen = async ({forceUpdate = false}: {forceUpdate?: boolean} = {}) =
     message.error('生成失败: ', e.message)
     throw e
   } finally {
+    clearTimeout(delayShowTimer)
     Loading.hide()
   }
 

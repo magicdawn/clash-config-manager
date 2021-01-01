@@ -110,7 +110,7 @@ export default new (class RuleListModel implements IState {
       const {url, name} = item
       let servers
       try {
-        servers = await subscribeToClash({url, force: true})
+        servers = await subscribeToClash({url, forceUpdate: true})
       } catch (e) {
         message.error('更新出错: \n' + e.stack || e)
         throw e
