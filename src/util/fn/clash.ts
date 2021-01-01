@@ -79,8 +79,8 @@ export const makeClashSsrProxy = (item) => {
   return clashProxyItem
 }
 
-export const subscribeToClash = async ({url, force}: {url: string; force: boolean}) => {
-  const servers = await urlToSubscribe({url, force})
+export const subscribeToClash = async ({url, forceUpdate}: {url: string; forceUpdate: boolean}) => {
+  const servers = await urlToSubscribe({url, forceUpdate})
   const clashProxies = servers.map(makeClashProxy)
   return clashProxies
 }

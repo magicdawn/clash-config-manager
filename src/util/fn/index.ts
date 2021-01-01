@@ -36,7 +36,7 @@ const readUrl = async ({url, file}: {url: string; file: string}) => {
   return text
 }
 
-const urlToSubscribe = async ({url, force}: {url: string; force: boolean}) => {
+const urlToSubscribe = async ({url, forceUpdate: force}: {url: string; forceUpdate: boolean}) => {
   const file = path.join(appCacheDir, 'readUrl', md5(url))
 
   let shouldReuse = false

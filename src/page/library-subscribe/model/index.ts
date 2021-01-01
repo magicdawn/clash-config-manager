@@ -88,13 +88,13 @@ export default new (class SubscribeModel implements IState {
     actions.persist()
   })
 
-  update: Thunk<SubscribeModel, {url: string; silent?: boolean; force?: boolean}> = thunk(
+  update: Thunk<SubscribeModel, {url: string; silent?: boolean; forceUpdate?: boolean}> = thunk(
     async (actions, payload) => {
-      const {url, silent = false, force = false} = payload
+      const {url, silent = false, forceUpdate: forceUpdate = false} = payload
       // TODO: ts
       let servers: any[]
       try {
-        servers = await subscribeToClash({url, force})
+        servers = await subscribeToClash({url, forceUpdate})
       } catch (e) {
         message.error('更新订阅出错: \n' + e.stack || e)
         throw e

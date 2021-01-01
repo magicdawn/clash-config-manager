@@ -83,7 +83,7 @@ export default async function genConfig(options: {forceUpdate?: boolean} = {}) {
     let servers
 
     // update subscribe
-    await store.dispatch.librarySubscribe.update({url, silent: true, force: forceUpdate})
+    await store.dispatch.librarySubscribe.update({url, silent: true, forceUpdate})
     servers = store.getState().librarySubscribe.detail[url]
     config.proxies = config.proxies.concat(servers)
   }
