@@ -4,9 +4,9 @@ import Loading from '../page/common/global/loading'
 import gen from '../util/fn/gen'
 import store from '../store'
 
-export const commandPaletteRef = createRef()
+export const commandPaletteRef = createRef<any>()
 export const close = () =>
-  new Promise((r) => {
+  new Promise<void>((r) => {
     setTimeout(function () {
       commandPaletteRef.current?.handleCloseModal?.()
       r()
@@ -19,9 +19,9 @@ const commandGen = async ({forceUpdate = false} = {}) => {
   // init first
   await store.dispatch.global.init()
 
-  let result = {}
+  let result
   try {
-    result = await gen({forceUpdate})
+    result = await gen() // {forceUpdate}
   } catch (e) {
     message.error('生成失败: ', e.message)
     throw e

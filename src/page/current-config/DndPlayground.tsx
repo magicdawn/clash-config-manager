@@ -1,27 +1,28 @@
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
 import React, {useMemo, useState, useCallback} from 'react'
 import {usePersistFn, useMount} from 'ahooks'
-import {useSelector, useDispatch} from 'react-redux'
 import {InfoCircleOutlined} from '@ant-design/icons'
 import {Tooltip} from 'antd'
 import cx from 'classnames'
-import usePlug from '@x/rematch/usePlug'
+import {limitLines} from '@util/text-util'
+import {useEasy, useStoreActions, useStoreState} from '@store'
 import styles from './DndPlayground.module.less'
-import {limitLines} from '../../util/text-util'
 
-export default function DndPlaygroud(props) {
-  const {effects, state} = usePlug({nsp: 'currentConfig', state: ['list']})
+export default function DndPlaygroud() {
+  const currentConfigModel = useEasy('currentConfig')
 
-  // load el-store data
-  const dispatch = useDispatch()
+  const initActions = useStoreActions((actions) => {
+    return [actions.librarySubscribe.init, actions.libraryRuleList.init, actions.currentConfig.init]
+  })
+
+  // load electron store data
   useMount(() => {
-    dispatch.librarySubscribe.init()
-    dispatch.libraryRuleList.init()
-    dispatch.currentConfig.init()
-  }, [])
+    initActions.forEach((act) => act())
+  })
 
   // subscribe
-  const subscribeList = useSelector((state) => state.librarySubscribe.list)
+  const subscribeList = useStoreState((state) => state.librarySubscribe.list)
+
   const subscribeSourceList = useMemo(() => {
     return subscribeList.map((item) => {
       return {
@@ -33,7 +34,7 @@ export default function DndPlaygroud(props) {
   }, [subscribeList])
 
   // rule
-  const ruleList = useSelector((state) => {
+  const ruleList = useStoreState((state) => {
     return state.libraryRuleList.list
   })
   const ruleSourceList = useMemo(() => {
@@ -48,8 +49,8 @@ export default function DndPlaygroud(props) {
   }, [ruleList])
 
   // 只放 {type, id}
-  const resultList = state.list
-  const modifyResultList = effects.modifyList
+  const resultList = currentConfigModel.list
+  const modifyResultList = currentConfigModel.modifyList
 
   // 具体 item
   const resultItemList = useMemo(() => {
@@ -218,7 +219,14 @@ export default function DndPlaygroud(props) {
   )
 }
 
-const Source = ({item, type, isDragDisabled, index}) => {
+interface SourceProps {
+  item
+  type
+  isDragDisabled?: boolean
+  index
+}
+
+const Source = ({item, type, isDragDisabled, index}: SourceProps) => {
   const {text, id} = item
   return (
     <Draggable draggableId={`${type}-${id}`} index={index} isDragDisabled={isDragDisabled}>

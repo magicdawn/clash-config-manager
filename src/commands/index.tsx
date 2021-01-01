@@ -1,5 +1,5 @@
 import CommandPalette from 'react-command-palette'
-import React, {useRef} from 'react'
+import React from 'react'
 import {commandPaletteRef, commands} from './run'
 
 // theme

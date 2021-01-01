@@ -26,11 +26,19 @@ if (process.env.NODE_ENV === 'development') {
 const {useStore, useStoreActions, useStoreDispatch, useStoreState} = createTypedHooks<StoreModel>()
 export {useStore, useStoreActions, useStoreDispatch, useStoreState}
 
-export const useEasy = <NSP extends keyof StoreModel>(nsp: NSP) => {
+export const useEasyState = <NSP extends keyof StoreModel>(nsp: NSP) => {
   const state = useStoreState((state) => state[nsp], shallowEqual)
+  return state
+}
+export const useEasyActions = <NSP extends keyof StoreModel>(nsp: NSP) => {
   const actions = useStoreActions((actions) => {
     return actions[nsp]
   })
+  return actions
+}
+export const useEasy = <NSP extends keyof StoreModel>(nsp: NSP) => {
+  const state = useEasyState(nsp)
+  const actions = useEasyActions(nsp)
   return useMemo(() => {
     return {
       ...state,

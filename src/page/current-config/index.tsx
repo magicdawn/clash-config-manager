@@ -1,23 +1,20 @@
-import React, {useState, useCallback, useEffect, useRef} from 'react'
-import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
-import usePlug from '@x/rematch/usePlug'
+import React from 'react'
+import {useMount, usePersistFn} from 'ahooks'
 import {Button, Input, Row, Col, Divider, message} from 'antd'
+import launch from 'launch-editor'
+import {getConfigFileDisplay, getConfigFile, DEFAULT_NAME} from '@util/fn/gen'
+import {runCommand} from '@commands/run'
+import {useEasy} from '@store'
 import styles from './index.module.less'
 import DndPlaygroud from './DndPlayground'
-import {getConfigFileDisplay, getConfigFile, DEFAULT_NAME} from '../../util/fn/gen'
-import launch from 'launch-editor'
-import {runCommand} from '../../commands/run'
 
 const namespace = 'currentConfig'
 
 export default function ConfigList(props) {
-  const {effects, state} = usePlug({
-    nsp: namespace,
-    state: ['list', 'name'],
-  })
+  const currentConfigModel = useEasy('currentConfig')
 
   useMount(() => {
-    effects.init()
+    currentConfigModel.init()
   })
 
   const onGenConfigClick = usePersistFn(async () => {
@@ -25,7 +22,7 @@ export default function ConfigList(props) {
   })
 
   const onOpenConfigClick = usePersistFn((editor = 'code') => {
-    const file = getConfigFile(state.name)
+    const file = getConfigFile(currentConfigModel.name)
     launch(
       // file
       file,
@@ -63,9 +60,9 @@ export default function ConfigList(props) {
         <Col span={10}>
           <Input
             placeholder={DEFAULT_NAME}
-            value={state.name}
+            value={currentConfigModel.name}
             onChange={(e) => {
-              effects.changeState({name: e.target.value})
+              currentConfigModel.changeState({name: e.target.value})
             }}
           />
         </Col>
@@ -87,7 +84,7 @@ export default function ConfigList(props) {
           </div>
         </Col>
         <Col span={10}>
-          <Input value={getConfigFileDisplay(state.name)} disabled />
+          <Input value={getConfigFileDisplay(currentConfigModel.name)} disabled />
         </Col>
       </Row>
 
