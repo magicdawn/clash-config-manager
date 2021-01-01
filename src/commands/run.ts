@@ -58,7 +58,9 @@ export const commands = [
   },
 ]
 
-export async function runCommand(key) {
+type CMD = 'generate' | 'generate-force-update'
+
+export async function runCommand(key: CMD) {
   const cmd = commands.find((x) => x.key === key)
   if (!cmd) {
     console.error('runCommand %s: command not found')

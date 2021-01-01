@@ -8,11 +8,13 @@ import {Button, Modal, Input, message, Tooltip, List, Space, Form, Select} from 
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
 import {v4 as uuid} from 'uuid'
 import Yaml from 'js-yaml'
+import {FileAddOutlined} from '@ant-design/icons'
 
 import useImmerState from '@util/hooks/useImmerState'
 import {firstLine, limitLines} from '@util/text-util'
 import {useEasy} from '@store'
 import {RuleItem} from '@define'
+import {runCommand} from '@commands/run'
 
 import styles from './index.module.less'
 const {Option} = Select
@@ -86,12 +88,12 @@ export default function LibraryRuleList() {
       />
 
       <List
-        size='large'
+        size='default'
         header={
           <div className='header'>
             <h4>配置源管理</h4>
             <Button type='primary' onClick={add}>
-              +
+              <FileAddOutlined />
             </Button>
           </div>
         }
@@ -141,36 +143,15 @@ export default function LibraryRuleList() {
                 </Button>
 
                 <Button
-                  type='dashed'
+                  type='default'
                   onClick={(e) => view(item, index)}
                   onKeyDown={disableEnterAsClick}
                 >
                   查看
                 </Button>
 
-                {/* not implemented */}
-                {/* <div style={{display: 'flex', flexDirection: 'column'}}>
-                  <Button
-                    type='primary'
-                    onClick={(e) => edit(item, index)}
-                    onKeyDown={disableEnterAsClick}
-                  >
-                    编辑规则(可视化)
-                  </Button>
-                </div> */}
-
-                {/* remote config not supported */}
-                {/* <Button
-                  type='primary'
-                  disabled={type !== 'remote'}
-                  onClick={() => update(item, index)}
-                  onKeyDown={disableEnterAsClick}
-                >
-                  更新
-                </Button> */}
-
                 <Button
-                  type='default'
+                  type='primary'
                   danger
                   onClick={() => del(item, index)}
                   onKeyDown={disableEnterAsClick}
@@ -242,6 +223,16 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     e?.preventDefault()
     e?.stopPropagation()
     form.submit()
+  })
+
+  const handleOkAndGenerate = usePersistFn(async (e) => {
+    handleOk(e)
+
+    // wait close
+    await new Promise((r) => {
+      setTimeout(r, 10)
+    })
+    runCommand('generate')
   })
 
   const onInputPressEnter = usePersistFn((e) => {
@@ -396,6 +387,11 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
             <Button disabled={editInEditorMaskVisible} onClick={handleCancel}>
               取消
             </Button>
+
+            <Button disabled={editInEditorMaskVisible} type='default' onClick={handleOkAndGenerate}>
+              确定 (并重新生成)
+            </Button>
+
             <Button disabled={editInEditorMaskVisible} type='primary' onClick={handleOk}>
               确定
             </Button>
