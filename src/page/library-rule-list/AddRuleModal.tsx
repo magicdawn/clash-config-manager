@@ -1,27 +1,58 @@
 import React, {useState, useEffect, useCallback, useMemo} from 'react'
-import {usePersistFn} from 'ahooks'
+import {useMount, usePersistFn} from 'ahooks'
 import {Modal, Row, Col, Select, AutoComplete, Input, Button, Space, message} from 'antd'
 import {clipboard} from 'electron'
 import URI from 'urijs'
+import pify from 'promise.ify'
+import AppleScript from 'applescript'
+import {useStoreDispatch, useStoreState} from '@store'
+import Yaml from 'js-yaml'
 
 const {Option} = Select
+
+// from-rule: 从规则编辑中打开
+// from-global: 从主页中直接打开
+type Mode = 'from-rule' | 'from-global'
 
 interface IProps {
   visible: boolean
   setVisible: (val: boolean) => void
-  onOk?: (rule: string) => void
+  onOk?: (rule: string, targetRuleId?: string) => void
+  mode?: Mode
 }
 
 export default function AddRuleModal(props: IProps) {
-  /**
-   * modal
-   */
-  const {visible, setVisible, onOk} = props
+  const {visible, setVisible, onOk, mode = 'from-rule'} = props
+
+  const ruleList = useStoreState((state) => {
+    const list = state.libraryRuleList.list.filter((item) => {
+      if (mode !== 'from-global') return false
+
+      if (!(item.type === 'local' && item.content)) {
+        return false
+      }
+
+      // too long, skip it
+      if (item.content.length > 10000) {
+        return false
+      }
+
+      const obj = Yaml.load(item.content)
+      if (Object.keys(obj).length === 1 && Object.keys(obj).includes('rules')) {
+        return true
+      } else {
+        return false
+      }
+    })
+    return list
+  })
+
+  const [ruleId, setRuleId] = useState(ruleList[0]?.id || '')
 
   const handleOk = usePersistFn(() => {
     setVisible(false)
     const rule = `${type},${url},${target}`
-    onOk?.(rule)
+    onOk?.(rule, ruleId)
   })
 
   const handleCancel = usePersistFn(() => {
@@ -55,6 +86,11 @@ export default function AddRuleModal(props: IProps) {
       }
     })()
   }, [])
+
+  // default use chrome url
+  useMount(() => {
+    readChromeUrl()
+  })
 
   /**
    * rule detail
@@ -98,6 +134,7 @@ export default function AddRuleModal(props: IProps) {
       bodyStyle={{padding: '24px 12px'}}
       okButtonProps={okButtonProps}
       destroyOnClose
+      okText={mode === 'from-global' ? '添加并重新生成' : '确定'}
     >
       <Input
         style={{flex: 1}}
@@ -161,12 +198,28 @@ export default function AddRuleModal(props: IProps) {
           </AutoComplete>
         </Col>
       </Row>
+
+      {mode === 'from-global' && (
+        <>
+          <Row gutter={8} style={{marginTop: 24}}>
+            <Col {...layout[0]}>添加至</Col>
+          </Row>
+          <Row gutter={8}>
+            <Col {...layout[0]}>
+              <Select style={{width: '100%'}} value={ruleId} onChange={(val) => setRuleId(val)}>
+                {ruleList.map((t) => (
+                  <Option key={t.id} value={t.id}>
+                    {t.name}
+                  </Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+        </>
+      )}
     </Modal>
   )
 }
-
-import pify from 'promise.ify'
-import AppleScript from 'applescript'
 
 async function getChromeUrl() {
   const script = `

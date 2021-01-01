@@ -121,7 +121,7 @@
     "lint-staged": "latest",
     "minimist": "^1.2.5",
     "monaco-editor-webpack-plugin": "^2.1.0",
-    "poi": "^12.10.2",
+    "poi": "^12.10.3",
     "prettier": "latest",
     "shelljs": "^0.8.4",
     "ts-node": "^9.1.1",

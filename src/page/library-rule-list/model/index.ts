@@ -18,7 +18,7 @@ interface IState {
 
 export default new (class RuleListModel implements IState {
   inited = false
-  list = []
+  list: RuleItem[] = []
   detail = {}
 
   /**

@@ -3,7 +3,8 @@ import {render} from 'react-dom'
 import {HashRouter as Router, Link, useLocation} from 'react-router-dom'
 import {StoreProvider} from 'easy-peasy'
 import 'antd/dist/antd.css'
-import {Menu} from 'antd'
+import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
+import {Menu, ConfigProvider} from 'antd'
 import {
   SettingOutlined,
   PayCircleOutlined,
@@ -64,9 +65,11 @@ const routes = [
 function Root() {
   return (
     <StoreProvider store={store}>
-      <Router>
-        <Routes></Routes>
-      </Router>
+      <ConfigProvider locale={zhCN}>
+        <Router>
+          <Routes></Routes>
+        </Router>
+      </ConfigProvider>
     </StoreProvider>
   )
 }

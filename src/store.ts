@@ -46,3 +46,8 @@ export const useEasy = <NSP extends keyof StoreModel>(nsp: NSP) => {
     }
   }, [state, actions])
 }
+
+// init on start
+process.nextTick(() => {
+  store.dispatch.global.init()
+})

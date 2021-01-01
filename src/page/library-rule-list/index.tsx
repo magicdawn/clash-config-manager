@@ -301,7 +301,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     // debugger
     let content = form.getFieldValue('content') || ''
 
-    if (content.split('\n').find((x) => x.includes(rule) && !x.trim().startsWith('#'))) {
+    if (content.split('\n').find((x: string) => x.includes(rule) && !x.trim().startsWith('#'))) {
       return message.error(`rule ${rule} 已存在`)
     }
 
