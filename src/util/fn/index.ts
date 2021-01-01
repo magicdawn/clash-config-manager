@@ -1,9 +1,9 @@
 import {createHash} from 'crypto'
 import path from 'path'
 import fse from 'fs-extra'
-import ms from 'ms'
 import request from 'umi-request'
 import envPaths from 'env-paths'
+import moment from 'moment'
 
 const appCacheDir = envPaths('clash-config-manager', {suffix: ''}).cache
 
@@ -36,19 +36,15 @@ const readUrl = async ({url, file}: {url: string; file: string}) => {
   return text
 }
 
-const urlToSubscribe = async ({url, force}: {url: string; force?: boolean}) => {
+const urlToSubscribe = async ({url, force}: {url: string; force: boolean}) => {
   const file = path.join(appCacheDir, 'readUrl', md5(url))
 
   let shouldReuse = false
   let stat: fse.Stats
-  // 5天之内不会再下载
-  const isRecent = (ts: number) => ts && Math.abs(Date.now() - ts) < ms('5d')
-  if (
-    !force &&
-    fse.existsSync(file) &&
-    (stat = fse.statSync(file)) &&
-    isRecent(stat.mtime.valueOf())
-  ) {
+  // 今天之内的更新不会再下载
+  const isRecent = (mtime: Date) =>
+    moment(mtime).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')
+  if (!force && fse.existsSync(file) && (stat = fse.statSync(file)) && isRecent(stat.mtime)) {
     shouldReuse = true
   }
 
@@ -56,7 +52,6 @@ const urlToSubscribe = async ({url, force}: {url: string; force?: boolean}) => {
   if (shouldReuse) {
     text = fse.readFileSync(file, 'utf8')
   } else {
-    // text = await readUrl({url, file, encoding: 'utf8', skipExists: false})
     text = await readUrl({url, file})
   }
 

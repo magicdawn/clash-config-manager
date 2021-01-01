@@ -13,7 +13,7 @@ export const close = () =>
     }, 0)
   })
 
-const commandGen = async ({forceUpdate = false} = {}) => {
+const commandGen = async ({forceUpdate = false}: {forceUpdate?: boolean} = {}) => {
   Loading.show()
 
   // init first
@@ -21,7 +21,7 @@ const commandGen = async ({forceUpdate = false} = {}) => {
 
   let result
   try {
-    result = await gen() // {forceUpdate}
+    result = await gen({forceUpdate}) // {forceUpdate}
   } catch (e) {
     message.error('生成失败: ', e.message)
     throw e
@@ -44,7 +44,7 @@ export const commands = [
     name: '生成配置 (generate)',
     async command() {
       await close()
-      return commandGen({forceUpdate: true})
+      return commandGen({forceUpdate: false})
     },
   },
   {

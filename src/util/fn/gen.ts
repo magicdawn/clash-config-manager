@@ -7,9 +7,9 @@ import store from '@store'
 import {ClashConfig} from '@define'
 import {ProxyGroupType} from '@common/define/ClashConfig'
 
-export default async function genConfig() {
-  // TODO: add more model
-  const rootState = store.getState() as any
+export default async function genConfig(options: {forceUpdate?: boolean} = {}) {
+  const {forceUpdate = false} = options
+  const rootState = store.getState()
 
   // subscribe
   const subscribeList = rootState.librarySubscribe.list
@@ -19,7 +19,7 @@ export default async function genConfig() {
   const ruleList = rootState.libraryRuleList.list
 
   // 只放 {type, id}
-  const {list: resultList, forceUpdate, name} = rootState.currentConfig
+  const {list: resultList, name} = rootState.currentConfig
 
   // 具体 item
   const resultItemList = resultList
@@ -38,7 +38,6 @@ export default async function genConfig() {
       }
     })
     .filter(Boolean)
-  console.log(resultItemList)
 
   // reverse: GUI最前面的优先
   const subscribeArr = resultItemList.filter((x) => x.type === 'subscribe')
@@ -84,16 +83,8 @@ export default async function genConfig() {
     let servers
 
     // update subscribe
-    if (forceUpdate || !subscribeDetail[url] || !subscribeDetail[url].length) {
-      await store.dispatch.librarySubscribe.update({url, silent: true})
-      servers = store.getState().librarySubscribe.detail[url]
-    }
-
-    // use cached
-    else {
-      servers = subscribeDetail[url]
-    }
-
+    await store.dispatch.librarySubscribe.update({url, silent: true, force: forceUpdate})
+    servers = store.getState().librarySubscribe.detail[url]
     config.proxies = config.proxies.concat(servers)
   }
 
