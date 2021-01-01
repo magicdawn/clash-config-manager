@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback, useMemo} from 'react'
-import {useMount, usePersistFn} from 'ahooks'
+import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
 import {Modal, Row, Col, Select, AutoComplete, Input, Button, Space, message} from 'antd'
 import {clipboard} from 'electron'
 import URI from 'urijs'
@@ -88,9 +88,11 @@ export default function AddRuleModal(props: IProps) {
   }, [])
 
   // default use chrome url
-  useMount(() => {
-    readChromeUrl()
-  })
+  useUpdateEffect(() => {
+    if (visible) {
+      readChromeUrl()
+    }
+  }, [visible])
 
   /**
    * rule detail

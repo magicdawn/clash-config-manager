@@ -1,16 +1,12 @@
 import React, {useState, useCallback} from 'react'
-import {Button, Layout, Menu, Modal, Input, message, List, Space} from 'antd'
-import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
+import {Button, Modal, Input, message, List, Space} from 'antd'
+import {usePersistFn, useUpdateEffect} from 'ahooks'
 import {v4 as uuid} from 'uuid'
 import {useEasy} from '@store'
 import styles from './index.module.less'
 
 export default function LibrarySubscribe() {
   const subscribeModel = useEasy('librarySubscribe')
-
-  useMount(() => {
-    subscribeModel.init()
-  })
 
   const [showModal, setShowModal] = useState(false)
   const [editItem, setEditItem] = useState(null)

@@ -49,12 +49,14 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
-      <AddRuleModal
-        visible={modalVisible}
-        setVisible={(val) => setModalState({modalVisible: val})}
-        onOk={handleAdd}
-        mode='from-global'
-      />
+      {
+        <AddRuleModal
+          visible={modalVisible}
+          setVisible={(val) => setModalState({modalVisible: val})}
+          onOk={handleAdd}
+          mode='from-global'
+        />
+      }
 
       <h1 className={styles.title}>Enjoy</h1>
       <div className={styles.btnGenWrapper} style={{padding: 20}}>

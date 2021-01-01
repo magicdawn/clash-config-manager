@@ -13,10 +13,6 @@ const namespace = 'currentConfig'
 export default function ConfigList(props) {
   const currentConfigModel = useEasy('currentConfig')
 
-  useMount(() => {
-    currentConfigModel.init()
-  })
-
   const onGenConfigClick = usePersistFn(async () => {
     return runCommand('generate')
   })

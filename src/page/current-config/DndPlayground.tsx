@@ -5,20 +5,11 @@ import {InfoCircleOutlined} from '@ant-design/icons'
 import {Tooltip} from 'antd'
 import cx from 'classnames'
 import {limitLines} from '@util/text-util'
-import {useEasy, useStoreActions, useStoreState} from '@store'
+import {useEasy, useStoreState} from '@store'
 import styles from './DndPlayground.module.less'
 
 export default function DndPlaygroud() {
   const currentConfigModel = useEasy('currentConfig')
-
-  const initActions = useStoreActions((actions) => {
-    return [actions.librarySubscribe.init, actions.libraryRuleList.init, actions.currentConfig.init]
-  })
-
-  // load electron store data
-  useMount(() => {
-    initActions.forEach((act) => act())
-  })
 
   // subscribe
   const subscribeList = useStoreState((state) => state.librarySubscribe.list)
