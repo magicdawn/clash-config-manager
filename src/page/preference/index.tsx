@@ -230,15 +230,14 @@ export default function Preference() {
               </>
             }
           >
+            <SelectExportForStaticMethod />
             <Space direction='vertical' size={20} style={{width: '100%'}}>
               <Button block type='primary' onClick={onExport}>
                 <CloudUploadOutlined /> 导出到 JSON
               </Button>
-
               <Button block onClick={onSelectImport}>
                 <CloudUploadOutlined /> 高级导出
               </Button>
-              <SelectExportForStaticMethod />
             </Space>
           </Card>
         </Col>
