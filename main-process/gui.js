@@ -42,6 +42,7 @@ const createMainWindow = async () => {
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false,
+      enableRemoteModule: true,
     },
   })
 
