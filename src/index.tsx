@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {render} from 'react-dom'
 import {HashRouter as Router, Link, useLocation} from 'react-router-dom'
 import {StoreProvider} from 'easy-peasy'
@@ -78,6 +78,12 @@ function Routes() {
   const {pathname} = useLocation()
   const getKey = (s: string) => _.trimStart(s, '/').replace(/\//g, ':') || 'home'
   const menuKey = getKey(pathname)
+
+  useEffect(() => {
+    ;(window as any).gtag?.('event', 'page_view', {
+      page_path: pathname,
+    })
+  }, [pathname])
 
   return (
     <>
