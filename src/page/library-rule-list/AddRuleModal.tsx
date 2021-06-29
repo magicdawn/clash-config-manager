@@ -12,7 +12,7 @@ const {Option} = Select
 
 // from-rule: 从规则编辑中打开
 // from-global: 从主页中直接打开
-type Mode = 'from-rule' | 'from-global'
+export type Mode = 'from-rule' | 'from-global'
 
 interface IProps {
   visible: boolean
