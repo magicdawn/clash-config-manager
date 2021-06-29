@@ -3,14 +3,14 @@ import {Button, message} from 'antd'
 import store from '@store'
 import {runCommand} from '@commands/run'
 import styles from './index.module.less'
-import useAddRuleModal from './useAddRuleModal'
+import useAddRuleModal, {useMobxAddRuleModal} from './useAddRuleModal'
 
 export default function Home() {
   const generate = useCallback(() => {
     runCommand('generate')
   }, [])
 
-  const {open: addRule, modal} = useAddRuleModal({
+  const {open: addRule, modal} = useMobxAddRuleModal({
     mode: 'from-global',
     handleAdd(rule: string, ruleId: string) {
       if (!rule || !ruleId) {
