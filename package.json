@@ -12,6 +12,9 @@
     "email": "magicdawn@qq.com",
     "url": "https://magicdawn.fun"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "install": "napa",
     "postinstall": "electron-builder install-app-deps",

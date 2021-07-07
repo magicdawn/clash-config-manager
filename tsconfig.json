@@ -1,35 +1,5 @@
 {
-  "include": ["src/**/*"],
-  "compilerOptions": {
-    "baseUrl": "src",
-    "paths": {
-      "@store": ["store.ts"],
-      "@define": ["common/define.ts"],
-      "@*": ["*"]
-    },
-    "rootDir": "src",
-    "outDir": "lib",
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "target": "es2019",
-    "module": "CommonJS",
-    "strict": false,
-    "skipLibCheck": true,
-    "experimentalDecorators": true,
-    "jsx": "react",
-    "plugins": [
-      {
-        "name": "typescript-plugin-css-modules",
-        "options": {
-          "classnameTransform": "camelCaseOnly"
-        }
-      }
-    ]
-  },
-  "ts-node": {
-    "transpileOnly": true
-  }
+  "extends": "./tsconfig.base.json",
+  "include": ["packages/*/src/**/*"],
+  "compilerOptions": {}
 }
