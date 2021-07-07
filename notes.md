@@ -8,3 +8,12 @@
 - [ ] 备份不处理详情. (no need)
 - [x] 在 vscode/Atom 中编辑规则
 - [x] 支持选择部分数据导出 -> 分享
+
+### 2021-07-08
+
+- [x] use yarn, 整理 yarn2 步骤
+- [ ] main + ts, poi-main.config.js to ts
+- [ ] Typescript-eslint
+- [ ] app icon
+- [ ] docs
+- [ ] 整理 easy-peasy 用法

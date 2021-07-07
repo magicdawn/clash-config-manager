@@ -11,3 +11,10 @@ report.*.json
 
 # changelog temp
 CHANGELOG.temp.md
+
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
