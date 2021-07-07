@@ -16,8 +16,8 @@
     "packages/*"
   ],
   "scripts": {
-    "install": "napa",
-    "postinstall": "electron-builder install-app-deps",
+    "_install": "napa",
+    "_postinstall": "electron-builder install-app-deps",
     "dev:ui": "poi -s -r ts-node/register/transpile-only",
     "dev:main": "poi --config poi-main.config.js --watch",
     "dev:start-main": "electron bundle/development/main/index.js",
@@ -119,6 +119,7 @@
     "@types/shelljs": "^0.8.8",
     "@types/urijs": "^1.19.13",
     "@types/uuid": "^8.3.0",
+    "@types/webpack-merge": "^5.0.0",
     "@types/yargs": "^15.0.12",
     "electron": "^11.1.1",
     "electron-builder": "^22.9.1",
