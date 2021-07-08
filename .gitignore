@@ -18,3 +18,5 @@ CHANGELOG.temp.md
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+
+*.log
