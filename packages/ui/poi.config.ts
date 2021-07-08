@@ -1,9 +1,9 @@
 import path from 'path'
 import merge from 'webpack-merge'
-import {Config} from 'poi'
 import MonacoWebpackPlugin from 'monaco-editor-webpack-plugin'
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
 import xDeps from '@magicdawn/x/deps'
+import {PoiConfig} from '@common'
 
 const common = {
   resolve: {
@@ -40,7 +40,6 @@ const common = {
 const dev = {}
 const prod = {}
 
-type PoiConfig = import('poi').Config & {reactRefresh?: boolean}
 const config: PoiConfig = {
   entry: 'src/index',
 
