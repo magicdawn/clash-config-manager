@@ -33,7 +33,6 @@
   "napa": {
     "@magicdawn/x": "magicdawn/x#master"
   },
-  "dependencies": {},
   "devDependencies": {
     "@babel/plugin-proposal-do-expressions": "^7.10.4",
     "@magicdawn/eslint-config": "latest",

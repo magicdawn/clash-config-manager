@@ -1,13 +1,13 @@
 {
-  "name": "clash-config-manager",
+  "name": "@clash-config-manager/main-process",
+  "version": "0.4.0",
+  "private": true,
   "productName": "clash-config-manager",
   "bundleId": "fun.magicdawn.clash-config-manager",
-  "version": "0.4.0",
   "description": "clash configuration manager",
   "license": "MIT",
   "repository": "magicdawn/clash-config-manager",
   "main": "main/index.js",
-  "private": true,
   "author": {
     "name": "magicdawn",
     "email": "magicdawn@qq.com",
