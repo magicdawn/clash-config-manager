@@ -10,7 +10,7 @@ const {
   openNewGitHubIssue,
   debugInfo,
 } = require('electron-util')
-import storage from '../src/storage/index'
+import storage from '@ui/storage/index'
 import debugFactory from 'debug'
 import {updateMenuItem} from './auto-update/index'
 

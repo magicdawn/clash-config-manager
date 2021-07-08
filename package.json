@@ -19,8 +19,8 @@
   "scripts": {
     "_install": "napa",
     "_postinstall": "electron-builder install-app-deps",
+    "dev:main": "yarn workspace main-process run dev",
     "dev:ui": "poi -s -r ts-node/register/transpile-only",
-    "dev:main": "poi --config poi-main.config.js --watch",
     "dev:start-main": "electron bundle/development/main/index.js",
     "dev:watch-main": "nodemon bundle/development/main/index.js --exec electron --watch bundle/development/main/",
     "build": "yarn build:ui && yarn build:main",
@@ -43,6 +43,7 @@
     "@types/gulp": "^4.0.9",
     "@types/poi": "^12.5.2",
     "@types/prettier": "2.3.2",
+    "@types/webpack-merge": "^5.0.0",
     "eslint": "^7.9.0",
     "eslint-plugin-react": "^7.20.6",
     "fancy-log": "^1.3.3",

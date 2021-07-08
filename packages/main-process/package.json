@@ -1,5 +1,5 @@
 {
-  "name": "@clash-config-manager/main-process",
+  "name": "main-process",
   "version": "0.4.0",
   "private": true,
   "productName": "clash-config-manager",
@@ -17,6 +17,7 @@
     "packages/*"
   ],
   "scripts": {
+    "dev": "poi -r ts-node/register/transpile-only --watch",
     "_install": "napa",
     "_postinstall": "electron-builder install-app-deps",
     "dev:ui": "poi -s -r ts-node/register/transpile-only",
@@ -49,7 +50,7 @@
     "fix-path": "^3.0.0",
     "fs-extra": "^9.0.1",
     "js-yaml": "^3.14.1",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "memoize-one": "^5.1.1",
     "minimist": "^1.2.5",
     "moment": "^2.29.1",

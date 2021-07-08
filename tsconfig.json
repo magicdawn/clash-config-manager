@@ -1,5 +1,18 @@
 {
   "extends": "./tsconfig.base.json",
   "include": ["packages/*/src/**/*", "packages/*/*.ts"],
-  "compilerOptions": {}
+  "compilerOptions": {
+    "baseUrl": "./packages",
+    "outDir": "bundle/temp",
+    "paths": {
+      "@common": ["common/src/"],
+      "@common/*": ["common/src/*"],
+      "@main-process": ["main-process/src/"],
+      "@main-process/*": ["main-process/src/*"],
+      "@ui": ["ui/src/"],
+      "@ui/*": ["ui/src/*"],
+      "@store": ["ui/src/store.ts"],
+      "@define": ["ui/src/common/define.ts"]
+    }
+  }
 }

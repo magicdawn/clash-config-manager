@@ -22,7 +22,9 @@ const common = {
 
     plugins: [
       // tsconfig
-      new TsconfigPathsPlugin({configFile: __dirname + '/tsconfig.json'}),
+      new TsconfigPathsPlugin({
+        configFile: __dirname + '/../../tsconfig.json',
+      }),
     ],
   },
 
@@ -54,7 +56,7 @@ const config: PoiConfig = {
   output: {
     target: 'electron-renderer',
     publicUrl: './',
-    dir: path.join(__dirname, 'bundle', process.env.NODE_ENV, 'renderer'),
+    dir: path.join(__dirname, '../../', 'bundle', process.env.NODE_ENV, 'renderer'),
   },
 
   reactRefresh: true,

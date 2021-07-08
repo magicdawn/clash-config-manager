@@ -1,5 +1,5 @@
 {
-  "name": "@clash-config-manager/ui",
+  "name": "ui",
   "version": "0.4.0",
   "private": true,
   "productName": "clash-config-manager",
