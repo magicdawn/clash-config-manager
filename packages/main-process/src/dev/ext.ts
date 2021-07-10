@@ -1,10 +1,11 @@
-const os = require('os')
-const fs = require('fs-extra')
-const {BrowserWindow} = require('electron')
-const debugFactory = require('debug')
+import os from 'os'
+import fs from 'fs-extra'
+import {BrowserWindow} from 'electron'
+import debugFactory from 'debug'
+
 const debug = debugFactory('ccm:dev:ext')
 
-const load = (id) => {
+const loadExt = (id: string) => {
   const extDir =
     os.homedir() + `/Library/Application Support/Google/Chrome/Default/Extensions/${id}`
   if (!fs.existsSync(extDir)) return
@@ -16,13 +17,13 @@ const load = (id) => {
   BrowserWindow.addDevToolsExtension(extVerDir)
 }
 
-exports.load = () => {
+export function load() {
   // react
-  load('fmkadmapgofadopljbjfkapdkoienihi')
+  loadExt('fmkadmapgofadopljbjfkapdkoienihi')
 
   // redux
-  load('lmhkpmbekcpmknklioeibfkpmmfibljd')
+  loadExt('lmhkpmbekcpmknklioeibfkpmmfibljd')
 
   // vue
-  load('nhdogjmejiglipccpnnnanhbledajbpd')
+  loadExt('nhdogjmejiglipccpnnnanhbledajbpd')
 }

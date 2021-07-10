@@ -1,10 +1,9 @@
 import path from 'path'
 import {app, BrowserWindow} from 'electron'
-import pkg from '../package.json'
 import minimist from 'minimist'
 
 // Prevent window from being garbage collected
-let mainWindow
+let mainWindow: BrowserWindow
 
 import './init/meta'
 import {loadWindowState} from './initWindowState'

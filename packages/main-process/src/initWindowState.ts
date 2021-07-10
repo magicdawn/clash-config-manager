@@ -1,9 +1,9 @@
 import fs from 'fs-extra'
 import path from 'path'
-import {app, screen} from 'electron'
+import {app, Rectangle, screen} from 'electron'
 import {throttle} from 'lodash'
 
-function isValidNumber(n) {
+function isValidNumber(n: number) {
   return typeof n === 'number' && !isNaN(n)
 }
 
@@ -11,8 +11,17 @@ const getFile = () => {
   return path.join(app.getPath('userData'), 'winstate.json')
 }
 
+interface IWinState {
+  bounds?: {
+    x?: number
+    y?: number
+    height?: number
+    width?: number
+  }
+}
+
 let isSaving = false
-export async function saveWindowState(windowState) {
+export async function saveWindowState(windowState: IWinState) {
   if (isSaving) return
 
   isSaving = true
@@ -26,7 +35,7 @@ export const saveWindowStateThrottle = throttle(saveWindowState, 1000)
 export async function loadWindowState() {
   const file = getFile()
 
-  let windowState
+  let windowState: IWinState
   try {
     windowState = await fs.readJson(file)
   } catch (e) {
@@ -56,8 +65,8 @@ export async function loadWindowState() {
     bounds.height = DEFAULT_HEIGHT
   }
 
-  const currentDisplay = screen.getDisplayMatching(bounds),
-    currentRect = currentDisplay.workArea
+  const currentDisplay = screen.getDisplayMatching(bounds as Rectangle)
+  const currentRect = currentDisplay.workArea
 
   // Check if bounds in screen
   if (bounds.x < currentRect.x || bounds.x > currentRect.x + currentRect.width) {

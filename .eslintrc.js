@@ -21,9 +21,22 @@ const unused = [
 ]
 
 module.exports = {
-  extends: __dirname + '/.eslintrc.yml',
+  root: true,
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    __dirname + '/.eslintrc.yml',
+    'prettier',
+  ],
+
   rules: {
-    'no-unused-vars': [
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [
       'warn',
       {
         args: 'none',

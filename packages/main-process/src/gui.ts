@@ -10,7 +10,7 @@ import './ipc/index'
 import setMenu from './menu'
 
 // Prevent window from being garbage collected
-let mainWindow
+let mainWindow: BrowserWindow
 main()
 
 async function main() {
@@ -62,7 +62,7 @@ const createMainWindow = async () => {
   const stopPreventClose = () => win.off('close', preventClose)
 
   win.on('close', preventClose)
-  win.stopPreventClose = stopPreventClose
+  ;(win as any).stopPreventClose = stopPreventClose
   app.on('before-quit', stopPreventClose)
 
   const saveWindowStateHandler = _.throttle(() => {
@@ -109,7 +109,7 @@ function initAppEvents() {
     if (mainWindow) {
       try {
         await saveWindowState({
-          bounds: mainWindow?.getBounds,
+          bounds: mainWindow?.getBounds?.(),
         })
       } catch (e) {
         // noop

@@ -1,20 +1,11 @@
 import path from 'path'
 import merge from 'webpack-merge'
-import xDeps from '@magicdawn/x/deps'
 import {PoiConfig} from '../common/src'
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
 
 const common = {
   resolve: {
-    alias: {
-      // make it short
-      '@x': '@magicdawn/x',
-      // when npmlink @magicdawn/x
-      ...xDeps.reduce((o, m) => {
-        o[m] = path.join(__dirname, 'node_modules', m)
-        return o
-      }, {}),
-    },
+    alias: {},
 
     plugins: [
       // tsconfig
@@ -29,10 +20,10 @@ const dev = {}
 const prod = {}
 
 const config: PoiConfig = {
-  entry: './src/index.js',
+  entry: './src/',
 
   babel: {
-    transpileModules: ['@magicdawn/x'],
+    transpileModules: [],
   },
 
   output: {

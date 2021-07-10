@@ -2,10 +2,10 @@ import {app, session} from 'electron'
 import debugFactory from 'debug'
 const debug = debugFactory('ccm:common')
 
-function checkIfCalledViaCLI(args) {
+function checkIfCalledViaCLI(args: string[]) {
   // in .app ['/Users/magicdawn/projects/clash-config-manager/dist/mac/clash-config-manager.app/Contents/MacOS/clash-config-manager']
   if (args[0]?.endsWith('.app/Contents/MacOS/clash-config-manager')) {
-    const restArgs = args.slice(1).filter((arg) => !['--inspect', '--inspect-brk'].includes(args))
+    const restArgs = args.slice(1).filter((arg) => !['--inspect', '--inspect-brk'].includes(arg))
     const isCli = !!restArgs.length
     return {isCli, restArgs}
   }
@@ -17,13 +17,14 @@ function checkIfCalledViaCLI(args) {
   } else {
     const restArgs = args
       .slice(scriptIndex + 1)
-      .filter((arg) => !['--inspect', '--inspect-brk'].includes(args))
+      .filter((arg) => !['--inspect', '--inspect-brk'].includes(arg))
     const isCli = !!restArgs.length
     return {isCli, restArgs}
   }
 }
 
-const isCli = process.env.CCM_RUN_MODE === 'cli'
+export const isCli = process.env.CCM_RUN_MODE === 'cli'
+
 const {restArgs} = checkIfCalledViaCLI(process.argv)
 export {restArgs}
 debug('process.argv: %O', {
