@@ -10,9 +10,7 @@
       "@main-process": ["main-process/src/"],
       "@main-process/*": ["main-process/src/*"],
       "@ui": ["ui/src/"],
-      "@ui/*": ["ui/src/*"],
-      "@store": ["ui/src/store.ts"],
-      "@define": ["ui/src/common/define.ts"]
+      "@ui/*": ["ui/src/*"]
     }
   }
 }

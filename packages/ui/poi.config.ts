@@ -2,21 +2,11 @@ import path from 'path'
 import merge from 'webpack-merge'
 import MonacoWebpackPlugin from 'monaco-editor-webpack-plugin'
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
-import xDeps from '@magicdawn/x/deps'
 import {PoiConfig} from '@common'
 
 const common = {
   resolve: {
     alias: {
-      // make it short
-      '@x': '@magicdawn/x',
-
-      // when npmlink @magicdawn/x
-      ...xDeps.reduce((o, m) => {
-        o[m] = path.join(__dirname, 'node_modules', m)
-        return o
-      }, {}),
-
       'easy-peasy': require.resolve('easy-peasy/src/index'),
     },
 
@@ -49,7 +39,7 @@ const config: PoiConfig = {
 
   babel: {
     // @ts-ignore
-    transpileModules: ['@magicdawn/x', /easy-peasy/],
+    transpileModules: [/easy-peasy/],
   },
 
   output: {
@@ -74,6 +64,7 @@ const config: PoiConfig = {
       options: {
         lintOnSave: false,
         babel: false,
+        configFile: __dirname + '/../../tsconfig.json',
       },
     },
   ],

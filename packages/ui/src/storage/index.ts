@@ -1,7 +1,7 @@
 /* eslint camelcase: off */
 
 import Store from 'electron-store'
-import {RuleItem, Subscribe} from '@define'
+import {RuleItem, Subscribe} from '@ui/common/define'
 
 const storage = new Store({
   name: 'data',

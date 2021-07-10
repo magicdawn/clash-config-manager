@@ -73,7 +73,9 @@ export async function check() {
 
 if (!is.development) {
   autoUpdater.logger = electronLog
+  // @ts-ignore
   autoUpdater.logger.transports.file.level = 'debug'
+  // @ts-ignore
   autoUpdater.logger.transports.console.level = 'debug'
 
   setInterval(() => {
@@ -81,6 +83,7 @@ if (!is.development) {
   }, ms('4h'))
   check()
 } else {
+  // @ts-ignore
   autoUpdater.currentVersion = '0.2.0'
   autoUpdater.checkForUpdates()
 }

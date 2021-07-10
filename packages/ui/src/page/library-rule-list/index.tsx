@@ -10,11 +10,11 @@ import {v4 as uuid} from 'uuid'
 import Yaml from 'js-yaml'
 import {FileAddOutlined} from '@ant-design/icons'
 
-import useImmerState from '@util/hooks/useImmerState'
-import {firstLine, limitLines} from '@util/text-util'
-import {useEasy} from '@store'
-import {RuleItem} from '@define'
-import {runCommand} from '@commands/run'
+import useImmerState from '@ui/util/hooks/useImmerState'
+import {firstLine, limitLines} from '@ui/util/text-util'
+import {useEasy} from '@ui/store'
+import {RuleItem} from '@ui/common/define'
+import {runCommand} from '@ui/commands/run'
 
 import styles from './index.module.less'
 const {Option} = Select
@@ -192,7 +192,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   const configEditorRef = useRef(null)
 
   useUpdateEffect(() => {
-    let val = editItem || getDefaultItem()
+    const val = editItem || getDefaultItem()
 
     form.setFieldsValue(val)
     modifyOtherFormData({id: val.id})

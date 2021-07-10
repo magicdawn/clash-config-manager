@@ -2,8 +2,8 @@ import memo from 'memoize-one'
 import webdav from 'webdav'
 import {dirname} from 'path'
 import {Modal, message} from 'antd'
-import store from '@store'
-import storage from '@storage'
+import store from '@ui/store'
+import storage from '@ui/storage'
 import customMerge from './customMerge'
 
 const newClient = memo((davServerUrl, user, pass) => {
@@ -52,7 +52,7 @@ class DavHelper {
 
   ensureDir = async () => {
     const dirs = this.getDirLevels(APP_DATA_DIR)
-    for (let d of dirs) {
+    for (const d of dirs) {
       // 已存在, 不会报错
       await this.client.createDirectory(d)
     }

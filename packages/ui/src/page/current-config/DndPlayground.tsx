@@ -4,8 +4,8 @@ import {usePersistFn, useMount} from 'ahooks'
 import {InfoCircleOutlined} from '@ant-design/icons'
 import {Tooltip} from 'antd'
 import cx from 'classnames'
-import {limitLines} from '@util/text-util'
-import {useEasy, useStoreState} from '@store'
+import {limitLines} from '@ui/util/text-util'
+import {useEasy, useStoreState} from '@ui/store'
 import styles from './DndPlayground.module.less'
 
 export default function DndPlaygroud() {
@@ -109,7 +109,7 @@ export default function DndPlaygroud() {
 
     const newindex = destination.index
     modifyResultList((list) => {
-      for (let action of modifyActions) {
+      for (const action of modifyActions) {
         action(list)
       }
       list.splice(newindex, 0, addItem)

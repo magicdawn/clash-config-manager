@@ -1,8 +1,8 @@
 import _ from 'lodash'
-import storage from '@storage'
-import {setStateFactory, SetStatePayload} from '@common/model/setState'
+import storage from '@ui/storage'
+import {setStateFactory, SetStatePayload} from '@ui/common/model/setState'
 import {Action, thunk, Thunk, thunkOn, ThunkOn} from 'easy-peasy'
-import {StoreModel} from '@store'
+import {StoreModel} from '@ui/store'
 
 const nsp = 'preference'
 const STORAGE_KEY = nsp

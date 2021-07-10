@@ -5,7 +5,7 @@ import {clipboard} from 'electron'
 import URI from 'urijs'
 import pify from 'promise.ify'
 import AppleScript from 'applescript'
-import {useStoreDispatch, useStoreState} from '@store'
+import {useStoreDispatch, useStoreState} from '@ui/store'
 import Yaml from 'js-yaml'
 
 const {Option} = Select

@@ -17,9 +17,9 @@
     "packages/*"
   ],
   "scripts": {
+    "dev": "poi -s -r ts-node/register/transpile-only",
     "_install": "napa",
     "_postinstall": "electron-builder install-app-deps",
-    "dev:ui": "poi -s -r ts-node/register/transpile-only",
     "dev:main": "poi --config poi-main.config.js --watch",
     "dev:start-main": "electron bundle/development/main/index.js",
     "dev:watch-main": "nodemon bundle/development/main/index.js --exec electron --watch bundle/development/main/",

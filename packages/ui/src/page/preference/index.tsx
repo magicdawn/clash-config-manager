@@ -10,7 +10,7 @@ import React, {useState, useCallback, useEffect} from 'react'
 import {Button, Modal, Input, message, Space, Row, Col, Card} from 'antd'
 import {SettingFilled, CloudUploadOutlined, CloudDownloadOutlined} from '@ant-design/icons'
 import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
-import useImmerState from '@util/hooks/useImmerState'
+import useImmerState from '@ui/util/hooks/useImmerState'
 import storage from '../../storage/index'
 import customMerge from '../../util/sync/webdav/customMerge'
 import {pick as pickSelectExport, SelectExportForStaticMethod} from './modal/SelectExport'
@@ -18,7 +18,7 @@ import PRESET_JSON_DATA from '../../assets/基本数据规则.json'
 
 import styles from './index.module.less'
 import helper from '../../util/sync/webdav/helper'
-import {useEasy} from '@store'
+import {useEasy} from '@ui/store'
 
 export default function Preference() {
   const preferenceModel = useEasy('preference')
@@ -50,8 +50,8 @@ export default function Preference() {
   const onExport = usePersistFn(async () => {
     const file = path.join(tmpdir(), 'cfm', `${moment().format('YYYY_MM_DD__HH_mm')}.json`)
 
-    let outputData = storage.store
-    let data = _.omit(outputData, ['subscribe_detail'])
+    const outputData = storage.store
+    const data = _.omit(outputData, ['subscribe_detail'])
     await fse.outputJson(file, data, {spaces: 2})
     setExportHelperVisible(true)
     setExportFile(file)

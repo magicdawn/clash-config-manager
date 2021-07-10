@@ -81,6 +81,7 @@ function Routes() {
 
   useEffect(() => {
     ;(window as any).gtag?.('event', 'page_view', {
+      // eslint-disable-next-line camelcase
       page_path: pathname,
     })
   }, [pathname])

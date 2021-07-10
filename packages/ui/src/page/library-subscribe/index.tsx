@@ -2,7 +2,7 @@ import React, {useState, useCallback} from 'react'
 import {Button, Modal, Input, message, List, Space} from 'antd'
 import {usePersistFn, useUpdateEffect} from 'ahooks'
 import {v4 as uuid} from 'uuid'
-import {useEasy} from '@store'
+import {useEasy} from '@ui/store'
 import styles from './index.module.less'
 
 export default function LibrarySubscribe() {

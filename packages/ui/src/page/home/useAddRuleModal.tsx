@@ -1,10 +1,10 @@
 import React, {useCallback} from 'react'
 import {message} from 'antd'
-import {runCommand} from '@commands/run'
-import useImmerState from '@util/hooks/useImmerState'
+import {runCommand} from '@ui/commands/run'
+import useImmerState from '@ui/util/hooks/useImmerState'
 import {usePersistFn} from 'ahooks'
 import AddRuleModal, {Mode} from '../library-rule-list/AddRuleModal'
-import store from '@store'
+import store from '@ui/store'
 
 type HandleAdd = (rule: string, ruleId: string) => void
 

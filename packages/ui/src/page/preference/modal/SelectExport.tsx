@@ -1,7 +1,7 @@
 import React, {useCallback, useState, useEffect} from 'react'
 import {Modal, Tree} from 'antd'
 import {BehaviorSubject} from 'rxjs'
-import useImmerState from '@util/hooks/useImmerState'
+import useImmerState from '@ui/util/hooks/useImmerState'
 import {usePersistFn, useUpdateEffect} from 'ahooks'
 import _ from 'lodash'
 
@@ -80,7 +80,7 @@ function generateTreeData(obj, keyPrefix = '') {
 
   if (Array.isArray(obj)) {
     obj.forEach((item, index) => {
-      let key = `${keyPrefix}${index}`
+      const key = `${keyPrefix}${index}`
       let title = `index=${index}`
 
       if (keyPrefix === 'subscribe_list.' || keyPrefix === 'rule_list.') {
@@ -100,9 +100,9 @@ function generateTreeData(obj, keyPrefix = '') {
     return treeData
   }
 
-  for (let i of Object.keys(obj)) {
+  for (const i of Object.keys(obj)) {
     let title = i
-    let key = keyPrefix + i
+    const key = keyPrefix + i
 
     if (key === 'subscribe_list') title = '订阅管理 (有泄露风险,谨慎分享)'
     if (key === 'rule_list') title = '配置源管理'
@@ -135,7 +135,7 @@ function getAllKeys(arr) {
 
 function clean(obj) {
   if (!obj || typeof obj !== 'object') return
-  for (let i of Object.keys(obj)) {
+  for (const i of Object.keys(obj)) {
     const val = obj[i]
 
     if (Array.isArray(val)) {

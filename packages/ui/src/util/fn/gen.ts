@@ -3,9 +3,9 @@ import {join as pathjoin} from 'path'
 import Yaml from 'js-yaml'
 import fse from 'fs-extra'
 import request from 'umi-request'
-import store from '@store'
-import {ClashConfig} from '@define'
-import {ProxyGroupType} from '@common/define/ClashConfig'
+import store from '@ui/store'
+import {ClashConfig} from '@ui/common/define'
+import {ProxyGroupType} from '@ui/common/define/ClashConfig'
 
 export default async function genConfig(options: {forceUpdate?: boolean} = {}) {
   const {forceUpdate = false} = options
@@ -25,13 +25,13 @@ export default async function genConfig(options: {forceUpdate?: boolean} = {}) {
   const resultItemList = resultList
     .map(({type, id}) => {
       if (type === 'subscribe') {
-        let item = subscribeList.find((x) => x.id === id)
+        const item = subscribeList.find((x) => x.id === id)
         if (item) {
           return {item, type}
         }
       }
       if (type === 'rule') {
-        let item = ruleList.find((x) => x.id === id)
+        const item = ruleList.find((x) => x.id === id)
         if (item) {
           return {item, type}
         }
@@ -48,7 +48,7 @@ export default async function genConfig(options: {forceUpdate?: boolean} = {}) {
    */
   let config: Partial<ClashConfig> = {}
 
-  for (let r of ruleArr) {
+  for (const r of ruleArr) {
     const {item} = r
     const {type, url, content} = item
     let usingContent = content
@@ -77,13 +77,14 @@ export default async function genConfig(options: {forceUpdate?: boolean} = {}) {
     config['proxy-groups'] = []
   }
 
-  for (let s of subscribeArr) {
+  for (const s of subscribeArr) {
     const {item} = s
     const {url} = item
     let servers
 
     // update subscribe
     await store.dispatch.librarySubscribe.update({url, silent: true, forceUpdate})
+    // eslint-disable-next-line prefer-const
     servers = store.getState().librarySubscribe.detail[url]
     config.proxies = config.proxies.concat(servers)
   }
@@ -97,7 +98,7 @@ export default async function genConfig(options: {forceUpdate?: boolean} = {}) {
     })
 
   const existNames = proxyGroups.map((i) => i.name)
-  for (let line of config.rules) {
+  for (const line of config.rules) {
     const use = line.split(',').slice(-1)[0]
     if (!use) continue
     if (['DIRECT', 'REJECT', 'no-resolve'].includes(use)) continue

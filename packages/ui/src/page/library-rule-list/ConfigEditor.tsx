@@ -1,5 +1,5 @@
 import MonacoEditor, {EditorWillMount} from 'react-monaco-editor'
-import React, {FC, forwardRef, ReactNode} from 'react'
+import React, {forwardRef, ReactNode} from 'react'
 import {usePersistFn, useUpdateEffect} from 'ahooks'
 import {Spin} from 'antd'
 import {SpinProps} from 'antd/lib/spin'
@@ -20,7 +20,9 @@ export default forwardRef(ConfigEditor)
 function ConfigEditor(props: IProps, ref) {
   const {value, onChange, readonly, spinProps, header, visible} = props
 
-  const editorWillMount: EditorWillMount = usePersistFn((monaco) => {})
+  const editorWillMount: EditorWillMount = usePersistFn((monaco) => {
+    //
+  })
 
   const editorDidMount = usePersistFn((editor, monaco) => {
     ;(window as any).$editor = editor

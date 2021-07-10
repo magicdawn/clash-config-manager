@@ -1,8 +1,8 @@
 import {createRef} from 'react'
 import {message} from 'antd'
-import Loading from '@page/common/global/loading'
-import gen from '@util/fn/gen'
-import store from '@store'
+import Loading from '@ui/page/common/global/loading'
+import gen from '@ui/util/fn/gen'
+import store from '@ui/store'
 
 export const commandPaletteRef = createRef<any>()
 export const close = () =>
@@ -14,7 +14,7 @@ export const close = () =>
   })
 
 const commandGen = async ({forceUpdate = false}: {forceUpdate?: boolean} = {}) => {
-  let delayShowTimer: NodeJS.Timeout
+  let delayShowTimer: ReturnType<typeof setTimeout>
   if (forceUpdate) {
     Loading.show()
   } else {
