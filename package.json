@@ -17,7 +17,7 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall": "electron-builder install-app-deps && husky install",
     "dev:main": "yarn workspace main-process run dev",
     "dev:ui": "yarn workspace ui run dev",
     "dev:start-main": "electron bundle/development/main/index.js",
@@ -53,7 +53,7 @@
     "eslint-plugin-react": "^7.20.6",
     "fancy-log": "^1.3.3",
     "gulp": "^4.0.2",
-    "husky": "^7.0.1",
+    "husky": "^7.0.0",
     "lint-staged": "^11.0.0",
     "monaco-editor-webpack-plugin": "^2.1.0",
     "napa": "^3.0.0",
@@ -63,11 +63,6 @@
     "tsconfig-paths-webpack-plugin": "^3.3.0",
     "typescript": "^4.3.5",
     "typescript-plugin-css-modules": "^3.0.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "*.{js,less,vue,ts,tsx}": [
