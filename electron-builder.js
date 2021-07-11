@@ -1,5 +1,5 @@
 const {execSync} = require('child_process')
-const pkg = require('./package.json')
+const pkg = require('./packages/main-process/package.json')
 
 const sh = (cmd) => {
   console.log('[exec]: %s', cmd)

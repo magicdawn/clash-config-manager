@@ -17,15 +17,14 @@
     "packages/*"
   ],
   "scripts": {
-    "_install": "napa",
-    "_postinstall": "electron-builder install-app-deps",
+    "postinstall": "electron-builder install-app-deps",
     "dev:main": "yarn workspace main-process run dev",
     "dev:ui": "yarn workspace ui run dev",
     "dev:start-main": "electron bundle/development/main/index.js",
     "dev:watch-main": "nodemon bundle/development/main/index.js --exec electron --watch bundle/development/main/",
-    "build": "yarn build:ui && yarn build:main",
-    "build:ui": "poi --prod -r ts-node/register/transpile-only",
-    "build:main": "poi --prod --config poi-main.config.js",
+    "build": "yarn build:main && yarn build:ui",
+    "build:main": "yarn workspace main-process run build",
+    "build:ui": "yarn workspace main-process run build",
     "pack": "electron-builder --dir",
     "dist:mac": "electron-builder --macos",
     "dist": "electron-builder --macos --linux --windows"
@@ -47,6 +46,8 @@
     "@types/webpack-merge": "^5.0.0",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
+    "electron": "^11.1.1",
+    "electron-builder": "^22.9.1",
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-react": "^7.20.6",

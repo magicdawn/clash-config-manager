@@ -13,25 +13,9 @@
     "email": "magicdawn@qq.com",
     "url": "https://magicdawn.fun"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
-    "dev": "poi -s -r ts-node/register/transpile-only",
-    "_install": "napa",
-    "_postinstall": "electron-builder install-app-deps",
-    "dev:main": "poi --config poi-main.config.js --watch",
-    "dev:start-main": "electron bundle/development/main/index.js",
-    "dev:watch-main": "nodemon bundle/development/main/index.js --exec electron --watch bundle/development/main/",
-    "build": "yarn build:ui && yarn build:main",
-    "build:ui": "poi --prod -r ts-node/register/transpile-only",
-    "build:main": "poi --prod --config poi-main.config.js",
-    "pack": "electron-builder --dir",
-    "dist:mac": "electron-builder --macos",
-    "dist": "electron-builder --macos --linux --windows"
-  },
-  "napa": {
-    "@magicdawn/x": "magicdawn/x#master"
+    "dev": "poi -r ts-node/register/transpile-only -s",
+    "build": "poi -r ts-node/register/transpile-only --prod"
   },
   "dependencies": {
     "@ant-design/icons": "^4.3.0",

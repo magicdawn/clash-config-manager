@@ -45,4 +45,14 @@ module.exports = {
       },
     ],
   },
+
+  overrides: [
+    {
+      files: ['*.js'],
+      parser: 'babel-eslint',
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
+      },
+    },
+  ],
 }
