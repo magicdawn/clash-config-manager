@@ -1,8 +1,11 @@
+/* eslint-disable camelcase */
+
 import fse from 'fs-extra'
 import globby from 'globby'
 import log from 'fancy-log'
 import {version} from '../package.json'
 import {sh, PROJECT_ROOT} from './util'
+import {TaskFunction} from 'gulp'
 
 function getChangelog() {
   const fullChangeLog = fse.readFileSync(PROJECT_ROOT + '/CHANGELOG.md', 'utf8')
@@ -10,7 +13,7 @@ function getChangelog() {
   const usingLines = []
   let h2Count = 0
 
-  for (let line of lines) {
+  for (const line of lines) {
     if (line.startsWith('## ')) {
       if (!h2Count) {
         usingLines.push(line)
@@ -25,6 +28,8 @@ function getChangelog() {
   const curChangelog = usingLines.join('\n')
   return curChangelog
 }
+
+;(release as TaskFunction).description = '发布release'
 
 export default async function release() {
   // 1. add Changelog

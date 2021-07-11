@@ -14,20 +14,3 @@ export const sh = (cmd: string) => {
     execSync(cmd, {stdio: 'inherit'})
   }
 }
-
-export interface TaskMeta {
-  description?: string
-  flags?: Object
-  displayName?: string
-  run: () => Promise<void>
-}
-
-export function task(data: TaskMeta) {
-  const run = data.run
-  Object.assign(run, {
-    description: data.description,
-    flags: data.flags,
-    displayName: data.displayName,
-  })
-  return run
-}

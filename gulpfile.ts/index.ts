@@ -1,5 +1,5 @@
 import log from 'fancy-log'
-import {task} from './util'
+import {TaskFunctionParams} from 'undertaker'
 
 export default async function () {
   log('default')
@@ -7,10 +7,10 @@ export default async function () {
 
 export {default as release} from './release'
 
-export const buildUi = task({
+Object.assign(buildUi, {
   displayName: 'build:ui',
   description: 'build 前端代码',
-  async run() {
-    log('build:ui')
-  },
-})
+} as TaskFunctionParams)
+export async function buildUi() {
+  log('build:ui')
+}
