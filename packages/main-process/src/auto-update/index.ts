@@ -64,10 +64,15 @@ autoUpdater.on('update-downloaded', (info) => {
 })
 
 export async function check() {
-  if (is.development) {
-    return autoUpdater.checkForUpdates()
-  } else {
-    return autoUpdater.checkForUpdatesAndNotify()
+  try {
+    if (is.development) {
+      return await autoUpdater.checkForUpdates()
+    } else {
+      return await autoUpdater.checkForUpdatesAndNotify()
+    }
+  } catch (e) {
+    console.error('[auto-update] check update error')
+    console.error(e.stack || e)
   }
 }
 
@@ -78,10 +83,15 @@ if (!is.development) {
   // @ts-ignore
   autoUpdater.logger.transports.console.level = 'debug'
 
+  // per day check
   setInterval(() => {
     check()
-  }, ms('4h'))
-  check()
+  }, ms('1d'))
+
+  // 10s after startup
+  setTimeout(() => {
+    check()
+  }, ms('10s'))
 } else {
   // @ts-ignore
   autoUpdater.currentVersion = '0.2.0'
