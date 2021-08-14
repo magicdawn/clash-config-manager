@@ -24,7 +24,7 @@
     "dev:watch-main": "nodemon bundle/development/main/index.js --exec electron --watch bundle/development/main/",
     "build": "yarn build:main && yarn build:ui",
     "build:main": "yarn workspace main-process run build",
-    "build:ui": "yarn workspace main-process run build",
+    "build:ui": "yarn workspace ui run build",
     "pack": "electron-builder --dir",
     "dist:mac": "electron-builder --macos",
     "dist": "electron-builder --macos --linux --windows"

@@ -27,7 +27,7 @@ module.exports = {
 
   extraResources: [
     {
-      from: './main-process/bin/clash-config-manager.sh',
+      from: './packages/main-process/src/bin/clash-config-manager.sh',
       to: '.',
     },
   ],

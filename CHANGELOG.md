@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.2
+
+- fix build
+
 ## v0.5.1
 
 - fix 由于 monorepo 导致 meta userData 目录不正确的问题.
