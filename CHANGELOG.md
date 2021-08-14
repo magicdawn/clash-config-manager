@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.0
+
+- monorepo
+- 首页 icon size 调整
+- auto-update 增加 catch
+
 ## v0.4.0
 
 - TypeScript 重构前端部分
