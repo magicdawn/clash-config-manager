@@ -1,5 +1,4 @@
 node_modules
-yarn.lock
 report.*.json
 .DS_Store
 

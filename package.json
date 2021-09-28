@@ -55,7 +55,6 @@
     "gulp": "^4.0.2",
     "husky": "^7.0.0",
     "lint-staged": "^11.0.0",
-    "monaco-editor-webpack-plugin": "^2.1.0",
     "napa": "^3.0.0",
     "poi": "latest",
     "prettier": "latest",
