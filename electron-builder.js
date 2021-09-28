@@ -33,11 +33,19 @@ module.exports = {
   ],
 
   beforeBuild() {
-    console.log('[build main]')
-    sh('yarn build:main')
+    if (process.argv.includes('--skip-build')) {
+      return
+    }
 
-    console.log('[build ui]')
-    sh('yarn build:ui')
+    if (!process.argv.includes('--skip-build-main')) {
+      console.log('[build main]')
+      sh('yarn build:main')
+    }
+
+    if (!process.argv.includes('--skip-build-ui')) {
+      console.log('[build ui]')
+      sh('yarn build:ui')
+    }
   },
 
   mac: {
