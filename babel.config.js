@@ -7,7 +7,7 @@ module.exports = {
       {
         env: {
           targets: {
-            electron: '7',
+            electron: '11',
           },
         },
       },
