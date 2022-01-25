@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.0
+
+- clash vmess `ws-path` / `ws-headers`, 变成 `ws-opts.path` / `ws-opts.headers` 更改
+
 ## v0.5.2
 
 - fix build
