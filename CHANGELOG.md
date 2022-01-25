@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.1
+
+- chore: update `electron-*` especially electron-updater, because auto update is broken now(v0.6 / v0.5)
+
 ## v0.6.0
 
 - clash vmess `ws-path` / `ws-headers`, 变成 `ws-opts.path` / `ws-opts.headers` 更改
