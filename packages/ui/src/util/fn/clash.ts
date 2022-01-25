@@ -41,10 +41,20 @@ export const makeClashVmessProxy = (item) => {
     'cipher': 'auto',
     'skip-cert-verify': true,
     'network': s.net,
-    'ws-path': s.path,
     'tls': Boolean(s.tls),
-    'ws-headers': {
-      Host: s.host,
+
+    // old
+    // 'ws-path': s.path,
+    // 'ws-headers': {
+    //   Host: s.host,
+    // },
+
+    // new
+    'ws-opts': {
+      path: s.path,
+      headers: {
+        Host: s.host,
+      },
     },
 
     // udp: true,
