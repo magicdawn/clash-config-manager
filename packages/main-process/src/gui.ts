@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import path from 'path'
 import {app, BrowserWindow} from 'electron'
 import {is} from 'electron-util'
 import _ from 'lodash'
+import * as remoteMain from '@electron/remote/main'
 
 import './init/meta'
 import {load as loadDevExt} from './dev/ext'
@@ -22,6 +24,10 @@ async function main() {
   mainWindow = await createMainWindow()
   global.mainWindow = mainWindow
 
+  // enable @electron/remote
+  remoteMain.initialize()
+  remoteMain.enable(mainWindow.webContents)
+
   if (process.env.NODE_ENV === 'production') {
     await mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
   } else {
@@ -40,9 +46,9 @@ const createMainWindow = async () => {
     width: bounds.width,
     height: bounds.height,
     webPreferences: {
+      contextIsolation: false,
       nodeIntegration: true,
       webSecurity: false,
-      enableRemoteModule: true,
     },
   })
 

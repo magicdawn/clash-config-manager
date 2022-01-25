@@ -1469,14 +1469,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/get@npm:^1.0.1":
-  version: 1.12.4
-  resolution: "@electron/get@npm:1.12.4::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2F%40electron%2Fget%2Fdownload%2F%40electron%2Fget-1.12.4.tgz"
+"@electron/get@npm:^1.13.0":
+  version: 1.13.1
+  resolution: "@electron/get@npm:1.13.1::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40electron%2Fget%2Fdownload%2F%40electron%2Fget-1.13.1.tgz"
   dependencies:
     debug: ^4.1.1
     env-paths: ^2.2.0
     fs-extra: ^8.1.0
-    global-agent: ^2.0.2
+    global-agent: ^3.0.0
     global-tunnel-ng: ^2.7.1
     got: ^9.6.0
     progress: ^2.0.3
@@ -1487,7 +1487,16 @@ __metadata:
       optional: true
     global-tunnel-ng:
       optional: true
-  checksum: 7cdcbaec202c30fa8f57299ac4304117637ad46215b1c9fcbafbd6db8aadb64b321b67125ada6f694f877b49c11c84cd4b404fbea51b285caa5505387cea7209
+  checksum: ea9863b73e8aedefb19cfe9b849c585b8bda29e11b90189b115680da4e9ab0167405efe63e5d141da2d13cde24eacacfde62f730f2730d047e58819fe69352f8
+  languageName: node
+  linkType: hard
+
+"@electron/remote@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@electron/remote@npm:2.0.1::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40electron%2Fremote%2Fdownload%2F%40electron%2Fremote-2.0.1.tgz"
+  peerDependencies:
+    electron: ">= 10.0.0-beta.1"
+  checksum: 0d363d8c41d21041b0ba294f538bb7cabf6e7cc7719910634be4bc3318f090a0acdcf079c90199f2a739418ef72664bf97eb260ec81053f48464cb5dd1871e67
   languageName: node
   linkType: hard
 
@@ -1866,6 +1875,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tootallnate/once@npm:2":
+  version: 2.0.0
+  resolution: "@tootallnate/once@npm:2.0.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40tootallnate%2Fonce%2Fdownload%2F%40tootallnate%2Fonce-2.0.0.tgz"
+  checksum: ad87447820dd3f24825d2d947ebc03072b20a42bfc96cbafec16bff8bbda6c1a81fcb0be56d5b21968560c5359a0af4038a68ba150c3e1694fe4c109a063bed8
+  languageName: node
+  linkType: hard
+
 "@types/body-parser@npm:*":
   version: 1.19.1
   resolution: "@types/body-parser@npm:1.19.1::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fbody-parser%2Fdownload%2F%40types%2Fbody-parser-1.19.1.tgz"
@@ -2163,10 +2179,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^12.0.12":
-  version: 12.20.16
-  resolution: "@types/node@npm:12.20.16::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-12.20.16.tgz"
-  checksum: 172f0b445781377e1adca12ffe7f4a73d9f1eb6b235fd5165f97db19079477e871d59db5f95a8e1650094d9ec5d3b9f06c5ca9ec9d00ff923edb9bb7bd3c0427
+"@types/node@npm:^14.6.2":
+  version: 14.18.9
+  resolution: "@types/node@npm:14.18.9::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-14.18.9.tgz"
+  checksum: a85dae901b5c3b318747e66f2228c0f0778bcd73430a01d7c42814c04ba1070f2817b865d0c5f0c1813b89afeebb34d19cf2662252bae9dc0c18d3ad23fc98c3
   languageName: node
   linkType: hard
 
@@ -2529,7 +2545,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^17.0.0, @types/yargs@npm:^17.0.2":
+"@types/yargs@npm:^17.0.1":
+  version: 17.0.8
+  resolution: "@types/yargs@npm:17.0.8::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fyargs%2Fdownload%2F%40types%2Fyargs-17.0.8.tgz"
+  dependencies:
+    "@types/yargs-parser": "*"
+  checksum: 63d06700ffbed745f00d7994eb92416649c8a3ead22f26446979d383f3af52fa9400bb185268f3a44a2348749098ffe33a8185ca676b77bc3206c63b8b73fd01
+  languageName: node
+  linkType: hard
+
+"@types/yargs@npm:^17.0.2":
   version: 17.0.2
   resolution: "@types/yargs@npm:17.0.2::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fyargs%2Fdownload%2F%40types%2Fyargs-17.0.2.tgz"
   dependencies:
@@ -2963,6 +2988,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ajv-formats@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "ajv-formats@npm:2.1.1::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fajv-formats%2Fdownload%2Fajv-formats-2.1.1.tgz"
+  dependencies:
+    ajv: ^8.0.0
+  peerDependencies:
+    ajv: ^8.0.0
+  peerDependenciesMeta:
+    ajv:
+      optional: true
+  checksum: 4a287d937f1ebaad4683249a4c40c0fa3beed30d9ddc0adba04859026a622da0d317851316ea64b3680dc60f5c3c708105ddd5d5db8fe595d9d0207fd19f90b7
+  languageName: node
+  linkType: hard
+
 "ajv-keywords@npm:^3.1.0, ajv-keywords@npm:^3.4.1, ajv-keywords@npm:^3.5.2":
   version: 3.5.2
   resolution: "ajv-keywords@npm:3.5.2::__archiveUrl=https%3A%2F%2Fregistry.npm.taobao.org%2Fajv-keywords%2Fdownload%2Fajv-keywords-3.5.2.tgz"
@@ -2972,7 +3011,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^6.1.0, ajv@npm:^6.10.0, ajv@npm:^6.10.2, ajv@npm:^6.12.0, ajv@npm:^6.12.2, ajv@npm:^6.12.4, ajv@npm:^6.12.5":
+"ajv@npm:^6.1.0, ajv@npm:^6.10.0, ajv@npm:^6.10.2, ajv@npm:^6.12.0, ajv@npm:^6.12.4, ajv@npm:^6.12.5":
   version: 6.12.6
   resolution: "ajv@npm:6.12.6::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fajv%2Fdownload%2Fajv-6.12.6.tgz"
   dependencies:
@@ -2981,6 +3020,18 @@ __metadata:
     json-schema-traverse: ^0.4.1
     uri-js: ^4.2.2
   checksum: 874972efe5c4202ab0a68379481fbd3d1b5d0a7bd6d3cc21d40d3536ebff3352a2a1fabb632d4fd2cc7fe4cbdcd5ed6782084c9bbf7f32a1536d18f9da5007d4
+  languageName: node
+  linkType: hard
+
+"ajv@npm:^8.0.0, ajv@npm:^8.6.3":
+  version: 8.9.0
+  resolution: "ajv@npm:8.9.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fajv%2Fdownload%2Fajv-8.9.0.tgz"
+  dependencies:
+    fast-deep-equal: ^3.1.1
+    json-schema-traverse: ^1.0.0
+    require-from-string: ^2.0.2
+    uri-js: ^4.2.2
+  checksum: 756c048bfa917b43bb84c8a0a53e6a489123203bc4bdec8cbeb8ec2d715674f5e61d49560a1a6ec83268af4f33bed324f5cb6d9c76d96849fd58ed7089b8e7f3
   languageName: node
   linkType: hard
 
@@ -3195,16 +3246,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"app-builder-bin@npm:3.6.1":
-  version: 3.6.1
-  resolution: "app-builder-bin@npm:3.6.1::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fapp-builder-bin%2Fdownload%2Fapp-builder-bin-3.6.1.tgz"
-  checksum: 0adc394bb0de4d4da813d21b4191b4656453f5c0a4569a8b5fbf48ce676aa3106bfa03c8afc8cff1ec5bffa8a13f6db74d688fac7e09d2c9daccdddd5481a56f
+"app-builder-bin@npm:3.7.1":
+  version: 3.7.1
+  resolution: "app-builder-bin@npm:3.7.1::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fapp-builder-bin%2Fdownload%2Fapp-builder-bin-3.7.1.tgz"
+  checksum: aae6152d7e7e6eabe35e5430f8b4733cc713bd3f80fdb861c5b675ebc8951aa26b520821d27c5ee31f05e850cdfd9b923b58064307f1ae583fb4e7434d380209
   languageName: node
   linkType: hard
 
-"app-builder-lib@npm:22.11.8":
-  version: 22.11.8
-  resolution: "app-builder-lib@npm:22.11.8::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fapp-builder-lib%2Fdownload%2Fapp-builder-lib-22.11.8.tgz"
+"app-builder-lib@npm:22.14.13":
+  version: 22.14.13
+  resolution: "app-builder-lib@npm:22.14.13::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fapp-builder-lib%2Fdownload%2Fapp-builder-lib-22.14.13.tgz"
   dependencies:
     7zip-bin: ~5.1.1
     "@develar/schema-utils": ~2.6.5
@@ -3212,12 +3263,14 @@ __metadata:
     "@malept/flatpak-bundler": ^0.4.0
     async-exit-hook: ^2.0.1
     bluebird-lst: ^1.0.9
-    builder-util: 22.11.8
-    builder-util-runtime: 8.7.7
+    builder-util: 22.14.13
+    builder-util-runtime: 8.9.2
     chromium-pickle-js: ^0.2.0
     debug: ^4.3.2
     ejs: ^3.1.6
-    electron-publish: 22.11.8
+    electron-osx-sign: ^0.5.0
+    electron-publish: 22.14.13
+    form-data: ^4.0.0
     fs-extra: ^10.0.0
     hosted-git-info: ^4.0.2
     is-ci: ^3.0.0
@@ -3229,7 +3282,7 @@ __metadata:
     sanitize-filename: ^1.6.3
     semver: ^7.3.5
     temp-file: ^3.4.0
-  checksum: fe2e419c660ff9781c0be800fdef03c0c2bee0089fd0fc671cee735684e5f2bf13eae6ad63c3f10141ec0526d73c85b0e5f7ef2217e36ecf61769656e2c7338c
+  checksum: a32a5ef25b3f70ddcd9b6ba0691221b9e66b0b0a4e1c28e9dc90854d7dcd0183445af55132587458963202afe40b1860b705558b990622d9e5953931b0de2572
   languageName: node
   linkType: hard
 
@@ -3588,6 +3641,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"asynckit@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "asynckit@npm:0.4.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fasynckit%2Fdownload%2Fasynckit-0.4.0.tgz"
+  checksum: 7b78c451df768adba04e2d02e63e2d0bf3b07adcd6e42b4cf665cb7ce899bedd344c69a1dcbce355b5f972d597b25aaa1c1742b52cffd9caccb22f348114f6be
+  languageName: node
+  linkType: hard
+
 "at-least-node@npm:^1.0.0":
   version: 1.0.0
   resolution: "at-least-node@npm:1.0.0::__archiveUrl=https%3A%2F%2Fregistry.npm.taobao.org%2Fat-least-node%2Fdownload%2Fat-least-node-1.0.0.tgz"
@@ -3604,9 +3664,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"atomically@npm:^1.3.1":
+"atomically@npm:^1.7.0":
   version: 1.7.0
-  resolution: "atomically@npm:1.7.0::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fatomically%2Fdownload%2Fatomically-1.7.0.tgz"
+  resolution: "atomically@npm:1.7.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fatomically%2Fdownload%2Fatomically-1.7.0.tgz"
   checksum: 991153b17334597f93b58e831bea9851e57ed9cd41d8f33991be063f170b5cc8ec7ff8605f3eb95c1d389c2ad651039e9eb8f2b795e24833c2ceb944f347373a
   languageName: node
   linkType: hard
@@ -3896,6 +3956,13 @@ __metadata:
 "bluebird@npm:^3.1.1, bluebird@npm:^3.5.5":
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fbluebird%2Fdownload%2Fbluebird-3.7.2.tgz"
+  checksum: 869417503c722e7dc54ca46715f70e15f4d9c602a423a02c825570862d12935be59ed9c7ba34a9b31f186c017c23cac6b54e35446f8353059c101da73eac22ef
+  languageName: node
+  linkType: hard
+
+"bluebird@npm:^3.5.0":
+  version: 3.7.2
+  resolution: "bluebird@npm:3.7.2::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fbluebird%2Fdownload%2Fbluebird-3.7.2.tgz"
   checksum: 869417503c722e7dc54ca46715f70e15f4d9c602a423a02c825570862d12935be59ed9c7ba34a9b31f186c017c23cac6b54e35446f8353059c101da73eac22ef
   languageName: node
   linkType: hard
@@ -4215,25 +4282,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"builder-util@npm:22.11.8":
-  version: 22.11.8
-  resolution: "builder-util@npm:22.11.8::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fbuilder-util%2Fdownload%2Fbuilder-util-22.11.8.tgz"
+"builder-util@npm:22.14.13":
+  version: 22.14.13
+  resolution: "builder-util@npm:22.14.13::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fbuilder-util%2Fdownload%2Fbuilder-util-22.14.13.tgz"
   dependencies:
     7zip-bin: ~5.1.1
-    "@types/debug": ^4.1.5
+    "@types/debug": ^4.1.6
     "@types/fs-extra": ^9.0.11
-    app-builder-bin: 3.6.1
+    app-builder-bin: 3.7.1
     bluebird-lst: ^1.0.9
-    builder-util-runtime: 8.7.7
+    builder-util-runtime: 8.9.2
     chalk: ^4.1.1
+    cross-spawn: ^7.0.3
     debug: ^4.3.2
     fs-extra: ^10.0.0
+    http-proxy-agent: ^5.0.0
+    https-proxy-agent: ^5.0.0
     is-ci: ^3.0.0
     js-yaml: ^4.1.0
     source-map-support: ^0.5.19
     stat-mode: ^1.0.0
     temp-file: ^3.4.0
-  checksum: 815b35bc6968557a86ed4d4ce81010751912e882a88d5c1cd4c5b872ee8e7ba3ab5f0c8a7a04704bbf60a135cd6ebae4ee728742da0223e58f3d81eae1008673
+  checksum: 6d72cc1f0bf7e72debe70049dede2a5eac302fb98b87eb7e60b7feed8631dc66877821367d5e7a87aea881f937a565c25e4e24042b421ef12c1d2afa8b7cc02d
   languageName: node
   linkType: hard
 
@@ -4652,6 +4722,7 @@ __metadata:
   resolution: "clash-config-manager@workspace:."
   dependencies:
     "@babel/plugin-proposal-do-expressions": ^7.10.4
+    "@electron/remote": ^2.0.1
     "@magicdawn/eslint-config": latest
     "@magicdawn/prettier-config": latest
     "@poi/plugin-typescript": ^12.3.1
@@ -4664,8 +4735,9 @@ __metadata:
     "@types/webpack-merge": ^5.0.0
     "@typescript-eslint/eslint-plugin": ^4.28.2
     "@typescript-eslint/parser": ^4.28.2
-    electron: ^11.1.1
-    electron-builder: ^22.9.1
+    electron: ^16.0.7
+    electron-builder: ^22.14.5
+    electron-store: ^8.0.1
     eslint: ^7.30.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-react: ^7.20.6
@@ -4989,6 +5061,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"combined-stream@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "combined-stream@npm:1.0.8::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fcombined-stream%2Fdownload%2Fcombined-stream-1.0.8.tgz"
+  dependencies:
+    delayed-stream: ~1.0.0
+  checksum: 49fa4aeb4916567e33ea81d088f6584749fc90c7abec76fd516bf1c5aa5c79f3584b5ba3de6b86d26ddd64bae5329c4c7479343250cfe71c75bb366eae53bb7c
+  languageName: node
+  linkType: hard
+
 "commander@npm:2.9.0":
   version: 2.9.0
   resolution: "commander@npm:2.9.0::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fcommander%2Fdownload%2Fcommander-2.9.0.tgz"
@@ -5036,6 +5117,13 @@ __metadata:
   version: 1.0.1
   resolution: "commondir@npm:1.0.1::__archiveUrl=https%3A%2F%2Fregistry.npm.taobao.org%2Fcommondir%2Fdownload%2Fcommondir-1.0.1.tgz"
   checksum: 59715f2fc456a73f68826285718503340b9f0dd89bfffc42749906c5cf3d4277ef11ef1cca0350d0e79204f00f1f6d83851ececc9095dc88512a697ac0b9bdcb
+  languageName: node
+  linkType: hard
+
+"compare-version@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "compare-version@npm:0.1.2::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fcompare-version%2Fdownload%2Fcompare-version-0.1.2.tgz"
+  checksum: 0ceaf50b5f912c8eb8eeca19375e617209d200abebd771e9306510166462e6f91ad764f33f210a3058ee27c83f2f001a7a4ca32f509da2d207d0143a3438a020
   languageName: node
   linkType: hard
 
@@ -5096,21 +5184,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conf@npm:^7.1.2":
-  version: 7.1.2
-  resolution: "conf@npm:7.1.2::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fconf%2Fdownload%2Fconf-7.1.2.tgz"
+"conf@npm:^10.0.3":
+  version: 10.1.1
+  resolution: "conf@npm:10.1.1::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fconf%2Fdownload%2Fconf-10.1.1.tgz"
   dependencies:
-    ajv: ^6.12.2
-    atomically: ^1.3.1
+    ajv: ^8.6.3
+    ajv-formats: ^2.1.1
+    atomically: ^1.7.0
     debounce-fn: ^4.0.0
-    dot-prop: ^5.2.0
-    env-paths: ^2.2.0
+    dot-prop: ^6.0.1
+    env-paths: ^2.2.1
     json-schema-typed: ^7.0.3
-    make-dir: ^3.1.0
-    onetime: ^5.1.0
+    onetime: ^5.1.2
     pkg-up: ^3.1.0
-    semver: ^7.3.2
-  checksum: d4afc6eb82954c6e90411c23f91ec8d47ea0ff028e3e91fda08bb221755532a520d7ad4c659300d1ce2a4caf0600bbdd07b5390e33a351c564e47ef132fc8991
+    semver: ^7.3.5
+  checksum: f67fd7b33b39b76e1b62316d4ed5943f9ac95a774f5a86a63aea2c594ff5b4ba7673bf6d42f806a23c07248e90f4699b24321640b1dffaf2d81d10d56476a203
   languageName: node
   linkType: hard
 
@@ -5299,13 +5387,6 @@ __metadata:
   version: 1.2.7
   resolution: "core-js@npm:1.2.7::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fcore-js%2Fdownload%2Fcore-js-1.2.7.tgz"
   checksum: 0b76371bfa98708351cde580f9287e2360d2209920e738ae950ae74ad08639a2e063541020bf666c28778956fc356ed9fe56d962129c88a87a6a4a0612526c75
-  languageName: node
-  linkType: hard
-
-"core-js@npm:^3.6.5":
-  version: 3.15.2
-  resolution: "core-js@npm:3.15.2::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fcore-js%2Fdownload%2Fcore-js-3.15.2.tgz"
-  checksum: f8f61569c4c3bdf50679226f5a1045551192a2f4bc3fa46a873b6fa834cff6d1634ee138a6e4bae3eea99f1b1db2d588fa693de74640447476292b41f595a4c3
   languageName: node
   linkType: hard
 
@@ -5786,6 +5867,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"debug@npm:^2.6.8":
+  version: 2.6.9
+  resolution: "debug@npm:2.6.9::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fdebug%2Fdownload%2Fdebug-2.6.9.tgz"
+  dependencies:
+    ms: 2.0.0
+  checksum: d2f51589ca66df60bf36e1fa6e4386b318c3f1e06772280eea5b1ae9fd3d05e9c2b7fd8a7d862457d00853c75b00451aa2d7459b924629ee385287a650f58fe6
+  languageName: node
+  linkType: hard
+
 "debug@npm:^3.1.1, debug@npm:^3.2.6":
   version: 3.2.7
   resolution: "debug@npm:3.2.7::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fdebug%2Fdownload%2Fdebug-3.2.7.tgz"
@@ -6033,6 +6123,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"delayed-stream@npm:~1.0.0":
+  version: 1.0.0
+  resolution: "delayed-stream@npm:1.0.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fdelayed-stream%2Fdownload%2Fdelayed-stream-1.0.0.tgz"
+  checksum: 46fe6e83e2cb1d85ba50bd52803c68be9bd953282fa7096f51fc29edd5d67ff84ff753c51966061e5ba7cb5e47ef6d36a91924eddb7f3f3483b1c560f77a0020
+  languageName: node
+  linkType: hard
+
 "delegates@npm:^1.0.0":
   version: 1.0.0
   resolution: "delegates@npm:1.0.0::__archiveUrl=https%3A%2F%2Fregistry.npm.taobao.org%2Fdelegates%2Fdownload%2Fdelegates-1.0.0.tgz"
@@ -6148,13 +6245,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dmg-builder@npm:22.11.8":
-  version: 22.11.8
-  resolution: "dmg-builder@npm:22.11.8::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fdmg-builder%2Fdownload%2Fdmg-builder-22.11.8.tgz"
+"dmg-builder@npm:22.14.13":
+  version: 22.14.13
+  resolution: "dmg-builder@npm:22.14.13::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fdmg-builder%2Fdownload%2Fdmg-builder-22.14.13.tgz"
   dependencies:
-    app-builder-lib: 22.11.8
-    builder-util: 22.11.8
-    builder-util-runtime: 8.7.7
+    app-builder-lib: 22.14.13
+    builder-util: 22.14.13
+    builder-util-runtime: 8.9.2
     dmg-license: ^1.0.9
     fs-extra: ^10.0.0
     iconv-lite: ^0.6.2
@@ -6162,7 +6259,7 @@ __metadata:
   dependenciesMeta:
     dmg-license:
       optional: true
-  checksum: ab2f3460bc0f31897eeb493b00eec167d735ae2bfdc6f1139ea62e6dcf3a59b01b582545d8734837c05f194af6e5e2c7e11ea1949b4a8a7bc220309ad338258b
+  checksum: 01be77f99b9309e356e3ae4fbccc294c4f1dcb65b9b21c434807cbaa9d0c22b2338a5b688bba1b277e0110ac33dd1eb126f4267d09382b1fa12d0878162ac648
   languageName: node
   linkType: hard
 
@@ -6345,6 +6442,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dot-prop@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "dot-prop@npm:6.0.1::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fdot-prop%2Fdownload%2Fdot-prop-6.0.1.tgz"
+  dependencies:
+    is-obj: ^2.0.0
+  checksum: 0f47600a4b93e1dc37261da4e6909652c008832a5d3684b5bf9a9a0d3f4c67ea949a86dceed9b72f5733ed8e8e6383cc5958df3bbd0799ee317fd181f2ece700
+  languageName: node
+  linkType: hard
+
 "dotenv-expand@npm:^4.2.0":
   version: 4.2.0
   resolution: "dotenv-expand@npm:4.2.0::__archiveUrl=https%3A%2F%2Fregistry.npm.taobao.org%2Fdotenv-expand%2Fdownload%2Fdotenv-expand-4.2.0.tgz"
@@ -6471,16 +6577,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-builder@npm:^22.9.1":
-  version: 22.11.8
-  resolution: "electron-builder@npm:22.11.8::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Felectron-builder%2Fdownload%2Felectron-builder-22.11.8.tgz"
+"electron-builder@npm:^22.14.5":
+  version: 22.14.13
+  resolution: "electron-builder@npm:22.14.13::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Felectron-builder%2Fdownload%2Felectron-builder-22.14.13.tgz"
   dependencies:
-    "@types/yargs": ^17.0.0
-    app-builder-lib: 22.11.8
-    builder-util: 22.11.8
-    builder-util-runtime: 8.7.7
+    "@types/yargs": ^17.0.1
+    app-builder-lib: 22.14.13
+    builder-util: 22.14.13
+    builder-util-runtime: 8.9.2
     chalk: ^4.1.1
-    dmg-builder: 22.11.8
+    dmg-builder: 22.14.13
     fs-extra: ^10.0.0
     is-ci: ^3.0.0
     lazy-val: ^1.0.5
@@ -6490,7 +6596,7 @@ __metadata:
   bin:
     electron-builder: cli.js
     install-app-deps: install-app-deps.js
-  checksum: 4a9dda15e1887aeb1f983791f9e1846c8137768cf007b9c12cecf1792a77dd295e27c565e3bee765e1d42fd2dfcbd5ffcffd6c7e735e83dfbfa83cca0ea030ce
+  checksum: 1c5179ca9c4db3886377f86b6aa00db703180358134fefbf4c32daa54ed2620c47bf5495d0e4ee12bd3694dd7d3553a6561f088d2e5ab571b9e9b2f07ff594f2
   languageName: node
   linkType: hard
 
@@ -6566,28 +6672,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-publish@npm:22.11.8":
-  version: 22.11.8
-  resolution: "electron-publish@npm:22.11.8::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Felectron-publish%2Fdownload%2Felectron-publish-22.11.8.tgz"
+"electron-osx-sign@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "electron-osx-sign@npm:0.5.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Felectron-osx-sign%2Fdownload%2Felectron-osx-sign-0.5.0.tgz"
+  dependencies:
+    bluebird: ^3.5.0
+    compare-version: ^0.1.2
+    debug: ^2.6.8
+    isbinaryfile: ^3.0.2
+    minimist: ^1.2.0
+    plist: ^3.0.1
+  bin:
+    electron-osx-flat: bin/electron-osx-flat.js
+    electron-osx-sign: bin/electron-osx-sign.js
+  checksum: ca1e55d8cb0987b78bfaf197860e73f7e6266cb219f3d6fd32f25665a8393efb284115db9e2246b42f75cdf6163c148060aff8a02960f4f810c6502d6f7d447c
+  languageName: node
+  linkType: hard
+
+"electron-publish@npm:22.14.13":
+  version: 22.14.13
+  resolution: "electron-publish@npm:22.14.13::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Felectron-publish%2Fdownload%2Felectron-publish-22.14.13.tgz"
   dependencies:
     "@types/fs-extra": ^9.0.11
-    builder-util: 22.11.8
-    builder-util-runtime: 8.7.7
+    builder-util: 22.14.13
+    builder-util-runtime: 8.9.2
     chalk: ^4.1.1
     fs-extra: ^10.0.0
     lazy-val: ^1.0.5
     mime: ^2.5.2
-  checksum: 715e486945c184a2a4f9db08032d8e5a4a26a625f1a85441eaaa564d6f2b64b6364bcf6a3e8fd7b3f5eef8e17f45abc30012b5fea11148bd4325f1e572df5b99
+  checksum: 66cf15ad52c9dea67d744eb9080c20d43792a734f4e524b8ffc676e8ce9541a2fe4b11a25e4bd3f48e670160e72edfc7eeb77767e843232f4454075ee91d2475
   languageName: node
   linkType: hard
 
-"electron-store@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "electron-store@npm:6.0.1::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Felectron-store%2Fdownload%2Felectron-store-6.0.1.tgz"
+"electron-store@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "electron-store@npm:8.0.1::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Felectron-store%2Fdownload%2Felectron-store-8.0.1.tgz"
   dependencies:
-    conf: ^7.1.2
-    type-fest: ^0.16.0
-  checksum: c906dc91a0d82c6bfd459804dcbe1784cea621b28646067a6f3e9485dff5ea9a6d78500d00978cb97a7db0fd3b123d1a9caddc4fb80eee0d35f81c073fa873d4
+    conf: ^10.0.3
+    type-fest: ^1.0.2
+  checksum: 3d708598c554c55ede73569879c9e538b4a644a693af9e5fd49d3c091e1ee6d2a32b6a4d6a1834a4f116a59724a7263ddebd42ded1e15119303b3132c4194a38
   languageName: node
   linkType: hard
 
@@ -6664,16 +6787,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^11.1.1":
-  version: 11.4.10
-  resolution: "electron@npm:11.4.10::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Felectron%2Fdownload%2Felectron-11.4.10.tgz"
+"electron@npm:^16.0.7":
+  version: 16.0.7
+  resolution: "electron@npm:16.0.7::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Felectron%2Fdownload%2Felectron-16.0.7.tgz"
   dependencies:
-    "@electron/get": ^1.0.1
-    "@types/node": ^12.0.12
+    "@electron/get": ^1.13.0
+    "@types/node": ^14.6.2
     extract-zip: ^1.0.3
   bin:
     electron: cli.js
-  checksum: c7ce7a092a7aead31db5ab8512469d1a2184865cc848428145f96e31b8fd059d166aff7e2886f8b685ec17ef14f9858d0ebc1946c3b4fda8964c4a7b184db139
+  checksum: 9ca82da3739ad737b736c9f5ff9d0e4883f69cb55128d65c39b559ad26b95502d7fb54899e01d744ee4d1d8d1414fe0a77750ed30ed187e90737562b823e1ee1
   languageName: node
   linkType: hard
 
@@ -6799,6 +6922,13 @@ __metadata:
 "env-paths@npm:^2.2.0":
   version: 2.2.1
   resolution: "env-paths@npm:2.2.1::__archiveUrl=https%3A%2F%2Fregistry.npm.taobao.org%2Fenv-paths%2Fdownload%2Fenv-paths-2.2.1.tgz"
+  checksum: 65b5df55a8bab92229ab2b40dad3b387fad24613263d103a97f91c9fe43ceb21965cd3392b1ccb5d77088021e525c4e0481adb309625d0cb94ade1d1fb8dc17e
+  languageName: node
+  linkType: hard
+
+"env-paths@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "env-paths@npm:2.2.1::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fenv-paths%2Fdownload%2Fenv-paths-2.2.1.tgz"
   checksum: 65b5df55a8bab92229ab2b40dad3b387fad24613263d103a97f91c9fe43ceb21965cd3392b1ccb5d77088021e525c4e0481adb309625d0cb94ade1d1fb8dc17e
   languageName: node
   linkType: hard
@@ -7922,6 +8052,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"form-data@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "form-data@npm:4.0.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fform-data%2Fdownload%2Fform-data-4.0.0.tgz"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.8
+    mime-types: ^2.1.12
+  checksum: 01135bf8675f9d5c61ff18e2e2932f719ca4de964e3be90ef4c36aacfc7b9cb2fceb5eca0b7e0190e3383fe51c5b37f4cb80b62ca06a99aaabfcfd6ac7c9328c
+  languageName: node
+  linkType: hard
+
 "forwarded@npm:0.2.0":
   version: 0.2.0
   resolution: "forwarded@npm:0.2.0::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fforwarded%2Fdownload%2Fforwarded-0.2.0.tgz"
@@ -8313,18 +8454,17 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"global-agent@npm:^2.0.2":
-  version: 2.2.0
-  resolution: "global-agent@npm:2.2.0::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fglobal-agent%2Fdownload%2Fglobal-agent-2.2.0.tgz"
+"global-agent@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "global-agent@npm:3.0.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fglobal-agent%2Fdownload%2Fglobal-agent-3.0.0.tgz"
   dependencies:
     boolean: ^3.0.1
-    core-js: ^3.6.5
     es6-error: ^4.1.1
     matcher: ^3.0.0
     roarr: ^2.15.3
     semver: ^7.3.2
     serialize-error: ^7.0.1
-  checksum: 09627d2cfc4ae0bee187730d6301cebb80c96c2adadb403d114c5574481b388d491e9c8a6fb2b935e5c0eda886a249bf954e4095d26ca553635cc1ae6d0feb95
+  checksum: 75074d80733b4bd5386c47f5df028e798018025beac0ab310e9908c72bf5639e408203e7bca0130d5ee01b5f4abc6d34385d96a9f950ea5fe1979bb431c808f7
   languageName: node
   linkType: hard
 
@@ -8965,6 +9105,17 @@ fsevents@~2.3.2:
     agent-base: 6
     debug: 4
   checksum: c6a5da5a1929416b6bbdf77b1aca13888013fe7eb9d59fc292e25d18e041bb154a8dfada58e223fc7b76b9b2d155a87e92e608235201f77d34aa258707963a82
+  languageName: node
+  linkType: hard
+
+"http-proxy-agent@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "http-proxy-agent@npm:5.0.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fhttp-proxy-agent%2Fdownload%2Fhttp-proxy-agent-5.0.0.tgz"
+  dependencies:
+    "@tootallnate/once": 2
+    agent-base: 6
+    debug: 4
+  checksum: e2ee1ff1656a131953839b2a19cd1f3a52d97c25ba87bd2559af6ae87114abf60971e498021f9b73f9fd78aea8876d1fb0d4656aac8a03c6caa9fc175f22b786
   languageName: node
   linkType: hard
 
@@ -9987,6 +10138,15 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"isbinaryfile@npm:^3.0.2":
+  version: 3.0.3
+  resolution: "isbinaryfile@npm:3.0.3::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fisbinaryfile%2Fdownload%2Fisbinaryfile-3.0.3.tgz"
+  dependencies:
+    buffer-alloc: ^1.2.0
+  checksum: 9a555786857c66fe36024d15a54e0ca371c02275622b007356d6afca2b3bca179cb0bd97e1adf5d3922b3325c0fe22813645c7f7eafb4c4bdab1da9d635133c2
+  languageName: node
+  linkType: hard
+
 "isbinaryfile@npm:^4.0.8":
   version: 4.0.8
   resolution: "isbinaryfile@npm:4.0.8::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fisbinaryfile%2Fdownload%2Fisbinaryfile-4.0.8.tgz"
@@ -10864,12 +11024,9 @@ fsevents@~2.3.2:
     bytes: ^3.1.0
     debug: ^4.3.1
     dl-vampire: ^0.5.0
-    electron: ^11.1.1
-    electron-builder: ^22.9.1
     electron-context-menu: ^2.3.1
     electron-debug: ^3.2.0
     electron-log: ^4.4.5
-    electron-store: ^6.0.1
     electron-unhandled: ^3.0.2
     electron-updater: ^4.6.1
     electron-util: ^0.13.0
@@ -11155,6 +11312,22 @@ fsevents@~2.3.2:
   version: 1.48.0
   resolution: "mime-db@npm:1.48.0::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Fmime-db%2Fdownload%2Fmime-db-1.48.0.tgz"
   checksum: d778392e474a5e78c24eef5a2894261f0ed168d2762c1ac2a115aa34c2274c9426178b92a6cc55e9edb8f13e7e9b8116380b0e61db9ff6d763e62876a65eea57
+  languageName: node
+  linkType: hard
+
+"mime-db@npm:1.51.0":
+  version: 1.51.0
+  resolution: "mime-db@npm:1.51.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fmime-db%2Fdownload%2Fmime-db-1.51.0.tgz"
+  checksum: 613b1ac9d6e725cc24444600b124a7f1ce6c60b1baa654f39a3e260d0995a6dffc5693190217e271af7e2a5612dae19f2a73f3e316707d797a7391165f7ef423
+  languageName: node
+  linkType: hard
+
+"mime-types@npm:^2.1.12":
+  version: 2.1.34
+  resolution: "mime-types@npm:2.1.34::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Fmime-types%2Fdownload%2Fmime-types-2.1.34.tgz"
+  dependencies:
+    mime-db: 1.51.0
+  checksum: 67013de9e9d6799bde6d669d18785b7e18bcd212e710d3e04a4727f92f67a8ad4e74aee24be28b685adb794944814bde649119b58ee3282ffdbee58f9278d9f3
   languageName: node
   linkType: hard
 
@@ -16902,13 +17075,6 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^0.16.0":
-  version: 0.16.0
-  resolution: "type-fest@npm:0.16.0::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Ftype-fest%2Fdownload%2Ftype-fest-0.16.0.tgz"
-  checksum: 1a4102c06dc109db00418c753062e206cab65befd469d000ece4452ee649bf2a9cf57686d96fb42326bc9d918d9a194d4452897b486dcc41989e5c99e4e87094
-  languageName: node
-  linkType: hard
-
 "type-fest@npm:^0.20.2":
   version: 0.20.2
   resolution: "type-fest@npm:0.20.2::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Ftype-fest%2Fdownload%2Ftype-fest-0.20.2.tgz"
@@ -16920,6 +17086,13 @@ resolve@^2.0.0-next.3:
   version: 0.21.3
   resolution: "type-fest@npm:0.21.3::__archiveUrl=https%3A%2F%2Fregistry.nlark.com%2Ftype-fest%2Fdownload%2Ftype-fest-0.21.3.tgz"
   checksum: e6b32a3b3877f04339bae01c193b273c62ba7bfc9e325b8703c4ee1b32dc8fe4ef5dfa54bf78265e069f7667d058e360ae0f37be5af9f153b22382cd55a9afe0
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^1.0.2":
+  version: 1.4.0
+  resolution: "type-fest@npm:1.4.0::__archiveUrl=https%3A%2F%2Fregistry.npmmirror.com%2Ftype-fest%2Fdownload%2Ftype-fest-1.4.0.tgz"
+  checksum: b011c3388665b097ae6a109a437a04d6f61d81b7357f74cbcb02246f2f5bd72b888ae33631b99871388122ba0a87f4ff1c94078e7119ff22c70e52c0ff828201
   languageName: node
   linkType: hard
 
@@ -17057,12 +17230,9 @@ typescript@^4.3.5:
     debug: ^4.3.1
     dl-vampire: ^0.5.0
     easy-peasy: ^4.0.1
-    electron: ^11.1.1
-    electron-builder: ^22.9.1
     electron-context-menu: ^2.3.1
     electron-debug: ^3.2.0
     electron-log: ^4.3.1
-    electron-store: ^6.0.1
     electron-unhandled: ^3.0.0
     electron-updater: ^4.0.6
     electron-util: ^0.13.0

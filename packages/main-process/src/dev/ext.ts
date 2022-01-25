@@ -1,6 +1,6 @@
 import os from 'os'
 import fs from 'fs-extra'
-import {BrowserWindow} from 'electron'
+import {session} from 'electron'
 import debugFactory from 'debug'
 
 const debug = debugFactory('ccm:dev:ext')
@@ -14,7 +14,7 @@ const loadExt = (id: string) => {
   const extVerDir = extDir + '/' + ver
 
   debug('add %s', extVerDir)
-  BrowserWindow.addDevToolsExtension(extVerDir)
+  session.defaultSession.loadExtension(extVerDir)
 }
 
 export function load() {
