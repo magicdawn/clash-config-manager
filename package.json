@@ -46,6 +46,7 @@
     "@types/webpack-merge": "^5.0.0",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
+    "electron-builder": "^22.14.5",
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-react": "^7.20.6",
@@ -69,7 +70,6 @@
   "dependencies": {
     "@electron/remote": "^2.0.1",
     "electron": "^16.0.7",
-    "electron-builder": "^22.14.5",
     "electron-store": "^8.0.1",
     "lodash": "^4.17.21"
   },
