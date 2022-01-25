@@ -94,6 +94,6 @@ if (!is.development) {
   }, ms('10s'))
 } else {
   // @ts-ignore
-  autoUpdater.currentVersion = '0.2.0'
-  autoUpdater.checkForUpdates()
+  // autoUpdater.currentVersion = '0.2.0'
+  // autoUpdater.checkForUpdates()
 }
