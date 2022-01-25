@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.7.0
+
+- it's broken for electron-updater@latest, it's using `fs/promises` module, so upgrade
+  - electron -> v16
+  - electron-builder -> latest
+  - electron-store -> latest
+  - use `@electron/remote`
+
 ## v0.6.1
 
 - chore: update `electron-*` especially electron-updater, because auto update is broken now(v0.6 / v0.5)
