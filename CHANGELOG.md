@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8.0
+
+- 支持 `ssr://` 协议配置到 clash
+
 ## v0.7.0
 
 - it's broken for electron-updater@latest, it's using `fs/promises` module, so upgrade
