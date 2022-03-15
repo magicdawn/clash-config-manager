@@ -15,7 +15,7 @@ export default function Commands() {
       alwaysRenderCommands
       theme={oneLightTheme}
       options={{keys: ['name', 'key']}}
-      placeholder='淦点啥'
+      placeholder='Type to start'
     />
   )
 }

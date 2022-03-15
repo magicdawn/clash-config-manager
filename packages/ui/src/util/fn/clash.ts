@@ -1,4 +1,4 @@
-import {urlToSubscribe} from './index'
+import {ClashSsrServer, urlToSubscribe} from './index'
 
 export const makeClashProxy = (item) => {
   const {type} = item
@@ -74,22 +74,12 @@ export const makeClashVmessProxy = (item) => {
   return clashProxyItem
 }
 
-export const makeClashSsrProxy = (item) => {
-  const {server: s, type} = item
-  return null
-
-  // clash 不支持 SSR
-  // Date.now() = 2020-02-27
-  // https://github.com/Dreamacro/clash/pull/519
-
-  const clashProxyItem = {
-    type,
-  }
-
-  return clashProxyItem
+export const makeClashSsrProxy = (item: {type: 'ssr'; server: ClashSsrServer}) => {
+  return item.server
 }
 
 export const subscribeToClash = async ({url, forceUpdate}: {url: string; forceUpdate: boolean}) => {
+  debugger
   const servers = await urlToSubscribe({url, forceUpdate})
   const clashProxies = servers.map(makeClashProxy)
   return clashProxies
