@@ -1,6 +1,6 @@
 import path from 'path'
 import merge from 'webpack-merge'
-import {PoiConfig} from '../common/src'
+import { PoiConfig } from '../common/src'
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
 
 const common = {

@@ -16,7 +16,6 @@ importers:
       '@types/lodash': ^4.14.171
       '@types/poi': ^12.5.2
       '@types/prettier': 2.3.2
-      '@types/webpack-merge': ^5.0.0
       '@typescript-eslint/eslint-plugin': ^4.28.2
       '@typescript-eslint/parser': ^4.28.2
       electron: ^16.0.7
@@ -38,6 +37,7 @@ importers:
       tsconfig-paths-webpack-plugin: ^3.3.0
       typescript: ^4.3.5
       typescript-plugin-css-modules: ^3.0.1
+      webpack-merge: ^5.8.0
     dependencies:
       '@electron/remote': 2.0.1_electron@16.0.7
       electron-store: 8.0.1
@@ -54,7 +54,6 @@ importers:
       '@types/lodash': 4.14.171
       '@types/poi': 12.5.3
       '@types/prettier': 2.3.2
-      '@types/webpack-merge': 5.0.0
       '@typescript-eslint/eslint-plugin': 4.32.0_1eacf2495a01e8a68ffa99482308e8ec
       '@typescript-eslint/parser': 4.32.0_eslint@7.32.0+typescript@4.4.3
       electron: 16.0.7
@@ -74,6 +73,7 @@ importers:
       tsconfig-paths-webpack-plugin: 3.5.1
       typescript: 4.4.3
       typescript-plugin-css-modules: 3.4.0_ts-node@9.1.1+typescript@4.4.3
+      webpack-merge: 5.8.0
 
   packages/common:
     specifiers: {}
@@ -2416,13 +2416,6 @@ packages:
       http-proxy-middleware: 1.3.1_debug@4.3.2
     transitivePeerDependencies:
       - debug
-    dev: true
-
-  /@types/webpack-merge/5.0.0:
-    resolution: {integrity: sha512-CFedsXD/7vmJ66PaC3eavdqqNZujWlvdkGFcizi0QPtDswK75DV7a5GTKzL9Ev6d0okLurq+ebQjwIEFmP9aZw==}
-    deprecated: This is a stub types definition. webpack-merge provides its own type definitions, so you do not need this installed.
-    dependencies:
-      webpack-merge: 5.8.0
     dev: true
 
   /@types/webpack-sources/2.1.1:

@@ -13,9 +13,6 @@
     "email": "magicdawn@qq.com",
     "url": "https://magicdawn.fun"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "postinstall": "electron-builder install-app-deps && husky install",
     "dev:main": "pnpm workspace main-process run dev",
@@ -29,8 +26,10 @@
     "dist:mac": "electron-builder --macos",
     "dist": "electron-builder --macos --linux --windows"
   },
-  "napa": {
-    "@magicdawn/x": "magicdawn/x#master"
+  "dependencies": {
+    "@electron/remote": "^2.0.1",
+    "electron-store": "^8.0.1",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@babel/core": "^7",
@@ -44,7 +43,6 @@
     "@types/lodash": "^4.14.171",
     "@types/poi": "^12.5.2",
     "@types/prettier": "2.3.2",
-    "@types/webpack-merge": "^5.0.0",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
     "electron": "^16.0.7",
@@ -63,17 +61,17 @@
     "ts-node": "^9.1.1",
     "tsconfig-paths-webpack-plugin": "^3.3.0",
     "typescript": "^4.3.5",
-    "typescript-plugin-css-modules": "^3.0.1"
+    "typescript-plugin-css-modules": "^3.0.1",
+    "webpack-merge": "^5.8.0"
   },
+  "packageManager": "pnpm@3.1.1",
+  "prettier": "@magicdawn/prettier-config",
   "lint-staged": {
     "*.{js,less,vue,ts,tsx}": [
       "prettier --write"
     ]
   },
-  "dependencies": {
-    "@electron/remote": "^2.0.1",
-    "electron-store": "^8.0.1",
-    "lodash": "^4.17.21"
-  },
-  "packageManager": "pnpm@3.1.1"
+  "napa": {
+    "@magicdawn/x": "magicdawn/x#master"
+  }
 }
