@@ -18,13 +18,13 @@
   ],
   "scripts": {
     "postinstall": "electron-builder install-app-deps && husky install",
-    "dev:main": "yarn workspace main-process run dev",
-    "dev:ui": "yarn workspace ui run dev",
+    "dev:main": "pnpm workspace main-process run dev",
+    "dev:ui": "pnpm workspace ui run dev",
     "dev:start-main": "electron bundle/development/main/index.js",
     "dev:watch-main": "nodemon bundle/development/main/index.js --exec electron --watch bundle/development/main/",
-    "build": "yarn build:main && yarn build:ui",
-    "build:main": "yarn workspace main-process run build",
-    "build:ui": "yarn workspace ui run build",
+    "build": "pnpm build:main && pnpm build:ui",
+    "build:main": "pnpm workspace main-process run build",
+    "build:ui": "pnpm workspace ui run build",
     "pack": "electron-builder --dir",
     "dist:mac": "electron-builder --macos",
     "dist": "electron-builder --macos --linux --windows"
@@ -73,5 +73,5 @@
     "electron-store": "^8.0.1",
     "lodash": "^4.17.21"
   },
-  "packageManager": "yarn@3.1.1"
+  "packageManager": "pnpm@3.1.1"
 }

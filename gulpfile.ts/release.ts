@@ -3,9 +3,9 @@
 import fse from 'fs-extra'
 import globby from 'globby'
 import log from 'fancy-log'
-import {version} from '../package.json'
-import {sh, PROJECT_ROOT} from './util'
-import {TaskFunction} from 'gulp'
+import { version } from '../package.json'
+import { sh, PROJECT_ROOT } from './util'
+import { TaskFunction } from 'gulp'
 
 function getChangelog() {
   const fullChangeLog = fse.readFileSync(PROJECT_ROOT + '/CHANGELOG.md', 'utf8')
@@ -45,7 +45,7 @@ export default async function release() {
   sh('git push origin --all && git push origin --tags')
 
   // 5.build
-  sh('yarn dist:mac')
+  sh('pnpm dist:mac')
 
   // 6.release
   // need proxy
@@ -57,7 +57,7 @@ export default async function release() {
   sh(`gh release create v${version} -F ${changelogTempFile}`)
 
   // find out files
-  const files = globby.sync(`./dist/clash-config-manager-${version}*`, {cwd: PROJECT_ROOT})
+  const files = globby.sync(`./dist/clash-config-manager-${version}*`, { cwd: PROJECT_ROOT })
   sh(`gh release upload v${version} ./dist/latest-mac.yml ${files.join(' ')}`)
 
   // notification

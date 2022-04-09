@@ -1,9 +1,9 @@
-const {execSync} = require('child_process')
+const { execSync } = require('child_process')
 const pkg = require('./packages/main-process/package.json')
 
 const sh = (cmd) => {
   console.log('[exec]: %s', cmd)
-  execSync(cmd, {stdio: 'inherit'})
+  execSync(cmd, { stdio: 'inherit' })
 }
 
 // env
@@ -39,12 +39,12 @@ module.exports = {
 
     if (!process.argv.includes('--skip-build-main')) {
       console.log('[build main]')
-      sh('yarn build:main')
+      sh('pnpm build:main')
     }
 
     if (!process.argv.includes('--skip-build-ui')) {
       console.log('[build ui]')
-      sh('yarn build:ui')
+      sh('pnpm build:ui')
     }
   },
 
