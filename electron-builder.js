@@ -1,5 +1,5 @@
 const { execSync } = require('child_process')
-const pkg = require('./packages/main-process/package.json')
+const pkg = require('./units/main-process/package.json')
 
 const sh = (cmd) => {
   console.log('[exec]: %s', cmd)
@@ -27,7 +27,7 @@ module.exports = {
 
   extraResources: [
     {
-      from: './packages/main-process/src/bin/clash-config-manager.sh',
+      from: './units/main-process/src/bin/clash-config-manager.sh',
       to: '.',
     },
   ],
