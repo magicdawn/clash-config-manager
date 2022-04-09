@@ -1,12 +1,12 @@
 import path from 'path'
-import {app, BrowserWindow} from 'electron'
+import { app, BrowserWindow } from 'electron'
 import minimist from 'minimist'
 
 // Prevent window from being garbage collected
 let mainWindow: BrowserWindow
 
 import './init/meta'
-import {loadWindowState} from './initWindowState'
+import { loadWindowState } from './initWindowState'
 import './ipc/index'
 
 // hide dock
@@ -31,7 +31,7 @@ async function main() {
 }
 
 async function createMainWindow() {
-  const {bounds} = await loadWindowState()
+  const { bounds } = await loadWindowState()
 
   const win = new BrowserWindow({
     title: app.name,

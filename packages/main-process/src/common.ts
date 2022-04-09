@@ -1,4 +1,4 @@
-import {app, session} from 'electron'
+import { app, session } from 'electron'
 import debugFactory from 'debug'
 const debug = debugFactory('ccm:common')
 
@@ -7,26 +7,26 @@ function checkIfCalledViaCLI(args: string[]) {
   if (args[0]?.endsWith('.app/Contents/MacOS/clash-config-manager')) {
     const restArgs = args.slice(1).filter((arg) => !['--inspect', '--inspect-brk'].includes(arg))
     const isCli = !!restArgs.length
-    return {isCli, restArgs}
+    return { isCli, restArgs }
   }
 
   // dev [electron xxx.js]
   const scriptIndex = args.findIndex((arg) => arg?.endsWith('bundle/development/main/index.js'))
   if (scriptIndex === -1) {
-    return {isCli: false}
+    return { isCli: false }
   } else {
     const restArgs = args
       .slice(scriptIndex + 1)
       .filter((arg) => !['--inspect', '--inspect-brk'].includes(arg))
     const isCli = !!restArgs.length
-    return {isCli, restArgs}
+    return { isCli, restArgs }
   }
 }
 
 export const isCli = process.env.CCM_RUN_MODE === 'cli'
 
-const {restArgs} = checkIfCalledViaCLI(process.argv)
-export {restArgs}
+const { restArgs } = checkIfCalledViaCLI(process.argv)
+export { restArgs }
 debug('process.argv: %O', {
   'process.argv': process.argv,
   isCli,
@@ -47,6 +47,6 @@ export async function initCommon() {
         // noop
       }
     }
-    callback({cancel: false, requestHeaders: {...details.requestHeaders, ...extraHeaders}})
+    callback({ cancel: false, requestHeaders: { ...details.requestHeaders, ...extraHeaders } })
   })
 }

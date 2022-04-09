@@ -1,6 +1,6 @@
 import ms from 'ms'
-import {is} from 'electron-util'
-import {autoUpdater} from 'electron-updater'
+import { is } from 'electron-util'
+import { autoUpdater } from 'electron-updater'
 import electronLog from 'electron-log'
 import setMenu from '../menu'
 import _ from 'lodash'
@@ -41,7 +41,7 @@ const menuItem = {
 export let updateMenuItem = menuItem.check
 
 const setDownloadingMenu = _.throttle((progressObj) => {
-  const {bytesPerSecond, percent, total, transferred} = progressObj
+  const { bytesPerSecond, percent, total, transferred } = progressObj
 
   const currentMenuItem = {
     ...menuItem.downloading,

@@ -4,10 +4,10 @@ import contextMenu from 'electron-context-menu'
 import fixPath from 'fix-path'
 import './init/meta'
 import './ipc/index'
-import {isCli, initCommon} from './common'
+import { isCli, initCommon } from './common'
 
 unhandled()
-debug({showDevTools: !isCli})
+debug({ showDevTools: !isCli })
 contextMenu()
 fixPath()
 initCommon()

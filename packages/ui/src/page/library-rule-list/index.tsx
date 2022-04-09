@@ -3,21 +3,21 @@ import path from 'path'
 import fse from 'fs-extra'
 import execa from 'execa'
 import debugFactory from 'debug'
-import React, {useState, useCallback, useRef, useMemo} from 'react'
-import {Button, Modal, Input, message, Tooltip, List, Space, Form, Select} from 'antd'
-import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
-import {v4 as uuid} from 'uuid'
+import React, { useState, useCallback, useRef, useMemo } from 'react'
+import { Button, Modal, Input, message, Tooltip, List, Space, Form, Select } from 'antd'
+import { useMount, usePersistFn, useUpdateEffect } from 'ahooks'
+import { v4 as uuid } from 'uuid'
 import Yaml from 'js-yaml'
-import {FileAddOutlined} from '@ant-design/icons'
+import { FileAddOutlined } from '@ant-design/icons'
 
 import useImmerState from '@ui/util/hooks/useImmerState'
-import {firstLine, limitLines} from '@ui/util/text-util'
-import {useEasy} from '@ui/store'
-import {RuleItem} from '@ui/common/define'
-import {runCommand} from '@ui/commands/run'
+import { firstLine, limitLines } from '@ui/util/text-util'
+import { useEasy } from '@ui/store'
+import { RuleItem } from '@ui/common/define'
+import { runCommand } from '@ui/commands/run'
 
 import styles from './index.module.less'
-const {Option} = Select
+const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
 const namespace = 'libraryRuleList'
 const TEMP_EDITING_FILE = path.join(remote.app.getPath('userData'), 'temp', '临时文件-关闭生效.yml')
@@ -84,7 +84,7 @@ export default function LibraryRuleList() {
       <h1>配置源管理</h1>
 
       <ModalAdd
-        {...{visible: showModal, setVisible: setShowModal, editItem, editItemIndex, editMode}}
+        {...{ visible: showModal, setVisible: setShowModal, editItem, editItemIndex, editMode }}
       />
 
       <List
@@ -100,9 +100,9 @@ export default function LibraryRuleList() {
         bordered
         dataSource={ruleListModel.list}
         renderItem={(item, index) => {
-          const {type, name, url, content} = item
+          const { type, name, url, content } = item
           return (
-            <List.Item style={{display: 'flex'}}>
+            <List.Item style={{ display: 'flex' }}>
               <div className='list-item'>
                 <div className='name'>名称: {name}</div>
                 <div className='type'>类型: {type === 'local' ? '本地' : '远程'}</div>
@@ -110,22 +110,22 @@ export default function LibraryRuleList() {
                   {type === 'local' ? (
                     <Tooltip
                       title={
-                        <div style={{whiteSpace: 'pre-wrap', wordBreak: 'break-all'}}>
+                        <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
                           {limitLines(content, 10)}
                         </div>
                       }
                     >
-                      <div className='ellipsis' style={{color: 'blue'}}>
+                      <div className='ellipsis' style={{ color: 'blue' }}>
                         内容: {firstLine(content)}
                       </div>
                     </Tooltip>
                   ) : (
                     <Tooltip
                       title={
-                        <div style={{whiteSpace: 'pre-wrap', wordBreak: 'break-all'}}>{url}</div>
+                        <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{url}</div>
                       }
                     >
-                      <div className='ellipsis' style={{color: 'blue'}}>
+                      <div className='ellipsis' style={{ color: 'blue' }}>
                         链接: {url}
                       </div>
                     </Tooltip>
@@ -133,7 +133,7 @@ export default function LibraryRuleList() {
                 </div>
               </div>
 
-              <Space style={{display: 'flex', alignItems: 'center'}}>
+              <Space style={{ display: 'flex', alignItems: 'center' }}>
                 <Button
                   type='primary'
                   onClick={(e) => edit(item, index)}
@@ -170,7 +170,7 @@ export default function LibraryRuleList() {
 import ConfigEditor from './ConfigEditor'
 import RuleAddModal from './AddRuleModal'
 
-function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
+function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }) {
   const ruleListModel = useEasy('libraryRuleList')
 
   const readonly = editMode === 'readonly'
@@ -186,8 +186,8 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   const [form] = Form.useForm()
   const [formFields, setFormFields] = useState([])
 
-  const [otherFormData, modifyOtherFormData] = useImmerState<{id?: string}>({})
-  const [type, setType] = useImmerState({value: editItem?.type || 'local'})
+  const [otherFormData, modifyOtherFormData] = useImmerState<{ id?: string }>({})
+  const [type, setType] = useImmerState({ value: editItem?.type || 'local' })
 
   const configEditorRef = useRef(null)
 
@@ -195,8 +195,8 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     const val = editItem || getDefaultItem()
 
     form.setFieldsValue(val)
-    modifyOtherFormData({id: val.id})
-    setType({value: val.type})
+    modifyOtherFormData({ id: val.id })
+    setType({ value: val.type })
 
     if (visible) {
       configEditorRef.current?.setSelections([])
@@ -209,8 +209,8 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   }
 
   const layout = {
-    labelCol: {span: 3},
-    wrapperCol: {span: 21},
+    labelCol: { span: 3 },
+    wrapperCol: { span: 21 },
   }
 
   const handleCancel = useCallback(() => {
@@ -242,10 +242,10 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
   })
 
   const handleSubmit = usePersistFn((item: RuleItem) => {
-    const {content} = item
+    const { content } = item
 
     // add more data
-    const {id} = otherFormData
+    const { id } = otherFormData
     item.id = id
     item.type = type.value
 
@@ -270,14 +270,14 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
       item.content = ''
     }
 
-    const err = ruleListModel.check({item, editItemIndex})
+    const err = ruleListModel.check({ item, editItemIndex })
     if (err) return message.error(err)
 
     const mode = editItem ? 'edit' : 'add'
     if (mode === 'add') {
-      ruleListModel.add({item})
+      ruleListModel.add({ item })
     } else {
-      ruleListModel.edit({item, editItemIndex})
+      ruleListModel.edit({ item, editItemIndex })
     }
 
     setVisible(false)
@@ -306,7 +306,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     }
 
     content = content.trimEnd() + '\n' + `  - ${rule}` + '\n'
-    form.setFieldsValue({content})
+    form.setFieldsValue({ content })
     message.success(`已添加规则 ${rule}`)
   })
 
@@ -320,7 +320,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     let execResults
     const cmd = `${editor} --wait '${TEMP_EDITING_FILE}'`
     try {
-      execResults = await execa.command(cmd, {shell: true})
+      execResults = await execa.command(cmd, { shell: true })
     } catch (e) {
       message.error('执行命令出错: ' + e.message)
       return
@@ -328,8 +328,8 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
       setEditInEditorMaskVisible(false)
     }
 
-    debug('exec: %o', {cmd, execResults})
-    const {exitCode} = execResults || {}
+    debug('exec: %o', { cmd, execResults })
+    const { exitCode } = execResults || {}
     if (exitCode !== 0) {
       message.error(`执行命令出错: exitCode = ${exitCode}`)
       return
@@ -338,7 +338,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
     // read & set
     const newContent = await fse.readFile(TEMP_EDITING_FILE, 'utf8')
     if (newContent !== content) {
-      form.setFieldsValue({content: newContent})
+      form.setFieldsValue({ content: newContent })
       message.success('文件内容已更新')
     }
   })
@@ -381,7 +381,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
             </>
           )}
 
-          <div style={{flex: 1}}></div>
+          <div style={{ flex: 1 }}></div>
 
           <div className='btn-wrapper'>
             <Button disabled={editInEditorMaskVisible} onClick={handleCancel}>
@@ -410,23 +410,23 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
           setFormFields(allFields)
         }}
       >
-        <Form.Item label='类型' name='type' rules={[{required: true, message: '类型不能为空'}]}>
+        <Form.Item label='类型' name='type' rules={[{ required: true, message: '类型不能为空' }]}>
           <Select
-            style={{width: '200px'}}
+            style={{ width: '200px' }}
             disabled={readonly}
             value={type.value}
-            onChange={(value) => setType({value})}
+            onChange={(value) => setType({ value })}
           >
             <Option value='local'>本地存储</Option>
             <Option value='remote'>远程规则列表</Option>
           </Select>
         </Form.Item>
 
-        <Form.Item label='名称' name='name' rules={[{required: true, message: '名称不能为空'}]}>
+        <Form.Item label='名称' name='name' rules={[{ required: true, message: '名称不能为空' }]}>
           <Input
             className='input-row'
             onPressEnter={onInputPressEnter}
-            style={{width: '200px'}}
+            style={{ width: '200px' }}
             disabled={readonly}
           />
         </Form.Item>
@@ -435,7 +435,7 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
           <Form.Item
             label='content'
             name='content'
-            rules={[{required: true, message: '内容不能为空'}]}
+            rules={[{ required: true, message: '内容不能为空' }]}
           >
             <ConfigEditor
               id={otherFormData.id}
@@ -469,11 +469,11 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex, editMode}) {
             />
           </Form.Item>
         ) : (
-          <Form.Item label='URL' name='url' rules={[{required: true, message: 'url不能为空'}]}>
+          <Form.Item label='URL' name='url' rules={[{ required: true, message: 'url不能为空' }]}>
             <Input.TextArea
               className='input-row'
               onPressEnter={onInputPressEnter}
-              autoSize={{minRows: 3, maxRows: 10}}
+              autoSize={{ minRows: 3, maxRows: 10 }}
               disabled={readonly}
             />
           </Form.Item>

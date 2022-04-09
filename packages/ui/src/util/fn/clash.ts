@@ -1,7 +1,7 @@
-import {ClashSsrServer, urlToSubscribe} from './index'
+import { ClashSsrServer, urlToSubscribe } from './index'
 
 export const makeClashProxy = (item) => {
-  const {type} = item
+  const { type } = item
   if (type === 'sep') return makeClashSepProxy(item.name)
   if (type === 'ssr') return makeClashSsrProxy(item)
   if (type === 'vmess') return makeClashVmessProxy(item)
@@ -29,7 +29,7 @@ export const makeClashSepProxy = (name) => {
 }
 
 export const makeClashVmessProxy = (item) => {
-  const {server: s, type} = item
+  const { server: s, type } = item
 
   const clashProxyItem = {
     'type': type,
@@ -74,12 +74,18 @@ export const makeClashVmessProxy = (item) => {
   return clashProxyItem
 }
 
-export const makeClashSsrProxy = (item: {type: 'ssr'; server: ClashSsrServer}) => {
+export const makeClashSsrProxy = (item: { type: 'ssr'; server: ClashSsrServer }) => {
   return item.server
 }
 
-export const subscribeToClash = async ({url, forceUpdate}: {url: string; forceUpdate: boolean}) => {
-  const servers = await urlToSubscribe({url, forceUpdate})
+export const subscribeToClash = async ({
+  url,
+  forceUpdate,
+}: {
+  url: string
+  forceUpdate: boolean
+}) => {
+  const servers = await urlToSubscribe({ url, forceUpdate })
   const clashProxies = servers.map(makeClashProxy)
   return clashProxies
 }

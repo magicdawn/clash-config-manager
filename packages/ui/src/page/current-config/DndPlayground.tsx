@@ -1,11 +1,11 @@
-import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
-import React, {useMemo, useState, useCallback} from 'react'
-import {usePersistFn, useMount} from 'ahooks'
-import {InfoCircleOutlined} from '@ant-design/icons'
-import {Tooltip} from 'antd'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import React, { useMemo, useState, useCallback } from 'react'
+import { usePersistFn, useMount } from 'ahooks'
+import { InfoCircleOutlined } from '@ant-design/icons'
+import { Tooltip } from 'antd'
 import cx from 'classnames'
-import {limitLines} from '@ui/util/text-util'
-import {useEasy, useStoreState} from '@ui/store'
+import { limitLines } from '@ui/util/text-util'
+import { useEasy, useStoreState } from '@ui/store'
 import styles from './DndPlayground.module.less'
 
 export default function DndPlaygroud() {
@@ -46,7 +46,7 @@ export default function DndPlaygroud() {
   // 具体 item
   const resultItemList = useMemo(() => {
     return resultList
-      .map(({type, id}) => {
+      .map(({ type, id }) => {
         if (type === 'subscribe') {
           return subscribeSourceList.find((x) => x.id === id)
         }
@@ -75,7 +75,7 @@ export default function DndPlaygroud() {
     setTrashDropDisabled(true)
 
     // console.log(result)
-    const {draggableId, type, source, destination, reason} = result
+    const { draggableId, type, source, destination, reason } = result
     if (!destination || !destination.droppableId) return
 
     // from result-list to trash
@@ -91,11 +91,11 @@ export default function DndPlaygroud() {
     const modifyActions = []
     if (source.droppableId === 'rule-source-list') {
       const id = ruleSourceList[source.index].id
-      addItem = {type: 'rule', id}
+      addItem = { type: 'rule', id }
     }
     if (source.droppableId === 'subscribe-source-list') {
       const id = subscribeSourceList[source.index].id
-      addItem = {type: 'subscribe', id}
+      addItem = { type: 'subscribe', id }
     }
 
     if (source.droppableId === 'result-list') {
@@ -145,7 +145,7 @@ export default function DndPlaygroud() {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className={cx('trash-wrapper', {'dragging-over': snapshot.isDraggingOver})}
+                className={cx('trash-wrapper', { 'dragging-over': snapshot.isDraggingOver })}
               >
                 <div className='text'>
                   <div>垃</div>
@@ -217,13 +217,13 @@ interface SourceProps {
   index
 }
 
-const Source = ({item, type, isDragDisabled, index}: SourceProps) => {
-  const {text, id} = item
+const Source = ({ item, type, isDragDisabled, index }: SourceProps) => {
+  const { text, id } = item
   return (
     <Draggable draggableId={`${type}-${id}`} index={index} isDragDisabled={isDragDisabled}>
       {(provided, snapshot) => (
         <div
-          className={cx('item', {disabled: isDragDisabled})}
+          className={cx('item', { disabled: isDragDisabled })}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}

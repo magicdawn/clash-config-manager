@@ -22,7 +22,7 @@ import _ from 'lodash'
 import produce from 'immer'
 
 export default function mergeStore(a, b) {
-  let ret = {...a}
+  let ret = { ...a }
 
   ret = produce(ret, (draft) => {
     // 'subscribe_detail',
@@ -35,7 +35,7 @@ export default function mergeStore(a, b) {
     // subscribe_list
     for (let i of b.subscribe_list || []) {
       if (!i || !i.id) continue
-      const {id} = i
+      const { id } = i
 
       const existingItem = draft.subscribe_list.find((x) => x.id === id)
       if (existingItem) {
@@ -48,7 +48,7 @@ export default function mergeStore(a, b) {
     // rule_list
     for (let i of b.rule_list || []) {
       if (!i || !i.id) continue
-      const {id} = i
+      const { id } = i
 
       const existingItem = draft.rule_list.find((x) => x.id === id)
       if (existingItem) {
@@ -61,7 +61,7 @@ export default function mergeStore(a, b) {
     // current_config_v2.list
     for (let i of b.current_config_v2.list || []) {
       if (!i || !i.id) continue
-      const {id} = i
+      const { id } = i
 
       const existingItem = draft.current_config_v2.list.find((x) => x.id === id)
       if (existingItem) {
@@ -81,8 +81,8 @@ if (module === require.main) {
   console.log(
     mergeStore(
       {
-        subscribe_list: [{id: 1, url: 'baidu'}],
-        subscribe_detail: {1: [1]},
+        subscribe_list: [{ id: 1, url: 'baidu' }],
+        subscribe_detail: { 1: [1] },
 
         rule_list: [
           {
@@ -107,10 +107,10 @@ if (module === require.main) {
       },
       {
         subscribe_list: [
-          {id: 1, url: 'google'},
-          {id: 2, url: 'sogou'},
+          { id: 1, url: 'google' },
+          { id: 2, url: 'sogou' },
         ],
-        subscribe_detail: {1: {x: 2, y: 1}},
+        subscribe_detail: { 1: { x: 2, y: 1 } },
         rule_list: [
           {
             id: 1,

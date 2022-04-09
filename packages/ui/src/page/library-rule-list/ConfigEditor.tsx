@@ -1,8 +1,8 @@
-import MonacoEditor, {EditorWillMount} from 'react-monaco-editor'
-import React, {forwardRef, ReactNode} from 'react'
-import {usePersistFn, useUpdateEffect} from 'ahooks'
-import {Spin} from 'antd'
-import {SpinProps} from 'antd/lib/spin'
+import MonacoEditor, { EditorWillMount } from 'react-monaco-editor'
+import React, { forwardRef, ReactNode } from 'react'
+import { usePersistFn, useUpdateEffect } from 'ahooks'
+import { Spin } from 'antd'
+import { SpinProps } from 'antd/lib/spin'
 import style from './ConfigEditor.module.less'
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api'
 
@@ -18,7 +18,7 @@ interface IProps {
 export default forwardRef(ConfigEditor)
 
 function ConfigEditor(props: IProps, ref) {
-  const {value, onChange, readonly, spinProps, header, visible} = props
+  const { value, onChange, readonly, spinProps, header, visible } = props
 
   const editorWillMount: EditorWillMount = usePersistFn((monaco) => {
     //
@@ -46,7 +46,7 @@ function ConfigEditor(props: IProps, ref) {
   })
 
   const options: monacoEditor.editor.IStandaloneEditorConstructionOptions = {
-    minimap: {enabled: false},
+    minimap: { enabled: false },
     overviewRulerBorder: true,
     renderIndentGuides: true,
     scrollBeyondLastLine: false,
@@ -61,7 +61,7 @@ function ConfigEditor(props: IProps, ref) {
   }
 
   useUpdateEffect(() => {
-    ref.current?.updateOptions({...options, readOnly: readonly})
+    ref.current?.updateOptions({ ...options, readOnly: readonly })
   }, [readonly, ref])
 
   useUpdateEffect(() => {
@@ -79,7 +79,7 @@ function ConfigEditor(props: IProps, ref) {
     <>
       <Spin {...spinProps}>
         {header}
-        <div style={{width: '100%', height: '50vh', marginTop: 10}} className={style.editor}>
+        <div style={{ width: '100%', height: '50vh', marginTop: 10 }} className={style.editor}>
           <MonacoEditor
             language='yaml'
             theme='quite-light'

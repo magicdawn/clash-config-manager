@@ -1,8 +1,8 @@
-import React, {useState, useCallback} from 'react'
-import {Button, Modal, Input, message, List, Space} from 'antd'
-import {usePersistFn, useUpdateEffect} from 'ahooks'
-import {v4 as uuid} from 'uuid'
-import {useEasy} from '@ui/store'
+import React, { useState, useCallback } from 'react'
+import { Button, Modal, Input, message, List, Space } from 'antd'
+import { usePersistFn, useUpdateEffect } from 'ahooks'
+import { v4 as uuid } from 'uuid'
+import { useEasy } from '@ui/store'
 import styles from './index.module.less'
 
 export default function LibrarySubscribe() {
@@ -26,7 +26,7 @@ export default function LibrarySubscribe() {
   })
 
   const update = usePersistFn((item, index) => {
-    subscribeModel.update({url: item.url})
+    subscribeModel.update({ url: item.url })
   })
 
   const disableEnterAsClick = useCallback((e) => {
@@ -54,7 +54,7 @@ export default function LibrarySubscribe() {
       <h1>订阅管理</h1>
 
       <ModalAdd
-        {...{visible: showModal, setVisible: setShowModal, editItem, editItemIndex}}
+        {...{ visible: showModal, setVisible: setShowModal, editItem, editItemIndex }}
       ></ModalAdd>
 
       <List
@@ -70,15 +70,15 @@ export default function LibrarySubscribe() {
         bordered
         dataSource={subscribeModel.list}
         renderItem={(item, index) => {
-          const {url, name} = item
+          const { url, name } = item
           return (
-            <List.Item style={{display: 'flex'}}>
+            <List.Item style={{ display: 'flex' }}>
               <div className='list-item'>
                 <div className='name'>{name}</div>
                 <div className='url'>{url}</div>
               </div>
 
-              <Space style={{alignSelf: 'flex-end'}}>
+              <Space style={{ alignSelf: 'flex-end' }}>
                 <Button
                   type='primary'
                   onClick={(e) => edit(item, index)}
@@ -105,7 +105,7 @@ export default function LibrarySubscribe() {
   )
 }
 
-function ModalAdd({visible, setVisible, editItem, editItemIndex}) {
+function ModalAdd({ visible, setVisible, editItem, editItemIndex }) {
   const subscribeModel = useEasy('librarySubscribe')
   const [url, setUrl] = useState(editItem?.url || '')
   const [name, setName] = useState(editItem?.name || '')
@@ -143,16 +143,16 @@ function ModalAdd({visible, setVisible, editItem, editItemIndex}) {
       return message.warn('url & name 不能为空')
     }
 
-    const err = subscribeModel.check({url, name, editItemIndex})
+    const err = subscribeModel.check({ url, name, editItemIndex })
     if (err) {
       return message.error(err)
     }
 
     const mode = editItem ? 'edit' : 'add'
     if (mode === 'add') {
-      subscribeModel.add({url, name, id})
+      subscribeModel.add({ url, name, id })
     } else {
-      subscribeModel.edit({url, name, id, editItemIndex})
+      subscribeModel.edit({ url, name, id, editItemIndex })
     }
 
     setVisible(false)

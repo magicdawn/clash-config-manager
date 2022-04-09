@@ -1,18 +1,18 @@
-import React, {useCallback} from 'react'
-import {message} from 'antd'
-import {runCommand} from '@ui/commands/run'
+import React, { useCallback } from 'react'
+import { message } from 'antd'
+import { runCommand } from '@ui/commands/run'
 import useImmerState from '@ui/util/hooks/useImmerState'
-import {usePersistFn} from 'ahooks'
-import AddRuleModal, {Mode} from '../library-rule-list/AddRuleModal'
+import { usePersistFn } from 'ahooks'
+import AddRuleModal, { Mode } from '../library-rule-list/AddRuleModal'
 import store from '@ui/store'
 
 type HandleAdd = (rule: string, ruleId: string) => void
 
-export default function useAddRuleModal(options: {handleAdd: HandleAdd; mode: Mode}) {
-  const [{modalVisible}, setState] = useImmerState({modalVisible: false})
+export default function useAddRuleModal(options: { handleAdd: HandleAdd; mode: Mode }) {
+  const [{ modalVisible }, setState] = useImmerState({ modalVisible: false })
 
   const addRule = useCallback(() => {
-    setState({modalVisible: true})
+    setState({ modalVisible: true })
   }, [])
 
   const handleAdd = usePersistFn((rule: string, ruleId: string) => {
@@ -20,7 +20,7 @@ export default function useAddRuleModal(options: {handleAdd: HandleAdd; mode: Mo
   })
 
   const setVisible = useCallback((val) => {
-    setState({modalVisible: val})
+    setState({ modalVisible: val })
   }, [])
 
   const modal = (
@@ -33,10 +33,10 @@ export default function useAddRuleModal(options: {handleAdd: HandleAdd; mode: Mo
   )
 
   const open = useCallback(() => {
-    setState({modalVisible: true})
+    setState({ modalVisible: true })
   }, [])
   const close = useCallback(() => {
-    setState({modalVisible: false})
+    setState({ modalVisible: false })
   }, [])
 
   return {
@@ -46,8 +46,8 @@ export default function useAddRuleModal(options: {handleAdd: HandleAdd; mode: Mo
   }
 }
 
-import {Observer, useLocalObservable} from 'mobx-react'
-export function useMobxAddRuleModal(options: {handleAdd: HandleAdd; mode: Mode}) {
+import { Observer, useLocalObservable } from 'mobx-react'
+export function useMobxAddRuleModal(options: { handleAdd: HandleAdd; mode: Mode }) {
   const store = useLocalObservable(() => {
     return {
       modalVisible: false,
@@ -73,7 +73,7 @@ export function useMobxAddRuleModal(options: {handleAdd: HandleAdd; mode: Mode})
   const modal = (
     <Observer>
       {() => {
-        const {modalVisible, setVisible} = store
+        const { modalVisible, setVisible } = store
         return (
           <AddRuleModal
             visible={modalVisible}

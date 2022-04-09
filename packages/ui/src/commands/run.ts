@@ -1,5 +1,5 @@
-import {createRef} from 'react'
-import {message} from 'antd'
+import { createRef } from 'react'
+import { message } from 'antd'
 import Loading from '@ui/page/common/global/loading'
 import gen from '@ui/util/fn/gen'
 import store from '@ui/store'
@@ -13,7 +13,7 @@ export const close = () =>
     }, 0)
   })
 
-const commandGen = async ({forceUpdate = false}: {forceUpdate?: boolean} = {}) => {
+const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {}) => {
   let delayShowTimer: ReturnType<typeof setTimeout>
   if (forceUpdate) {
     Loading.show()
@@ -28,7 +28,7 @@ const commandGen = async ({forceUpdate = false}: {forceUpdate?: boolean} = {}) =
 
   let result
   try {
-    result = await gen({forceUpdate}) // {forceUpdate}
+    result = await gen({ forceUpdate }) // {forceUpdate}
   } catch (e) {
     message.error('生成失败: ', e.message)
     throw e
@@ -37,7 +37,7 @@ const commandGen = async ({forceUpdate = false}: {forceUpdate?: boolean} = {}) =
     Loading.hide()
   }
 
-  const {success, msg, filename} = result || {}
+  const { success, msg, filename } = result || {}
   if (success) {
     message.success(`生成成功: ${filename} 已更新`)
   } else {
@@ -52,7 +52,7 @@ export const commands = [
     name: '生成配置 (generate)',
     async command() {
       await close()
-      return commandGen({forceUpdate: false})
+      return commandGen({ forceUpdate: false })
     },
   },
   {
@@ -61,7 +61,7 @@ export const commands = [
     name: '生成配置-强制更新 (generate forceUpdate)',
     async command() {
       await close()
-      return commandGen({forceUpdate: true})
+      return commandGen({ forceUpdate: true })
     },
   },
 ]

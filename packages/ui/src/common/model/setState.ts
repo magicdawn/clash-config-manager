@@ -1,4 +1,4 @@
-import {Action, action, State} from 'easy-peasy'
+import { Action, action, State } from 'easy-peasy'
 
 export type SetStatePayload<T> = Partial<T> | ((state: T) => T | undefined | void)
 

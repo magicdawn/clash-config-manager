@@ -1,9 +1,9 @@
 import _ from 'lodash'
-import {Action, thunk, Thunk, thunkOn, ThunkOn} from 'easy-peasy'
+import { Action, thunk, Thunk, thunkOn, ThunkOn } from 'easy-peasy'
 import storage from '@ui/storage'
-import {ConfigItem} from '@ui/common/define'
-import {setStateFactory, SetStatePayload} from '@ui/common/model/setState'
-import {StoreModel} from '@ui/store'
+import { ConfigItem } from '@ui/common/define'
+import { setStateFactory, SetStatePayload } from '@ui/common/model/setState'
+import { StoreModel } from '@ui/store'
 
 const CURRENT_CONFIG_STORAGE_KEY = 'current_config_v2'
 
@@ -37,15 +37,15 @@ export default new (class CurrentConfigModel implements IState {
 
   load: Thunk<CurrentConfigModel> = thunk((actions) => {
     const storeValues = storage.get(CURRENT_CONFIG_STORAGE_KEY)
-    actions.setState({inited: true, ...storeValues})
+    actions.setState({ inited: true, ...storeValues })
   })
 
-  persist: Thunk<CurrentConfigModel> = thunk((actions, payload, {getState}) => {
+  persist: Thunk<CurrentConfigModel> = thunk((actions, payload, { getState }) => {
     storage.set(CURRENT_CONFIG_STORAGE_KEY, _.omit(getState(), ['inited']))
   })
 
-  init: Thunk<CurrentConfigModel> = thunk((actions, _, {getState}) => {
-    const {inited} = getState()
+  init: Thunk<CurrentConfigModel> = thunk((actions, _, { getState }) => {
+    const { inited } = getState()
     if (inited) return
     actions.load()
   })

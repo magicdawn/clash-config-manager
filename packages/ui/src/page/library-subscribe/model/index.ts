@@ -1,11 +1,11 @@
 import _ from 'lodash'
-import {message} from 'antd'
-import {Action, Thunk, thunk, ThunkOn, thunkOn} from 'easy-peasy'
-import {subscribeToClash} from '@ui/util/fn/clash'
-import {Subscribe} from '@ui/common/define'
-import {StoreModel} from '@ui/store'
+import { message } from 'antd'
+import { Action, Thunk, thunk, ThunkOn, thunkOn } from 'easy-peasy'
+import { subscribeToClash } from '@ui/util/fn/clash'
+import { Subscribe } from '@ui/common/define'
+import { StoreModel } from '@ui/store'
 import storage from '@ui/storage'
-import {setStateFactory, SetStatePayload} from '@ui/common/model/setState'
+import { setStateFactory, SetStatePayload } from '@ui/common/model/setState'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
@@ -34,67 +34,67 @@ export default new (class SubscribeModel implements IState {
   load: Thunk<SubscribeModel> = thunk((actions) => {
     const list = storage.get(SUBSCRIBE_LIST_STORAGE_KEY)
     const detail = storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY)
-    actions.setState({inited: true, list, detail})
+    actions.setState({ inited: true, list, detail })
   })
 
-  init: Thunk<SubscribeModel> = thunk((actions, payload, {getState}) => {
-    const {inited} = getState()
+  init: Thunk<SubscribeModel> = thunk((actions, payload, { getState }) => {
+    const { inited } = getState()
     if (inited) return
     actions.load()
   })
 
-  persist: Thunk<SubscribeModel> = thunk((actions, payliad, {getState}) => {
-    const {list, detail} = getState()
+  persist: Thunk<SubscribeModel> = thunk((actions, payliad, { getState }) => {
+    const { list, detail } = getState()
     storage.set(SUBSCRIBE_LIST_STORAGE_KEY, list)
     storage.set(SUBSCRIBE_DETAIL_STORAGE_KEY, detail)
   })
 
-  check: Thunk<SubscribeModel, {url: string; name: string; editItemIndex: number}> = thunk(
-    (actions, payload, {getState}) => {
-      const {url, name, editItemIndex} = payload
+  check: Thunk<SubscribeModel, { url: string; name: string; editItemIndex: number }> = thunk(
+    (actions, payload, { getState }) => {
+      const { url, name, editItemIndex } = payload
 
-      let {list} = getState()
+      let { list } = getState()
       if (editItemIndex || editItemIndex === 0) {
         list = _.filter(list, (i, index) => index !== editItemIndex)
       }
-      if (_.find(list, {url})) {
+      if (_.find(list, { url })) {
         return 'url已存在'
       }
-      if (_.find(list, {name})) {
+      if (_.find(list, { name })) {
         return 'name已存在'
       }
     }
   )
 
   add: Thunk<SubscribeModel, Subscribe> = thunk((actions, payload) => {
-    actions.setState(({list}) => {
+    actions.setState(({ list }) => {
       list.push(payload)
     })
     actions.persist()
   })
 
-  edit: Thunk<SubscribeModel, Subscribe & {editItemIndex: number}> = thunk((actions, payload) => {
-    const {url, name, id, editItemIndex} = payload
-    actions.setState(({list}) => {
-      list[editItemIndex] = {url, name, id}
+  edit: Thunk<SubscribeModel, Subscribe & { editItemIndex: number }> = thunk((actions, payload) => {
+    const { url, name, id, editItemIndex } = payload
+    actions.setState(({ list }) => {
+      list[editItemIndex] = { url, name, id }
     })
     actions.persist()
   })
 
   del: Thunk<SubscribeModel, number> = thunk((actions, index) => {
-    actions.setState(({list}) => {
+    actions.setState(({ list }) => {
       list.splice(index, 1)
     })
     actions.persist()
   })
 
-  update: Thunk<SubscribeModel, {url: string; silent?: boolean; forceUpdate?: boolean}> = thunk(
+  update: Thunk<SubscribeModel, { url: string; silent?: boolean; forceUpdate?: boolean }> = thunk(
     async (actions, payload) => {
-      const {url, silent = false, forceUpdate: forceUpdate = false} = payload
+      const { url, silent = false, forceUpdate: forceUpdate = false } = payload
       // TODO: ts
       let servers: any[]
       try {
-        servers = await subscribeToClash({url, forceUpdate})
+        servers = await subscribeToClash({ url, forceUpdate })
       } catch (e) {
         message.error('更新订阅出错: \n' + e.stack || e)
         throw e
@@ -104,7 +104,7 @@ export default new (class SubscribeModel implements IState {
         message.success('更新订阅成功')
       }
 
-      actions.setState(({detail}) => {
+      actions.setState(({ detail }) => {
         detail[url] = servers
       })
       actions.persist()

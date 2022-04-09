@@ -1,10 +1,10 @@
-import React, {useEffect, useCallback, useState} from 'react'
-import {render} from 'react-dom'
-import {BehaviorSubject} from 'rxjs'
-import {withProps} from 'recompose'
+import React, { useEffect, useCallback, useState } from 'react'
+import { render } from 'react-dom'
+import { BehaviorSubject } from 'rxjs'
+import { withProps } from 'recompose'
 import useImmerState from '@ui/util/hooks/useImmerState'
 
-export default function wrap({component, defaultProps, withProps: withPropsOptions}) {
+export default function wrap({ component, defaultProps, withProps: withPropsOptions }) {
   const subject = new BehaviorSubject(null)
   let C = component
 
@@ -35,7 +35,7 @@ export default function wrap({component, defaultProps, withProps: withPropsOptio
   }
 
   function createMethod(factory) {
-    const fn = factory({setProps: (val) => subject.next(val)})
+    const fn = factory({ setProps: (val) => subject.next(val) })
     return function () {
       mount()
       fn()

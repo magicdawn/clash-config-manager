@@ -1,7 +1,7 @@
 import memo from 'memoize-one'
 import webdav from 'webdav'
-import {dirname} from 'path'
-import {Modal, message} from 'antd'
+import { dirname } from 'path'
+import { Modal, message } from 'antd'
 import store from '@ui/store'
 import storage from '@ui/storage'
 import customMerge from './customMerge'
@@ -14,7 +14,7 @@ const newClient = memo((davServerUrl, user, pass) => {
 })
 
 export function getClient() {
-  const {davServerUrl, user, pass} = store.getState().preference?.syncConfig || {}
+  const { davServerUrl, user, pass } = store.getState().preference?.syncConfig || {}
   return newClient(davServerUrl, user, pass)
 }
 
@@ -59,7 +59,7 @@ class DavHelper {
   }
 
   read = async () => {
-    const fileContent = await this.client.getFileContents(STORAGE_FILE, {format: 'text'})
+    const fileContent = await this.client.getFileContents(STORAGE_FILE, { format: 'text' })
     const jsonStr = Buffer.from(fileContent, 'base64').toString('utf8')
     const json = JSON.parse(jsonStr)
     return json
@@ -96,7 +96,7 @@ class DavHelper {
 
     // 合并数据
     const data = customMerge(remoteData, localData)
-    console.log('customMerge', {remoteData, localData, merged: data})
+    console.log('customMerge', { remoteData, localData, merged: data })
 
     await this.write(data)
     message.success('备份成功')
@@ -132,13 +132,13 @@ class DavHelper {
     if (!yes) return
 
     const remoteData = await this.read()
-    const localData = {...storage.store}
+    const localData = { ...storage.store }
     const merged = customMerge(localData, remoteData)
-    console.log('customMerge', {remoteData, localData, merged})
+    console.log('customMerge', { remoteData, localData, merged })
 
     // reload electron-store & redux
     storage.store = merged
-    store.dispatch({type: 'global/reload'})
+    store.dispatch({ type: 'global/reload' })
     message.success('下载成功')
   }
 
@@ -152,7 +152,7 @@ class DavHelper {
 
     // reload electron-store & redux
     storage.store = data
-    store.dispatch({type: 'global/reload'})
+    store.dispatch({ type: 'global/reload' })
     message.success('下载成功')
   }
 }

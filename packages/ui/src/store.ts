@@ -1,13 +1,13 @@
 import _ from 'lodash'
-import {createStore, createTypedHooks} from 'easy-peasy'
-import {useMemo} from 'react'
+import { createStore, createTypedHooks } from 'easy-peasy'
+import { useMemo } from 'react'
 import shallowEqual from 'shallowequal'
 import * as models from './models'
 
 const getModels = <T>(models: T) =>
   _.cloneDeepWith(models, (val) => {
     if (val && typeof val === 'object' && val.constructor !== Object) {
-      return {...val} // if it's a Model instance, make it plain object
+      return { ...val } // if it's a Model instance, make it plain object
     }
   }) as T
 
@@ -23,8 +23,9 @@ if (process.env.NODE_ENV === 'development') {
   }
 }
 
-const {useStore, useStoreActions, useStoreDispatch, useStoreState} = createTypedHooks<StoreModel>()
-export {useStore, useStoreActions, useStoreDispatch, useStoreState}
+const { useStore, useStoreActions, useStoreDispatch, useStoreState } =
+  createTypedHooks<StoreModel>()
+export { useStore, useStoreActions, useStoreDispatch, useStoreState }
 
 export const useEasyState = <NSP extends keyof StoreModel>(nsp: NSP) => {
   const state = useStoreState((state) => state[nsp], shallowEqual)

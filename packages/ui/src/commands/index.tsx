@@ -1,6 +1,6 @@
 import CommandPalette from 'react-command-palette'
 import React from 'react'
-import {commandPaletteRef, commands} from './run'
+import { commandPaletteRef, commands } from './run'
 
 // theme
 import oneLightTheme from './theme/one-light.module.less'
@@ -14,7 +14,7 @@ export default function Commands() {
       resetInputOnClose
       alwaysRenderCommands
       theme={oneLightTheme}
-      options={{keys: ['name', 'key']}}
+      options={{ keys: ['name', 'key'] }}
       placeholder='Type to start'
     />
   )

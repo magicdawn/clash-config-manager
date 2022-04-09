@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react'
-import {Modal} from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Modal } from 'antd'
 import wrap from './wrapComponent'
 import PacmanLoader from 'react-spinners/PacmanLoader'
 import styles from './loading.module.less'
@@ -15,7 +15,7 @@ const colors = [
   '#1890ff', // antd
 ]
 
-function Loading({visible}) {
+function Loading({ visible }) {
   const [color, setColor] = useState('orange')
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function Loading({visible}) {
       footer={null}
       centered
       closable={false}
-      bodyStyle={{padding: 0, backgroundColor: 'transparent'}}
+      bodyStyle={{ padding: 0, backgroundColor: 'transparent' }}
     >
       <PacmanLoader
         color={color}
@@ -47,25 +47,25 @@ function Loading({visible}) {
   )
 }
 
-const {subject, WrappedComponent, createMethod} = wrap({
+const { subject, WrappedComponent, createMethod } = wrap({
   component: Loading,
-  defaultProps: {visible: false},
-  withProps({setProps}) {
+  defaultProps: { visible: false },
+  withProps({ setProps }) {
     return {
       setVisible(val) {
-        setProps({visible: val})
+        setProps({ visible: val })
       },
     }
   },
 })
 
-const show = createMethod(({setProps}) => () => {
-  setProps({visible: true})
+const show = createMethod(({ setProps }) => () => {
+  setProps({ visible: true })
 })
 
-const hide = createMethod(({setProps}) => () => {
-  setProps({visible: false})
+const hide = createMethod(({ setProps }) => () => {
+  setProps({ visible: false })
 })
 
-export {subject, WrappedComponent, show, hide}
-export default {subject, WrappedComponent, show, hide}
+export { subject, WrappedComponent, show, hide }
+export default { subject, WrappedComponent, show, hide }

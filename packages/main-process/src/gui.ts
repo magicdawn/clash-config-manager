@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import path from 'path'
-import {app, BrowserWindow} from 'electron'
-import {is} from 'electron-util'
+import { app, BrowserWindow } from 'electron'
+import { is } from 'electron-util'
 import _ from 'lodash'
 import * as remoteMain from '@electron/remote/main'
 
 import './init/meta'
-import {load as loadDevExt} from './dev/ext'
-import {loadWindowState, saveWindowState} from './initWindowState'
+import { load as loadDevExt } from './dev/ext'
+import { loadWindowState, saveWindowState } from './initWindowState'
 import './ipc/index'
 import setMenu from './menu'
 
@@ -36,7 +36,7 @@ async function main() {
 }
 
 const createMainWindow = async () => {
-  const {bounds} = await loadWindowState()
+  const { bounds } = await loadWindowState()
 
   const win = new BrowserWindow({
     title: app.name,
@@ -74,7 +74,7 @@ const createMainWindow = async () => {
   const saveWindowStateHandler = _.throttle(() => {
     const bounds = mainWindow?.getBounds()
     if (!bounds) return
-    saveWindowState({bounds})
+    saveWindowState({ bounds })
   }, 1000)
   win.on('resize', () => {
     saveWindowStateHandler()

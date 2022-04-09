@@ -2,7 +2,7 @@ import path from 'path'
 import merge from 'webpack-merge'
 import MonacoWebpackPlugin from 'monaco-editor-webpack-plugin'
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
-import {PoiConfig} from '@common'
+import { PoiConfig } from '@common'
 
 const common = {
   resolve: {

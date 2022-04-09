@@ -1,14 +1,14 @@
-import {homedir} from 'os'
-import {join as pathjoin} from 'path'
+import { homedir } from 'os'
+import { join as pathjoin } from 'path'
 import Yaml from 'js-yaml'
 import fse from 'fs-extra'
 import request from 'umi-request'
 import store from '@ui/store'
-import {ClashConfig} from '@ui/common/define'
-import {ProxyGroupType} from '@ui/common/define/ClashConfig'
+import { ClashConfig } from '@ui/common/define'
+import { ProxyGroupType } from '@ui/common/define/ClashConfig'
 
-export default async function genConfig(options: {forceUpdate?: boolean} = {}) {
-  const {forceUpdate = false} = options
+export default async function genConfig(options: { forceUpdate?: boolean } = {}) {
+  const { forceUpdate = false } = options
   const rootState = store.getState()
 
   // subscribe
@@ -19,21 +19,21 @@ export default async function genConfig(options: {forceUpdate?: boolean} = {}) {
   const ruleList = rootState.libraryRuleList.list
 
   // 只放 {type, id}
-  const {list: resultList, name} = rootState.currentConfig
+  const { list: resultList, name } = rootState.currentConfig
 
   // 具体 item
   const resultItemList = resultList
-    .map(({type, id}) => {
+    .map(({ type, id }) => {
       if (type === 'subscribe') {
         const item = subscribeList.find((x) => x.id === id)
         if (item) {
-          return {item, type}
+          return { item, type }
         }
       }
       if (type === 'rule') {
         const item = ruleList.find((x) => x.id === id)
         if (item) {
-          return {item, type}
+          return { item, type }
         }
       }
     })
@@ -49,21 +49,21 @@ export default async function genConfig(options: {forceUpdate?: boolean} = {}) {
   let config: Partial<ClashConfig> = {}
 
   for (const r of ruleArr) {
-    const {item} = r
-    const {type, url, content} = item
+    const { item } = r
+    const { type, url, content } = item
     let usingContent = content
 
     // remote: url -> content
     if (type === 'remote') {
       usingContent = await request.get(url, {
         responseType: 'text',
-        headers: {'x-extra-headers': JSON.stringify({'user-agent': 'clash'})},
+        headers: { 'x-extra-headers': JSON.stringify({ 'user-agent': 'clash' }) },
       })
     }
 
     const cur = Yaml.load(usingContent)
-    const {rules, ...otherConfig} = cur
-    config = {...otherConfig, ...config, rules: [...(config.rules || []), ...(rules || [])]}
+    const { rules, ...otherConfig } = cur
+    config = { ...otherConfig, ...config, rules: [...(config.rules || []), ...(rules || [])] }
   }
 
   /**
@@ -78,12 +78,12 @@ export default async function genConfig(options: {forceUpdate?: boolean} = {}) {
   }
 
   for (const s of subscribeArr) {
-    const {item} = s
-    const {url} = item
+    const { item } = s
+    const { url } = item
     let servers
 
     // update subscribe
-    await store.dispatch.librarySubscribe.update({url, silent: true, forceUpdate})
+    await store.dispatch.librarySubscribe.update({ url, silent: true, forceUpdate })
     // eslint-disable-next-line prefer-const
     servers = store.getState().librarySubscribe.detail[url]
     config.proxies = config.proxies.concat(servers)

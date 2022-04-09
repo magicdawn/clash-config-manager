@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react'
-import {render} from 'react-dom'
-import {HashRouter as Router, Link, useLocation} from 'react-router-dom'
-import {StoreProvider} from 'easy-peasy'
+import React, { useEffect } from 'react'
+import { render } from 'react-dom'
+import { HashRouter as Router, Link, useLocation } from 'react-router-dom'
+import { StoreProvider } from 'easy-peasy'
 import 'antd/dist/antd.css'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
-import {Menu, ConfigProvider} from 'antd'
+import { Menu, ConfigProvider } from 'antd'
 import {
   SettingOutlined,
   PayCircleOutlined,
@@ -12,7 +12,7 @@ import {
   UserOutlined,
   HeartOutlined,
 } from '@ant-design/icons'
-import {renderRoutes} from 'react-router-config'
+import { renderRoutes } from 'react-router-config'
 import _ from 'lodash'
 
 import store from './store'
@@ -75,7 +75,7 @@ function Root() {
 }
 
 function Routes() {
-  const {pathname} = useLocation()
+  const { pathname } = useLocation()
   const getKey = (s: string) => _.trimStart(s, '/').replace(/\//g, ':') || 'home'
   const menuKey = getKey(pathname)
 
@@ -89,7 +89,7 @@ function Routes() {
   return (
     <>
       <Menu selectedKeys={[menuKey]} mode='horizontal'>
-        {routes.map(({path, icon, title}) => {
+        {routes.map(({ path, icon, title }) => {
           return (
             <Menu.Item key={getKey(path)} icon={icon}>
               <Link to={path}>{title}</Link>

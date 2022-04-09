@@ -1,6 +1,6 @@
 import path from 'path'
 import fse from 'fs-extra'
-import {app, Menu, shell, dialog, BrowserWindow, MenuItemConstructorOptions} from 'electron'
+import { app, Menu, shell, dialog, BrowserWindow, MenuItemConstructorOptions } from 'electron'
 import {
   is,
   appMenu,
@@ -11,7 +11,7 @@ import {
 } from 'electron-util'
 import storage from '@ui/storage/index'
 import debugFactory from 'debug'
-import {updateMenuItem} from './auto-update/index'
+import { updateMenuItem } from './auto-update/index'
 
 const debug = debugFactory('ccm:menu')
 
@@ -59,7 +59,7 @@ if (!is.macos) {
   )
 }
 
-const macosTemplate = (options: {updateMenuItem: any}) =>
+const macosTemplate = (options: { updateMenuItem: any }) =>
   [
     appMenu(
       [
@@ -177,6 +177,6 @@ async function installCli() {
 export default async function setMenu() {
   await app.whenReady()
   const template = process.platform === 'darwin' ? macosTemplate : otherTemplate
-  const menu = Menu.buildFromTemplate(template({updateMenuItem}))
+  const menu = Menu.buildFromTemplate(template({ updateMenuItem }))
   Menu.setApplicationMenu(menu)
 }

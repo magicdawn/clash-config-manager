@@ -1,16 +1,16 @@
-import React, {useCallback} from 'react'
-import {Button, message} from 'antd'
+import React, { useCallback } from 'react'
+import { Button, message } from 'antd'
 import store from '@ui/store'
-import {runCommand} from '@ui/commands/run'
+import { runCommand } from '@ui/commands/run'
 import styles from './index.module.less'
-import useAddRuleModal, {useMobxAddRuleModal} from './useAddRuleModal'
+import useAddRuleModal, { useMobxAddRuleModal } from './useAddRuleModal'
 
 export default function Home() {
   const generate = useCallback(() => {
     runCommand('generate')
   }, [])
 
-  const {open: addRule, modal} = useMobxAddRuleModal({
+  const { open: addRule, modal } = useMobxAddRuleModal({
     mode: 'from-global',
     handleAdd(rule: string, ruleId: string) {
       if (!rule || !ruleId) {
@@ -33,7 +33,7 @@ export default function Home() {
       // save new content
       store.dispatch.libraryRuleList.edit({
         editItemIndex: index,
-        item: {...ruleItem, content: newContent},
+        item: { ...ruleItem, content: newContent },
       })
       message.success(`已添加规则 ${rule} 至 ${ruleItem.name}`)
 
@@ -46,7 +46,7 @@ export default function Home() {
     <div className={styles.page}>
       {modal}
       <h1 className={styles.title}>Enjoy</h1>
-      <div className={styles.btnGenWrapper} style={{padding: 20}}>
+      <div className={styles.btnGenWrapper} style={{ padding: 20 }}>
         <Button type='primary' shape='round' className={styles.btnGen} onClick={generate} block>
           重新生成配置文件
         </Button>

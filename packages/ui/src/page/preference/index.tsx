@@ -1,24 +1,24 @@
-import {tmpdir} from 'os'
+import { tmpdir } from 'os'
 import moment from 'moment'
 import path from 'path'
 import fse from 'fs-extra'
-import {shell, ipcRenderer} from 'electron'
+import { shell, ipcRenderer } from 'electron'
 import launch from 'launch-editor'
 import _ from 'lodash'
 
-import React, {useState, useCallback, useEffect} from 'react'
-import {Button, Modal, Input, message, Space, Row, Col, Card} from 'antd'
-import {SettingFilled, CloudUploadOutlined, CloudDownloadOutlined} from '@ant-design/icons'
-import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
+import React, { useState, useCallback, useEffect } from 'react'
+import { Button, Modal, Input, message, Space, Row, Col, Card } from 'antd'
+import { SettingFilled, CloudUploadOutlined, CloudDownloadOutlined } from '@ant-design/icons'
+import { useMount, usePersistFn, useUpdateEffect } from 'ahooks'
 import useImmerState from '@ui/util/hooks/useImmerState'
 import storage from '../../storage/index'
 import customMerge from '../../util/sync/webdav/customMerge'
-import {pick as pickSelectExport, SelectExportForStaticMethod} from './modal/SelectExport'
+import { pick as pickSelectExport, SelectExportForStaticMethod } from './modal/SelectExport'
 import PRESET_JSON_DATA from '../../assets/基本数据规则.json'
 
 import styles from './index.module.less'
 import helper from '../../util/sync/webdav/helper'
-import {useEasy} from '@ui/store'
+import { useEasy } from '@ui/store'
 
 export default function Preference() {
   const preferenceModel = useEasy('preference')
@@ -52,7 +52,7 @@ export default function Preference() {
 
     const outputData = storage.store
     const data = _.omit(outputData, ['subscribe_detail'])
-    await fse.outputJson(file, data, {spaces: 2})
+    await fse.outputJson(file, data, { spaces: 2 })
     setExportHelperVisible(true)
     setExportFile(file)
   })
@@ -67,19 +67,19 @@ export default function Preference() {
     const outputData = _.omit(fullData, ['subscribe_detail'])
 
     // 选择数据
-    const {cancel, data} = await pickSelectExport(outputData)
+    const { cancel, data } = await pickSelectExport(outputData)
     if (cancel) return
     console.log(data)
 
-    await fse.outputJson(file, data, {spaces: 2})
+    await fse.outputJson(file, data, { spaces: 2 })
     setExportHelperVisible(true)
     setExportFile(file)
   })
 
   const importAction = (importData) => {
-    const localData = {...storage.store}
+    const localData = { ...storage.store }
     const merged = customMerge(localData, importData)
-    console.log('customMerge', {localData, importData, merged})
+    console.log('customMerge', { localData, importData, merged })
 
     // reload electron-store
     storage.store = merged
@@ -120,11 +120,11 @@ export default function Preference() {
     )
   })
 
-  const rowGutter = {xs: 8, sm: 16, md: 24}
+  const rowGutter = { xs: 8, sm: 16, md: 24 }
 
   return (
     <div className={styles.page}>
-      <ModalSyncConfig {...{visible: showModal, setVisible: setShowModal}} />
+      <ModalSyncConfig {...{ visible: showModal, setVisible: setShowModal }} />
 
       <Modal
         title='已导出'
@@ -135,7 +135,7 @@ export default function Preference() {
         maskClosable={false}
         keyboard={true}
       >
-        <div style={{marginBottom: 12}}>文件位置: {exportFile}</div>
+        <div style={{ marginBottom: 12 }}>文件位置: {exportFile}</div>
         <Space>
           <Button
             onClick={() => {
@@ -161,7 +161,7 @@ export default function Preference() {
         </Space>
       </Modal>
 
-      <div style={{textAlign: 'right'}}>
+      <div style={{ textAlign: 'right' }}>
         <Button
           type='primary'
           onClick={() => {
@@ -173,7 +173,7 @@ export default function Preference() {
         </Button>
       </div>
 
-      <Row gutter={rowGutter} style={{marginTop: 10}}>
+      <Row gutter={rowGutter} style={{ marginTop: 10 }}>
         {/* 上传区 */}
         <Col span={12}>
           <Card
@@ -183,7 +183,7 @@ export default function Preference() {
               </>
             }
           >
-            <Space direction='vertical' size={20} style={{width: '100%'}}>
+            <Space direction='vertical' size={20} style={{ width: '100%' }}>
               <Button type='primary' size='large' block onClick={onUpload}>
                 <CloudUploadOutlined />
                 上传
@@ -206,7 +206,7 @@ export default function Preference() {
               </>
             }
           >
-            <Space direction='vertical' size={20} style={{width: '100%'}}>
+            <Space direction='vertical' size={20} style={{ width: '100%' }}>
               <Button type='primary' size='large' block onClick={onDownload}>
                 <CloudDownloadOutlined />
                 下载
@@ -220,7 +220,7 @@ export default function Preference() {
         </Col>
       </Row>
 
-      <Row gutter={rowGutter} style={{marginTop: 10}}>
+      <Row gutter={rowGutter} style={{ marginTop: 10 }}>
         {/* 导出区 */}
         <Col span={12}>
           <Card
@@ -231,7 +231,7 @@ export default function Preference() {
             }
           >
             <SelectExportForStaticMethod />
-            <Space direction='vertical' size={20} style={{width: '100%'}}>
+            <Space direction='vertical' size={20} style={{ width: '100%' }}>
               <Button block type='primary' onClick={onExport}>
                 <CloudUploadOutlined /> 导出到 JSON
               </Button>
@@ -251,7 +251,7 @@ export default function Preference() {
               </>
             }
           >
-            <Space direction='vertical' size={20} style={{width: '100%'}}>
+            <Space direction='vertical' size={20} style={{ width: '100%' }}>
               <Button type='primary' block onClick={onImport}>
                 <CloudUploadOutlined /> 从 JSON 导入
               </Button>
@@ -275,7 +275,7 @@ interface ModalSyncConfigProps {
 }
 
 function ModalSyncConfig(props: ModalSyncConfigProps) {
-  const {visible, setVisible, editItem, editItemIndex} = props
+  const { visible, setVisible, editItem, editItemIndex } = props
   const preferenceModel = useEasy('preference')
 
   const [data, modifyData] = useImmerState(preferenceModel.syncConfig)
@@ -295,14 +295,14 @@ function ModalSyncConfig(props: ModalSyncConfigProps) {
     e?.stopPropagation()
 
     console.log(data)
-    const {davServerUrl, user, pass} = data
+    const { davServerUrl, user, pass } = data
 
     if (!davServerUrl || !user || !pass) {
       return message.warn('davServerUrl & user & pass 不能为空')
     }
 
     // save
-    preferenceModel.setState({syncConfig: data})
+    preferenceModel.setState({ syncConfig: data })
     preferenceModel.persist()
 
     // close
@@ -322,14 +322,14 @@ function ModalSyncConfig(props: ModalSyncConfigProps) {
         className='input-row'
         prefix={<label className='label'>server url</label>}
         value={data.davServerUrl}
-        onChange={(e) => modifyData({davServerUrl: e.target.value})}
+        onChange={(e) => modifyData({ davServerUrl: e.target.value })}
         onPressEnter={handleOk}
       />
       <Input
         className='input-row'
         prefix={<label className='label'>user</label>}
         value={data.user}
-        onChange={(e) => modifyData({user: e.target.value})}
+        onChange={(e) => modifyData({ user: e.target.value })}
         onPressEnter={handleOk}
       />
       <Input
@@ -337,7 +337,7 @@ function ModalSyncConfig(props: ModalSyncConfigProps) {
         type='password'
         prefix={<label className='label'>password</label>}
         value={data.pass}
-        onChange={(e) => modifyData({pass: e.target.value})}
+        onChange={(e) => modifyData({ pass: e.target.value })}
         onPressEnter={handleOk}
       />
     </Modal>

@@ -1,11 +1,11 @@
-import {createHash} from 'crypto'
+import { createHash } from 'crypto'
 import path from 'path'
 import fse from 'fs-extra'
 import request from 'umi-request'
 import envPaths from 'env-paths'
 import moment from 'moment'
 
-const appCacheDir = envPaths('clash-config-manager', {suffix: ''}).cache
+const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 
 const Base64 = {
   encode: (s: string) => Buffer.from(s, 'utf-8').toString('base64'),
@@ -14,7 +14,7 @@ const Base64 = {
 
 const md5 = (s: string) => createHash('md5').update(s, 'utf8').digest('hex')
 
-const readUrl = async ({url, file}: {url: string; file: string}) => {
+const readUrl = async ({ url, file }: { url: string; file: string }) => {
   const text = (await request.get(url, {
     responseType: 'text',
     headers: {
@@ -36,7 +36,13 @@ const readUrl = async ({url, file}: {url: string; file: string}) => {
   return text
 }
 
-const urlToSubscribe = async ({url, forceUpdate: force}: {url: string; forceUpdate: boolean}) => {
+const urlToSubscribe = async ({
+  url,
+  forceUpdate: force,
+}: {
+  url: string
+  forceUpdate: boolean
+}) => {
   const file = path.join(appCacheDir, 'readUrl', md5(url))
 
   let shouldReuse = false
@@ -52,7 +58,7 @@ const urlToSubscribe = async ({url, forceUpdate: force}: {url: string; forceUpda
   if (shouldReuse) {
     text = fse.readFileSync(file, 'utf8')
   } else {
-    text = await readUrl({url, file})
+    text = await readUrl({ url, file })
   }
 
   return textToSubscribe(text)
@@ -73,7 +79,7 @@ const textToSubscribe = (text: string) => {
       if (type === 'ssr') server = getSsrServer(text)
       if (!server) return
 
-      return {type, server}
+      return { type, server }
     })
     .filter(Boolean)
 
@@ -161,7 +167,7 @@ const getSsrServer = (str: string): ClashSsrServer => {
   const params = new URLSearchParams(rest)
 
   // @ts-ignore
-  let {obfsparam, protoparam, remarks, group} = Array.from(params).reduce(
+  let { obfsparam, protoparam, remarks, group } = Array.from(params).reduce(
     (result, [key, value]) => {
       result[key] = value
       return result
@@ -190,4 +196,4 @@ const getSsrServer = (str: string): ClashSsrServer => {
   return ret
 }
 
-export {Base64, textToSubscribe, urlToSubscribe, getVmessServer, getSsrServer}
+export { Base64, textToSubscribe, urlToSubscribe, getVmessServer, getSsrServer }

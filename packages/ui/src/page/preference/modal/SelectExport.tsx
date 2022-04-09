@@ -1,20 +1,20 @@
-import React, {useCallback, useState, useEffect} from 'react'
-import {Modal, Tree} from 'antd'
-import {BehaviorSubject} from 'rxjs'
+import React, { useCallback, useState, useEffect } from 'react'
+import { Modal, Tree } from 'antd'
+import { BehaviorSubject } from 'rxjs'
 import useImmerState from '@ui/util/hooks/useImmerState'
-import {usePersistFn, useUpdateEffect} from 'ahooks'
+import { usePersistFn, useUpdateEffect } from 'ahooks'
 import _ from 'lodash'
 
 export default function SelectExport(props) {
-  const {visible, setVisible, treeData, resolve} = props
+  const { visible, setVisible, treeData, resolve } = props
 
   const onCancel = usePersistFn(() => {
     setVisible(false)
-    resolve?.({cancel: true})
+    resolve?.({ cancel: true })
   })
   const onOk = usePersistFn(() => {
     setVisible(false)
-    resolve?.({cancel: false, keys: checkedKeys})
+    resolve?.({ cancel: false, keys: checkedKeys })
   })
 
   const [expandedKeys, setExpandedKeys] = useState(() => getAllKeys(treeData))
@@ -51,7 +51,7 @@ export default function SelectExport(props) {
       onCancel={onCancel}
       onOk={onOk}
       centered
-      bodyStyle={{maxHeight: '60vh', overflow: 'scroll'}}
+      bodyStyle={{ maxHeight: '60vh', overflow: 'scroll' }}
     >
       <Tree
         checkable
@@ -150,7 +150,7 @@ function clean(obj) {
 export const subject = new BehaviorSubject(null)
 
 export function SelectExportForStaticMethod() {
-  const [{treeData, visible, resolve}, setState] = useImmerState({
+  const [{ treeData, visible, resolve }, setState] = useImmerState({
     treeData: null,
     visible: false,
     resolve: null,
@@ -164,7 +164,7 @@ export function SelectExportForStaticMethod() {
   }, [])
 
   const setVisible = useCallback(() => {
-    subject.next({visible: false})
+    subject.next({ visible: false })
   }, [])
 
   if (!treeData) {
@@ -180,19 +180,19 @@ export async function pick(obj) {
   const originalObj = obj
   obj = _.cloneDeep(obj)
   obj?.current_config_v2?.list?.forEach((item, i) => {
-    const {id} = item
+    const { id } = item
     const target =
       obj?.subscribe_list?.find((i) => i.id === id) || obj?.rule_list?.find((i) => i.id === id)
     item.name = target?.name ?? '未找到对应源'
   })
   const treeData = generateTreeData(obj)
 
-  const {cancel, keys} = await new Promise((resolve) => {
-    subject.next({treeData, visible: true, resolve})
+  const { cancel, keys } = await new Promise((resolve) => {
+    subject.next({ treeData, visible: true, resolve })
   })
 
   if (cancel) {
-    return {cancel, keys}
+    return { cancel, keys }
   }
 
   // sleect
@@ -201,5 +201,5 @@ export async function pick(obj) {
   // clean
   clean(data)
 
-  return {cancel, keys, data}
+  return { cancel, keys, data }
 }

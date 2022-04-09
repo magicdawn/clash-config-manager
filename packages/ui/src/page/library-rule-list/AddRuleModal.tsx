@@ -1,14 +1,14 @@
-import React, {useState, useEffect, useCallback, useMemo} from 'react'
-import {useMount, usePersistFn, useUpdateEffect} from 'ahooks'
-import {Modal, Row, Col, Select, AutoComplete, Input, Button, Space, message} from 'antd'
-import {clipboard} from 'electron'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { useMount, usePersistFn, useUpdateEffect } from 'ahooks'
+import { Modal, Row, Col, Select, AutoComplete, Input, Button, Space, message } from 'antd'
+import { clipboard } from 'electron'
 import URI from 'urijs'
 import pify from 'promise.ify'
 import AppleScript from 'applescript'
-import {useStoreDispatch, useStoreState} from '@ui/store'
+import { useStoreDispatch, useStoreState } from '@ui/store'
 import Yaml from 'js-yaml'
 
-const {Option} = Select
+const { Option } = Select
 
 // from-rule: 从规则编辑中打开
 // from-global: 从主页中直接打开
@@ -22,7 +22,7 @@ interface IProps {
 }
 
 export default function AddRuleModal(props: IProps) {
-  const {visible, setVisible, onOk, mode = 'from-rule'} = props
+  const { visible, setVisible, onOk, mode = 'from-rule' } = props
 
   const ruleList = useStoreState((state) => {
     const list = state.libraryRuleList.list.filter((item) => {
@@ -115,7 +115,7 @@ export default function AddRuleModal(props: IProps) {
    * ui style
    */
 
-  const layout = [{span: 7}, {flex: 1}, {span: 4}]
+  const layout = [{ span: 7 }, { flex: 1 }, { span: 4 }]
 
   const okButtonProps = useMemo(() => {
     const disabled = !(type && target && url)
@@ -133,18 +133,18 @@ export default function AddRuleModal(props: IProps) {
       maskClosable={false}
       title='添加规则'
       width={'95vw'}
-      bodyStyle={{padding: '24px 12px'}}
+      bodyStyle={{ padding: '24px 12px' }}
       okButtonProps={okButtonProps}
       destroyOnClose
       okText={mode === 'from-global' ? '添加并重新生成' : '确定'}
     >
       <Input
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         addonBefore='源URL'
         value={processUrl}
         onChange={(e) => setProcessUrl(e.target.value)}
       />
-      <div style={{marginTop: 10}}>
+      <div style={{ marginTop: 10 }}>
         <Space direction='horizontal'>
           <Button onClick={readClipboardUrl}>从剪贴板读取</Button>
           <Button type='primary' onClick={readChromeUrl}>
@@ -153,7 +153,7 @@ export default function AddRuleModal(props: IProps) {
         </Space>
       </div>
 
-      <Row gutter={8} style={{marginTop: 24}}>
+      <Row gutter={8} style={{ marginTop: 24 }}>
         <Col {...layout[0]}>类型</Col>
         <Col {...layout[1]}>URL</Col>
         <Col {...layout[2]}>Target</Col>
@@ -161,7 +161,7 @@ export default function AddRuleModal(props: IProps) {
 
       <Row gutter={8}>
         <Col {...layout[0]}>
-          <Select value={type} onChange={(val) => setType(val)} style={{width: '100%'}}>
+          <Select value={type} onChange={(val) => setType(val)} style={{ width: '100%' }}>
             {TYPES.map((t) => (
               <Option key={t} value={t}>
                 {t}
@@ -171,7 +171,7 @@ export default function AddRuleModal(props: IProps) {
         </Col>
 
         <Col {...layout[1]}>
-          <AutoComplete value={url} onChange={setUrl} style={{width: '100%'}}>
+          <AutoComplete value={url} onChange={setUrl} style={{ width: '100%' }}>
             {url && !curAutoCompletes.includes(url) && (
               <Option key={`${type}-custom`} value={url}>
                 {url}
@@ -186,7 +186,7 @@ export default function AddRuleModal(props: IProps) {
         </Col>
 
         <Col {...layout[2]}>
-          <AutoComplete value={target} onChange={setTarget} style={{width: '100%'}}>
+          <AutoComplete value={target} onChange={setTarget} style={{ width: '100%' }}>
             {!TARGETS.includes(target) && (
               <Option key='custom' value={target}>
                 {target}
@@ -203,12 +203,12 @@ export default function AddRuleModal(props: IProps) {
 
       {mode === 'from-global' && (
         <>
-          <Row gutter={8} style={{marginTop: 24}}>
+          <Row gutter={8} style={{ marginTop: 24 }}>
             <Col {...layout[0]}>添加至</Col>
           </Row>
           <Row gutter={8}>
             <Col {...layout[0]}>
-              <Select style={{width: '100%'}} value={ruleId} onChange={(val) => setRuleId(val)}>
+              <Select style={{ width: '100%' }} value={ruleId} onChange={(val) => setRuleId(val)}>
                 {ruleList.map((t) => (
                   <Option key={t.id} value={t.id}>
                     {t.name}

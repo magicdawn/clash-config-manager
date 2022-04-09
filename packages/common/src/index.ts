@@ -1,3 +1,3 @@
-import {Config} from 'poi'
+import { Config } from 'poi'
 
-export type PoiConfig = Config & {reactRefresh?: boolean}
+export type PoiConfig = Config & { reactRefresh?: boolean }

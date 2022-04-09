@@ -1,10 +1,10 @@
 import React from 'react'
-import {useMount, usePersistFn} from 'ahooks'
-import {Button, Input, Row, Col, Divider, message} from 'antd'
+import { useMount, usePersistFn } from 'ahooks'
+import { Button, Input, Row, Col, Divider, message } from 'antd'
 import launch from 'launch-editor'
-import {getConfigFileDisplay, getConfigFile, DEFAULT_NAME} from '@ui/util/fn/gen'
-import {runCommand} from '@ui/commands/run'
-import {useEasy} from '@ui/store'
+import { getConfigFileDisplay, getConfigFile, DEFAULT_NAME } from '@ui/util/fn/gen'
+import { runCommand } from '@ui/commands/run'
+import { useEasy } from '@ui/store'
 import styles from './index.module.less'
 import DndPlaygroud from './DndPlayground'
 
@@ -58,13 +58,13 @@ export default function ConfigList(props) {
             placeholder={DEFAULT_NAME}
             value={currentConfigModel.name}
             onChange={(e) => {
-              currentConfigModel.changeState({name: e.target.value})
+              currentConfigModel.changeState({ name: e.target.value })
             }}
           />
         </Col>
       </Row>
 
-      <Row style={{marginTop: 5}}>
+      <Row style={{ marginTop: 5 }}>
         <Col span={4}>
           <div
             className='label'
@@ -88,7 +88,7 @@ export default function ConfigList(props) {
         type='primary'
         block
         shape='round'
-        style={{marginTop: '10px'}}
+        style={{ marginTop: '10px' }}
         onClick={onGenConfigClick}
       >
         生成
@@ -98,7 +98,7 @@ export default function ConfigList(props) {
         type='default'
         block
         shape='round'
-        style={{marginTop: '10px'}}
+        style={{ marginTop: '10px' }}
         onClick={() => onOpenConfigClick('code')}
       >
         打开(Code)
@@ -107,7 +107,7 @@ export default function ConfigList(props) {
         type='default'
         block
         shape='round'
-        style={{marginTop: '10px'}}
+        style={{ marginTop: '10px' }}
         onClick={() => onOpenConfigClick('atom')}
       >
         打开(Atom)
