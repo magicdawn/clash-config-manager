@@ -31,7 +31,7 @@ const menuItem = {
       debug('quit and install')
 
       // remove preventClose listener
-      global.mainWindow?.stopPreventClose?.()
+      ;(global.mainWindow as any)?.stopPreventClose?.()
 
       setImmediate(() => autoUpdater.quitAndInstall())
     },

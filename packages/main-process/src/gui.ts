@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+
 import path from 'path'
 import { app, BrowserWindow } from 'electron'
 import { is } from 'electron-util'
@@ -14,6 +15,14 @@ import setMenu from './menu'
 // Prevent window from being garbage collected
 let mainWindow: BrowserWindow
 main()
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      mainWindow?: BrowserWindow
+    }
+  }
+}
 
 async function main() {
   initAppEvents()

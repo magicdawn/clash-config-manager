@@ -15,8 +15,8 @@
   },
   "scripts": {
     "postinstall": "electron-builder install-app-deps && husky install",
-    "dev:main": "pnpm workspace main-process run dev",
-    "dev:ui": "pnpm workspace ui run dev",
+    "dev:main": "pnpm dev --filter main-process",
+    "dev:ui": "pnpm dev --filter ui",
     "dev:start-main": "electron bundle/development/main/index.js",
     "dev:watch-main": "nodemon bundle/development/main/index.js --exec electron --watch bundle/development/main/",
     "build": "pnpm build:main && pnpm build:ui",
@@ -70,8 +70,5 @@
     "*.{js,less,vue,ts,tsx}": [
       "prettier --write"
     ]
-  },
-  "napa": {
-    "@magicdawn/x": "magicdawn/x#master"
   }
 }
