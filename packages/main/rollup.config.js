@@ -1,6 +1,5 @@
-import { defineConfig } from 'rollup'
 import { join } from 'path'
-
+import { defineConfig } from 'rollup'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
@@ -14,6 +13,17 @@ const tsconfig = APP_ROOT + '/tsconfig.json'
 
 export default defineConfig({
   input: join(__dirname, './src/index.ts'),
+  output: {
+    dir: `${APP_ROOT}/bundle/${env}/main`,
+    format: 'cjs',
+  },
+
+  external: ['electron', 'fs/promises'],
+
+  onwarn: function (message) {
+    if (['CIRCULAR_DEPENDENCY'].includes(message.code)) return
+    console.error(message)
+  },
 
   plugins: [
     tsconfigPaths({ tsConfigPath: tsconfig }),
@@ -25,11 +35,4 @@ export default defineConfig({
     commonjs(),
     esbuild({ tsconfig }),
   ],
-
-  external: ['electron', 'fs/promises'],
-
-  output: {
-    dir: `${APP_ROOT}/bundle/${env}/main`,
-    format: 'cjs',
-  },
 })

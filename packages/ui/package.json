@@ -14,8 +14,8 @@
     "url": "https://magicdawn.fun"
   },
   "scripts": {
-    "dev": "poi -r ts-node/register/transpile-only -s",
-    "build": "poi -r ts-node/register/transpile-only --prod"
+    "dev": "rollup -c -w",
+    "build": "NODE_ENV=production rollup -c"
   },
   "dependencies": {
     "@ant-design/icons": "^4.3.0",

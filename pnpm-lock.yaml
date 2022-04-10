@@ -82,7 +82,7 @@ importers:
   packages/common:
     specifiers: {}
 
-  packages/main-process:
+  packages/main:
     specifiers:
       '@poi/plugin-typescript': ^12.3.1
       '@rollup/plugin-commonjs': ^21.0.3

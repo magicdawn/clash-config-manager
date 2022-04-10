@@ -6,8 +6,8 @@
     "paths": {
       "@common": ["common/src/"],
       "@common/*": ["common/src/*"],
-      "@main-process": ["main-process/src/"],
-      "@main-process/*": ["main-process/src/*"],
+      "@main": ["main/src/"],
+      "@main/*": ["main/src/*"],
       "@ui": ["ui/src/"],
       "@ui/*": ["ui/src/*"]
     }
