@@ -4,24 +4,25 @@ import { useMemo } from 'react'
 import shallowEqual from 'shallowequal'
 import * as models from './models'
 
-const getModels = <T>(models: T) =>
-  _.cloneDeepWith(models, (val) => {
-    if (val && typeof val === 'object' && val.constructor !== Object) {
-      return { ...val } // if it's a Model instance, make it plain object
-    }
-  }) as T
+function getModels<T>(models: T) {
+  const ret = {}
+  Object.entries(models).forEach(([key, val]) => {
+    ret[key] = { ...val } // easy-peasy need model slice as Plain Object
+  })
+  return ret as T
+}
 
 const store = createStore(getModels(models))
 export default store
 export type StoreModel = typeof models
 
-if (process.env.NODE_ENV === 'development') {
-  if ((module as any).hot) {
-    ;(module as any).hot.accept('./models', () => {
-      store.reconfigure(getModels(models)) // 👈 Here is the magic
-    })
-  }
-}
+// if (process.env.NODE_ENV === 'development') {
+//   if ((module as any).hot) {
+//     ;(module as any).hot.accept('./models', () => {
+//       store.reconfigure(getModels(models)) // 👈 Here is the magic
+//     })
+//   }
+// }
 
 const { useStore, useStoreActions, useStoreDispatch, useStoreState } =
   createTypedHooks<StoreModel>()
