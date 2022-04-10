@@ -14,7 +14,6 @@ import setMenu from './menu'
 
 // Prevent window from being garbage collected
 let mainWindow: BrowserWindow
-main()
 
 declare global {
   namespace NodeJS {
@@ -24,7 +23,7 @@ declare global {
   }
 }
 
-async function main() {
+export async function main() {
   initAppEvents()
   await app.whenReady()
 

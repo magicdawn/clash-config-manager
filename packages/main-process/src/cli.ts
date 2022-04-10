@@ -1,26 +1,25 @@
 import path from 'path'
 import { app, BrowserWindow } from 'electron'
 import minimist from 'minimist'
-
-// Prevent window from being garbage collected
-let mainWindow: BrowserWindow
-
 import './init/meta'
 import { loadWindowState } from './initWindowState'
 import './ipc/index'
 
-// hide dock
-app.dock.hide()
+// Prevent window from being garbage collected
+let mainWindow: BrowserWindow
 
-const argv = minimist(process.argv, {
-  alias: {
-    h: 'help',
-    v: 'version',
-  },
-})
-console.log('argv = ', argv)
+export async function main() {
+  // hide dock
+  app.dock.hide()
 
-async function main() {
+  const argv = minimist(process.argv, {
+    alias: {
+      h: 'help',
+      v: 'version',
+    },
+  })
+  console.log('argv = ', argv)
+
   await app.whenReady()
   mainWindow = await createMainWindow()
   if (process.env.NODE_ENV === 'production') {

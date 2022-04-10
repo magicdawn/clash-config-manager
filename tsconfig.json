@@ -2,8 +2,7 @@
   "extends": "./tsconfig.base.json",
   "include": ["packages/*/src/**/*", "packages/*/*.ts"],
   "compilerOptions": {
-    "baseUrl": "./units",
-    "outDir": "bundle/temp",
+    "baseUrl": "./packages",
     "paths": {
       "@common": ["common/src/"],
       "@common/*": ["common/src/*"],

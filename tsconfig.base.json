@@ -6,9 +6,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "target": "es2019",
-    "module": "CommonJS",
+    "module": "es6",
     "strict": false,
-    "skipLibCheck": true,
     "experimentalDecorators": true,
     "jsx": "react",
     "plugins": [

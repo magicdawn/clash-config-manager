@@ -5,6 +5,8 @@ import fixPath from 'fix-path'
 import './init/meta'
 import './ipc/index'
 import { isCli, initCommon } from './common'
+import { main as mainGui } from './gui'
+import { main as mainCli } from './cli'
 
 unhandled()
 debug({ showDevTools: !isCli })
@@ -13,7 +15,7 @@ fixPath()
 initCommon()
 
 if (isCli) {
-  require('./cli')
+  mainCli()
 } else {
-  require('./gui')
+  mainGui()
 }
