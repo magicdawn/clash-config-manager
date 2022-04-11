@@ -6,7 +6,7 @@
   "description": "clash configuration manager",
   "license": "MIT",
   "repository": "magicdawn/clash-config-manager",
-  "main": "bundle/development/main/index.js",
+  "main": "main/index.js",
   "private": true,
   "author": {
     "name": "magicdawn",
@@ -23,7 +23,7 @@
     "build:main": "pnpm build --filter main",
     "build:ui": "pnpm build --filter ui",
     "pack": "electron-builder --dir",
-    "dist:mac": "electron-builder --macos",
+    "dist:mac": "PYTHON_PATH=`pyenv which python2.7` electron-builder --macos",
     "dist": "electron-builder --macos --linux --windows"
   },
   "dependencies": {

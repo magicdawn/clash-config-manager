@@ -5,6 +5,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import esbuild from 'rollup-plugin-esbuild'
 import tsconfigPaths from 'rollup-plugin-tsconfig-paths'
+import replace from '@rollup/plugin-replace'
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 const env = process.env.NODE_ENV
@@ -34,5 +35,9 @@ export default defineConfig({
     json(),
     commonjs(),
     esbuild({ tsconfig }),
+    replace({
+      'preventAssignment': true,
+      'process.env.NODE_ENV': JSON.stringify(env),
+    }),
   ],
 })

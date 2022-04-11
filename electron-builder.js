@@ -33,16 +33,16 @@ module.exports = {
   ],
 
   beforeBuild() {
-    if (process.argv.includes('--skip-build')) {
+    if (process.env.SKIP_BUILD) {
       return
     }
 
-    if (!process.argv.includes('--skip-build-main')) {
+    if (!process.env.SKIP_BUILD_MAIN) {
       console.log('[build main]')
       sh('pnpm build:main')
     }
 
-    if (!process.argv.includes('--skip-build-ui')) {
+    if (!process.env.SKIP_BUILD_UI) {
       console.log('[build ui]')
       sh('pnpm build:ui')
     }
