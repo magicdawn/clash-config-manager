@@ -20,8 +20,8 @@
     "dev:start-main": "electron bundle/development/main/index.js",
     "dev:watch-main": "nodemon bundle/development/main/index.js --exec electron --watch bundle/development/main/",
     "build": "pnpm build:main && pnpm build:ui",
-    "build:main": "pnpm workspace main run build",
-    "build:ui": "pnpm workspace ui run build",
+    "build:main": "pnpm build --filter main",
+    "build:ui": "pnpm build --filter ui",
     "pack": "electron-builder --dir",
     "dist:mac": "electron-builder --macos",
     "dist": "electron-builder --macos --linux --windows"

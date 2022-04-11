@@ -47,7 +47,7 @@ export default defineConfig({
     port: 7749,
   },
   build: {
-    minify: false,
+    // minify: true,
     outDir: join(__dirname, '../../bundle/production/renderer/'),
     emptyOutDir: true,
     rollupOptions: {

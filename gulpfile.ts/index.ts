@@ -1,11 +1,11 @@
 import log from 'fancy-log'
-import {TaskFunctionParams} from 'undertaker'
+import { TaskFunctionParams } from 'undertaker'
 
 export default async function () {
   log('default')
 }
 
-export {default as release} from './release'
+export { default as release } from './release'
 
 Object.assign(buildUi, {
   displayName: 'build:ui',
