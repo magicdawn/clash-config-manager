@@ -6,7 +6,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "target": "es2019",
-    "module": "es6",
+    "module": "ESNext",
     "strict": false,
     "experimentalDecorators": true,
     "jsx": "react",

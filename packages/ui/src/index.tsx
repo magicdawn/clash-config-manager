@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 import React, { useEffect } from 'react'
 import { render } from 'react-dom'
 import { HashRouter as Router, Link, useLocation } from 'react-router-dom'

@@ -30,4 +30,10 @@ export default defineConfig({
       logLevel: 'info',
     },
   },
+
+  css: {
+    modules: {
+      localsConvention: 'camelCaseOnly',
+    },
+  },
 })

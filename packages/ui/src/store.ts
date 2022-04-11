@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { createStore, createTypedHooks } from 'easy-peasy'
 import { useMemo } from 'react'
 import shallowEqual from 'shallowequal'
@@ -16,13 +15,11 @@ const store = createStore(getModels(models))
 export default store
 export type StoreModel = typeof models
 
-// if (process.env.NODE_ENV === 'development') {
-//   if ((module as any).hot) {
-//     ;(module as any).hot.accept('./models', () => {
-//       store.reconfigure(getModels(models)) // 👈 Here is the magic
-//     })
-//   }
-// }
+if (import.meta.hot) {
+  import.meta.hot.accept('./models', (models) => {
+    store.reconfigure(getModels(models)) // 👈 Here is the magic
+  })
+}
 
 const { useStore, useStoreActions, useStoreDispatch, useStoreState } =
   createTypedHooks<StoreModel>()
@@ -43,6 +40,7 @@ export const useEasy = <NSP extends keyof StoreModel>(nsp: NSP) => {
   const actions = useEasyActions(nsp)
   return useMemo(() => {
     return {
+      // @ts-ignore
       ...state,
       ...actions,
     }
@@ -53,3 +51,6 @@ export const useEasy = <NSP extends keyof StoreModel>(nsp: NSP) => {
 process.nextTick(() => {
   store.dispatch.global.init()
 })
+
+// FIXME
+global.easyStore = store
