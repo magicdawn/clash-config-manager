@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.9.0 (un released)
+
+- yarn -> pnpm
+- poi -> rollup / vite, 原因是 poi 对 ts 支持有限
+
 ## v0.8.0
 
 - 支持 `ssr://` 协议配置到 clash
