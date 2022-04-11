@@ -16,96 +16,96 @@ interface IState {
   detail: any
 }
 
-export default new (class RuleListModel implements IState {
-  inited = false
-  list: RuleItem[] = []
-  detail = {}
+export default {
+  ...new (class M implements IState {
+    inited = false
+    list: RuleItem[] = []
+    detail = {}
 
-  /**
-   * reducers
-   */
+    /**
+     * reducers
+     */
 
-  setState: Action<RuleListModel, SetStatePayload<IState>> = setStateFactory()
+    setState: Action<M, SetStatePayload<IState>> = setStateFactory()
 
-  /**
-   * listeners
-   */
+    /**
+     * listeners
+     */
 
-  onInit: ThunkOn<RuleListModel, any, StoreModel> = thunkOn(
-    (_, storeActions) => storeActions.global.init,
-    (actions) => {
-      actions.init()
-    }
-  )
-  onReload: ThunkOn<RuleListModel, any, StoreModel> = thunkOn(
-    (_, storeActions) => storeActions.global.reload,
-    (actions) => {
+    onInit: ThunkOn<M, any, StoreModel> = thunkOn(
+      (_, storeActions) => storeActions.global.init,
+      (actions) => {
+        actions.init()
+      }
+    )
+    onReload: ThunkOn<M, any, StoreModel> = thunkOn(
+      (_, storeActions) => storeActions.global.reload,
+      (actions) => {
+        actions.load()
+      }
+    )
+
+    /**
+     * effects
+     */
+
+    init: Thunk<M> = thunk((actions, _, { getState }) => {
+      const { inited } = getState()
+      if (inited) return
       actions.load()
-    }
-  )
+    })
 
-  /**
-   * effects
-   */
+    load: Thunk<M> = thunk((actions) => {
+      const list = storage.get(RULE_LIST_STORAGE_KEY)
+      actions.setState({ inited: true, list })
+    })
 
-  init: Thunk<RuleListModel> = thunk((actions, _, { getState }) => {
-    const { inited } = getState()
-    if (inited) return
-    actions.load()
-  })
+    persist: Thunk<M> = thunk((actions, _, { getState }) => {
+      const { list } = getState()
+      storage.set(RULE_LIST_STORAGE_KEY, list)
+    })
 
-  load: Thunk<RuleListModel> = thunk((actions) => {
-    const list = storage.get(RULE_LIST_STORAGE_KEY)
-    actions.setState({ inited: true, list })
-  })
-
-  persist: Thunk<RuleListModel> = thunk((actions, _, { getState }) => {
-    const { list } = getState()
-    storage.set(RULE_LIST_STORAGE_KEY, list)
-  })
-
-  check: Thunk<RuleListModel, { editItemIndex: number; item: RuleItem }> = thunk(
-    (actions, payload, { getState }) => {
-      const { item, editItemIndex } = payload
-      let { list } = getState()
-      if (editItemIndex || editItemIndex === 0) {
-        list = _.filter(list, (i, index) => index !== editItemIndex)
-      }
-      const { type, name, url } = item
-      if (_.find(list, { name })) {
-        return 'name已存在'
-      }
-      if (type === 'remote') {
-        if (_.find(list, { url })) {
-          return 'url已存在'
+    check: Thunk<M, { editItemIndex: number; item: RuleItem }> = thunk(
+      (actions, payload, { getState }) => {
+        const { item, editItemIndex } = payload
+        let { list } = getState()
+        if (editItemIndex || editItemIndex === 0) {
+          list = _.filter(list, (i, index) => index !== editItemIndex)
+        }
+        const { type, name, url } = item
+        if (_.find(list, { name })) {
+          return 'name已存在'
+        }
+        if (type === 'remote') {
+          if (_.find(list, { url })) {
+            return 'url已存在'
+          }
+        }
+        if (type === 'local') {
+          // do not check content
+          // we don't care
         }
       }
-      if (type === 'local') {
-        // do not check content
-        // we don't care
-      }
-    }
-  )
+    )
 
-  add: Thunk<RuleListModel, { item: RuleItem }> = thunk((actions, { item }) => {
-    actions.setState(({ list }) => void list.push(item))
-    actions.persist()
-  })
-
-  edit: Thunk<RuleListModel, { item: RuleItem; editItemIndex: number }> = thunk(
-    (actions, { item, editItemIndex }) => {
-      actions.setState(({ list }) => void (list[editItemIndex] = item))
+    add: Thunk<M, { item: RuleItem }> = thunk((actions, { item }) => {
+      actions.setState(({ list }) => void list.push(item))
       actions.persist()
-    }
-  )
+    })
 
-  del: Thunk<RuleListModel, number> = thunk((actions, index) => {
-    actions.setState(({ list }) => void list.splice(index, 1))
-    actions.persist()
-  })
+    edit: Thunk<M, { item: RuleItem; editItemIndex: number }> = thunk(
+      (actions, { item, editItemIndex }) => {
+        actions.setState(({ list }) => void (list[editItemIndex] = item))
+        actions.persist()
+      }
+    )
 
-  update: Thunk<RuleListModel, { item: RuleItem; index: number }> = thunk(
-    async (actions, payload) => {
+    del: Thunk<M, number> = thunk((actions, index) => {
+      actions.setState(({ list }) => void list.splice(index, 1))
+      actions.persist()
+    })
+
+    update: Thunk<M, { item: RuleItem; index: number }> = thunk(async (actions, payload) => {
       const { item, index } = payload
       const { url, name } = item
       let servers
@@ -120,6 +120,6 @@ export default new (class RuleListModel implements IState {
         detail[url] = servers
       })
       actions.persist()
-    }
-  )
-})()
+    })
+  })(),
+}

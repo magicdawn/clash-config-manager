@@ -3,12 +3,15 @@ import { useMemo } from 'react'
 import shallowEqual from 'shallowequal'
 import * as models from './models'
 
+// easy-peasy need model slice as Plain Object
 function getModels<T>(models: T) {
-  const ret = {}
-  Object.entries(models).forEach(([key, val]) => {
-    ret[key] = { ...val } // easy-peasy need model slice as Plain Object
-  })
-  return ret as T
+  return models
+
+  // const ret = {}
+  // Object.entries(models).forEach(([key, val]) => {
+  //   ret[key] = { ...val }
+  // })
+  // return ret as T
 }
 
 const store = createStore(getModels(models))
@@ -29,6 +32,7 @@ export const useEasyState = <NSP extends keyof StoreModel>(nsp: NSP) => {
   const state = useStoreState((state) => state[nsp], shallowEqual)
   return state
 }
+
 export const useEasyActions = <NSP extends keyof StoreModel>(nsp: NSP) => {
   const actions = useStoreActions((actions) => {
     return actions[nsp]
