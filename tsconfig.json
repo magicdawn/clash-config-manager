@@ -10,5 +10,11 @@
       "@ui": ["ui/src/"],
       "@ui/*": ["ui/src/*"]
     }
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
   }
 }

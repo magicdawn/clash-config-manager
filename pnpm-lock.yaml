@@ -25,11 +25,13 @@ importers:
       eslint-config-prettier: ^8.5.0
       eslint-plugin-react: ^7.29.4
       fancy-log: ^1.3.3
+      fs-extra: ^9.0.1
       globby: ^11.1.0
       gulp: ^4.0.2
       husky: ^7.0.4
       lint-staged: ^11.2.6
       lodash: ^4.17.21
+      minimist: ^1.2.5
       napa: ^3.0.0
       poi: latest
       prettier: latest
@@ -64,10 +66,12 @@ importers:
       eslint-config-prettier: 8.5.0_eslint@7.32.0
       eslint-plugin-react: 7.29.4_eslint@7.32.0
       fancy-log: 1.3.3
+      fs-extra: 9.1.0
       globby: 11.1.0
       gulp: 4.0.2
       husky: 7.0.4
       lint-staged: 11.2.6
+      minimist: 1.2.6
       napa: 3.0.0
       poi: 12.10.3
       prettier: 2.6.2
@@ -1914,7 +1918,7 @@ packages:
       ignore: 4.0.6
       import-fresh: 3.3.0
       js-yaml: 3.14.1
-      minimatch: 3.0.4
+      minimatch: 3.1.2
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
@@ -1926,7 +1930,7 @@ packages:
     dependencies:
       '@humanwhocodes/object-schema': 1.2.0
       debug: 4.3.4
-      minimatch: 3.0.4
+      minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2337,7 +2341,7 @@ packages:
     resolution: {integrity: sha512-w+LsMxKyYQm347Otw+IfBXOv9UWVjpHpCDdbBMt8Kz/xbvCYNjP+0qPh91Km3iKfSRLBB0P7fAMf0KHrPu+MyA==}
     dependencies:
       '@types/minimatch': 3.0.5
-      '@types/node': 16.3.0
+      '@types/node': 17.0.23
     dev: true
 
   /@types/glob/7.2.0:
@@ -7233,7 +7237,7 @@ packages:
     engines: {node: '>= 0.10'}
     dependencies:
       detect-file: 1.0.0
-      is-glob: 4.0.1
+      is-glob: 4.0.3
       micromatch: 3.1.10
       resolve-dir: 1.0.1
     dev: true
@@ -7311,7 +7315,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.4_supports-color@6.1.0
     dev: true
 
   /for-in/0.1.8:
@@ -7625,7 +7629,7 @@ packages:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
     dependencies:
-      is-glob: 4.0.1
+      is-glob: 4.0.3
     dev: true
 
   /glob-regex/0.3.2:
@@ -7637,7 +7641,7 @@ packages:
     engines: {node: '>= 0.10'}
     dependencies:
       extend: 3.0.2
-      glob: 7.1.7
+      glob: 7.2.0
       glob-parent: 3.1.0
       is-negated-glob: 1.0.0
       ordered-read-streams: 1.0.1
@@ -7671,7 +7675,7 @@ packages:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.0.4
+      minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
     dev: true
@@ -9974,7 +9978,7 @@ packages:
     resolution: {integrity: sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==}
     hasBin: true
     dependencies:
-      minimist: 1.2.5
+      minimist: 1.2.6
     dev: true
 
   /mkdirp/0.5.6:
@@ -12840,7 +12844,7 @@ packages:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     hasBin: true
     dependencies:
-      glob: 7.1.7
+      glob: 7.2.0
     dev: true
 
   /ripemd160/2.0.2:
@@ -13894,7 +13898,7 @@ packages:
       lodash.truncate: 4.4.2
       slice-ansi: 4.0.0
       string-width: 4.2.3
-      strip-ansi: 6.0.0
+      strip-ansi: 6.0.1
     dev: true
 
   /tapable/1.1.3:
