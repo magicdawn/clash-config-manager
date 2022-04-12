@@ -3,24 +3,13 @@ import { useMemo } from 'react'
 import shallowEqual from 'shallowequal'
 import * as models from './models'
 
-// easy-peasy need model slice as Plain Object
-function getModels<T>(models: T) {
-  return models
-
-  // const ret = {}
-  // Object.entries(models).forEach(([key, val]) => {
-  //   ret[key] = { ...val }
-  // })
-  // return ret as T
-}
-
-const store = createStore(getModels(models))
+const store = createStore(models)
 export default store
 export type StoreModel = typeof models
 
 if (import.meta.hot) {
   import.meta.hot.accept('./models', (models) => {
-    store.reconfigure(getModels(models)) // 👈 Here is the magic
+    store.reconfigure(models) // 👈 Here is the magic
   })
 }
 

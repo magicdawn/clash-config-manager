@@ -2,8 +2,9 @@
 
 ## v0.9.0 (un released)
 
-- yarn -> pnpm
-- poi -> rollup / vite, 原因是 poi 对 ts 支持有限
+- [x] yarn -> pnpm
+- [x] poi -> rollup / vite, 原因是 poi 对 ts 支持有限
+- [ ] clean up deps
 
 ## v0.8.0
 
