@@ -105,4 +105,11 @@ function Routes() {
   )
 }
 
-render(<Root />, (window as any).app)
+declare global {
+  interface Window {
+    // #app
+    app: HTMLDivElement
+  }
+}
+
+render(<Root />, window.app)

@@ -1,19 +1,12 @@
 import React, { useCallback } from 'react'
-import { message } from 'antd'
-import { runCommand } from '@ui/commands/run'
 import useImmerState from '@ui/util/hooks/useImmerState'
 import { usePersistFn } from 'ahooks'
 import AddRuleModal, { Mode } from '../library-rule-list/AddRuleModal'
-import store from '@ui/store'
 
 type HandleAdd = (rule: string, ruleId: string) => void
 
-export default function useAddRuleModal(options: { handleAdd: HandleAdd; mode: Mode }) {
+export function useAddRuleModal(options: { handleAdd: HandleAdd; mode: Mode }) {
   const [{ modalVisible }, setState] = useImmerState({ modalVisible: false })
-
-  const addRule = useCallback(() => {
-    setState({ modalVisible: true })
-  }, [])
 
   const handleAdd = usePersistFn((rule: string, ruleId: string) => {
     options.handleAdd(rule, ruleId)

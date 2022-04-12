@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { useMount, usePersistFn, useUpdateEffect } from 'ahooks'
+import { usePersistFn, useUpdateEffect } from 'ahooks'
 import { Modal, Row, Col, Select, AutoComplete, Input, Button, Space, message } from 'antd'
 import { clipboard } from 'electron'
 import URI from 'urijs'
 import pify from 'promise.ify'
 import AppleScript from 'applescript'
-import { useStoreDispatch, useStoreState } from '@ui/store'
 import Yaml from 'js-yaml'
+import { useStoreState } from '@ui/store'
 
 const { Option } = Select
 

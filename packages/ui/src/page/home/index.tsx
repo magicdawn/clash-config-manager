@@ -3,7 +3,7 @@ import { Button, message } from 'antd'
 import store from '@ui/store'
 import { runCommand } from '@ui/commands/run'
 import styles from './index.module.less'
-import useAddRuleModal, { useMobxAddRuleModal } from './useAddRuleModal'
+import { useMobxAddRuleModal } from './useAddRuleModal'
 
 export default function Home() {
   const generate = useCallback(() => {
