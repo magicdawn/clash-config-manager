@@ -106,8 +106,8 @@ export default {
     })
 
     update: Thunk<M, { item: RuleItem; index: number }> = thunk(async (actions, payload) => {
-      const { item, index } = payload
-      const { url, name } = item
+      const { item } = payload
+      const { url } = item
       let servers
       try {
         servers = await subscribeToClash({ url, forceUpdate: true })

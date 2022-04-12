@@ -50,7 +50,6 @@ module.exports = {
 
   mac: {
     category: 'public.app-category.developer-tools',
-    // target: ['dmg', 'zip'],
     publish: {
       provider: 'github',
     },
