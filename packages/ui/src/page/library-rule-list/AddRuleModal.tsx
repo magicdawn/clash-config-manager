@@ -33,7 +33,7 @@ export default function AddRuleModal(props: IProps) {
       }
 
       // too long, skip it
-      if (item.content.length > 10000) {
+      if (item.content.length > 20 * 10000) {
         return false
       }
 

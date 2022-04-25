@@ -4,6 +4,7 @@
 
 - [x] yarn -> pnpm
 - [x] poi -> rollup / vite, 原因是 poi 对 ts 支持有限
+- [x] increase AddRuleModal target length limit, from 10000 to 200000
 - [ ] clean up deps
 
 ## v0.8.0
