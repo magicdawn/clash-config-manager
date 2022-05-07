@@ -17,3 +17,9 @@
 - [ ] app icon
 - [ ] docs
 - [ ] 整理 easy-peasy 用法
+
+### 2022-05-07
+
+- [ ] 支持远程规则
+- [ ] 支持 url scheme 添加远程规则, 比如 `clash-config-manager://add-rule?url=some_url`
+- [ ] 支持远程规则自动更新间隔
