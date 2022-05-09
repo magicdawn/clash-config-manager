@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
 import { Modal } from 'antd'
-import wrap from './wrapComponent'
+import _ from 'lodash'
+import React, { useEffect, useState } from 'react'
 import PacmanLoader from 'react-spinners/PacmanLoader'
 import styles from './loading.module.less'
-import _ from 'lodash'
+import wrap from './wrapComponent'
 
 // import Spinner from 'react-spinkit'
 /* <Spinner name='pacman' color='' className={styles.spin} /> */

@@ -46,4 +46,4 @@ process.nextTick(() => {
 })
 
 // FIXME
-global.easyStore = store
+;(global as any).easyStore = store

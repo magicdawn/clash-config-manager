@@ -1,30 +1,29 @@
 /// <reference types="vite/client" />
 
-import React, { useEffect } from 'react'
-import { render } from 'react-dom'
-import { HashRouter as Router, Link, useLocation } from 'react-router-dom'
-import { StoreProvider } from 'easy-peasy'
+import {
+  AppstoreAddOutlined,
+  HeartOutlined,
+  PayCircleOutlined,
+  SettingOutlined,
+  UserOutlined,
+} from '@ant-design/icons'
+import { ConfigProvider, Menu } from 'antd'
 import 'antd/dist/antd.css'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
-import { Menu, ConfigProvider } from 'antd'
-import {
-  SettingOutlined,
-  PayCircleOutlined,
-  AppstoreAddOutlined,
-  UserOutlined,
-  HeartOutlined,
-} from '@ant-design/icons'
-import { renderRoutes } from 'react-router-config'
+import { StoreProvider } from 'easy-peasy'
 import _ from 'lodash'
-
-import store from './store'
-import './page/common'
+import React, { useEffect } from 'react'
+import { render } from 'react-dom'
+import { renderRoutes } from 'react-router-config'
+import { HashRouter as Router, Link, useLocation } from 'react-router-dom'
 import Commands from './commands'
-import Home from './page/home'
-import LibrarySubscribe from './page/library-subscribe'
-import LibraryRuleList from './page/library-rule-list'
+import './page/common'
 import CurrentConfig from './page/current-config'
+import Home from './page/home'
+import LibraryRuleList from './page/library-rule-list'
+import LibrarySubscribe from './page/library-subscribe'
 import Preference from './page/preference'
+import store from './store'
 
 const routes = [
   {

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react'
+import React, { useEffect } from 'react'
 import { render } from 'react-dom'
 import { BehaviorSubject } from 'rxjs'
 import { withProps } from 'recompose'
