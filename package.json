@@ -14,14 +14,15 @@
     "url": "https://magicdawn.fun"
   },
   "scripts": {
-    "postinstall": "electron-builder install-app-deps && husky install",
-    "dev:main": "pnpm dev --filter main",
-    "dev:ui": "pnpm dev --filter ui",
+    "prepare": "husky install",
+    "postinstall": "electron-builder install-app-deps",
+    "dev:main": "pnpm -F main dev",
+    "dev:ui": "pnpm -F ui dev",
     "dev:start-main": "electron bundle/development/main/index.js",
     "dev:watch-main": "nodemon bundle/development/main/index.js --exec electron --watch bundle/development/main/",
     "build": "pnpm build:main && pnpm build:ui",
-    "build:main": "pnpm build --filter main",
-    "build:ui": "pnpm build --filter ui",
+    "build:main": "pnpm -F main build",
+    "build:ui": "pnpm -F ui build",
     "pack": "electron-builder --dir",
     "dist:mac": "PYTHON_PATH=`pyenv which python2.7` electron-builder --macos",
     "dist": "electron-builder --macos --linux --windows"
