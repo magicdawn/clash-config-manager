@@ -1,10 +1,15 @@
 # clash-config-manager
 
-> a clashX config manager for macOS
+> 用于 MacOS clashX 的 GUI 配置合并工具
 
 ## 下载
 
 [**下载 .dmg 文件**](https://github.com/magicdawn/clash-config-manager/releases/latest)
+
+## 类似软件
+
+- https://github.com/crazyhl/PullAndMergeConfig
+- https://github.com/surgioproject/surgio
 
 ## 功能
 
@@ -15,8 +20,8 @@
 - [x] 支持在 vscode/Atom 中编辑规则
 - [x] 支持从 剪贴板/Chrome 快速添加规则
 - [x] 内置基础配置, 导入内置基础配置 + 添加一个 subscribe 即可开始使用.
-- [ ] 支持命令行
 - [x] 支持类似 Atom / vscode 的 command palette 快速操作
+- [ ] 支持命令行
 
 ## 截图
 
