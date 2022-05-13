@@ -2,17 +2,17 @@ import React, { useCallback, useState, useEffect } from 'react'
 import { Modal, Tree } from 'antd'
 import { BehaviorSubject } from 'rxjs'
 import useImmerState from '@ui/util/hooks/useImmerState'
-import { usePersistFn, useUpdateEffect } from 'ahooks'
+import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import _ from 'lodash'
 
 export default function SelectExport(props) {
   const { visible, setVisible, treeData, resolve } = props
 
-  const onCancel = usePersistFn(() => {
+  const onCancel = useMemoizedFn(() => {
     setVisible(false)
     resolve?.({ cancel: true })
   })
-  const onOk = usePersistFn(() => {
+  const onOk = useMemoizedFn(() => {
     setVisible(false)
     resolve?.({ cancel: false, keys: checkedKeys })
   })

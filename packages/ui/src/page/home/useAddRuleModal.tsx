@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import useImmerState from '@ui/util/hooks/useImmerState'
-import { usePersistFn } from 'ahooks'
+import { useMemoizedFn } from 'ahooks'
 import AddRuleModal, { Mode } from '../library-rule-list/AddRuleModal'
 
 type HandleAdd = (rule: string, ruleId: string) => void
@@ -8,7 +8,7 @@ type HandleAdd = (rule: string, ruleId: string) => void
 export function useAddRuleModal(options: { handleAdd: HandleAdd; mode: Mode }) {
   const [{ modalVisible }, setState] = useImmerState({ modalVisible: false })
 
-  const handleAdd = usePersistFn((rule: string, ruleId: string) => {
+  const handleAdd = useMemoizedFn((rule: string, ruleId: string) => {
     options.handleAdd(rule, ruleId)
   })
 

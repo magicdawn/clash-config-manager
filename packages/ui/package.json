@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
-    "ahooks": "^2.9.3",
+    "ahooks": "^3.3.10",
     "antd": "^4.9.4",
     "applescript": "^1.0.0",
     "bytes": "^3.1.0",

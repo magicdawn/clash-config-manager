@@ -8,7 +8,7 @@ const unused = [
   'useImperativeHandle',
 
   // ahooks
-  'usePersistFn',
+  'useMemoizedFn',
   'useMount',
   'useUpdateEffect',
 

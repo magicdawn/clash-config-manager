@@ -1,6 +1,6 @@
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import React, { useMemo, useState, useCallback } from 'react'
-import { usePersistFn, useMount } from 'ahooks'
+import { useMemoizedFn } from 'ahooks'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import { Tooltip } from 'antd'
 import cx from 'classnames'
@@ -64,14 +64,14 @@ export default function DndPlaygroud() {
 
   const [trashDropDisabled, setTrashDropDisabled] = useState(true)
 
-  const onDragStart = usePersistFn((start) => {
+  const onDragStart = useMemoizedFn((start) => {
     const droppableId = start.source.droppableId
     if (droppableId === 'result-list') {
       setTrashDropDisabled(false)
     }
   })
 
-  const onDragEnd = usePersistFn((result, provided) => {
+  const onDragEnd = useMemoizedFn((result, provided) => {
     setTrashDropDisabled(true)
 
     // console.log(result)

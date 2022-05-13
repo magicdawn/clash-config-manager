@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { usePersistFn, useUpdateEffect } from 'ahooks'
+import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Modal, Row, Col, Select, AutoComplete, Input, Button, Space, message } from 'antd'
 import { clipboard } from 'electron'
 import URI from 'urijs'
@@ -49,13 +49,13 @@ export default function AddRuleModal(props: IProps) {
 
   const [ruleId, setRuleId] = useState(ruleList[0]?.id || '')
 
-  const handleOk = usePersistFn(() => {
+  const handleOk = useMemoizedFn(() => {
     setVisible(false)
     const rule = `${type},${url},${target}`
     onOk?.(rule, ruleId)
   })
 
-  const handleCancel = usePersistFn(() => {
+  const handleCancel = useMemoizedFn(() => {
     setVisible(false)
   })
 
@@ -66,7 +66,7 @@ export default function AddRuleModal(props: IProps) {
   const [processUrl, setProcessUrl] = useState('')
   const [autoCompletes, setAutoCompletes] = useState({})
 
-  const changeProcessUrl = usePersistFn((u) => {
+  const changeProcessUrl = useMemoizedFn((u) => {
     setProcessUrl(u)
     const data = getAutoCompletes(u)
     setAutoCompletes(data)

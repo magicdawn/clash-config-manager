@@ -1,14 +1,15 @@
 import MonacoEditor, { EditorWillMount } from 'react-monaco-editor'
 import React, { forwardRef, ReactNode } from 'react'
-import { usePersistFn, useUpdateEffect } from 'ahooks'
+import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Spin } from 'antd'
 import { SpinProps } from 'antd/lib/spin'
 import style from './ConfigEditor.module.less'
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api'
 
 interface IProps {
-  value: string
-  onChange: (val: string) => void
+  id?: string
+  value?: string
+  onChange?: (val: string) => void
   readonly: boolean
   spinProps?: SpinProps
   header: ReactNode
@@ -20,11 +21,11 @@ export default forwardRef(ConfigEditor)
 function ConfigEditor(props: IProps, ref) {
   const { value, onChange, readonly, spinProps, header, visible } = props
 
-  const editorWillMount: EditorWillMount = usePersistFn((monaco) => {
+  const editorWillMount: EditorWillMount = useMemoizedFn((monaco) => {
     //
   })
 
-  const editorDidMount = usePersistFn((editor, monaco) => {
+  const editorDidMount = useMemoizedFn((editor, monaco) => {
     ;(window as any).$editor = editor
     ;(window as any).$monaco = monaco
 
@@ -41,7 +42,7 @@ function ConfigEditor(props: IProps, ref) {
     })
   })
 
-  const editorOnChange = usePersistFn((newValue, e) => {
+  const editorOnChange = useMemoizedFn((newValue, e) => {
     onChange(newValue)
   })
 

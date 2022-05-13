@@ -1,26 +1,28 @@
-import * as remote from '@electron/remote'
-import path from 'path'
-import fse from 'fs-extra'
-import execa from 'execa'
-import debugFactory from 'debug'
-import React, { useState, useCallback, useRef, useMemo } from 'react'
-import { Button, Modal, Input, message, Tooltip, List, Space, Form, Select } from 'antd'
-import { useMount, usePersistFn, useUpdateEffect } from 'ahooks'
-import { v4 as uuid } from 'uuid'
-import Yaml from 'js-yaml'
 import { FileAddOutlined } from '@ant-design/icons'
-
+import * as remote from '@electron/remote'
+import { runCommand } from '@ui/commands/run'
+import { RuleItem } from '@ui/common/define'
+import { useEasy } from '@ui/store'
 import useImmerState from '@ui/util/hooks/useImmerState'
 import { firstLine, limitLines } from '@ui/util/text-util'
-import { useEasy } from '@ui/store'
-import { RuleItem } from '@ui/common/define'
-import { runCommand } from '@ui/commands/run'
-
+import { useMount, useMemoizedFn, useUpdateEffect } from 'ahooks'
+import { Button, Form, Input, List, message, Modal, Select, Space, Tooltip } from 'antd'
+import debugFactory from 'debug'
+import execa from 'execa'
+import fse from 'fs-extra'
+import Yaml from 'js-yaml'
+import path from 'path'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
+import { v4 as uuid } from 'uuid'
+import RuleAddModal from './AddRuleModal'
+import ConfigEditor from './ConfigEditor'
 import styles from './index.module.less'
+
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
-const namespace = 'libraryRuleList'
 const TEMP_EDITING_FILE = path.join(remote.app.getPath('userData'), 'temp', '临时文件-关闭生效.yml')
+
+type EditMode = 'edit' | 'readonly'
 
 export default function LibraryRuleList() {
   const ruleListModel = useEasy('libraryRuleList')
@@ -29,35 +31,31 @@ export default function LibraryRuleList() {
     ruleListModel.init()
   })
 
-  const [showModal, setShowModal] = useState(false)
-  const [editItem, setEditItem] = useState(null)
-  const [editItemIndex, setEditItemIndex] = useState(null)
-  const [editMode, setEditMode] = useState('edit')
+  const [showModal, showModalSet] = useState(false)
+  const [editItem, editItemSet] = useState<RuleItem>(null)
+  const [editItemIndex, editItemIndexSet] = useState<number>(null)
+  const [editMode, editModeSet] = useState<EditMode>('edit')
 
-  const add = usePersistFn(() => {
-    setEditItem(null)
-    setEditItemIndex(null)
-    setEditMode('edit')
-    setShowModal(true)
+  const add = useMemoizedFn(() => {
+    editItemSet(null)
+    editItemIndexSet(null)
+    editModeSet('edit')
+    showModalSet(true)
   })
 
-  const edit = usePersistFn((item, index) => {
-    setEditItem(item)
-    setEditItemIndex(index)
-    setEditMode('edit')
-    setShowModal(true)
+  const edit = useMemoizedFn((item, index) => {
+    editItemSet(item)
+    editItemIndexSet(index)
+    editModeSet('edit')
+    showModalSet(true)
   })
 
-  const view = usePersistFn((item, index) => {
-    setEditItem(item)
-    setEditItemIndex(index)
-    setEditMode('readonly')
-    setShowModal(true)
+  const view = useMemoizedFn((item, index) => {
+    editItemSet(item)
+    editItemIndexSet(index)
+    editModeSet('readonly')
+    showModalSet(true)
   })
-
-  // const update = usePersistFn((item, index) => {
-  //   effects.update({item, index})
-  // })
 
   const disableEnterAsClick = useCallback((e) => {
     // disable enter
@@ -66,7 +64,7 @@ export default function LibraryRuleList() {
     }
   }, [])
 
-  const del = usePersistFn((item, index) => {
+  const del = useMemoizedFn((item, index) => {
     Modal.confirm({
       title: 'Do you Want to delete these items?',
       content: 'Some descriptions',
@@ -84,7 +82,7 @@ export default function LibraryRuleList() {
       <h1>配置源管理</h1>
 
       <ModalAdd
-        {...{ visible: showModal, setVisible: setShowModal, editItem, editItemIndex, editMode }}
+        {...{ visible: showModal, setVisible: showModalSet, editItem, editItemIndex, editMode }}
       />
 
       <List
@@ -100,7 +98,7 @@ export default function LibraryRuleList() {
         bordered
         dataSource={ruleListModel.list}
         renderItem={(item, index) => {
-          const { type, name, url, content } = item
+          const { type, name, url, content } = item as RuleItem
           return (
             <List.Item style={{ display: 'flex' }}>
               <div className='list-item'>
@@ -167,10 +165,15 @@ export default function LibraryRuleList() {
   )
 }
 
-import ConfigEditor from './ConfigEditor'
-import RuleAddModal from './AddRuleModal'
+type ModalAddProps = {
+  visible: boolean
+  setVisible: (val: boolean) => void
+  editItem: RuleItem
+  editItemIndex: number
+  editMode: EditMode
+}
 
-function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }) {
+function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: ModalAddProps) {
   const ruleListModel = useEasy('libraryRuleList')
 
   const readonly = editMode === 'readonly'
@@ -219,13 +222,13 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }) {
     clean()
   }, [])
 
-  const handleOk = usePersistFn((e) => {
+  const handleOk = useMemoizedFn((e) => {
     e?.preventDefault()
     e?.stopPropagation()
     form.submit()
   })
 
-  const handleOkAndGenerate = usePersistFn(async (e) => {
+  const handleOkAndGenerate = useMemoizedFn(async (e) => {
     handleOk(e)
 
     // wait close
@@ -235,13 +238,13 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }) {
     runCommand('generate')
   })
 
-  const onInputPressEnter = usePersistFn((e) => {
+  const onInputPressEnter = useMemoizedFn((e) => {
     e?.preventDefault()
     e?.stopPropagation()
     form.submit()
   })
 
-  const handleSubmit = usePersistFn((item: RuleItem) => {
+  const handleSubmit = useMemoizedFn((item: RuleItem) => {
     const { content } = item
 
     // add more data
@@ -297,7 +300,7 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }) {
     setRuleAddVisible(true)
   }, [])
 
-  const onAddRule = usePersistFn((rule) => {
+  const onAddRule = useMemoizedFn((rule) => {
     // debugger
     let content = form.getFieldValue('content') || ''
 
@@ -311,7 +314,7 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }) {
   })
 
   const [editInEditorMaskVisible, setEditInEditorMaskVisible] = useState(false)
-  const editInEditor = usePersistFn(async (editor = 'code') => {
+  const editInEditor = useMemoizedFn(async (editor = 'code') => {
     const content = form.getFieldValue('content')
     await fse.outputFile(TEMP_EDITING_FILE, content, 'utf8')
 
@@ -457,7 +460,6 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }) {
               spinProps={{
                 size: 'large',
                 spinning: editInEditorMaskVisible,
-                // @ts-ignore
                 tip: (
                   <>
                     文件已经在编辑器中打开

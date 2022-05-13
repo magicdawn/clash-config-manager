@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMount, usePersistFn } from 'ahooks'
+import { useMount, useMemoizedFn } from 'ahooks'
 import { Button, Input, Row, Col, Divider, message } from 'antd'
 import launch from 'launch-editor'
 import { getConfigFileDisplay, getConfigFile, DEFAULT_NAME } from '@ui/util/fn/gen'
@@ -13,11 +13,11 @@ const namespace = 'currentConfig'
 export default function ConfigList(props) {
   const currentConfigModel = useEasy('currentConfig')
 
-  const onGenConfigClick = usePersistFn(async () => {
+  const onGenConfigClick = useMemoizedFn(async () => {
     return runCommand('generate')
   })
 
-  const onOpenConfigClick = usePersistFn((editor = 'code') => {
+  const onOpenConfigClick = useMemoizedFn((editor = 'code') => {
     const file = getConfigFile(currentConfigModel.name)
     launch(
       // file

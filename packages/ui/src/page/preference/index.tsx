@@ -1,7 +1,7 @@
 import { CloudDownloadOutlined, CloudUploadOutlined, SettingFilled } from '@ant-design/icons'
 import { useEasy } from '@ui/store'
 import useImmerState from '@ui/util/hooks/useImmerState'
-import { useMount, usePersistFn, useUpdateEffect } from 'ahooks'
+import { useMount, useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Button, Card, Col, Input, message, Modal, Row, Space } from 'antd'
 import { ipcRenderer, shell } from 'electron'
 import fse from 'fs-extra'
@@ -29,24 +29,24 @@ export default function Preference() {
 
   const [showModal, setShowModal] = useState(false)
 
-  const onUpload = usePersistFn(async () => {
+  const onUpload = useMemoizedFn(async () => {
     await helper.upload()
   })
-  const onForceUpload = usePersistFn(async () => {
+  const onForceUpload = useMemoizedFn(async () => {
     await helper.forceUpload()
   })
 
-  const onDownload = usePersistFn(async () => {
+  const onDownload = useMemoizedFn(async () => {
     await helper.download()
   })
-  const onForceDownload = usePersistFn(async () => {
+  const onForceDownload = useMemoizedFn(async () => {
     await helper.forceDownload()
   })
 
   const [exportHelperVisible, setExportHelperVisible] = useState(false)
   const [exportFile, setExportFile] = useState('')
 
-  const onExport = usePersistFn(async () => {
+  const onExport = useMemoizedFn(async () => {
     const file = path.join(tmpdir(), 'cfm', `${moment().format('YYYY_MM_DD__HH_mm')}.json`)
 
     const outputData = storage.store
@@ -56,7 +56,7 @@ export default function Preference() {
     setExportFile(file)
   })
 
-  const onSelectImport = usePersistFn(async () => {
+  const onSelectImport = useMemoizedFn(async () => {
     const file = path.join(
       tmpdir(),
       'cfm',
@@ -89,7 +89,7 @@ export default function Preference() {
     message.success('导入成功: 已与本地配置合并')
   }
 
-  const onImport = usePersistFn(async () => {
+  const onImport = useMemoizedFn(async () => {
     const file = await ipcRenderer.invoke('select-file')
     if (!file) return
 
@@ -103,11 +103,11 @@ export default function Preference() {
     importAction(importData)
   })
 
-  const onImportPreset = usePersistFn(async () => {
+  const onImportPreset = useMemoizedFn(async () => {
     importAction(PRESET_JSON_DATA)
   })
 
-  const openInEditor = usePersistFn((editor) => {
+  const openInEditor = useMemoizedFn((editor) => {
     launch(
       // file
       exportFile,
@@ -289,7 +289,7 @@ function ModalSyncConfig(props: ModalSyncConfigProps) {
     setVisible(false)
   }, [])
 
-  const handleOk = usePersistFn((e) => {
+  const handleOk = useMemoizedFn((e) => {
     e?.preventDefault()
     e?.stopPropagation()
 

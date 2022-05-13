@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { Button, Modal, Input, message, List, Space } from 'antd'
-import { usePersistFn, useUpdateEffect } from 'ahooks'
+import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { v4 as uuid } from 'uuid'
 import { useEasy } from '@ui/store'
 import styles from './index.module.less'
@@ -12,20 +12,20 @@ export default function LibrarySubscribe() {
   const [editItem, setEditItem] = useState(null)
   const [editItemIndex, setEditItemIndex] = useState(null)
 
-  const add = usePersistFn(() => {
+  const add = useMemoizedFn(() => {
     console.log('add')
     setEditItem(null)
     setEditItemIndex(null)
     setShowModal(true)
   })
 
-  const edit = usePersistFn((item, index) => {
+  const edit = useMemoizedFn((item, index) => {
     setEditItem(item)
     setEditItemIndex(index)
     setShowModal(true)
   })
 
-  const update = usePersistFn((item, index) => {
+  const update = useMemoizedFn((item, index) => {
     subscribeModel.update({ url: item.url })
   })
 
@@ -36,7 +36,7 @@ export default function LibrarySubscribe() {
     }
   }, [])
 
-  const del = usePersistFn((item, index) => {
+  const del = useMemoizedFn((item, index) => {
     Modal.confirm({
       title: 'Do you Want to delete these items?',
       content: 'Some descriptions',
@@ -135,7 +135,7 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex }) {
     clean()
   }, [])
 
-  const handleOk = usePersistFn((e) => {
+  const handleOk = useMemoizedFn((e) => {
     e?.preventDefault()
     e?.stopPropagation()
 
