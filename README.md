@@ -22,6 +22,7 @@
 - [x] 内置基础配置, 导入内置基础配置 + 添加一个 subscribe 即可开始使用.
 - [x] 支持类似 Atom / vscode 的 command palette 快速操作
 - [ ] 支持命令行
+      1
 
 ## 截图
 
