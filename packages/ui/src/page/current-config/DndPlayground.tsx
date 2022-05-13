@@ -1,11 +1,11 @@
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import React, { useMemo, useState, useCallback } from 'react'
-import { useMemoizedFn } from 'ahooks'
 import { InfoCircleOutlined } from '@ant-design/icons'
+import { useEasy, useStoreState } from '@ui/store'
+import { limitLines } from '@ui/util/text-util'
+import { useMemoizedFn } from 'ahooks'
 import { Tooltip } from 'antd'
 import cx from 'classnames'
-import { limitLines } from '@ui/util/text-util'
-import { useEasy, useStoreState } from '@ui/store'
+import React, { useMemo, useState } from 'react'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import styles from './DndPlayground.module.less'
 
 export default function DndPlaygroud() {
@@ -197,7 +197,7 @@ export default function DndPlaygroud() {
                         item={item}
                         index={index}
                         isDragDisabled={resultIdSet.has(item.id)}
-                      ></Source>
+                      />
                     )
                   })}
                 </div>
