@@ -5,14 +5,11 @@ import PacmanLoader from 'react-spinners/PacmanLoader'
 import styles from './loading.module.less'
 import wrap from './wrapComponent'
 
-// import Spinner from 'react-spinkit'
-/* <Spinner name='pacman' color='' className={styles.spin} /> */
-
 const colors = [
   'orange',
   'yellow',
   'pink',
-  '#1890ff', // antd
+  '#1890ff', // from antd
 ]
 
 function Loading({ visible }) {

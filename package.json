@@ -34,7 +34,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",
-    "@babel/plugin-proposal-do-expressions": "^7.16.7",
     "@magicdawn/eslint-config": "latest",
     "@magicdawn/prettier-config": "latest",
     "@types/eslint": "^7.29.0",
@@ -60,9 +59,9 @@
     "prettier": "latest",
     "ts-node": "^9.1.1",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
-    "typescript": "^4.6.3",
+    "typescript": "^4.6.4",
     "typescript-plugin-css-modules": "^3.4.0",
-    "vite": "^2.9.1",
+    "vite": "^2.9.9",
     "webpack": "^5.72.0",
     "webpack-merge": "^5.8.0"
   },

@@ -19,9 +19,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.3.0",
+    "@ant-design/icons": "^4.7.0",
     "ahooks": "^3.3.10",
-    "antd": "^4.9.4",
+    "antd": "^4.20.4",
     "applescript": "^1.0.0",
     "bytes": "^3.1.0",
     "classnames": "^2.2.6",
@@ -56,6 +56,7 @@
     "react-dom": "^17.0.1",
     "react-monaco-editor": "0.45.0",
     "react-redux": "^7.2.2",
+    "react-router": "^6.3.0",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.2.0",
     "react-spinkit": "^3.0.0",
@@ -73,7 +74,6 @@
     "yargs": "^16.2.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-do-expressions": "^7.10.4",
     "@magicdawn/eslint-config": "latest",
     "@magicdawn/prettier-config": "latest",
     "@originjs/vite-plugin-commonjs": "^1.0.3",
@@ -112,13 +112,11 @@
     "gulp": "^4.0.2",
     "husky": "latest",
     "less": "^4.0.0",
-    "less-loader": "^7.2.1",
     "lint-staged": "latest",
     "minimist": "^1.2.5",
-    "monaco-editor-webpack-plugin": "4.2.0",
     "prettier": "latest",
     "shelljs": "^0.8.4",
-    "vite": "^2.9.1",
+    "vite": "^2.9.9",
     "vite-plugin-electron": "^0.4.0",
     "vite-tsconfig-paths": "^3.4.1"
   }
