@@ -17,6 +17,7 @@ import { v4 as uuid } from 'uuid'
 import RuleAddModal from './AddRuleModal'
 import ConfigEditor from './ConfigEditor'
 import styles from './index.module.less'
+import { LinkTwo, SdCard } from '@icon-park/react'
 
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
@@ -66,13 +67,9 @@ export default function LibraryRuleList() {
 
   const del = useMemoizedFn((item, index) => {
     Modal.confirm({
-      title: 'Do you Want to delete these items?',
-      content: 'Some descriptions',
+      title: '确认删除?',
       onOk() {
         ruleListModel.del(index)
-      },
-      onCancel() {
-        console.log('Cancel')
       },
     })
   })
@@ -102,8 +99,17 @@ export default function LibraryRuleList() {
           return (
             <List.Item style={{ display: 'flex' }}>
               <div className='list-item'>
-                <div className='name'>名称: {name}</div>
-                <div className='type'>类型: {type === 'local' ? '本地' : '远程'}</div>
+                <div className='name' style={{ display: 'flex', height: 24, alignItems: 'center' }}>
+                  <span>名称: {name}</span>
+                  <span style={{ marginLeft: 5, marginTop: 4 }}>
+                    {type === 'local' ? (
+                      <SdCard theme='outline' size='18' fill='#333' title='本地规则' />
+                    ) : (
+                      <LinkTwo theme='outline' size='18' fill='#333' title='远程规则' />
+                    )}
+                  </span>
+                </div>
+
                 <div className='info'>
                   {type === 'local' ? (
                     <Tooltip

@@ -7,6 +7,8 @@ import {
   SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons'
+// styles
+import '@icon-park/react/styles/index.css'
 import type { MenuProps } from 'antd'
 import { ConfigProvider, Menu } from 'antd'
 import 'antd/dist/antd.css'
