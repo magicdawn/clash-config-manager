@@ -7,6 +7,7 @@ import {
   SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons'
+import type { MenuProps } from 'antd'
 import { ConfigProvider, Menu } from 'antd'
 import 'antd/dist/antd.css'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
@@ -87,17 +88,13 @@ function Routes() {
     })
   }, [pathname])
 
+  const menuItems: MenuProps['items'] = routes.map(({ title, path, icon }) => {
+    return { label: <Link to={path}>{title}</Link>, key: getKey(path), icon }
+  })
+
   return (
     <>
-      <Menu selectedKeys={[menuKey]} mode='horizontal'>
-        {routes.map(({ path, icon, title }) => {
-          return (
-            <Menu.Item key={getKey(path)} icon={icon}>
-              <Link to={path}>{title}</Link>
-            </Menu.Item>
-          )
-        })}
-      </Menu>
+      <Menu selectedKeys={[menuKey]} mode='horizontal' items={menuItems} />
       <Commands />
       <div>{renderRoutes(routes)}</div>
     </>
