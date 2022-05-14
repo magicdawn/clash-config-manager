@@ -1,7 +1,6 @@
-import CommandPalette from 'react-command-palette'
 import React from 'react'
+import CommandPalette from 'react-command-palette'
 import { commandPaletteRef, commands } from './run'
-
 // theme
 import oneLightTheme from './theme/one-light.module.less'
 
