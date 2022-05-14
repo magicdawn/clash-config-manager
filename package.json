@@ -71,7 +71,7 @@
   "packageManager": "pnpm@3.1.1",
   "prettier": "@magicdawn/prettier-config",
   "lint-staged": {
-    "*.{js,less,vue,ts,tsx}": [
+    "*.{js,jsx,less,css,ts,tsx,md}": [
       "prettier --write"
     ]
   }
