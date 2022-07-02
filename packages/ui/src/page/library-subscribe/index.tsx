@@ -2,12 +2,19 @@ import React, { useState, useCallback } from 'react'
 import { Button, Modal, Input, message, List, Space, Select, Divider, Tag, Tooltip } from 'antd'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { v4 as uuid } from 'uuid'
-import { useEasy } from '@ui/store'
 import styles from './index.module.less'
 import { Subscribe } from '@ui/common/define'
 
+import { state, actions } from './model/valtio'
+import { useSnapshot } from 'valtio'
+
+setTimeout(() => {
+  actions.load()
+})
+console.log(state)
+
 export default function LibrarySubscribe() {
-  const subscribeModel = useEasy('librarySubscribe')
+  const { list } = useSnapshot(state)
 
   const [showModal, setShowModal] = useState(false)
   const [editItem, setEditItem] = useState(null)
@@ -26,8 +33,8 @@ export default function LibrarySubscribe() {
     setShowModal(true)
   })
 
-  const update = useMemoizedFn((item, index) => {
-    subscribeModel.update({ url: item.url })
+  const update = useMemoizedFn((item) => {
+    actions.update({ url: item.url })
   })
 
   const disableEnterAsClick = useCallback((e) => {
@@ -41,7 +48,7 @@ export default function LibrarySubscribe() {
     Modal.confirm({
       title: '确认删除?',
       onOk() {
-        subscribeModel.del(index)
+        actions.del(index)
       },
       onCancel() {
         console.log('Cancel')
@@ -66,7 +73,7 @@ export default function LibrarySubscribe() {
           </div>
         }
         bordered
-        dataSource={subscribeModel.list}
+        dataSource={list}
         renderItem={(item: Subscribe, index) => {
           const { url, name, excludeKeywords } = item
           return (
@@ -94,11 +101,7 @@ export default function LibrarySubscribe() {
                 >
                   编辑
                 </Button>
-                <Button
-                  type='primary'
-                  onClick={() => update(item, index)}
-                  onKeyDown={disableEnterAsClick}
-                >
+                <Button type='primary' onClick={() => update(item)} onKeyDown={disableEnterAsClick}>
                   更新
                 </Button>
                 <Button danger onClick={() => del(item, index)} onKeyDown={disableEnterAsClick}>
@@ -124,7 +127,6 @@ function ModalAdd({
   editItem?: Subscribe
   editItemIndex?: number
 }) {
-  const subscribeModel = useEasy('librarySubscribe')
   const [url, setUrl] = useState(editItem?.url || '')
   const [name, setName] = useState(editItem?.name || '')
   const [id, setId] = useState(editItem?.id || uuid())
@@ -168,16 +170,16 @@ function ModalAdd({
       return message.warn('url & name 不能为空')
     }
 
-    const err = subscribeModel.check({ url, name, editItemIndex })
+    const err = actions.check({ url, name, editItemIndex })
     if (err) {
       return message.error(err)
     }
 
     const mode = editItem ? 'edit' : 'add'
     if (mode === 'add') {
-      subscribeModel.add({ url, name, id, excludeKeywords })
+      actions.add({ url, name, id, excludeKeywords })
     } else {
-      subscribeModel.edit({ url, name, id, excludeKeywords, editItemIndex })
+      actions.edit({ url, name, id, excludeKeywords, editItemIndex })
     }
 
     setVisible(false)
