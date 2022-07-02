@@ -2,6 +2,8 @@ export interface Subscribe {
   id: string
   name: string
   url: string
+  // 用于从 subscribe 里移除某些 proxy
+  excludeKeywords?: string[]
 }
 
 export interface RuleItem {

@@ -75,9 +75,9 @@ export default {
     })
 
     edit: Thunk<M, Subscribe & { editItemIndex: number }> = thunk((actions, payload) => {
-      const { url, name, id, editItemIndex } = payload
+      const { url, name, id, editItemIndex, excludeKeywords } = payload
       actions.setState(({ list }) => {
-        list[editItemIndex] = { url, name, id }
+        list[editItemIndex] = { url, name, id, excludeKeywords }
       })
       actions.persist()
     })
@@ -90,7 +90,7 @@ export default {
     })
 
     update: Thunk<M, { url: string; silent?: boolean; forceUpdate?: boolean }> = thunk(
-      async (actions, payload) => {
+      async (actions, payload, { getState }) => {
         const { url, silent = false, forceUpdate: forceUpdate = false } = payload
         // TODO: ts
         let servers: any[]
@@ -99,6 +99,13 @@ export default {
         } catch (e) {
           message.error('更新订阅出错: \n' + e.stack || e)
           throw e
+        }
+
+        const keywords = getState().list.find((item) => item.url === url)?.excludeKeywords || []
+        if (keywords.length) {
+          for (const keyword of keywords) {
+            servers = servers.filter((server) => server.name && !server.name.includes(keyword))
+          }
         }
 
         if (!silent) {

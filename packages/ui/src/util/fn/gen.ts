@@ -13,7 +13,6 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
 
   // subscribe
   const subscribeList = rootState.librarySubscribe.list
-  const subscribeDetail = rootState.librarySubscribe.detail
 
   // rule
   const ruleList = rootState.libraryRuleList.list
@@ -128,12 +127,14 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
 
 export const DEFAULT_NAME = 'clash-config-manager'
 
-export function getConfigFile(name) {
+// default parameter 不能处理空字符串的情况
+
+export function getConfigFile(name?: string) {
   name = name || DEFAULT_NAME
   return pathjoin(homedir(), `.config/clash/${name}.yaml`)
 }
 
-export function getConfigFileDisplay(name) {
+export function getConfigFileDisplay(name?: string) {
   name = name || DEFAULT_NAME
   return `~/.config/clash/${name}.yaml`
 }

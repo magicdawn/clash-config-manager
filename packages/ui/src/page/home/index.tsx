@@ -45,7 +45,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       {modal}
-      <h1 className={styles.title}>Enjoy</h1>
+      <h1 className={styles.title}>快捷操作</h1>
       <div className={styles.btnGenWrapper} style={{ padding: 20 }}>
         <Button type='primary' shape='round' className={styles.btnGen} onClick={generate} block>
           重新生成配置文件

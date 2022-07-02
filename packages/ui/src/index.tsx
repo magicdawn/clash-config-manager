@@ -16,7 +16,7 @@ import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是
 import { StoreProvider } from 'easy-peasy'
 import _ from 'lodash'
 import React, { useEffect } from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { renderRoutes } from 'react-router-config'
 import { HashRouter as Router, Link, useLocation } from 'react-router-dom'
 import Commands from './commands'
@@ -33,7 +33,7 @@ const routes = [
     path: '/',
     exact: true,
     component: Home,
-    title: 'Home',
+    title: '主页',
     icon: <HeartOutlined />,
   },
   {
@@ -68,6 +68,7 @@ const routes = [
 
 function Root() {
   return (
+    // @ts-ignore
     <StoreProvider store={store}>
       <ConfigProvider locale={zhCN}>
         <Router>
@@ -110,4 +111,5 @@ declare global {
   }
 }
 
-render(<Root />, window.app)
+// render(<Root />, window.app)
+createRoot(window.app).render(<Root />)

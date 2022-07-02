@@ -66,6 +66,6 @@
     "rollup": "^2.70.1",
     "rollup-plugin-esbuild": "^4.9.1",
     "rollup-plugin-tsconfig-paths": "^1.1.6",
-    "typescript": "^4.6.4"
+    "typescript": "^4.7.4"
   }
 }
