@@ -86,10 +86,6 @@ function add(payload: Subscribe) {
 
 function edit(payload: Subscribe & { editItemIndex: number }) {
   const { url, name, id, editItemIndex, excludeKeywords } = payload
-
-  // const list = store.list.slice()
-  // list[editItemIndex] = { url, name, id, excludeKeywords }
-  // setState({ list })
   state.list[editItemIndex] = { url, name, id, excludeKeywords }
 }
 
@@ -119,8 +115,6 @@ async function update(payload: { url: string; silent?: boolean; forceUpdate?: bo
     message.success('更新订阅成功')
   }
 
-  // const detail = { ...store.detail, [url]: servers }
-  // setState({ detail })
   state.detail[url] = servers
 }
 

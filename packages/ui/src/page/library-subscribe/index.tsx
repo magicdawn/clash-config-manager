@@ -1,17 +1,16 @@
 import React, { useState, useCallback } from 'react'
 import { Button, Modal, Input, message, List, Space, Select, Divider, Tag, Tooltip } from 'antd'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { v4 as uuid } from 'uuid'
 import styles from './index.module.less'
 import { Subscribe } from '@ui/common/define'
 
 import { state, actions } from './model/valtio'
 import { useSnapshot } from 'valtio'
 
+// FIXME: load on init
 setTimeout(() => {
   actions.load()
 })
-console.log(state)
 
 export default function LibrarySubscribe() {
   const { list } = useSnapshot(state)
@@ -44,7 +43,7 @@ export default function LibrarySubscribe() {
     }
   }, [])
 
-  const del = useMemoizedFn((item, index) => {
+  const del = useMemoizedFn((index) => {
     Modal.confirm({
       title: '确认删除?',
       onOk() {
@@ -104,7 +103,7 @@ export default function LibrarySubscribe() {
                 <Button type='primary' onClick={() => update(item)} onKeyDown={disableEnterAsClick}>
                   更新
                 </Button>
-                <Button danger onClick={() => del(item, index)} onKeyDown={disableEnterAsClick}>
+                <Button danger onClick={() => del(index)} onKeyDown={disableEnterAsClick}>
                   删除
                 </Button>
               </Space>
@@ -129,7 +128,7 @@ function ModalAdd({
 }) {
   const [url, setUrl] = useState(editItem?.url || '')
   const [name, setName] = useState(editItem?.name || '')
-  const [id, setId] = useState(editItem?.id || uuid())
+  const [id, setId] = useState(editItem?.id || crypto.randomUUID())
   const [excludeKeywords, setExcludeKeywords] = useState(editItem?.excludeKeywords || [])
 
   const onUrlChange = useCallback((e) => {
@@ -147,7 +146,7 @@ function ModalAdd({
   useUpdateEffect(() => {
     setUrl(editItem?.url || '')
     setName(editItem?.name || '')
-    setId(editItem?.id || uuid())
+    setId(editItem?.id || crypto.randomUUID())
     setExcludeKeywords(editItem?.excludeKeywords || [])
   }, [editItem, visible])
 
