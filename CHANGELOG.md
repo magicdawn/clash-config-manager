@@ -1,11 +1,12 @@
 # Changelog
 
-## v0.9.0 (un released)
+## v0.9.0 2022-07-02
 
 - [x] yarn -> pnpm
 - [x] poi -> rollup / vite, 原因是 poi 对 ts 支持有限
 - [x] increase AddRuleModal target length limit, from 10000 to 200000
-- [ ] clean up deps
+- [x] clean up deps, use react@18
+- [x] 订阅管理增加排除关键词支持, (excludeKeywords), 可以按节点名字匹配关键词忽略特定节点
 
 ## v0.8.0
 
@@ -14,10 +15,10 @@
 ## v0.7.0
 
 - it's broken for electron-updater@latest, it's using `fs/promises` module, so upgrade
-  - electron -> v16
-  - electron-builder -> latest
-  - electron-store -> latest
-  - use `@electron/remote`
+- electron -> v16
+- electron-builder -> latest
+- electron-store -> latest
+- use `@electron/remote`
 
 ## v0.6.1
 
