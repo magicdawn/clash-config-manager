@@ -10,7 +10,7 @@ import { TaskFunction } from 'gulp'
 function getChangelog() {
   const fullChangeLog = fse.readFileSync(PROJECT_ROOT + '/CHANGELOG.md', 'utf8')
   const lines = fullChangeLog.split('\n')
-  const usingLines = []
+  const usingLines: string[] = []
   let h2Count = 0
 
   for (const line of lines) {
