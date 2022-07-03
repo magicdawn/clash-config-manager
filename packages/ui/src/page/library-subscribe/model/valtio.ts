@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import { message } from 'antd'
-import { subscribeToClash } from '@ui/util/fn/clash'
-import { Subscribe } from '@ui/common/define'
-import storage from '@ui/storage'
+import { subscribeToClash } from '$ui/util/fn/clash'
+import { Subscribe } from '$ui/common/define'
+import storage from '$ui/storage'
 import { proxy, subscribe } from 'valtio'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'

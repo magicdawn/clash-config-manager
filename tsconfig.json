@@ -4,12 +4,12 @@
   "compilerOptions": {
     "baseUrl": "./packages",
     "paths": {
-      "@common": ["common/src/"],
-      "@common/*": ["common/src/*"],
-      "@main": ["main/src/"],
-      "@main/*": ["main/src/*"],
-      "@ui": ["ui/src/"],
-      "@ui/*": ["ui/src/*"]
+      "$common": ["common/src/"],
+      "$common/*": ["common/src/*"],
+      "$main": ["main/src/"],
+      "$main/*": ["main/src/*"],
+      "$ui": ["ui/src/"],
+      "$ui/*": ["ui/src/*"]
     }
   },
   "ts-node": {

@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react'
 import { Button, Modal, Input, message, List, Space, Select, Divider, Tag, Tooltip } from 'antd'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import styles from './index.module.less'
-import { Subscribe } from '@ui/common/define'
+import { Subscribe } from '$ui/common/define'
 
 import { state, actions } from './model/valtio'
 import { useSnapshot } from 'valtio'

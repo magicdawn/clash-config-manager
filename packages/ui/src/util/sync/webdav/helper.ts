@@ -2,8 +2,8 @@ import memo from 'memoize-one'
 import webdav from 'webdav'
 import { dirname } from 'path'
 import { Modal, message } from 'antd'
-import store from '@ui/store'
-import storage from '@ui/storage'
+import store from '$ui/store'
+import storage from '$ui/storage'
 import customMerge from './customMerge'
 
 const newClient = memo((davServerUrl, user, pass) => {

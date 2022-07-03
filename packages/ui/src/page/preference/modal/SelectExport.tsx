@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { Modal, Tree } from 'antd'
 import { BehaviorSubject } from 'rxjs'
-import useImmerState from '@ui/util/hooks/useImmerState'
+import useImmerState from '$ui/util/hooks/useImmerState'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import _ from 'lodash'
 

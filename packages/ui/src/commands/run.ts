@@ -1,6 +1,6 @@
-import Loading from '@ui/page/common/global/loading'
-import store from '@ui/store'
-import gen from '@ui/util/fn/gen'
+import Loading from '$ui/page/common/global/loading'
+import store from '$ui/store'
+import gen from '$ui/util/fn/gen'
 import { message } from 'antd'
 import { createRef } from 'react'
 

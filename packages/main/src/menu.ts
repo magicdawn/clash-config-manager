@@ -9,7 +9,7 @@ import {
   openNewGitHubIssue,
   debugInfo,
 } from 'electron-util'
-import storage from '@ui/storage/index'
+import storage from '$ui/storage/index'
 import debugFactory from 'debug'
 import { updateMenuItem } from './auto-update/index'
 

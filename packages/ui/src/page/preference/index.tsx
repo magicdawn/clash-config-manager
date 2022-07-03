@@ -1,6 +1,6 @@
 import { CloudDownloadOutlined, CloudUploadOutlined, SettingFilled } from '@ant-design/icons'
-import { useEasy } from '@ui/store'
-import useImmerState from '@ui/util/hooks/useImmerState'
+import { useEasy } from '$ui/store'
+import useImmerState from '$ui/util/hooks/useImmerState'
 import { useMount, useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Button, Card, Col, Input, message, Modal, Row, Space } from 'antd'
 import { ipcRenderer, shell } from 'electron'

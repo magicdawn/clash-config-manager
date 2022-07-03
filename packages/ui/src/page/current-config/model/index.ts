@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import { Action, computed, Computed, thunk, Thunk, thunkOn, ThunkOn } from 'easy-peasy'
-import storage from '@ui/storage'
-import { ConfigItem } from '@ui/common/define'
-import { setStateFactory, SetStatePayload } from '@ui/common/model/setState'
-import { StoreModel } from '@ui/store'
+import storage from '$ui/storage'
+import { ConfigItem } from '$ui/common/define'
+import { setStateFactory, SetStatePayload } from '$ui/common/model/setState'
+import { StoreModel } from '$ui/store'
 
 const CURRENT_CONFIG_STORAGE_KEY = 'current_config_v2'
 

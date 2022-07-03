@@ -6,7 +6,7 @@ import URI from 'urijs'
 import pify from 'promise.ify'
 import AppleScript from 'applescript'
 import Yaml from 'js-yaml'
-import { useStoreState } from '@ui/store'
+import { useStoreState } from '$ui/store'
 
 const { Option } = Select
 

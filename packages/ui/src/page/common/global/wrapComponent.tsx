@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { render } from 'react-dom'
 import { BehaviorSubject } from 'rxjs'
 import { withProps } from 'recompose'
-import useImmerState from '@ui/util/hooks/useImmerState'
+import useImmerState from '$ui/util/hooks/useImmerState'
 
 export default function wrap({ component, defaultProps, withProps: withPropsOptions }) {
   const subject = new BehaviorSubject(null)

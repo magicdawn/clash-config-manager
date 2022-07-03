@@ -1,6 +1,6 @@
 import { InfoCircleOutlined } from '@ant-design/icons'
-import { useEasy, useStoreState } from '@ui/store'
-import { limitLines } from '@ui/util/text-util'
+import { useEasy, useStoreState } from '$ui/store'
+import { limitLines } from '$ui/util/text-util'
 import { useMemoizedFn } from 'ahooks'
 import { Tooltip } from 'antd'
 import cx from 'classnames'

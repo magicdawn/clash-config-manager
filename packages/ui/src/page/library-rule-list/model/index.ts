@@ -1,12 +1,12 @@
 import _ from 'lodash'
 import { message } from 'antd'
-import storage from '@ui/storage'
-import { subscribeToClash } from '@ui/util/fn/clash'
+import storage from '$ui/storage'
+import { subscribeToClash } from '$ui/util/fn/clash'
 import { thunk, thunkOn } from 'easy-peasy'
 import { Action, Thunk, ThunkOn } from 'easy-peasy'
-import { RuleItem } from '@ui/common/define'
-import { StoreModel } from '@ui/store'
-import { setStateFactory, SetStatePayload } from '@ui/common/model/setState'
+import { RuleItem } from '$ui/common/define'
+import { StoreModel } from '$ui/store'
+import { setStateFactory, SetStatePayload } from '$ui/common/model/setState'
 
 const RULE_LIST_STORAGE_KEY = 'rule_list'
 

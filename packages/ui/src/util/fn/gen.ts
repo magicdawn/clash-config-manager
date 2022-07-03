@@ -3,9 +3,9 @@ import { join as pathjoin } from 'path'
 import Yaml from 'js-yaml'
 import fse from 'fs-extra'
 import request from 'umi-request'
-import store from '@ui/store'
-import { ClashConfig } from '@ui/common/define'
-import { ProxyGroupType } from '@ui/common/define/ClashConfig'
+import store from '$ui/store'
+import { ClashConfig } from '$ui/common/define'
+import { ProxyGroupType } from '$ui/common/define/ClashConfig'
 
 export default async function genConfig(options: { forceUpdate?: boolean } = {}) {
   const { forceUpdate = false } = options

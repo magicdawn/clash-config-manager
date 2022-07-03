@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import useImmerState from '@ui/util/hooks/useImmerState'
+import useImmerState from '$ui/util/hooks/useImmerState'
 import { useMemoizedFn } from 'ahooks'
 import AddRuleModal, { Mode } from '../library-rule-list/AddRuleModal'
 

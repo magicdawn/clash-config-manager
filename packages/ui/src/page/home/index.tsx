@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { Button, message } from 'antd'
-import store from '@ui/store'
-import { runCommand } from '@ui/commands/run'
+import store from '$ui/store'
+import { runCommand } from '$ui/commands/run'
 import styles from './index.module.less'
 import { useMobxAddRuleModal } from './useAddRuleModal'
 

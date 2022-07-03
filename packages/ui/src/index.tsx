@@ -28,13 +28,6 @@ import LibrarySubscribe from './page/library-subscribe'
 import Preference from './page/preference'
 import store from './store'
 
-// augment
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useSnapshot } from 'valtio'
-declare module 'valtio' {
-  function useSnapshot<T extends object>(p: T): T
-}
-
 const routes = [
   {
     path: '/',
