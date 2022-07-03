@@ -43,7 +43,7 @@ export const actions = {
   update,
 }
 
-function check(payload: { url: string; name: string; editItemIndex: number }) {
+function check(payload: { url: string; name: string; editItemIndex?: number | null }) {
   const { url, name, editItemIndex } = payload
 
   let { list } = state

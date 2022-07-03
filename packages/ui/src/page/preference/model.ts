@@ -2,8 +2,7 @@ import { valtioState } from '$ui/common/model/valtio-helper'
 import { onInit, onReload } from '$ui/page/global-model'
 import storage from '$ui/storage'
 
-const nsp = 'preference'
-const STORAGE_KEY = nsp
+const STORAGE_KEY = 'preference'
 
 interface IState {
   syncConfig: {

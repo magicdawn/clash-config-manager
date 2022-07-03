@@ -1,5 +1,4 @@
 import Emitter from 'emittery'
-import { proxy } from 'valtio'
 
 export const globalEmitter = new Emitter<{ init: undefined; reload: undefined }>()
 
@@ -19,14 +18,3 @@ export function onInit(cb: () => void) {
 export function onReload(cb: () => void) {
   globalEmitter.on('reload', cb)
 }
-
-const state = proxy({
-  count: 0,
-  name: 'foo',
-  inc: () => {
-    ++state.count
-  },
-  setName: (name) => {
-    state.name = name
-  },
-})

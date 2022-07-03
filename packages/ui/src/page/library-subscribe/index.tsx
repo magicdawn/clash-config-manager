@@ -1,26 +1,19 @@
-import React, { useState, useCallback } from 'react'
-import { Button, Modal, Input, message, List, Space, Select, Divider, Tag, Tooltip } from 'antd'
-import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import styles from './index.module.less'
 import { Subscribe } from '$ui/common/define'
-
-import { state, actions } from './model/valtio'
+import { useMemoizedFn, useUpdateEffect } from 'ahooks'
+import { Button, Divider, Input, List, message, Modal, Select, Space, Tag, Tooltip } from 'antd'
+import React, { KeyboardEventHandler, useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
-
-// FIXME: load on init
-setTimeout(() => {
-  actions.load()
-})
+import styles from './index.module.less'
+import { actions, state } from './model'
 
 export default function LibrarySubscribe() {
   const { list } = useSnapshot(state)
 
   const [showModal, setShowModal] = useState(false)
-  const [editItem, setEditItem] = useState(null)
-  const [editItemIndex, setEditItemIndex] = useState(null)
+  const [editItem, setEditItem] = useState<Subscribe | null>(null)
+  const [editItemIndex, setEditItemIndex] = useState<number | null>(null)
 
   const add = useMemoizedFn(() => {
-    console.log('add')
     setEditItem(null)
     setEditItemIndex(null)
     setShowModal(true)
@@ -36,7 +29,7 @@ export default function LibrarySubscribe() {
     actions.update({ url: item.url })
   })
 
-  const disableEnterAsClick = useCallback((e) => {
+  const disableEnterAsClick: KeyboardEventHandler = useCallback((e) => {
     // disable enter
     if (e.keyCode === 13) {
       e.preventDefault()
@@ -59,7 +52,12 @@ export default function LibrarySubscribe() {
     <div className={styles.page}>
       <h1>订阅管理</h1>
 
-      <ModalAdd {...{ visible: showModal, setVisible: setShowModal, editItem, editItemIndex }} />
+      <ModalAdd
+        visible={showModal}
+        setVisible={setShowModal}
+        editItem={editItem}
+        editItemIndex={editItemIndex}
+      />
 
       <List
         size='large'
@@ -123,8 +121,8 @@ function ModalAdd({
 }: {
   visible: boolean
   setVisible: (visible: boolean) => void
-  editItem?: Subscribe
-  editItemIndex?: number
+  editItem?: Subscribe | null
+  editItemIndex?: number | null
 }) {
   const [url, setUrl] = useState(editItem?.url || '')
   const [name, setName] = useState(editItem?.name || '')
@@ -178,7 +176,7 @@ function ModalAdd({
     if (mode === 'add') {
       actions.add({ url, name, id, excludeKeywords })
     } else {
-      actions.edit({ url, name, id, excludeKeywords, editItemIndex })
+      actions.edit({ url, name, id, excludeKeywords, editItemIndex: editItemIndex! })
     }
 
     setVisible(false)

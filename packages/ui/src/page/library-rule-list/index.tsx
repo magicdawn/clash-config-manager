@@ -1,6 +1,5 @@
 import { runCommand } from '$ui/commands/run'
 import { RuleItem } from '$ui/common/define'
-import {} from '$ui/store'
 import useImmerState from '$ui/util/hooks/useImmerState'
 import { firstLine, limitLines } from '$ui/util/text-util'
 import { FileAddOutlined } from '@ant-design/icons'
@@ -19,7 +18,7 @@ import { useSnapshot } from 'valtio'
 import RuleAddModal from './AddRuleModal'
 import ConfigEditor, { EditorRefInner } from './ConfigEditor'
 import styles from './index.module.less'
-import { actions, state } from './model/valtio'
+import { actions, state } from './model'
 
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
