@@ -2,6 +2,19 @@
 
 ## Todo
 
+### 2022-07-04
+
+- [ ] feat: 自动更新
+- [ ] 体验: 软件内增加 tooltip
+- [ ] 首页 Tabs 样式问题, 性能
+- [ ] react-beautiful-dnd + react@18 报错
+- [ ] DND 代码优化 & 样式优化
+- [ ] 清理 any
+- [ ] 文档: 使用教程
+- [ ] feat: 发布订阅, maybe public service
+
+## unknown
+
 - [x] 快速添加规则, mc clash add-rule GUI version
 - [x] 记住窗口位置
 - [x] 导入导出(store 加密有必要, 防止扫描)
@@ -16,7 +29,6 @@
 - [x] Typescript-eslint
 - [ ] app icon
 - [ ] docs
-- [ ] 整理 easy-peasy 用法
 
 ### 2022-05-07
 
