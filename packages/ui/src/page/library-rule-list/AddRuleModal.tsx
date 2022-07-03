@@ -6,7 +6,8 @@ import URI from 'urijs'
 import pify from 'promise.ify'
 import AppleScript from 'applescript'
 import Yaml from 'js-yaml'
-import { useStoreState } from '$ui/store'
+import { rootState } from '$ui/store'
+import { useSnapshot } from 'valtio'
 
 const { Option } = Select
 
@@ -24,8 +25,11 @@ interface IProps {
 export default function AddRuleModal(props: IProps) {
   const { visible, setVisible, onOk, mode = 'from-rule' } = props
 
-  const ruleList = useStoreState((state) => {
-    const list = state.libraryRuleList.list.filter((item) => {
+  const rootStateSnap = useSnapshot(rootState)
+  const fullList = rootStateSnap.libraryRuleList.list
+
+  const ruleList = useMemo(() => {
+    const list = fullList.filter((item) => {
       if (mode !== 'from-global') return false
 
       if (!(item.type === 'local' && item.content)) {
@@ -45,7 +49,7 @@ export default function AddRuleModal(props: IProps) {
       }
     })
     return list
-  })
+  }, [fullList])
 
   const [ruleId, setRuleId] = useState(ruleList[0]?.id || '')
 

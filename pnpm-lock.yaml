@@ -224,6 +224,7 @@ importers:
       electron-unhandled: ^3.0.0
       electron-updater: ^4.0.6
       electron-util: ^0.13.0
+      emittery: ^0.11.0
       env-paths: ^2.2.0
       eslint: ^8.15.0
       eslint-plugin-react: ^7.29.4
@@ -294,6 +295,7 @@ importers:
       electron-unhandled: 3.0.2
       electron-updater: 4.6.5
       electron-util: 0.13.1
+      emittery: 0.11.0
       env-paths: 2.2.1
       execa: 5.1.1
       fix-path: 3.0.0
@@ -3666,6 +3668,11 @@ packages:
       extract-zip: 1.7.0
     transitivePeerDependencies:
       - supports-color
+
+  /emittery/0.11.0:
+    resolution: {integrity: sha512-S/7tzL6v5i+4iJd627Nhv9cLFIo5weAIlGccqJFpnBoDB8U1TF2k5tez4J/QNuxyyhWuFqHg1L84Kd3m7iXg6g==}
+    engines: {node: '>=12'}
+    dev: false
 
   /emoji-regex/8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}

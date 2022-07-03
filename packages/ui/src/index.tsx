@@ -13,7 +13,6 @@ import type { MenuProps } from 'antd'
 import { ConfigProvider, Menu } from 'antd'
 import 'antd/dist/antd.css'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
-import { StoreProvider } from 'easy-peasy'
 import _ from 'lodash'
 import React, { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
@@ -26,7 +25,6 @@ import Home from './page/home'
 import LibraryRuleList from './page/library-rule-list'
 import LibrarySubscribe from './page/library-subscribe'
 import Preference from './page/preference'
-import store from './store'
 
 const routes = [
   {
@@ -68,14 +66,11 @@ const routes = [
 
 function Root() {
   return (
-    // @ts-ignore
-    <StoreProvider store={store}>
-      <ConfigProvider locale={zhCN}>
-        <Router>
-          <Routes></Routes>
-        </Router>
-      </ConfigProvider>
-    </StoreProvider>
+    <ConfigProvider locale={zhCN}>
+      <Router>
+        <Routes></Routes>
+      </Router>
+    </ConfigProvider>
   )
 }
 

@@ -1,10 +1,12 @@
-import MonacoEditor, { EditorWillMount } from 'react-monaco-editor'
-import React, { forwardRef, ReactNode } from 'react'
+import MonacoEditor, { EditorDidMount, EditorWillMount, monaco } from 'react-monaco-editor'
+import React, { MutableRefObject, ReactNode, useRef } from 'react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Spin } from 'antd'
 import { SpinProps } from 'antd/lib/spin'
 import style from './ConfigEditor.module.less'
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api'
+
+export type EditorRefInner = monaco.editor.IStandaloneCodeEditor
 
 interface IProps {
   id?: string
@@ -14,42 +16,47 @@ interface IProps {
   spinProps?: SpinProps
   header: ReactNode
   visible: boolean
+  editorRef?: MutableRefObject<EditorRefInner | null>
 }
 
-export default forwardRef(ConfigEditor)
+export default function ConfigEditor(props: IProps) {
+  const { value, onChange, readonly, spinProps, header, visible, editorRef } = props
 
-function ConfigEditor(props: IProps, ref) {
-  const { value, onChange, readonly, spinProps, header, visible } = props
+  const ref = useRef<EditorRefInner | null>(null)
 
   const editorWillMount: EditorWillMount = useMemoizedFn((monaco) => {
     //
   })
 
-  const editorDidMount = useMemoizedFn((editor, monaco) => {
+  const editorDidMount: EditorDidMount = useMemoizedFn((editor, monaco) => {
+    // FIXME
     ;(window as any).$editor = editor
     ;(window as any).$monaco = monaco
 
     // ref
     ref.current = editor
+    if (editorRef) {
+      editorRef.current = editor
+    }
 
     // focus
     editor.focus()
 
     // extra options
     const model = editor.getModel()
-    model.updateOptions({
+    model?.updateOptions({
       tabSize: 2,
     })
   })
 
   const editorOnChange = useMemoizedFn((newValue, e) => {
-    onChange(newValue)
+    onChange?.(newValue)
   })
 
   const options: monacoEditor.editor.IStandaloneEditorConstructionOptions = {
     minimap: { enabled: false },
     overviewRulerBorder: true,
-    renderIndentGuides: true,
+    // renderIndentGuides: true,
     scrollBeyondLastLine: false,
     scrollbar: {
       horizontal: 'hidden',

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Button, message } from 'antd'
-import store from '$ui/store'
+import { rootState, rootActions } from '$ui/store'
 import { runCommand } from '$ui/commands/run'
 import styles from './index.module.less'
 import { useMobxAddRuleModal } from './useAddRuleModal'
@@ -17,8 +17,8 @@ export default function Home() {
         return message.warn(`内容 or 待添加规则为空`)
       }
 
-      const index = store.getState().libraryRuleList.list.findIndex((item) => item.id === ruleId)
-      const ruleItem = store.getState().libraryRuleList.list[index]
+      const index = rootState.libraryRuleList.list.findIndex((item) => item.id === ruleId)
+      const ruleItem = rootState.libraryRuleList.list[index]
       if (!ruleItem) {
         return message.warn(`找不到待添加规则`)
       }
@@ -31,7 +31,7 @@ export default function Home() {
       // construct new content
       const newContent = content.trimEnd() + '\n' + `  - ${rule}` + '\n'
       // save new content
-      store.dispatch.libraryRuleList.edit({
+      rootActions.libraryRuleList.edit({
         editItemIndex: index,
         item: { ...ruleItem, content: newContent },
       })

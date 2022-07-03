@@ -3,13 +3,12 @@ import { join as pathjoin } from 'path'
 import Yaml from 'js-yaml'
 import fse from 'fs-extra'
 import request from 'umi-request'
-import store from '$ui/store'
-import { ClashConfig } from '$ui/common/define'
+import { rootState, rootActions } from '$ui/store'
+import { ClashConfig, RuleItem, Subscribe } from '$ui/common/define'
 import { ProxyGroupType } from '$ui/common/define/ClashConfig'
 
 export default async function genConfig(options: { forceUpdate?: boolean } = {}) {
   const { forceUpdate = false } = options
-  const rootState = store.getState()
 
   // subscribe
   const subscribeList = rootState.librarySubscribe.list
@@ -39,8 +38,14 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
     .filter(Boolean)
 
   // reverse: GUI最前面的优先
-  const subscribeArr = resultItemList.filter((x) => x.type === 'subscribe')
-  const ruleArr = resultItemList.filter((x) => x.type === 'rule')
+  const subscribeArr = resultItemList.filter((x) => x?.type === 'subscribe') as {
+    item: Subscribe
+    type: 'subscribe'
+  }[]
+  const ruleArr = resultItemList.filter((x) => x?.type === 'rule') as {
+    item: RuleItem
+    type: 'rule'
+  }[]
 
   /**
    * config merge
@@ -54,10 +59,15 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
 
     // remote: url -> content
     if (type === 'remote') {
-      usingContent = await request.get(url, {
+      usingContent = await request.get(url!, {
         responseType: 'text',
         headers: { 'x-extra-headers': JSON.stringify({ 'user-agent': 'clash' }) },
       })
+    }
+
+    if (!usingContent) {
+      console.warn('content 为空')
+      continue
     }
 
     const cur = Yaml.load(usingContent)
@@ -82,9 +92,9 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
     let servers
 
     // update subscribe
-    await store.dispatch.librarySubscribe.update({ url, silent: true, forceUpdate })
+    await rootActions.librarySubscribe.update({ url, silent: true, forceUpdate })
     // eslint-disable-next-line prefer-const
-    servers = store.getState().librarySubscribe.detail[url]
+    servers = rootState.librarySubscribe.detail[url]
     config.proxies = config.proxies.concat(servers)
   }
 
@@ -97,7 +107,7 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
     })
 
   const existNames = proxyGroups.map((i) => i.name)
-  for (const line of config.rules) {
+  for (const line of config.rules || []) {
     const use = line.split(',').slice(-1)[0]
     if (!use) continue
     if (['DIRECT', 'REJECT', 'no-resolve'].includes(use)) continue

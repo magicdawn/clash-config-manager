@@ -1,7 +1,7 @@
-import { CloudDownloadOutlined, CloudUploadOutlined, SettingFilled } from '@ant-design/icons'
-import { useEasy } from '$ui/store'
+import { rootActions, rootState } from '$ui/store'
 import useImmerState from '$ui/util/hooks/useImmerState'
-import { useMount, useMemoizedFn, useUpdateEffect } from 'ahooks'
+import { CloudDownloadOutlined, CloudUploadOutlined, SettingFilled } from '@ant-design/icons'
+import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Button, Card, Col, Input, message, Modal, Row, Space } from 'antd'
 import { ipcRenderer, shell } from 'electron'
 import fse from 'fs-extra'
@@ -11,6 +11,7 @@ import moment from 'moment'
 import { tmpdir } from 'os'
 import path from 'path'
 import React, { useCallback, useState } from 'react'
+import { useSnapshot } from 'valtio'
 
 import PRESET_JSON_DATA from '../../assets/基本数据规则.json'
 import storage from '../../storage/index'
@@ -20,13 +21,6 @@ import styles from './index.module.less'
 import { pick as pickSelectExport, SelectExportForStaticMethod } from './modal/SelectExport'
 
 export default function Preference() {
-  const preferenceModel = useEasy('preference')
-  const globalModel = useEasy('global')
-
-  useMount(() => {
-    preferenceModel.init()
-  })
-
   const [showModal, setShowModal] = useState(false)
 
   const onUpload = useMemoizedFn(async () => {
@@ -84,7 +78,7 @@ export default function Preference() {
     storage.store = merged
 
     // reload redux
-    globalModel.reload()
+    rootActions.global.reload()
 
     message.success('导入成功: 已与本地配置合并')
   }
@@ -274,16 +268,16 @@ interface ModalSyncConfigProps {
 }
 
 function ModalSyncConfig(props: ModalSyncConfigProps) {
-  const { visible, setVisible, editItem, editItemIndex } = props
-  const preferenceModel = useEasy('preference')
+  const { visible, setVisible } = props
 
-  const [data, modifyData] = useImmerState(preferenceModel.syncConfig)
+  const syncConfig = useSnapshot(rootState.preference.syncConfig)
+  const [data, modifyData] = useImmerState(syncConfig)
 
   useUpdateEffect(() => {
     if (visible) {
-      modifyData(preferenceModel.syncConfig)
+      modifyData(syncConfig)
     }
-  }, [visible, preferenceModel.syncConfig])
+  }, [visible, syncConfig])
 
   const handleCancel = useCallback(() => {
     setVisible(false)
@@ -301,8 +295,7 @@ function ModalSyncConfig(props: ModalSyncConfigProps) {
     }
 
     // save
-    preferenceModel.setState({ syncConfig: data })
-    preferenceModel.persist()
+    rootState.preference.syncConfig = data
 
     // close
     setVisible(false)

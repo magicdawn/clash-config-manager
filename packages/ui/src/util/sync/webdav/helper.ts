@@ -2,7 +2,7 @@ import memo from 'memoize-one'
 import webdav from 'webdav'
 import { dirname } from 'path'
 import { Modal, message } from 'antd'
-import store from '$ui/store'
+import { rootActions, rootState } from '$ui/store'
 import storage from '$ui/storage'
 import customMerge from './customMerge'
 
@@ -14,7 +14,7 @@ const newClient = memo((davServerUrl, user, pass) => {
 })
 
 export function getClient() {
-  const { davServerUrl, user, pass } = store.getState().preference?.syncConfig || {}
+  const { davServerUrl, user, pass } = rootState.preference?.syncConfig || {}
   return newClient(davServerUrl, user, pass)
 }
 
@@ -27,7 +27,7 @@ class DavHelper {
   }
 
   private getDirLevels = (dir: string) => {
-    const ret = []
+    const ret: string[] = []
     let cur = dir
     do {
       ret.unshift(cur)
@@ -138,7 +138,7 @@ class DavHelper {
 
     // reload electron-store & redux
     storage.store = merged
-    store.dispatch({ type: 'global/reload' })
+    rootActions.global.reload()
     message.success('下载成功')
   }
 
@@ -152,7 +152,7 @@ class DavHelper {
 
     // reload electron-store & redux
     storage.store = data
-    store.dispatch({ type: 'global/reload' })
+    rootActions.global.reload()
     message.success('下载成功')
   }
 }

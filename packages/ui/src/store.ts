@@ -1,49 +1,31 @@
-import { createStore, createTypedHooks } from 'easy-peasy'
-import { useMemo } from 'react'
-import shallowEqual from 'shallowequal'
-import * as models from './models'
+import { proxy } from 'valtio'
 
-const store = createStore(models)
-export default store
-export type StoreModel = typeof models
+import { actions as globalActions } from './page/global-model'
+import { state as currentConfig } from './page/current-config/model/valtio'
+import {
+  state as libraryRuleList,
+  actions as libraryRuleListActions,
+} from './page/library-rule-list/model/valtio'
+import {
+  state as librarySubscribe,
+  actions as librarySubscribeActions,
+} from './page/library-subscribe/model/valtio'
+import { state as preference } from './page/preference/model/valtio'
 
-if (import.meta.hot) {
-  import.meta.hot.accept('./models', (models) => {
-    store.reconfigure(models) // 👈 Here is the magic
-  })
-}
+export const rootState = proxy({
+  currentConfig,
+  librarySubscribe,
+  libraryRuleList,
+  preference,
+})
 
-const { useStore, useStoreActions, useStoreDispatch, useStoreState } =
-  createTypedHooks<StoreModel>()
-export { useStore, useStoreActions, useStoreDispatch, useStoreState }
-
-export const useEasyState = <NSP extends keyof StoreModel>(nsp: NSP) => {
-  const state = useStoreState((state) => state[nsp], shallowEqual)
-  return state
-}
-
-export const useEasyActions = <NSP extends keyof StoreModel>(nsp: NSP) => {
-  const actions = useStoreActions((actions) => {
-    return actions[nsp]
-  })
-  return actions
-}
-export const useEasy = <NSP extends keyof StoreModel>(nsp: NSP) => {
-  const state = useEasyState(nsp)
-  const actions = useEasyActions(nsp)
-  return useMemo(() => {
-    return {
-      // @ts-ignore
-      ...state,
-      ...actions,
-    }
-  }, [state, actions])
+export const rootActions = {
+  global: globalActions,
+  libraryRuleList: libraryRuleListActions,
+  librarySubscribe: librarySubscribeActions,
 }
 
 // init on start
 process.nextTick(() => {
-  store.dispatch.global.init()
+  rootActions.global.init()
 })
-
-// FIXME
-;(global as any).easyStore = store

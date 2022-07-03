@@ -4,21 +4,20 @@ import { Button, Input, Row, Col, Divider, message } from 'antd'
 import launch from 'launch-editor'
 import { getConfigFileDisplay, getConfigFile, DEFAULT_NAME } from '$ui/util/fn/gen'
 import { runCommand } from '$ui/commands/run'
-import { useEasy } from '$ui/store'
+import { rootState } from '$ui/store'
 import styles from './index.module.less'
 import DndPlaygroud from './DndPlayground'
+import { useSnapshot } from 'valtio'
 
-const namespace = 'currentConfig'
-
-export default function ConfigList(props) {
-  const currentConfigModel = useEasy('currentConfig')
+export default function ConfigList() {
+  const { name } = useSnapshot(rootState.currentConfig)
 
   const onGenConfigClick = useMemoizedFn(async () => {
     return runCommand('generate')
   })
 
   const onOpenConfigClick = useMemoizedFn((editor = 'code') => {
-    const file = getConfigFile(currentConfigModel.name)
+    const file = getConfigFile(rootState.currentConfig.name)
     launch(
       // file
       file,
@@ -56,9 +55,10 @@ export default function ConfigList(props) {
         <Col span={10}>
           <Input
             placeholder={DEFAULT_NAME}
-            value={currentConfigModel.name}
+            value={name}
             onChange={(e) => {
-              currentConfigModel.changeState({ name: e.target.value })
+              const name = e.target.value
+              rootState.currentConfig.name = name
             }}
           />
         </Col>
@@ -80,7 +80,7 @@ export default function ConfigList(props) {
           </div>
         </Col>
         <Col span={10}>
-          <Input value={getConfigFileDisplay(currentConfigModel.name)} disabled />
+          <Input value={getConfigFileDisplay(name)} disabled />
         </Col>
       </Row>
 

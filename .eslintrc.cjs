@@ -49,6 +49,8 @@ module.exports = {
         varsIgnorePattern: unused.join('|'),
       },
     ],
+
+    '@typescript-eslint/no-non-null-assertion': 'off',
   },
 
   overrides: [

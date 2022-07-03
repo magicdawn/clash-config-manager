@@ -8,6 +8,7 @@
     "target": "es2019",
     "module": "ESNext",
     "strict": false,
+    "strictNullChecks": true,
     "experimentalDecorators": true,
     "jsx": "react",
     "plugins": [

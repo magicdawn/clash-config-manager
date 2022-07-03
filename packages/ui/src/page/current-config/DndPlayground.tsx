@@ -1,5 +1,5 @@
 import { InfoCircleOutlined } from '@ant-design/icons'
-import { useEasy, useStoreState } from '$ui/store'
+import { rootState } from '$ui/store'
 import { limitLines } from '$ui/util/text-util'
 import { useMemoizedFn } from 'ahooks'
 import { Tooltip } from 'antd'
@@ -7,12 +7,18 @@ import cx from 'classnames'
 import React, { useMemo, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import styles from './DndPlayground.module.less'
+import { useSnapshot } from 'valtio'
+import { ConfigItem } from '$ui/common/define'
+import { truthy } from '$ui/util/ts-filter'
+
+function modifyResultList(action: (list: ConfigItem[]) => void) {
+  action(rootState.currentConfig.list)
+}
 
 export default function DndPlaygroud() {
-  const currentConfigModel = useEasy('currentConfig')
-
   // subscribe
-  const subscribeList = useStoreState((state) => state.librarySubscribe.list)
+  const rootStateSnap = useSnapshot(rootState)
+  const subscribeList = rootStateSnap.librarySubscribe.list
 
   const subscribeSourceList = useMemo(() => {
     return subscribeList.map((item) => {
@@ -25,9 +31,7 @@ export default function DndPlaygroud() {
   }, [subscribeList])
 
   // rule
-  const ruleList = useStoreState((state) => {
-    return state.libraryRuleList.list
-  })
+  const ruleList = rootStateSnap.libraryRuleList.list
   const ruleSourceList = useMemo(() => {
     return ruleList.map((item) => {
       return {
@@ -40,8 +44,7 @@ export default function DndPlaygroud() {
   }, [ruleList])
 
   // 只放 {type, id}
-  const resultList = currentConfigModel.list
-  const modifyResultList = currentConfigModel.modifyList
+  const resultList = rootStateSnap.currentConfig.list
 
   // 具体 item
   const resultItemList = useMemo(() => {
@@ -54,7 +57,7 @@ export default function DndPlaygroud() {
           return ruleSourceList.find((x) => x.id === id)
         }
       })
-      .filter(Boolean)
+      .filter(truthy)
   }, [resultList, ruleSourceList])
 
   // id set
@@ -75,20 +78,21 @@ export default function DndPlaygroud() {
     setTrashDropDisabled(true)
 
     // console.log(result)
-    const { draggableId, type, source, destination, reason } = result
+    // {reason, draggableId, type}
+    const { source, destination } = result
     if (!destination || !destination.droppableId) return
 
     // from result-list to trash
     if (source.droppableId === 'result-list' && destination.droppableId === 'trash') {
       const delIndex = source.index
-      modifyResultList((l) => {
-        l.splice(delIndex, 1) // remove
+      modifyResultList((list) => {
+        list.splice(delIndex, 1) // remove
       })
       return
     }
 
     let addItem
-    const modifyActions = []
+    const modifyActions: Array<(list: ConfigItem[]) => void> = []
     if (source.droppableId === 'rule-source-list') {
       const id = ruleSourceList[source.index].id
       addItem = { type: 'rule', id }

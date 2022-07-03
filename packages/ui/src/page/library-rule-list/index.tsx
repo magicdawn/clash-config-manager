@@ -1,11 +1,12 @@
-import { FileAddOutlined } from '@ant-design/icons'
-import * as remote from '@electron/remote'
 import { runCommand } from '$ui/commands/run'
 import { RuleItem } from '$ui/common/define'
-import { useEasy } from '$ui/store'
+import {} from '$ui/store'
 import useImmerState from '$ui/util/hooks/useImmerState'
 import { firstLine, limitLines } from '$ui/util/text-util'
-import { useMount, useMemoizedFn, useUpdateEffect } from 'ahooks'
+import { FileAddOutlined } from '@ant-design/icons'
+import * as remote from '@electron/remote'
+import { LinkTwo, SdCard } from '@icon-park/react'
+import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Button, Form, Input, List, message, Modal, Select, Space, Tooltip } from 'antd'
 import debugFactory from 'debug'
 import execa from 'execa'
@@ -14,10 +15,11 @@ import Yaml from 'js-yaml'
 import path from 'path'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
+import { useSnapshot } from 'valtio'
 import RuleAddModal from './AddRuleModal'
-import ConfigEditor from './ConfigEditor'
+import ConfigEditor, { EditorRefInner } from './ConfigEditor'
 import styles from './index.module.less'
-import { LinkTwo, SdCard } from '@icon-park/react'
+import { actions, state } from './model/valtio'
 
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
@@ -26,16 +28,12 @@ const TEMP_EDITING_FILE = path.join(remote.app.getPath('userData'), 'temp', '临
 type EditMode = 'edit' | 'readonly'
 
 export default function LibraryRuleList() {
-  const ruleListModel = useEasy('libraryRuleList')
-
-  useMount(() => {
-    ruleListModel.init()
-  })
-
   const [showModal, showModalSet] = useState(false)
-  const [editItem, editItemSet] = useState<RuleItem>(null)
-  const [editItemIndex, editItemIndexSet] = useState<number>(null)
+  const [editItem, editItemSet] = useState<RuleItem | null>(null)
+  const [editItemIndex, editItemIndexSet] = useState<number | null>(null)
   const [editMode, editModeSet] = useState<EditMode>('edit')
+
+  const { list } = useSnapshot(state)
 
   const add = useMemoizedFn(() => {
     editItemSet(null)
@@ -69,7 +67,7 @@ export default function LibraryRuleList() {
     Modal.confirm({
       title: '确认删除?',
       onOk() {
-        ruleListModel.del(index)
+        actions.del(index)
       },
     })
   })
@@ -93,9 +91,9 @@ export default function LibraryRuleList() {
           </div>
         }
         bordered
-        dataSource={ruleListModel.list}
+        dataSource={list}
         renderItem={(item, index) => {
-          const { type, name, url, content } = item as RuleItem
+          const { type, name, url, content = '' } = item as RuleItem
           return (
             <List.Item style={{ display: 'flex' }}>
               <div className='list-item'>
@@ -174,14 +172,12 @@ export default function LibraryRuleList() {
 type ModalAddProps = {
   visible: boolean
   setVisible: (val: boolean) => void
-  editItem: RuleItem
-  editItemIndex: number
+  editItem: RuleItem | null
+  editItemIndex: number | null
   editMode: EditMode
 }
 
 function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: ModalAddProps) {
-  const ruleListModel = useEasy('libraryRuleList')
-
   const readonly = editMode === 'readonly'
 
   const getDefaultItem = () => ({
@@ -193,12 +189,12 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
   })
 
   const [form] = Form.useForm()
-  const [formFields, setFormFields] = useState([])
+  const [formFields, setFormFields] = useState<any[]>([])
 
   const [otherFormData, modifyOtherFormData] = useImmerState<{ id?: string }>({})
   const [type, setType] = useImmerState({ value: editItem?.type || 'local' })
 
-  const configEditorRef = useRef(null)
+  const monacoEditorRef = useRef<EditorRefInner | null>(null)
 
   useUpdateEffect(() => {
     const val = editItem || getDefaultItem()
@@ -208,8 +204,8 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
     setType({ value: val.type })
 
     if (visible) {
-      configEditorRef.current?.setSelections([])
-      configEditorRef.current?.focus()
+      monacoEditorRef.current?.setSelections([])
+      monacoEditorRef.current?.focus()
     }
   }, [editItem, visible])
 
@@ -255,7 +251,7 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
 
     // add more data
     const { id } = otherFormData
-    item.id = id
+    item.id = id!
     item.type = type.value
 
     const typeValue = type.value
@@ -264,7 +260,7 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
         return message.error('content can not be empty')
       }
 
-      let err: Error
+      let err: Error | undefined
       try {
         Yaml.safeLoad(content)
       } catch (e) {
@@ -279,14 +275,14 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
       item.content = ''
     }
 
-    const err = ruleListModel.check({ item, editItemIndex })
+    const err = actions.check({ item, editItemIndex })
     if (err) return message.error(err)
 
     const mode = editItem ? 'edit' : 'add'
     if (mode === 'add') {
-      ruleListModel.add({ item })
+      actions.add({ item })
     } else {
-      ruleListModel.edit({ item, editItemIndex })
+      actions.edit({ item, editItemIndex: editItemIndex! })
     }
 
     setVisible(false)
@@ -449,7 +445,7 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
             <ConfigEditor
               id={otherFormData.id}
               visible={visible}
-              ref={configEditorRef}
+              editorRef={monacoEditorRef}
               readonly={readonly}
               header={
                 <>

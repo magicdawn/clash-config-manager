@@ -7,13 +7,16 @@ export interface Subscribe {
 }
 
 export interface RuleItem {
-  id?: string
+  id: string
   type: string
   name: string
   url?: string
   content?: string
 }
 
-export interface ConfigItem {}
+export interface ConfigItem {
+  type: 'subscribe' | 'rule'
+  id: string
+}
 
 export { default as ClashConfig } from './define/ClashConfig'

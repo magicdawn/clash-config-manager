@@ -1,5 +1,5 @@
 import Loading from '$ui/page/common/global/loading'
-import store from '$ui/store'
+import { rootActions } from '$ui/store'
 import gen from '$ui/util/fn/gen'
 import { message } from 'antd'
 import { createRef } from 'react'
@@ -14,7 +14,7 @@ export const close = () =>
   })
 
 const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {}) => {
-  let delayShowTimer: ReturnType<typeof setTimeout>
+  let delayShowTimer: ReturnType<typeof setTimeout> | undefined
   if (forceUpdate) {
     Loading.show()
   } else {
@@ -24,7 +24,7 @@ const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {
   }
 
   // init first
-  await store.dispatch.global.init()
+  rootActions.global.init()
 
   let result
   try {
