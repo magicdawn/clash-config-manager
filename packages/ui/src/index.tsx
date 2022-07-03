@@ -14,7 +14,7 @@ import { ConfigProvider, Menu } from 'antd'
 import 'antd/dist/antd.css'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
 import _ from 'lodash'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { createRoot } from 'react-dom/client'
 import { renderRoutes } from 'react-router-config'
 import { HashRouter as Router, Link, useLocation } from 'react-router-dom'
@@ -68,7 +68,7 @@ function Root() {
   return (
     <ConfigProvider locale={zhCN}>
       <Router>
-        <Routes></Routes>
+        <Routes />
       </Router>
     </ConfigProvider>
   )
@@ -77,14 +77,7 @@ function Root() {
 function Routes() {
   const { pathname } = useLocation()
   const getKey = (s: string) => _.trimStart(s, '/').replace(/\//g, ':') || 'home'
-  const menuKey = getKey(pathname)
-
-  useEffect(() => {
-    ;(window as any).gtag?.('event', 'page_view', {
-      // eslint-disable-next-line camelcase
-      page_path: pathname,
-    })
-  }, [pathname])
+  const menuKey = useMemo(() => getKey(pathname), [pathname])
 
   const menuItems: MenuProps['items'] = routes.map(({ title, path, icon }) => {
     return { label: <Link to={path}>{title}</Link>, key: getKey(path), icon }

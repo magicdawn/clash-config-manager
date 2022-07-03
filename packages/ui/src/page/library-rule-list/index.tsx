@@ -203,8 +203,12 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
     setType({ value: val.type })
 
     if (visible) {
-      monacoEditorRef.current?.setSelections([])
-      monacoEditorRef.current?.focus()
+      setTimeout(() => {
+        const editor = monacoEditorRef.current
+        if (!editor) return
+        editor.focus()
+        editor.setPosition({ lineNumber: 1, column: 1 })
+      }, 100)
     }
   }, [editItem, visible])
 
@@ -447,16 +451,14 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
               editorRef={monacoEditorRef}
               readonly={readonly}
               header={
-                <>
-                  <Space direction='horizontal'>
-                    <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('code')}>
-                      使用 vscode 编辑
-                    </Button>
-                    <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('atom')}>
-                      使用 Atom 编辑
-                    </Button>
-                  </Space>
-                </>
+                <Space direction='horizontal'>
+                  <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('code')}>
+                    使用 vscode 编辑
+                  </Button>
+                  <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('atom')}>
+                    使用 Atom 编辑
+                  </Button>
+                </Space>
               }
               spinProps={{
                 size: 'large',

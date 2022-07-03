@@ -1,5 +1,5 @@
 import MonacoEditor, { EditorDidMount, EditorWillMount, monaco } from 'react-monaco-editor'
-import React, { MutableRefObject, ReactNode, useRef } from 'react'
+import React, { MutableRefObject, ReactNode, useMemo, useRef } from 'react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Spin } from 'antd'
 import { SpinProps } from 'antd/lib/spin'
@@ -53,20 +53,23 @@ export default function ConfigEditor(props: IProps) {
     onChange?.(newValue)
   })
 
-  const options: monacoEditor.editor.IStandaloneEditorConstructionOptions = {
-    minimap: { enabled: false },
-    overviewRulerBorder: true,
-    // renderIndentGuides: true,
-    scrollBeyondLastLine: false,
-    scrollbar: {
-      horizontal: 'hidden',
-    },
-    fontSize: 14,
-    fontFamily: 'Menlo, Hack, "Ubuntu Mono"',
-    automaticLayout: true,
-    renderFinalNewline: true,
-    readOnly: readonly,
-  }
+  const options = useMemo(() => {
+    const opts: monacoEditor.editor.IStandaloneEditorConstructionOptions = {
+      minimap: { enabled: false },
+      overviewRulerBorder: true,
+      // renderIndentGuides: true,
+      scrollBeyondLastLine: false,
+      scrollbar: {
+        horizontal: 'hidden',
+      },
+      fontSize: 14,
+      fontFamily: 'Menlo, Hack, "Ubuntu Mono"',
+      automaticLayout: true,
+      renderFinalNewline: true,
+      readOnly: readonly,
+    }
+    return opts
+  }, [readonly])
 
   useUpdateEffect(() => {
     ref.current?.updateOptions({ ...options, readOnly: readonly })
