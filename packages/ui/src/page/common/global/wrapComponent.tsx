@@ -1,28 +1,21 @@
-import React, { useEffect } from 'react'
-import { render } from 'react-dom'
-import { BehaviorSubject } from 'rxjs'
-import { withProps } from 'recompose'
-import useImmerState from '$ui/util/hooks/useImmerState'
+import React, { ComponentType } from 'react'
+import { createRoot } from 'react-dom/client'
+import { proxy, useSnapshot } from 'valtio'
 
-export default function wrap({ component, defaultProps, withProps: withPropsOptions }) {
-  const subject = new BehaviorSubject(null)
-  let C = component
+export function wrapComponent<IProps extends object>({
+  component,
+  defaultProps,
+}: {
+  component: ComponentType<IProps>
+  defaultProps: IProps
+}) {
+  const proxyProps = proxy<IProps>(defaultProps)
 
-  if (withPropsOptions) {
-    C = withProps(withPropsOptions)(C)
-  }
+  const C = component
 
   function WrappedComponent() {
-    const [props, setProps] = useImmerState(defaultProps)
-
-    useEffect(() => {
-      const subscription = subject.subscribe((val) => setProps(val))
-      return () => {
-        subscription.unsubscribe()
-      }
-    }, [])
-
-    return <C {...props} setProps={setProps} />
+    const props = useSnapshot(proxyProps)
+    return <C {...props} />
   }
 
   let mounted = false
@@ -30,22 +23,21 @@ export default function wrap({ component, defaultProps, withProps: withPropsOpti
     if (mounted) return
     const div = document.createElement('div')
     document.body.appendChild(div)
-    render(<WrappedComponent />, div)
+    createRoot(div).render(<WrappedComponent />)
     mounted = true
   }
 
-  function createMethod(factory) {
-    const fn = factory({ setProps: (val) => subject.next(val) })
-    return function () {
+  function wrapAction<T extends (...args: any[]) => any>(action: T) {
+    return (...args: Parameters<T>): ReturnType<T> => {
       mount()
-      fn()
+      return action(...args)
     }
   }
 
   return {
-    subject,
     WrappedComponent,
+    proxyProps,
     mount,
-    createMethod,
+    wrapAction,
   }
 }

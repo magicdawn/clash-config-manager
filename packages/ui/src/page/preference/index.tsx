@@ -77,7 +77,7 @@ export default function Preference() {
     // reload electron-store
     storage.store = merged
 
-    // reload redux
+    // reload react store
     rootActions.global.reload()
 
     message.success('导入成功: 已与本地配置合并')

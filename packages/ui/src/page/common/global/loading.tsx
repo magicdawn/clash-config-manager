@@ -3,7 +3,7 @@ import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import PacmanLoader from 'react-spinners/PacmanLoader'
 import styles from './loading.module.less'
-import wrap from './wrapComponent'
+import { wrapComponent } from './wrapComponent'
 
 const colors = [
   'orange',
@@ -35,34 +35,24 @@ function Loading({ visible }) {
       <PacmanLoader
         color={color}
         size={100}
-        css={`
-          margin-left: -300px;
-          margin-top: -100px;
-        `}
+        style={{ marginLeft: '-300px', marginTop: '-100px' }}
       />
     </Modal>
   )
 }
 
-const { subject, WrappedComponent, createMethod } = wrap({
+const { WrappedComponent, proxyProps, wrapAction } = wrapComponent({
   component: Loading,
   defaultProps: { visible: false },
-  withProps({ setProps }) {
-    return {
-      setVisible(val) {
-        setProps({ visible: val })
-      },
-    }
-  },
 })
 
-const show = createMethod(({ setProps }) => () => {
-  setProps({ visible: true })
+const show = wrapAction(() => {
+  proxyProps.visible = true
 })
 
-const hide = createMethod(({ setProps }) => () => {
-  setProps({ visible: false })
+const hide = wrapAction(() => {
+  proxyProps.visible = false
 })
 
-export { subject, WrappedComponent, show, hide }
-export default { subject, WrappedComponent, show, hide }
+export { WrappedComponent, show, hide }
+export default { WrappedComponent, show, hide }

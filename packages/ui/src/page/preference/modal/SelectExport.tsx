@@ -1,13 +1,30 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { Modal, Tree } from 'antd'
-import { BehaviorSubject } from 'rxjs'
-import useImmerState from '$ui/util/hooks/useImmerState'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import _ from 'lodash'
+import { proxy, useSnapshot } from 'valtio'
+import { truthy } from '$ui/util/ts-filter'
 
-export default function SelectExport(props) {
-  const { visible, setVisible, treeData, resolve } = props
+type SelectExportProps = {
+  visible: boolean
+  setVisible: (val: boolean) => void
+  treeData?: TreeData[] // can not be null
+  resolve?: Resolve | null
+}
 
+type SelectResult = {
+  cancel: boolean
+  keys?: string[]
+}
+
+type Resolve = (result: SelectResult) => void
+
+export default function SelectExport({
+  visible,
+  setVisible,
+  treeData,
+  resolve,
+}: SelectExportProps) {
   const onCancel = useMemoizedFn(() => {
     setVisible(false)
     resolve?.({ cancel: true })
@@ -18,15 +35,15 @@ export default function SelectExport(props) {
   })
 
   const [expandedKeys, setExpandedKeys] = useState(() => getAllKeys(treeData))
-  const [checkedKeys, setCheckedKeys] = useState([])
-  const [selectedKeys, setSelectedKeys] = useState([])
+  const [checkedKeys, setCheckedKeys] = useState<string[]>([])
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   const [autoExpandParent, setAutoExpandParent] = useState(true)
 
   useUpdateEffect(() => {
     setExpandedKeys(getAllKeys(treeData))
   }, [treeData])
 
-  const onExpand = (expandedKeys) => {
+  const onExpand = (expandedKeys: string[]) => {
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
     console.log('onExpand', expandedKeys)
@@ -34,12 +51,12 @@ export default function SelectExport(props) {
     setAutoExpandParent(false)
   }
 
-  const onCheck = (checkedKeys) => {
+  const onCheck = (checkedKeys: string[]) => {
     console.log('onCheck', checkedKeys)
     setCheckedKeys(checkedKeys)
   }
 
-  const onSelect = (selectedKeys, info) => {
+  const onSelect = (selectedKeys: string[], info) => {
     console.log('onSelect', info)
     setSelectedKeys(selectedKeys)
   }
@@ -68,8 +85,14 @@ export default function SelectExport(props) {
   )
 }
 
-function generateTreeData(obj, keyPrefix = '') {
-  const treeData = []
+type TreeData = {
+  key: string
+  title: string
+  children?: TreeData[]
+}
+
+function generateTreeData(obj: object, keyPrefix = '') {
+  const treeData: TreeData[] = []
 
   if (!obj) {
     return treeData
@@ -123,23 +146,23 @@ function generateTreeData(obj, keyPrefix = '') {
   return treeData
 }
 
-function getAllKeys(arr) {
-  if (!arr || !arr.length) return []
-  let ret = []
-  arr.forEach((item) => {
+function getAllKeys(tree?: TreeData[] | null) {
+  if (!tree || !tree.length) return []
+  let ret: string[] = []
+  tree.forEach((item) => {
     ret.push(item.key)
     ret = ret.concat(getAllKeys(item.children))
   })
   return ret
 }
 
-function clean(obj) {
+function clean(obj: object) {
   if (!obj || typeof obj !== 'object') return
   for (const i of Object.keys(obj)) {
     const val = obj[i]
 
     if (Array.isArray(val)) {
-      obj[i] = obj[i].filter(Boolean)
+      obj[i] = obj[i].filter(truthy)
       continue
     }
 
@@ -147,24 +170,21 @@ function clean(obj) {
   }
 }
 
-export const subject = new BehaviorSubject(null)
+const proxyProps = proxy<{
+  visible: boolean
+  treeData?: TreeData[] | null
+  resolve?: Resolve | null
+}>({
+  visible: true,
+  treeData: null,
+  resolve: null,
+})
 
 export function SelectExportForStaticMethod() {
-  const [{ treeData, visible, resolve }, setState] = useImmerState({
-    treeData: null,
-    visible: false,
-    resolve: null,
-  })
+  const { treeData, visible, resolve } = useSnapshot(proxyProps)
 
-  useEffect(() => {
-    const subscription = subject.subscribe((val) => setState(val))
-    return () => {
-      subscription.unsubscribe()
-    }
-  }, [])
-
-  const setVisible = useCallback(() => {
-    subject.next({ visible: false })
+  const setVisible = useCallback((val: boolean) => {
+    proxyProps.visible = val
   }, [])
 
   if (!treeData) {
@@ -187,8 +207,8 @@ export async function pick(obj) {
   })
   const treeData = generateTreeData(obj)
 
-  const { cancel, keys } = await new Promise((resolve) => {
-    subject.next({ treeData, visible: true, resolve })
+  const { cancel, keys } = await new Promise<SelectResult>((resolve) => {
+    Object.assign(proxyProps, { treeData, visible: true, resolve })
   })
 
   if (cancel) {
@@ -196,7 +216,7 @@ export async function pick(obj) {
   }
 
   // sleect
-  const data = _.pick(originalObj, keys)
+  const data = _.pick(originalObj, keys!)
 
   // clean
   clean(data)

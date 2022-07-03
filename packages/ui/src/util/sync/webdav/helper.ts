@@ -136,7 +136,7 @@ class DavHelper {
     const merged = customMerge(localData, remoteData)
     console.log('customMerge', { remoteData, localData, merged })
 
-    // reload electron-store & redux
+    // reload electron-store & react global store
     storage.store = merged
     rootActions.global.reload()
     message.success('下载成功')
@@ -150,7 +150,7 @@ class DavHelper {
 
     const data = await this.read()
 
-    // reload electron-store & redux
+    // reload electron-store & react store
     storage.store = data
     rootActions.global.reload()
     message.success('下载成功')
