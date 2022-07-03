@@ -1,9 +1,0 @@
-# root
-root: true
-
-extends:
-  - '@magicdawn/eslint-config/react'
-
-rules:
-  react/prop-types: off
-  brace-style: off
