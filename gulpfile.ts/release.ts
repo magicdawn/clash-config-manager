@@ -7,6 +7,10 @@ import { version } from '../package.json'
 import { sh, PROJECT_ROOT } from './util'
 import { TaskFunction } from 'gulp'
 
+const r = release as TaskFunction
+r.description = '发布release'
+export { release }
+
 function getChangelog() {
   const fullChangeLog = fse.readFileSync(PROJECT_ROOT + '/CHANGELOG.md', 'utf8')
   const lines = fullChangeLog.split('\n')
@@ -29,9 +33,7 @@ function getChangelog() {
   return curChangelog
 }
 
-;(release as TaskFunction).description = '发布release'
-
-export default async function release() {
+async function release() {
   // 1. add Changelog
   // 2. npm version patch or minor
 

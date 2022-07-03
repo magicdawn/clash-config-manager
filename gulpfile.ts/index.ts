@@ -1,7 +1,10 @@
-import log from 'fancy-log'
+import { execSync } from 'child_process'
+import { TaskFunction } from 'gulp'
 
-export default async function () {
-  log('default')
+const defaultTask: TaskFunction = async function () {
+  execSync('gulp -T', { stdio: 'inherit' })
 }
+defaultTask.description = '同 `gulp -T`'
+export default defaultTask
 
-export { default as release } from './release'
+export { release } from './release'
