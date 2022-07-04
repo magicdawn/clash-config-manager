@@ -99,17 +99,38 @@ const macosTemplate = (options: { updateMenuItem: any }) =>
         },
       ].filter(Boolean)
     ),
+
+    // {
+    //   role: 'editMenu',
+    // },
     {
-      role: 'viewMenu',
+      label: '编辑',
+      submenu: [
+        { role: 'selectAll', label: '全选' },
+        { role: 'copy', label: '复制' },
+        { role: 'cut', label: '剪切' },
+        { role: 'paste', label: '粘贴' },
+      ],
     },
+
+    // {
+    //   role: 'viewMenu',
+    // },
     {
-      role: 'editMenu',
+      label: '视图',
+      submenu: [
+        process.env.NODE_ENV === 'development' && { role: 'reload' },
+        { role: 'toggleDevTools', label: '开发者工具' },
+        { type: 'separator' },
+        { role: 'resetZoom', label: '实际大小' },
+        { role: 'zoomIn', label: '放大' },
+        { role: 'zoomOut', label: '缩小' },
+      ].filter(Boolean),
     },
-    {
-      role: 'windowMenu',
-    },
+
     {
       role: 'help',
+      label: '帮助',
       submenu: helpSubmenu,
     },
   ] as MenuItemConstructorOptions[]

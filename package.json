@@ -60,6 +60,7 @@
     "lint-staged": "^12.4.1",
     "minimist": "^1.2.6",
     "napa": "^3.0.0",
+    "nodemon": "^2.0.18",
     "prettier": "^2.6.2",
     "ts-node": "^10.7.0",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
