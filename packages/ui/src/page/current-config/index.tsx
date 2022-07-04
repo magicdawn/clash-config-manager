@@ -1,13 +1,13 @@
-import React from 'react'
-import { useMount, useMemoizedFn } from 'ahooks'
-import { Button, Input, Row, Col, Divider, message } from 'antd'
-import launch from 'launch-editor'
-import { getConfigFileDisplay, getConfigFile, DEFAULT_NAME } from '$ui/util/fn/gen'
 import { runCommand } from '$ui/commands/run'
 import { rootState } from '$ui/store'
-import styles from './index.module.less'
-import DndPlaygroud from './DndPlayground'
+import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/util/fn/gen'
+import { useMemoizedFn } from 'ahooks'
+import { Button, Col, Divider, Input, message, Row } from 'antd'
+import launch from 'launch-editor'
+import React from 'react'
 import { useSnapshot } from 'valtio'
+import DndPlaygroud from './DndPlayground'
+import styles from './index.module.less'
 
 export default function ConfigList() {
   const { name } = useSnapshot(rootState.currentConfig)

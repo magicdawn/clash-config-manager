@@ -1,9 +1,9 @@
 import { createHash } from 'crypto'
-import path from 'path'
-import fse from 'fs-extra'
-import request from 'umi-request'
 import envPaths from 'env-paths'
+import fse from 'fs-extra'
 import moment from 'moment'
+import path from 'path'
+import request from 'umi-request'
 
 const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 
@@ -163,6 +163,7 @@ const getSsrServer = (str: string): ClashSsrServer => {
   // hinet1.puffvip.com:1063:auth_aes128_sha1:chacha20:plain:UGFvZnU/?obfsparam=ZmE3Nzc4NzYzMS5taWNyb3NvZnQuY29t&protoparam=ODc2MzE6eHlqdHlza2Z5ZGhxc3M&remarks=W1YxXSDlj7Dmub4x&group=5rOh6IqZ5LqR
 
   const [prev, rest] = str.split('/?')
+  // eslint-disable-next-line prefer-const
   let [server, port, protocol, cipher, obfs, password] = prev.split(':')
   const params = new URLSearchParams(rest)
 

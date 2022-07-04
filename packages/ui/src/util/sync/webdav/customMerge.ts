@@ -33,7 +33,7 @@ export default function mergeStore(a, b) {
     _.merge(draft, _.pick(b, ['current_config_v2.name', 'preference']))
 
     // subscribe_list
-    for (let i of b.subscribe_list || []) {
+    for (const i of b.subscribe_list || []) {
       if (!i || !i.id) continue
       const { id } = i
 
@@ -46,7 +46,7 @@ export default function mergeStore(a, b) {
     }
 
     // rule_list
-    for (let i of b.rule_list || []) {
+    for (const i of b.rule_list || []) {
       if (!i || !i.id) continue
       const { id } = i
 
@@ -59,7 +59,7 @@ export default function mergeStore(a, b) {
     }
 
     // current_config_v2.list
-    for (let i of b.current_config_v2.list || []) {
+    for (const i of b.current_config_v2.list || []) {
       if (!i || !i.id) continue
       const { id } = i
 

@@ -1,5 +1,10 @@
 /// <reference types="vite/client" />
 
+// styles
+import '@icon-park/react/styles/index.css'
+import 'antd/dist/antd.css'
+
+// deps
 import {
   AppstoreAddOutlined,
   HeartOutlined,
@@ -7,14 +12,11 @@ import {
   SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-// styles
-import '@icon-park/react/styles/index.css'
-import type { MenuProps } from 'antd'
-import { ConfigProvider, Menu } from 'antd'
-import 'antd/dist/antd.css'
+
+import { ConfigProvider, Menu, MenuProps } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
 import _ from 'lodash'
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { createRoot } from 'react-dom/client'
 import { renderRoutes } from 'react-router-config'
 import { HashRouter as Router, Link, useLocation } from 'react-router-dom'
