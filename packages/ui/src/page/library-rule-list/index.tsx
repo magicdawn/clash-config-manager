@@ -13,7 +13,6 @@ import fse from 'fs-extra'
 import Yaml from 'js-yaml'
 import path from 'path'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { v4 as uuid } from 'uuid'
 import { useSnapshot } from 'valtio'
 import RuleAddModal from './AddRuleModal'
 import ConfigEditor, { EditorRefInner } from './ConfigEditor'
@@ -180,7 +179,7 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
   const readonly = editMode === 'readonly'
 
   const getDefaultItem = () => ({
-    id: uuid(),
+    id: crypto.randomUUID(),
     type: 'local',
     name: '',
     url: '',
