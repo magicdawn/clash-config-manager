@@ -351,7 +351,7 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
     }
   })
 
-  const contentField = form.getFieldValue('content')
+  const contentField = Form.useWatch('content', form)
   const showAddRuleButton = useMemo(() => {
     return Boolean(contentField?.indexOf?.('rules:') > -1)
   }, [contentField])
