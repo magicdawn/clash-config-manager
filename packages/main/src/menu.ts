@@ -21,15 +21,11 @@ const showPreferences = () => {
 
 const helpSubmenu = [
   openUrlMenuItem({
-    label: 'Website',
-    url: 'https://github.com/magicdawn/clash-config-manager',
-  }),
-  openUrlMenuItem({
-    label: 'Source Code',
+    label: 'GitHub 项目主页',
     url: 'https://github.com/magicdawn/clash-config-manager',
   }),
   {
-    label: 'Report an Issue…',
+    label: '报告 Issue',
     url: 'https://github.com/magicdawn/clash-config-manager/issues',
     click() {
       const body = `
@@ -64,7 +60,7 @@ const macosTemplate = (options: { updateMenuItem: any }) =>
     appMenu(
       [
         {
-          label: 'Preferences…',
+          label: '偏好设置',
           accelerator: 'Command+,',
           click() {
             showPreferences()
@@ -169,9 +165,12 @@ async function installCli() {
   }
 
   debug('installCli success')
-  dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
-    message: '安装成功',
-  })
+
+  const win = BrowserWindow.getFocusedWindow()
+  win &&
+    dialog.showMessageBoxSync(win, {
+      message: '安装成功',
+    })
 }
 
 export default async function setMenu() {

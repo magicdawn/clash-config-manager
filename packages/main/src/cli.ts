@@ -35,10 +35,10 @@ async function createMainWindow() {
   const win = new BrowserWindow({
     title: app.name,
     show: false,
-    x: bounds.x,
-    y: bounds.y,
-    width: bounds.width,
-    height: bounds.height,
+    x: bounds?.x,
+    y: bounds?.y,
+    width: bounds?.width,
+    height: bounds?.height,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false,

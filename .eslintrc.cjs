@@ -1,33 +1,11 @@
-const unused = [
-  // react
-  'React',
-  'useState',
-  'useEffect',
-  'useCallback',
-  'useRef',
-  'useImperativeHandle',
-
-  // ahooks
-  'useMemoizedFn',
-  'useMount',
-  'useUpdateEffect',
-
-  // plug
-  'usePlug',
-
-  // antd
-  'message',
-  'Button',
-]
-
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
   extends: [
+    //
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    __dirname + '/.eslintrc.yml',
     'prettier',
   ],
 
@@ -46,7 +24,6 @@ module.exports = {
       {
         args: 'none',
         ignoreRestSiblings: true,
-        varsIgnorePattern: unused.join('|'),
       },
     ],
 
@@ -55,11 +32,9 @@ module.exports = {
 
   overrides: [
     {
-      files: ['*.js'],
+      files: ['*.js', '*.cjs'],
       parser: 'babel-eslint',
-      rules: {
-        '@typescript-eslint/no-var-requires': 'off',
-      },
+      rules: {},
     },
   ],
 }

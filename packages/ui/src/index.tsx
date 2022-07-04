@@ -35,14 +35,14 @@ const routes = [
     icon: <HeartOutlined />,
   },
   {
-    path: '/library/subscribe',
+    path: '/library-subscribe',
     exact: true,
     component: LibrarySubscribe,
     title: '订阅管理',
     icon: <PayCircleOutlined />,
   },
   {
-    path: '/library/rule-list',
+    path: '/library-rule-list',
     exact: true,
     component: LibraryRuleList,
     title: '配置源管理',
@@ -74,18 +74,22 @@ function Root() {
   )
 }
 
+const getKey = (s: string) => _.trimStart(s, '/') || 'home'
+const menuItems: MenuProps['items'] = routes.map(({ title, path, icon }) => {
+  return {
+    key: getKey(path),
+    icon,
+    label: <Link to={path}>{title}</Link>,
+  }
+})
+
 function Routes() {
   const { pathname } = useLocation()
-  const getKey = (s: string) => _.trimStart(s, '/').replace(/\//g, ':') || 'home'
-  const menuKey = useMemo(() => getKey(pathname), [pathname])
-
-  const menuItems: MenuProps['items'] = routes.map(({ title, path, icon }) => {
-    return { label: <Link to={path}>{title}</Link>, key: getKey(path), icon }
-  })
+  const menuKey = useMemo(() => [getKey(pathname)], [pathname])
 
   return (
     <>
-      <Menu selectedKeys={[menuKey]} mode='horizontal' items={menuItems} />
+      <Menu selectedKeys={menuKey} mode='horizontal' items={menuItems} />
       <Commands />
       <div>{renderRoutes(routes)}</div>
     </>
