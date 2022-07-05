@@ -1,10 +1,12 @@
+import { runCommand } from '$ui/commands/run'
 import { Subscribe } from '$ui/common/define'
 import { valtioState } from '$ui/common/model/valtio-helper'
 import { onInit, onReload } from '$ui/page/global-model'
 import storage from '$ui/storage'
 import { subscribeToClash } from '$ui/util/fn/clash'
 import { message } from 'antd'
-import { find, pick } from 'lodash'
+import { find, once, pick } from 'lodash'
+import ms from 'ms'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
@@ -78,8 +80,19 @@ function del(index: number) {
   state.list.splice(index, 1)
 }
 
-async function update(payload: { url: string; silent?: boolean; forceUpdate?: boolean }) {
-  const { url, silent = false, forceUpdate: forceUpdate = false } = payload
+async function update({
+  url,
+  silent = false,
+  successMsg,
+  forceUpdate = false,
+}: {
+  url: string
+  silent?: boolean
+  successMsg?: string
+  forceUpdate?: boolean
+}) {
+  const currentSubscribe = state.list.find((s) => s.url === url)
+
   // TODO: ts
   let servers: any[]
   try {
@@ -89,17 +102,22 @@ async function update(payload: { url: string; silent?: boolean; forceUpdate?: bo
     throw e
   }
 
-  const keywords = state.list.find((item) => item.url === url)?.excludeKeywords || []
+  const keywords = currentSubscribe?.excludeKeywords || []
   if (keywords.length) {
     for (const keyword of keywords) {
       servers = servers.filter((server) => server.name && !server.name.includes(keyword))
     }
   }
 
-  if (!silent) {
-    message.success('更新订阅成功')
+  if (!silent || successMsg) {
+    const msg =
+      successMsg ||
+      (currentSubscribe?.name ? `订阅(${currentSubscribe.name}) 更新成功` : `订阅更新成功`)
+    message.success(msg)
   }
 
+  // TODO: 会影响 electron-store 保存么?
+  // state.detail[url] = ref(servers)
   state.detail[url] = servers
 }
 
@@ -108,5 +126,44 @@ async function update(payload: { url: string; silent?: boolean; forceUpdate?: bo
  */
 
 // listeners
-onInit(init)
+
+const scheduleAutoUpdateOnce = once(scheduleAutoUpdate)
+onInit(() => {
+  init()
+  scheduleAutoUpdateOnce()
+})
 onReload(load)
+
+/**
+ * auto update
+ */
+
+const timerRegistry: Record<string, NodeJS.Timer | undefined> = {}
+
+async function scheduleAutoUpdate() {
+  for (const sub of state.list) {
+    const { name, url, autoUpdate, autoUpdateInterval } = sub
+    if (!autoUpdate || !autoUpdateInterval) continue
+
+    const run = async () => {
+      await update({
+        url,
+        forceUpdate: true,
+        successMsg: `自动更新订阅: ${name} 更新成功`,
+      })
+      await runCommand('generate')
+    }
+
+    // after start
+    // setTimeout(run, 1000)
+    await run()
+
+    if (timerRegistry[name]) {
+      clearInterval(timerRegistry[name])
+      timerRegistry[name] = undefined
+    }
+    timerRegistry[name] = setInterval(async () => {
+      await run()
+    }, ms(autoUpdateInterval + 'h'))
+  }
+}

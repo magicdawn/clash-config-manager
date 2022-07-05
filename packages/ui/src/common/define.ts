@@ -8,7 +8,7 @@ export interface Subscribe {
 
   // 自动更新订阅?
   autoUpdate: boolean
-  autoUpdateInterval?: number // in ms
+  autoUpdateInterval?: number // 小时
 }
 
 export interface RuleItem {

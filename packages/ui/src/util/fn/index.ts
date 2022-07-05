@@ -24,7 +24,7 @@ const readUrl = async ({ url, file }: { url: string; file: string }) => {
     },
   })) as string
 
-  fse.outputFile(file, text).then(
+  await fse.outputFile(file, text).then(
     () => {
       console.log('File %s writed', file)
     },
