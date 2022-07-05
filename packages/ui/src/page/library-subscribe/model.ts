@@ -116,6 +116,8 @@ async function update({
     message.success(msg)
   }
 
+  if (currentSubscribe) currentSubscribe.updatedAt = Date.now()
+
   // TODO: 会影响 electron-store 保存么?
   // state.detail[url] = ref(servers)
   state.detail[url] = servers
@@ -142,7 +144,7 @@ const timerRegistry: Record<string, NodeJS.Timer | undefined> = {}
 
 async function scheduleAutoUpdate() {
   for (const sub of state.list) {
-    const { name, url, autoUpdate, autoUpdateInterval } = sub
+    const { name, url, autoUpdate, autoUpdateInterval, updatedAt: lastUpdated } = sub
     if (!autoUpdate || !autoUpdateInterval) continue
 
     const run = async () => {
@@ -154,9 +156,13 @@ async function scheduleAutoUpdate() {
       await runCommand('generate')
     }
 
-    // after start
-    // setTimeout(run, 1000)
-    await run()
+    const interval = ms(autoUpdateInterval + 'h')
+
+    // 启动时更新
+    // 使用场景: 定时12小时更新, 退出了, 第二天打开自动更新, 但当天重启不会更新
+    if (!lastUpdated || Date.now() >= lastUpdated + interval) {
+      await run()
+    }
 
     if (timerRegistry[name]) {
       clearInterval(timerRegistry[name])
@@ -164,6 +170,6 @@ async function scheduleAutoUpdate() {
     }
     timerRegistry[name] = setInterval(async () => {
       await run()
-    }, ms(autoUpdateInterval + 'h'))
+    }, interval)
   }
 }
