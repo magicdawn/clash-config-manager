@@ -4,7 +4,7 @@
 
 ### 2022-07-04
 
-- [ ] feat: 自动更新
+- [ ] feat: 自动更新订阅, 规则
 - [ ] 体验: 软件内增加 tooltip
 - [ ] 首页 Tabs 样式问题, 性能
 - [ ] react-beautiful-dnd + react@18 报错

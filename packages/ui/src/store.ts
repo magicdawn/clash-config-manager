@@ -1,4 +1,5 @@
 import { proxy } from 'valtio'
+import { devtools } from 'valtio/utils'
 
 import { actions as globalActions } from './page/global-model'
 import { state as currentConfig } from './page/current-config/model'
@@ -28,4 +29,10 @@ export const rootActions = {
 // init on start
 process.nextTick(() => {
   rootActions.global.init()
+})
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const unsub = devtools(rootState, {
+  name: 'valtio rootState',
+  enabled: process.env.NODE_ENV === 'development',
 })

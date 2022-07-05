@@ -1,10 +1,10 @@
-import _ from 'lodash'
-import { message } from 'antd'
-import { subscribeToClash } from '$ui/util/fn/clash'
 import { Subscribe } from '$ui/common/define'
-import storage from '$ui/storage'
 import { valtioState } from '$ui/common/model/valtio-helper'
 import { onInit, onReload } from '$ui/page/global-model'
+import storage from '$ui/storage'
+import { subscribeToClash } from '$ui/util/fn/clash'
+import { message } from 'antd'
+import { find, pick } from 'lodash'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
@@ -22,11 +22,18 @@ const { state, load, init } = valtioState<IState>(
   {
     persist(val) {
       storage.set(SUBSCRIBE_LIST_STORAGE_KEY, val.list)
-      storage.set(SUBSCRIBE_DETAIL_STORAGE_KEY, val.detail)
+      // 只保留当前 list 存在的订阅
+      const detail = pick(val.detail, val.list.map((item) => item.url).filter(Boolean))
+      storage.set(SUBSCRIBE_DETAIL_STORAGE_KEY, detail)
     },
     load() {
-      const list = storage.get(SUBSCRIBE_LIST_STORAGE_KEY)
-      const detail = storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY)
+      const list = storage.get(SUBSCRIBE_LIST_STORAGE_KEY) || []
+
+      // 只保留当前 list 存在的订阅
+      const detail = pick(
+        storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY) || {},
+        list.map((item) => item.url).filter(Boolean)
+      )
       return { list, detail }
     },
   }
@@ -48,12 +55,12 @@ function check(payload: { url: string; name: string; editItemIndex?: number | nu
 
   let { list } = state
   if (editItemIndex || editItemIndex === 0) {
-    list = _.filter(list, (i, index) => index !== editItemIndex)
+    list = state.list.filter((i, index) => index !== editItemIndex)
   }
-  if (_.find(list, { url })) {
+  if (find(list, { url })) {
     return 'url已存在'
   }
-  if (_.find(list, { name })) {
+  if (find(list, { name })) {
     return 'name已存在'
   }
 }
