@@ -70,8 +70,8 @@ function add(payload: Subscribe) {
 }
 
 function edit(payload: Subscribe & { editItemIndex: number }) {
-  const { url, name, id, editItemIndex, excludeKeywords } = payload
-  state.list[editItemIndex] = { url, name, id, excludeKeywords }
+  const { editItemIndex, ...subscribeItem } = payload
+  state.list[editItemIndex] = subscribeItem
 }
 
 function del(index: number) {

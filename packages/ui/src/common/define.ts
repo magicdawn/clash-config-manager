@@ -2,8 +2,13 @@ export interface Subscribe {
   id: string
   name: string
   url: string
+
   // 用于从 subscribe 里移除某些 proxy
   excludeKeywords?: string[]
+
+  // 自动更新订阅?
+  autoUpdate: boolean
+  autoUpdateInterval?: number // in ms
 }
 
 export interface RuleItem {

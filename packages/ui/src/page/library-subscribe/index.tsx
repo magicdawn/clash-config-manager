@@ -1,7 +1,20 @@
 import { Subscribe } from '$ui/common/define'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { Button, Divider, Input, List, message, Modal, Select, Space, Tag, Tooltip } from 'antd'
-import React, { KeyboardEventHandler, useCallback, useState } from 'react'
+import {
+  Button,
+  Checkbox,
+  Divider,
+  Input,
+  InputNumber,
+  List,
+  message,
+  Modal,
+  Select,
+  Space,
+  Tag,
+  Tooltip,
+} from 'antd'
+import React, { ChangeEventHandler, KeyboardEventHandler, useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import styles from './index.module.less'
 import { actions, state } from './model'
@@ -128,11 +141,30 @@ function ModalAdd({
   const [name, setName] = useState(editItem?.name || '')
   const [id, setId] = useState(editItem?.id || crypto.randomUUID())
   const [excludeKeywords, setExcludeKeywords] = useState(editItem?.excludeKeywords || [])
+  const [autoUpdate, setAutoUpdate] = useState(true)
 
-  const onUrlChange = useCallback((e) => {
+  // min={1} // 1h
+  // max={240} // 240h = 10d
+  const [autoUpdateIntervalMin, autoUpdateIntervalMax] = [1, 240]
+  const autoUpdateIntervalDefault = 12
+  const [autoUpdateInterval, setAutoUpdateInterval] = useState(
+    () => editItem?.autoUpdateInterval || autoUpdateIntervalDefault
+  ) // 小时
+
+  useUpdateEffect(() => {
+    setUrl(editItem?.url || '')
+    setName(editItem?.name || '')
+    setId(editItem?.id || crypto.randomUUID())
+    setExcludeKeywords(editItem?.excludeKeywords || [])
+    setAutoUpdate(editItem?.autoUpdate || true)
+    setAutoUpdateInterval(editItem?.autoUpdateInterval || autoUpdateIntervalDefault)
+  }, [editItem, visible])
+
+  type OnChange = ChangeEventHandler<HTMLInputElement>
+  const onUrlChange: OnChange = useCallback((e) => {
     setUrl(e.target.value)
   }, [])
-  const onNameChange = useCallback((e) => {
+  const onNameChange: OnChange = useCallback((e) => {
     setName(e.target.value)
   }, [])
 
@@ -140,13 +172,6 @@ function ModalAdd({
     console.log('onExcludeKeywordsChange', value)
     setExcludeKeywords(value)
   }, [])
-
-  useUpdateEffect(() => {
-    setUrl(editItem?.url || '')
-    setName(editItem?.name || '')
-    setId(editItem?.id || crypto.randomUUID())
-    setExcludeKeywords(editItem?.excludeKeywords || [])
-  }, [editItem, visible])
 
   const clean = () => {
     setUrl('')
@@ -173,10 +198,12 @@ function ModalAdd({
     }
 
     const mode = editItem ? 'edit' : 'add'
+
+    const subscribeItem = { url, name, id, excludeKeywords, autoUpdate, autoUpdateInterval }
     if (mode === 'add') {
-      actions.add({ url, name, id, excludeKeywords })
+      actions.add(subscribeItem)
     } else {
-      actions.edit({ url, name, id, excludeKeywords, editItemIndex: editItemIndex! })
+      actions.edit({ ...subscribeItem, editItemIndex: editItemIndex! })
     }
 
     setVisible(false)
@@ -209,6 +236,27 @@ function ModalAdd({
         onPressEnter={handleOk}
         prefix={<label className='label'>订阅链接:</label>}
       />
+
+      <Checkbox
+        checked={autoUpdate}
+        onChange={(e) => setAutoUpdate(e.target.checked)}
+        style={{ marginLeft: 0 }}
+      >
+        自动更新节点
+      </Checkbox>
+
+      {autoUpdate && (
+        <div style={{ marginLeft: 0, marginTop: 5 }}>
+          <InputNumber
+            addonAfter={'小时'}
+            min={autoUpdateIntervalMin}
+            max={autoUpdateIntervalMax}
+            defaultValue={autoUpdateIntervalDefault}
+            value={autoUpdateInterval}
+            onChange={(val) => setAutoUpdateInterval(val)}
+          />
+        </div>
+      )}
 
       <Divider orientation='left'>
         <Tooltip
