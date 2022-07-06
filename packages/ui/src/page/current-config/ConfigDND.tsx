@@ -1,11 +1,11 @@
 import { ConfigItem } from '$ui/common/define'
+import { cx } from '$ui/libs'
 import { rootState } from '$ui/store'
 import { limitLines } from '$ui/util/text-util'
 import { truthy } from '$ui/util/ts-filter'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import { useMemoizedFn } from 'ahooks'
 import { Tooltip } from 'antd'
-import cx from 'classnames'
 import React, { useMemo, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useSnapshot } from 'valtio'
@@ -151,10 +151,8 @@ export function ConfigDND() {
                 {...provided.droppableProps}
                 className={cx('trash-wrapper', { 'dragging-over': snapshot.isDraggingOver })}
               >
-                <div className='text'>
-                  <div>垃</div>
-                  <div>圾</div>
-                  <div>桶</div>
+                <div className='text-wrapper'>
+                  <div className='text'>垃圾桶</div>
                 </div>
                 {provided.placeholder}
               </div>
@@ -232,7 +230,7 @@ const Source = ({ item, type, isDragDisabled, index }: SourceProps) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <div className='text'>
+          <div className='text' style={{ textAlign: 'center' }}>
             {text}
             <Tooltip
               overlayClassName={styles.tooltipDetailOverlay}

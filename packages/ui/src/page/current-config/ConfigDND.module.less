@@ -11,31 +11,35 @@
 
     .trash-wrapper {
       position: fixed;
-      top: 65px;
-      right: 10px;
+      top: 55px;
+      right: 8px;
 
-      width: 80px;
-      height: 120px;
-      border-radius: 10px;
-      border: 1px solid red;
-      background-color: #999;
-      &.dragging-over {
-        background-color: red;
-      }
+      width: 60px;
+      height: 90px;
+      border-radius: 8px;
+      border: 1px solid slateblue;
 
-      .text {
+      .text-wrapper {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
         height: 100%;
+
+        background-color: slateblue;
+        color: #fff;
+
+        writing-mode: vertical-lr;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        text-align: center;
+        letter-spacing: 4px;
+      }
 
-        > div {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 18px;
-          line-height: 18px;
-          color: #fff;
+      &.dragging-over {
+        .text-wrapper {
+          background-color: red;
         }
       }
     }
@@ -44,16 +48,18 @@
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+      margin-left: -10px;
 
       .item {
-        width: 40%;
+        width: calc(50% - 10px);
         height: 50px;
         border: 1px solid purple;
         margin-bottom: 10px;
-        margin-right: 10px;
+        border-radius: 4px;
+        margin-left: 10px;
 
         &.disabled {
-          background-color: fade(yellow, 50%);
+          background-color: gold;
           cursor: not-allowed;
         }
 
@@ -73,15 +79,22 @@
       flex-direction: row;
       flex-wrap: wrap;
       min-height: 50px;
-      border: 1px solid pink;
+      border: 1px solid peru;
+      padding: 2px;
+      border-radius: 4px;
 
       .item {
         width: 100%;
+        margin-left: auto;
+        margin-right: auto;
         height: 50px;
         border: 1px solid purple;
-        margin-bottom: 10px;
+        border-radius: 4px;
+        background-color: bisque;
+
+        margin-top: 4px;
         &:first-child {
-          margin-top: 10px;
+          margin-top: 0;
         }
 
         display: flex;
