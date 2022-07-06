@@ -30,6 +30,9 @@ export default function ConfigList() {
     )
   })
 
+  const spanLeft = 4
+  const spanRight = 16
+
   return (
     <div className={styles.page}>
       <Divider orientation='left'>配置内容</Divider>
@@ -37,7 +40,7 @@ export default function ConfigList() {
 
       <Divider orientation='left'>配置文件</Divider>
       <Row>
-        <Col span={4}>
+        <Col span={spanLeft}>
           <div
             className='label'
             style={{
@@ -51,7 +54,7 @@ export default function ConfigList() {
             配置名称
           </div>
         </Col>
-        <Col span={10}>
+        <Col span={spanRight}>
           <Input
             placeholder={DEFAULT_NAME}
             value={name}
@@ -64,7 +67,7 @@ export default function ConfigList() {
       </Row>
 
       <Row style={{ marginTop: 5 }}>
-        <Col span={4}>
+        <Col span={spanLeft}>
           <div
             className='label'
             style={{
@@ -78,7 +81,7 @@ export default function ConfigList() {
             文件地址
           </div>
         </Col>
-        <Col span={10}>
+        <Col span={spanRight}>
           <Input value={getConfigFileDisplay(name)} disabled />
         </Col>
       </Row>
