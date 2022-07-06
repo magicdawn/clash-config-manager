@@ -18,8 +18,7 @@ import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是
 import _ from 'lodash'
 import React, { useMemo } from 'react'
 import { createRoot } from 'react-dom/client'
-import { renderRoutes } from 'react-router-config'
-import { HashRouter as Router, Link, useLocation } from 'react-router-dom'
+import { HashRouter as Router, Link, useLocation, useRoutes, RouteObject } from 'react-router-dom'
 import Commands from './commands'
 import './page/common'
 import CurrentConfig from './page/current-config'
@@ -31,40 +30,42 @@ import Preference from './page/preference'
 const routes = [
   {
     path: '/',
-    exact: true,
     component: Home,
     title: '主页',
     icon: <HeartOutlined />,
   },
   {
     path: '/library-subscribe',
-    exact: true,
     component: LibrarySubscribe,
     title: '订阅管理',
     icon: <PayCircleOutlined />,
   },
   {
     path: '/library-rule-list',
-    exact: true,
     component: LibraryRuleList,
     title: '配置源管理',
     icon: <AppstoreAddOutlined />,
   },
   {
     path: '/current-config',
-    exact: true,
     component: CurrentConfig,
     title: '配置管理',
     icon: <SettingOutlined />,
   },
   {
     path: '/preference',
-    exact: true,
     component: Preference,
     title: '偏好设置',
     icon: <UserOutlined />,
   },
 ]
+
+const usingRoutes: RouteObject[] = routes.map((r) => {
+  return {
+    path: r.path,
+    element: <r.component />,
+  }
+})
 
 function Root() {
   return (
@@ -89,11 +90,14 @@ function Routes() {
   const { pathname } = useLocation()
   const menuKey = useMemo(() => [getKey(pathname)], [pathname])
 
+  // <Routes></Routes>
+  const routesEl = useRoutes(usingRoutes)
+
   return (
     <>
       <Menu selectedKeys={menuKey} mode='horizontal' items={menuItems} />
       <Commands />
-      <div>{renderRoutes(routes)}</div>
+      <div>{routesEl}</div>
     </>
   )
 }
