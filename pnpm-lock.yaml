@@ -241,8 +241,6 @@ importers:
       lodash: ^4.17.20
       memoize-one: ^5.1.1
       minimist: ^1.2.5
-      mobx: ^6.3.2
-      mobx-react: ^7.5.1
       moment: ^2.29.1
       monaco-editor: 0.33.0
       ms: ^2.1.3
@@ -296,8 +294,6 @@ importers:
       lodash: 4.17.21
       memoize-one: 5.2.1
       minimist: 1.2.5
-      mobx: 6.5.0
-      mobx-react: 7.5.1_lawn3fqw4yvyr7y4busku2ffna
       moment: 2.29.2
       monaco-editor: 0.33.0
       ms: 2.1.3
@@ -6883,47 +6879,6 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dev: true
-
-  /mobx-react-lite/3.4.0_lawn3fqw4yvyr7y4busku2ffna:
-    resolution: {integrity: sha512-bRuZp3C0itgLKHu/VNxi66DN/XVkQG7xtoBVWxpvC5FhAqbOCP21+nPhULjnzEqd7xBMybp6KwytdUpZKEgpIQ==}
-    peerDependencies:
-      mobx: ^6.1.0
-      react: ^16.8.0 || ^17 || ^18
-      react-dom: '*'
-      react-native: '*'
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-    dependencies:
-      mobx: 6.5.0
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    dev: false
-
-  /mobx-react/7.5.1_lawn3fqw4yvyr7y4busku2ffna:
-    resolution: {integrity: sha512-VNRpKBNpJEYER3XdkcY1PAr9zxFIaR2Ka6xwKFvySbEUC/uIITKt8rioVDqBdTc9pPzaYiCLw2dYpUOU85GQ5w==}
-    peerDependencies:
-      mobx: ^6.1.0
-      react: ^16.8.0 || ^17 || ^18
-      react-dom: '*'
-      react-native: '*'
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-    dependencies:
-      mobx: 6.5.0
-      mobx-react-lite: 3.4.0_lawn3fqw4yvyr7y4busku2ffna
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    dev: false
-
-  /mobx/6.5.0:
-    resolution: {integrity: sha512-pHZ/cySF00FVENDWIDzJyoObFahK6Eg4d0papqm6d7yMkxWTZ/S/csqJX1A3PsYy4t5k3z2QnlwuCfMW5lSEwA==}
-    dev: false
 
   /modify-filename/1.1.0:
     resolution: {integrity: sha512-EickqnKq3kVVaZisYuCxhtKbZjInCuwgwZWyAmRIp1NTMhri7r3380/uqwrUHfaDiPzLVTuoNy4whX66bxPVog==}

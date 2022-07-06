@@ -46,8 +46,6 @@
     "lodash": "^4.17.20",
     "memoize-one": "^5.1.1",
     "minimist": "^1.2.5",
-    "mobx": "^6.3.2",
-    "mobx-react": "^7.5.1",
     "moment": "^2.29.1",
     "monaco-editor": "0.33.0",
     "ms": "^2.1.3",

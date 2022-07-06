@@ -1,16 +1,16 @@
-import React, { useCallback } from 'react'
-import { Button, message } from 'antd'
-import { rootState, rootActions } from '$ui/store'
 import { runCommand } from '$ui/commands/run'
+import { rootActions, rootState } from '$ui/store'
+import { Button, message } from 'antd'
+import React, { useCallback } from 'react'
 import styles from './index.module.less'
-import { useMobxAddRuleModal } from './useAddRuleModal'
+import { useAddRuleModal } from './useAddRuleModal'
 
 export default function Home() {
   const generate = useCallback(() => {
     runCommand('generate')
   }, [])
 
-  const { open: addRule, modal } = useMobxAddRuleModal({
+  const { open: addRule, modal } = useAddRuleModal({
     mode: 'from-global',
     handleAdd(rule: string, ruleId: string) {
       if (!rule || !ruleId) {
