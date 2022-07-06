@@ -1,21 +1,21 @@
-import { InfoCircleOutlined } from '@ant-design/icons'
+import { ConfigItem } from '$ui/common/define'
 import { rootState } from '$ui/store'
 import { limitLines } from '$ui/util/text-util'
+import { truthy } from '$ui/util/ts-filter'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import { useMemoizedFn } from 'ahooks'
 import { Tooltip } from 'antd'
 import cx from 'classnames'
 import React, { useMemo, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import styles from './DndPlayground.module.less'
 import { useSnapshot } from 'valtio'
-import { ConfigItem } from '$ui/common/define'
-import { truthy } from '$ui/util/ts-filter'
+import styles from './ConfigDND.module.less'
 
 function modifyResultList(action: (list: ConfigItem[]) => void) {
   action(rootState.currentConfig.list)
 }
 
-export default function DndPlaygroud() {
+export function ConfigDND() {
   // subscribe
   const rootStateSnap = useSnapshot(rootState)
   const subscribeList = rootStateSnap.librarySubscribe.list

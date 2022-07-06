@@ -3,6 +3,7 @@ import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import {
   Button,
   Checkbox,
+  Descriptions,
   Divider,
   Input,
   InputNumber,
@@ -63,8 +64,6 @@ export default function LibrarySubscribe() {
 
   return (
     <div className={styles.page}>
-      <h1>订阅管理</h1>
-
       <ModalAdd
         visible={showModal}
         setVisible={setShowModal}
@@ -73,10 +72,10 @@ export default function LibrarySubscribe() {
       />
 
       <List
-        size='large'
+        size='small'
         header={
-          <div className='header'>
-            <h4>订阅管理</h4>
+          <div className='header' style={{ display: 'flex', alignItems: 'center' }}>
+            <h2 style={{ margin: 0 }}>订阅管理</h2>
             <Button type='primary' onClick={add}>
               +
             </Button>
@@ -86,38 +85,84 @@ export default function LibrarySubscribe() {
         dataSource={list}
         renderItem={(item: Subscribe, index) => {
           const { url, name, excludeKeywords } = item
+
+          // <div className='list-item'>
+          //   <div className='name'>{name}</div>
+          //   <div className='url'>{url}</div>
+          //   {excludeKeywords?.length && (
+          //     <div className='exclude'>
+          //       排除关键词:{' '}
+          //       {excludeKeywords.map((s) => (
+          //         <Tag key={s} color='warning'>
+          //           {s}
+          //         </Tag>
+          //       ))}
+          //     </div>
+          //   )}
+          // </div>
+          // <Space style={{ alignSelf: 'flex-end' }}>
+          //   <Button
+          //     type='primary'
+          //     onClick={(e) => edit(item, index)}
+          //     onKeyDown={disableEnterAsClick}
+          //   >
+          //     编辑
+          //   </Button>
+          //   <Button type='primary' onClick={() => update(item)} onKeyDown={disableEnterAsClick}>
+          //     更新
+          //   </Button>
+          //   <Button danger onClick={() => del(index)} onKeyDown={disableEnterAsClick}>
+          //     删除
+          //   </Button>
+          // </Space>
+
           return (
-            <List.Item style={{ display: 'flex' }}>
-              <div className='list-item'>
-                <div className='name'>{name}</div>
-                <div className='url'>{url}</div>
+            <List.Item style={{ display: 'flex', borderBottom: 'none' }}>
+              <Descriptions
+                bordered
+                column={1}
+                size='middle'
+                style={{ width: '100%' }}
+                labelStyle={{ width: '120px', textAlign: 'center' }}
+              >
+                <Descriptions.Item label='名称'>{name}</Descriptions.Item>
+
                 {excludeKeywords?.length && (
-                  <div className='exclude'>
-                    排除关键词:{' '}
+                  <Descriptions.Item label='排除关键词'>
                     {excludeKeywords.map((s) => (
                       <Tag key={s} color='warning'>
                         {s}
                       </Tag>
                     ))}
-                  </div>
+                  </Descriptions.Item>
                 )}
-              </div>
 
-              <Space style={{ alignSelf: 'flex-end' }}>
-                <Button
-                  type='primary'
-                  onClick={(e) => edit(item, index)}
-                  onKeyDown={disableEnterAsClick}
-                >
-                  编辑
-                </Button>
-                <Button type='primary' onClick={() => update(item)} onKeyDown={disableEnterAsClick}>
-                  更新
-                </Button>
-                <Button danger onClick={() => del(index)} onKeyDown={disableEnterAsClick}>
-                  删除
-                </Button>
-              </Space>
+                <Descriptions.Item label='链接' span={3}>
+                  {url}
+                </Descriptions.Item>
+
+                <Descriptions.Item label='操作' span={3}>
+                  <Space style={{ alignSelf: 'flex-end' }}>
+                    <Button
+                      type='primary'
+                      onClick={(e) => edit(item, index)}
+                      onKeyDown={disableEnterAsClick}
+                    >
+                      编辑
+                    </Button>
+                    <Button
+                      type='primary'
+                      onClick={() => update(item)}
+                      onKeyDown={disableEnterAsClick}
+                    >
+                      更新
+                    </Button>
+                    <Button danger onClick={() => del(index)} onKeyDown={disableEnterAsClick}>
+                      删除
+                    </Button>
+                  </Space>
+                </Descriptions.Item>
+              </Descriptions>
             </List.Item>
           )
         }}

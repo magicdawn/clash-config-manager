@@ -1,30 +1,29 @@
 import { runCommand } from '$ui/commands/run'
-import { rootState } from '$ui/store'
 import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/util/fn/gen'
 import { useMemoizedFn } from 'ahooks'
 import { Button, Col, Divider, Input, message, Row } from 'antd'
 import launch from 'launch-editor'
 import React from 'react'
 import { useSnapshot } from 'valtio'
-import DndPlaygroud from './DndPlayground'
+import { ConfigDND } from './ConfigDND'
 import styles from './index.module.less'
+import { state } from './model'
 
 export default function ConfigList() {
-  const { name } = useSnapshot(rootState.currentConfig)
+  const { name } = useSnapshot(state)
 
   const onGenConfigClick = useMemoizedFn(async () => {
     return runCommand('generate')
   })
 
   const onOpenConfigClick = useMemoizedFn((editor = 'code') => {
-    const file = getConfigFile(rootState.currentConfig.name)
+    const file = getConfigFile(state.name)
     launch(
       // file
       file,
-
       // try specific editor bin first (optional)
       editor,
-
+      // callback if failed to launch (optional)
       (fileName, errorMsg) => {
         message.error(errorMsg)
       }
@@ -34,7 +33,7 @@ export default function ConfigList() {
   return (
     <div className={styles.page}>
       <Divider orientation='left'>配置内容</Divider>
-      <DndPlaygroud></DndPlaygroud>
+      <ConfigDND />
 
       <Divider orientation='left'>配置文件</Divider>
       <Row>
@@ -58,7 +57,7 @@ export default function ConfigList() {
             value={name}
             onChange={(e) => {
               const name = e.target.value
-              rootState.currentConfig.name = name
+              state.name = name
             }}
           />
         </Col>
