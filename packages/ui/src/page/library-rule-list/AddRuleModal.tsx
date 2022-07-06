@@ -81,14 +81,12 @@ export default function AddRuleModal(props: IProps) {
     changeProcessUrl(url)
   }, [])
 
-  const readChromeUrl = useCallback(() => {
-    ;(async () => {
-      const url = await getChromeUrl()
-      if (url) {
-        message.success('获取 chrome url 成功')
-        changeProcessUrl(url)
-      }
-    })()
+  const readChromeUrl = useCallback(async () => {
+    const url = await getChromeUrl()
+    if (url) {
+      message.success('获取 chrome url 成功')
+      changeProcessUrl(url)
+    }
   }, [])
 
   // default use chrome url
