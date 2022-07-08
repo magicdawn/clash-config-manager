@@ -137,11 +137,11 @@ export default function LibrarySubscribe() {
                   </Descriptions.Item>
                 )}
 
-                <Descriptions.Item label='链接' span={3}>
+                <Descriptions.Item label='链接' contentStyle={{ wordBreak: 'break-all' }}>
                   {url}
                 </Descriptions.Item>
 
-                <Descriptions.Item label='操作' span={3}>
+                <Descriptions.Item label='操作'>
                   <Space style={{ alignSelf: 'flex-end' }}>
                     <Button
                       type='primary'
