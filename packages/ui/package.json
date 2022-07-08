@@ -71,6 +71,7 @@
     "@magicdawn/eslint-config": "^0.0.6",
     "@magicdawn/prettier-config": "latest",
     "@originjs/vite-plugin-commonjs": "^1.0.3",
+    "@qiniu/typed-less-modules": "^0.1.2",
     "@types/bytes": "^3.1.0",
     "@types/classnames": "^2.2.11",
     "@types/debug": "^4.1.5",
@@ -105,7 +106,6 @@
     "minimist": "^1.2.5",
     "prettier": "latest",
     "shelljs": "^0.8.4",
-    "typed-less-modules": "^1.0.1",
     "vite": "^2.9.13",
     "vite-plugin-electron": "^0.4.4",
     "vite-tsconfig-paths": "^3.4.1"

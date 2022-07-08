@@ -1,0 +1,37 @@
+$ pnpm i
+Scope: all 4 workspace projects
+packages/ui                              |  WARN  deprecated @types/classnames@2.3.1
+packages/ui                              |  WARN  deprecated webdav@3.6.2
+ WARN  deprecated babel-eslint@10.1.0: babel-eslint is now @babel/eslint-parser. This package will no longer receive updates.
+packages/ui                              |  WARN  deprecated babel-eslint@10.1.0
+ WARN  deprecated dmg-license@1.0.11: Disk image license agreements are deprecated by Apple and will probably be removed in a future macOS release. Discussion at: https://github.com/argv-minus-one/dmg-license/issues/11
+packages/ui                              |  WARN  deprecated chokidar@2.1.8
+ WARN  deprecated tar@2.2.2: This version of tar is no longer supported, and will not receive security updates. Please upgrade asap.
+packages/ui                              |  WARN  deprecated fsevents@1.2.13
+packages/ui                              |  WARN  deprecated source-map-resolve@0.5.3
+packages/ui                              |  WARN  deprecated source-map-resolve@0.5.3
+packages/ui                              |  WARN  deprecated resolve-url@0.2.1
+packages/ui                              |  WARN  deprecated resolve-url@0.2.1
+packages/ui                              |  WARN  deprecated source-map-url@0.4.1
+packages/ui                              |  WARN  deprecated source-map-url@0.4.1
+packages/ui                              |  WARN  deprecated urix@0.1.0
+packages/ui                              |  WARN  deprecated urix@0.1.0
+Packages: +16 -33
+++++++++++++++++---------------------------------
+Progress: resolved 1712, reused 1103, downloaded 1, added 16, done
+. postinstall$ electron-builder install-app-deps
+│   • electron-builder  version=23.0.3
+│   • loaded configuration  file=/Users/magicdawn/projects/clash-config-manager/electron-builder.js
+└─ Done in 861ms
+. prepare$ husky install
+│ husky - Git hooks installed
+└─ Done in 130ms
+ WARN  Issues with peer dependencies found
+packages/ui
+├─┬ react-beautiful-dnd
+│ ├── ✕ unmet peer react@"^16.8.5 || ^17.0.0": found 18.2.0
+│ ├── ✕ unmet peer react-dom@"^16.8.5 || ^17.0.0": found 18.2.0
+│ └─┬ use-memo-one
+│   └── ✕ unmet peer react@"^16.8.0 || ^17.0.0": found 18.2.0
+└─┬ react-command-palette
+  └── ✕ unmet peer react-dom@"16 -18": found 18.2.0

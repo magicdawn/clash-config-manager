@@ -5,11 +5,6 @@ import globby from 'globby'
 import log from 'fancy-log'
 import { version } from '../package.json'
 import { sh, PROJECT_ROOT } from './util'
-import { TaskFunction } from 'gulp'
-
-const r = release as TaskFunction
-r.description = '发布release'
-export { release }
 
 function getChangelog() {
   const fullChangeLog = fse.readFileSync(PROJECT_ROOT + '/CHANGELOG.md', 'utf8')
@@ -33,7 +28,7 @@ function getChangelog() {
   return curChangelog
 }
 
-async function release() {
+export async function release() {
   // 1. add Changelog
   // 2. npm version patch or minor
 
