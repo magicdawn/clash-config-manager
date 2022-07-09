@@ -16,9 +16,9 @@ import {
 import { ConfigProvider, Menu, MenuProps } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
 import _ from 'lodash'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { createRoot } from 'react-dom/client'
-import { HashRouter as Router, Link, useLocation, useRoutes, RouteObject } from 'react-router-dom'
+import { HashRouter as Router, Link, RouteObject, useLocation, useRoutes } from 'react-router-dom'
 import Commands from './commands'
 import './page/common'
 import CurrentConfig from './page/current-config'

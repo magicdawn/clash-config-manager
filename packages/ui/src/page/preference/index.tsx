@@ -10,7 +10,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import { tmpdir } from 'os'
 import path from 'path'
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
 
 import PRESET_JSON_DATA from '../../assets/基本数据规则.json'

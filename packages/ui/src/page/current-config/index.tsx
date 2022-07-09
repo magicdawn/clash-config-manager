@@ -3,7 +3,6 @@ import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/util/fn/g
 import { useMemoizedFn } from 'ahooks'
 import { Button, Col, Divider, Input, message, Row } from 'antd'
 import launch from 'launch-editor'
-import React from 'react'
 import { useSnapshot } from 'valtio'
 import { ConfigDND } from './ConfigDND'
 import styles from './index.module.less'

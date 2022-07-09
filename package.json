@@ -34,11 +34,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
-    "@magicdawn/eslint-config": "^0.0.6",
     "@magicdawn/prettier-config": "^0.0.2",
     "@swc/core": "^1.2.208",
     "@swc/helpers": "^0.4.3",
-    "@types/eslint": "^8.4.2",
     "@types/fancy-log": "^1.3.1",
     "@types/fs-extra": "^9.0.13",
     "@types/jake": "^0.0.33",
@@ -70,7 +68,6 @@
     "webpack": "^5.72.1",
     "webpack-merge": "^5.8.0"
   },
-  "packageManager": "pnpm@3.1.1",
   "prettier": "@magicdawn/prettier-config",
   "lint-staged": {
     "*.{js,jsx,less,css,ts,tsx,md}": [

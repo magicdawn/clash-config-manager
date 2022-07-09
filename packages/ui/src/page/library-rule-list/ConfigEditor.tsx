@@ -1,10 +1,10 @@
-import MonacoEditor, { EditorDidMount, EditorWillMount, monaco } from 'react-monaco-editor'
-import React, { MutableRefObject, ReactNode, useMemo, useRef } from 'react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Spin } from 'antd'
 import { SpinProps } from 'antd/lib/spin'
-import style from './ConfigEditor.module.less'
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api'
+import { MutableRefObject, ReactNode, useMemo, useRef } from 'react'
+import MonacoEditor, { EditorDidMount, EditorWillMount, monaco } from 'react-monaco-editor'
+import style from './ConfigEditor.module.less'
 
 export type EditorRefInner = monaco.editor.IStandaloneCodeEditor
 

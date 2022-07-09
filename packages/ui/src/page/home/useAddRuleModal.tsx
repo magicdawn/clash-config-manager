@@ -1,4 +1,3 @@
-import React from 'react'
 import { proxy, useSnapshot } from 'valtio'
 import AddRuleModal, { Mode } from '../library-rule-list/AddRuleModal'
 

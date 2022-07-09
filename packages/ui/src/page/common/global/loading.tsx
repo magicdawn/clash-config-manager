@@ -1,6 +1,6 @@
 import { Modal } from 'antd'
 import _ from 'lodash'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import PacmanLoader from 'react-spinners/PacmanLoader'
 import styles from './loading.module.less'
 import { wrapComponent } from './wrapComponent'
@@ -12,6 +12,8 @@ const colors = [
   '#1890ff', // from antd
 ]
 
+// FIXME:
+// eslint-disable-next-line react/prop-types
 function Loading({ visible }) {
   const [color, setColor] = useState('orange')
 

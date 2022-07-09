@@ -2,7 +2,7 @@ import { truthy } from '$ui/util/ts-filter'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Modal, Tree } from 'antd'
 import _ from 'lodash'
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { proxy, useSnapshot } from 'valtio'
 
 type SelectExportProps = {

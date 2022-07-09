@@ -15,7 +15,7 @@ import {
   Tag,
   Tooltip,
 } from 'antd'
-import React, { ChangeEventHandler, KeyboardEventHandler, useCallback, useState } from 'react'
+import { ChangeEventHandler, KeyboardEventHandler, useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import styles from './index.module.less'
 import { actions, state } from './model'

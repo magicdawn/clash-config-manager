@@ -1,7 +1,7 @@
 import { runCommand } from '$ui/commands/run'
 import { rootActions, rootState } from '$ui/store'
 import { Button, message } from 'antd'
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import styles from './index.module.less'
 import { useAddRuleModal } from './useAddRuleModal'
 
