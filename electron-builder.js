@@ -1,5 +1,6 @@
 const { execSync } = require('child_process')
 const pkg = require('./packages/main/package.json')
+const { once } = require('lodash')
 
 const sh = (cmd) => {
   console.log('[exec]: %s', cmd)
@@ -8,6 +9,24 @@ const sh = (cmd) => {
 
 // env
 process.env.NODE_ENV = 'production'
+
+// multiarch 会调用多次 build
+const buildOnce = once(build)
+function build() {
+  if (process.env.SKIP_BUILD) {
+    return
+  }
+
+  if (!process.env.SKIP_BUILD_MAIN) {
+    console.log('[build main]')
+    sh('pnpm build:main')
+  }
+
+  if (!process.env.SKIP_BUILD_UI) {
+    console.log('[build ui]')
+    sh('pnpm build:ui')
+  }
+}
 
 module.exports = {
   appId: pkg.bundleId,
@@ -33,19 +52,7 @@ module.exports = {
   ],
 
   beforeBuild() {
-    if (process.env.SKIP_BUILD) {
-      return
-    }
-
-    if (!process.env.SKIP_BUILD_MAIN) {
-      console.log('[build main]')
-      sh('pnpm build:main')
-    }
-
-    if (!process.env.SKIP_BUILD_UI) {
-      console.log('[build ui]')
-      sh('pnpm build:ui')
-    }
+    buildOnce()
   },
 
   mac: {
@@ -53,6 +60,12 @@ module.exports = {
     publish: {
       provider: 'github',
     },
+    target: [
+      {
+        target: 'default',
+        arch: ['x64', 'arm64'],
+      },
+    ],
   },
 
   dmg: {
