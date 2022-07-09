@@ -1,10 +1,13 @@
 # Changelog
 
-## v0.10.0 未发布
+## v0.10.0 2022-07-09
 
 - [x] 重构: 移除 easy-peasy / redux, 使用 valtio 作为全局状态管理
 - [x] 重构: 移除 rxjs BehaviorSubject / recompose 等, 使用 valtio 全局组件
 - [x] 重构: 开启 TypeScript strictNullChecks
+- [x] 重构: UI 优化
+- [x] react-router v6
+- [x] feat: 订阅支持自动更新, 并因此更新配置
 
 ## v0.9.0 2022-07-02
 
