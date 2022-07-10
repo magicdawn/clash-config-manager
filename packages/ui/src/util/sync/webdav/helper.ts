@@ -1,32 +1,35 @@
-import memo from 'memoize-one'
-import webdav from 'webdav'
-import { dirname } from 'path'
-import { Modal, message } from 'antd'
-import { rootActions, rootState } from '$ui/store'
 import storage from '$ui/storage'
+import { rootActions, rootState } from '$ui/store'
+import { message, Modal } from 'antd'
+import { dirname } from 'path'
+import { createClient } from 'webdav'
 import customMerge from './customMerge'
+import memo from 'memoize-one'
 
-const newClient = memo((davServerUrl, user, pass) => {
-  return webdav.createClient(davServerUrl, {
-    username: user,
-    password: pass,
+const makeClient = memo((davServerUrl: string, username: string, password: string) =>
+  createClient(davServerUrl, {
+    username,
+    password,
   })
-})
+)
 
-export function getClient() {
+function getClient() {
   const { davServerUrl, user, pass } = rootState.preference?.syncConfig || {}
-  return newClient(davServerUrl, user, pass)
+  return makeClient(davServerUrl, user, pass)
 }
 
 const APP_DATA_DIR = '/AppData/clash-config-manager'
-const STORAGE_FILE = APP_DATA_DIR + '/data.json'
+const STORAGE_FILE = APP_DATA_DIR + '/data.txt'
 
 class DavHelper {
   get client() {
     return getClient()
   }
 
-  private getDirLevels = (dir: string) => {
+  // 获取所有的 dir 层级, 如 input = '/AppData/clash-config-manager/'
+  // levels = [/AppData, /AppData/clash-config-manager/]
+  // client.createDirectory recursive 不生效 2022-07-10
+  private getDirLevels(dir: string) {
     const ret: string[] = []
     let cur = dir
     do {
@@ -36,7 +39,7 @@ class DavHelper {
     return ret
   }
 
-  private confirm = (what: string) => {
+  private confirm(what: string): Promise<boolean> {
     return new Promise((resolve) => {
       Modal.confirm({
         title: what,
@@ -50,27 +53,28 @@ class DavHelper {
     })
   }
 
-  ensureDir = async () => {
-    const dirs = this.getDirLevels(APP_DATA_DIR)
-    for (const d of dirs) {
-      // 已存在, 不会报错
+  async ensureDir(d = APP_DATA_DIR) {
+    for (const d of this.getDirLevels(APP_DATA_DIR)) {
       await this.client.createDirectory(d)
     }
   }
 
-  read = async () => {
-    const fileContent = await this.client.getFileContents(STORAGE_FILE, { format: 'text' })
+  async read() {
+    const fileContent = (await this.client.getFileContents(STORAGE_FILE, {
+      format: 'text',
+    })) as string
     const jsonStr = Buffer.from(fileContent, 'base64').toString('utf8')
     const json = JSON.parse(jsonStr)
     return json
   }
-  write = async (json) => {
+  async write(json: any) {
     const jsonStr = JSON.stringify(json, null, 2)
     const base64Str = Buffer.from(jsonStr).toString('base64')
-    await this.client.putFileContents(STORAGE_FILE, base64Str)
+    await this.client.putFileContents(STORAGE_FILE, base64Str, { overwrite: true })
   }
 
-  exists = async (path = STORAGE_FILE) => {
+  async exists(path = STORAGE_FILE) {
+    // 如果 dir 不存在, 会报错 status code 409
     try {
       return await this.client.exists(path)
     } catch (e) {
@@ -78,7 +82,7 @@ class DavHelper {
     }
   }
 
-  upload = async () => {
+  async upload() {
     const localData = storage.store
     const remoteHasData = await this.exists()
 
@@ -102,7 +106,7 @@ class DavHelper {
     message.success('备份成功')
   }
 
-  forceUpload = async () => {
+  async forceUpload() {
     const yes = await this.confirm('确认要上传并覆盖')
     if (!yes) {
       return
@@ -119,7 +123,7 @@ class DavHelper {
     message.success('备份成功')
   }
 
-  download = async () => {
+  async download() {
     const remoteHasData = await this.exists()
 
     // 远程无数据
@@ -142,7 +146,7 @@ class DavHelper {
     message.success('下载成功')
   }
 
-  forceDownload = async () => {
+  async forceDownload() {
     const yes = await this.confirm('确认要上传并覆盖')
     if (!yes) {
       return

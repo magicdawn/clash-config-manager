@@ -44,7 +44,7 @@
     "js-yaml": "^3.14.1",
     "launch-editor": "^2.2.1",
     "lodash": "^4.17.20",
-    "memoize-one": "^5.1.1",
+    "memoize-one": "^6.0.0",
     "minimist": "^1.2.5",
     "moment": "^2.29.1",
     "monaco-editor": "0.33.0",
@@ -63,8 +63,8 @@
     "umi-request": "^1.3.5",
     "urijs": "^1.19.5",
     "valtio": "^1.6.1",
-    "webdav": "^3.6.1",
-    "webdav-fs": "^3.0.0",
+    "webdav": "^4.10.0",
+    "webdav-fs": "^4.0.1",
     "yargs": "^16.2.0"
   },
   "devDependencies": {
