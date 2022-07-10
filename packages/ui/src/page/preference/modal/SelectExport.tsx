@@ -1,9 +1,12 @@
+import { StorageData } from '$ui/storage'
 import { truthy } from '$ui/util/ts-filter'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Modal, Tree } from 'antd'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
 import { proxy, useSnapshot } from 'valtio'
+import { Merge } from 'type-fest'
+import { ConfigItem } from '$ui/common/define'
 
 type SelectExportProps = {
   visible: boolean
@@ -196,15 +199,34 @@ export function SelectExportForStaticMethod() {
   )
 }
 
-export async function pick(obj) {
-  const originalObj = obj
-  obj = _.cloneDeep(obj)
-  obj?.current_config_v2?.list?.forEach((item, i) => {
-    const { id } = item
-    const target =
-      obj?.subscribe_list?.find((i) => i.id === id) || obj?.rule_list?.find((i) => i.id === id)
-    item.name = target?.name ?? '未找到对应源'
-  })
+// Merge is Object.assign for Types
+type StorageDataExtended = Merge<
+  StorageData,
+  {
+    current_config_v2: Merge<
+      StorageData['current_config_v2'],
+      {
+        list: (ConfigItem & { name?: string })[]
+      }
+    >
+  }
+>
+
+export async function pick(originalObj: StorageData) {
+  const obj = _.cloneDeep(originalObj) as StorageDataExtended
+
+  if (obj?.current_config_v2?.list) {
+    obj.current_config_v2.list.forEach((item, i) => {
+      const { id } = item
+      const target =
+        obj?.subscribe_list?.find((i) => i.id === id) || obj?.rule_list?.find((i) => i.id === id)
+      item.name = target?.name
+    })
+    obj.current_config_v2.list = obj.current_config_v2.list.filter((item) => {
+      return !!item.name
+    })
+  }
+
   const treeData = generateTreeData(obj)
 
   const { cancel, keys } = await new Promise<SelectResult>((resolve) => {

@@ -1,7 +1,7 @@
 /* eslint camelcase: off */
 
 import Store from 'electron-store'
-import { RuleItem, Subscribe } from '$ui/common/define'
+import { ConfigItem, RuleItem, Subscribe } from '$ui/common/define'
 
 const storage = new Store({
   name: 'data',
@@ -15,7 +15,7 @@ const storage = new Store({
     rule_list: [] as RuleItem[],
 
     current_config_v2: {
-      list: [],
+      list: [] as ConfigItem[],
       name: 'clash-config-manager',
       forceUpdate: true,
     },
@@ -30,6 +30,10 @@ const storage = new Store({
   },
 })
 
-// fixme
-;(global as any).estore = storage
+type StoreData<T> = T extends Store<infer Inner> ? Inner : never
+export type StorageData = StoreData<typeof storage>
+
 export default storage
+
+// FIXME: debug only
+// ;(global as any).estore = storage
