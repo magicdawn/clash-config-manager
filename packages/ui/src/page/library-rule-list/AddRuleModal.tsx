@@ -246,7 +246,8 @@ async function getChromeUrl() {
   return url
 }
 
-global.URI = URI
+// FIXME
+// global.URI = URI
 
 function getAutoCompletes(url: string) {
   const u = new URI(url)
