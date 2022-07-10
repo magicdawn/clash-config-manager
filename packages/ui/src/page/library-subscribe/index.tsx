@@ -201,7 +201,7 @@ function ModalAdd({
     setName(editItem?.name || '')
     setId(editItem?.id || crypto.randomUUID())
     setExcludeKeywords(editItem?.excludeKeywords || [])
-    setAutoUpdate(editItem?.autoUpdate || true)
+    setAutoUpdate(editItem?.autoUpdate ?? true)
     setAutoUpdateInterval(editItem?.autoUpdateInterval || autoUpdateIntervalDefault)
   }, [editItem, visible])
 
