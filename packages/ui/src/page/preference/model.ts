@@ -15,7 +15,7 @@ interface IState {
 const { state, init, load } = valtioState<IState>(
   {
     syncConfig: {
-      davServerUrl: '',
+      davServerUrl: 'https://dav.jianguoyun.com/dav/',
       user: '',
       pass: '',
     },

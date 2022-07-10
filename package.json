@@ -24,7 +24,8 @@
     "build:main": "pnpm -F main build",
     "build:ui": "pnpm -F ui build",
     "pack": "electron-builder --dir",
-    "dist:mac": "PYTHON_PATH=`pyenv which python2.7` electron-builder --macos",
+    "dist:mac": "electron-builder --macos",
+    "dist:mac:dmg": "electron-builder --macos dmg",
     "dist": "electron-builder --macos --linux --windows"
   },
   "dependencies": {

@@ -18,8 +18,8 @@ function getClient() {
   return makeClient(davServerUrl, user, pass)
 }
 
-const APP_DATA_DIR = '/AppData/clash-config-manager'
-const STORAGE_FILE = APP_DATA_DIR + '/data.txt'
+export const APP_DATA_DIR = '/AppData/clash-config-manager'
+export const STORAGE_FILE = APP_DATA_DIR + '/data.txt'
 
 class DavHelper {
   get client() {

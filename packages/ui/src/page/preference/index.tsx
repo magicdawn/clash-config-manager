@@ -1,8 +1,11 @@
+import storage from '$ui/storage'
 import { rootActions, rootState } from '$ui/store'
 import useImmerState from '$ui/util/hooks/useImmerState'
+import customMerge from '$ui/util/sync/webdav/customMerge'
+import helper, { STORAGE_FILE } from '$ui/util/sync/webdav/helper'
 import { CloudDownloadOutlined, CloudUploadOutlined, SettingFilled } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { Button, Card, Col, Input, message, Modal, Row, Space } from 'antd'
+import { Alert, Button, Card, Col, Input, message, Modal, Row, Space, Tag } from 'antd'
 import { ipcRenderer, shell } from 'electron'
 import fse from 'fs-extra'
 import launch from 'launch-editor'
@@ -12,13 +15,9 @@ import { tmpdir } from 'os'
 import path from 'path'
 import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
-
-import PRESET_JSON_DATA from '../../assets/基本数据规则.json'
-import storage from '../../storage/index'
-import customMerge from '../../util/sync/webdav/customMerge'
-import helper from '../../util/sync/webdav/helper'
-import styles from './index.module.less'
 import { pick as pickSelectExport, SelectExportForStaticMethod } from './modal/SelectExport'
+import PRESET_JSON_DATA from '../../assets/基本数据规则.json'
+import styles from './index.module.less'
 
 export default function Preference() {
   const [showModal, setShowModal] = useState(false)
@@ -310,6 +309,24 @@ function ModalSyncConfig(props: ModalSyncConfigProps) {
       onOk={handleOk}
       onCancel={handleCancel}
     >
+      <Alert
+        type='success'
+        message='同步服务'
+        description={
+          <span>
+            <ul style={{ marginBottom: 0, paddingLeft: 25 }}>
+              <li>
+                支持任意 webdav 协议的同步, 推荐使用坚果云{' '}
+                <a href='https://www.jianguoyun.com/'>https://www.jianguoyun.com/</a>
+              </li>
+              <li style={{ lineHeight: 1.5 }}>
+                存放在文件 <Tag color='warning'>{STORAGE_FILE}</Tag> 中, 以
+                <Tag color='default'>to-base64(to-json(config))</Tag> 形式保存
+              </li>
+            </ul>
+          </span>
+        }
+      />
       <Input
         className='input-row'
         prefix={<label className='label'>server url</label>}
