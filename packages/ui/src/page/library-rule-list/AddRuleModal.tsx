@@ -1,4 +1,3 @@
-import { rootState } from '$ui/store'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { AutoComplete, Button, Col, Input, message, Modal, Row, Select, Space } from 'antd'
 import AppleScript from 'applescript'
@@ -8,12 +7,18 @@ import pify from 'promise.ify'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import URI from 'urijs'
 import { useSnapshot } from 'valtio'
+import { state } from './model'
 
 const { Option } = Select
 
 // from-rule: 从规则编辑中打开
 // from-global: 从主页中直接打开
 export type Mode = 'from-rule' | 'from-global'
+
+type ClashRuleType = 'DOMAIN-SUFFIX' | 'DOMAIN-KEYWORD'
+const TYPES: ClashRuleType[] = ['DOMAIN-SUFFIX', 'DOMAIN-KEYWORD']
+
+const TARGETS = ['Proxy', 'DIRECT', 'REJECT']
 
 interface IProps {
   visible: boolean
@@ -25,8 +30,7 @@ interface IProps {
 export default function AddRuleModal(props: IProps) {
   const { visible, setVisible, onOk, mode = 'from-rule' } = props
 
-  const rootStateSnap = useSnapshot(rootState)
-  const fullList = rootStateSnap.libraryRuleList.list
+  const { list: fullList } = useSnapshot(state)
 
   const ruleList = useMemo(() => {
     const list = fullList.filter((item) => {
@@ -68,7 +72,10 @@ export default function AddRuleModal(props: IProps) {
    */
 
   const [processUrl, setProcessUrl] = useState('')
-  const [autoCompletes, setAutoCompletes] = useState({})
+  const [autoCompletes, setAutoCompletes] = useState<Record<ClashRuleType, string[]>>(() => ({
+    'DOMAIN-KEYWORD': [],
+    'DOMAIN-SUFFIX': [],
+  }))
 
   const changeProcessUrl = useMemoizedFn((u) => {
     setProcessUrl(u)
@@ -78,7 +85,9 @@ export default function AddRuleModal(props: IProps) {
 
   const readClipboardUrl = useCallback(() => {
     const url = clipboard.readText()
-    changeProcessUrl(url)
+    if (url) {
+      changeProcessUrl(url)
+    }
   }, [])
 
   const readChromeUrl = useCallback(async () => {
@@ -100,18 +109,19 @@ export default function AddRuleModal(props: IProps) {
    * rule detail
    */
 
-  const TYPES = ['DOMAIN-SUFFIX', 'DOMAIN-KEYWORD']
-  const TARGETS = ['Proxy', 'DIRECT']
-  const [type, setType] = useState(TYPES[0])
+  const [type, setType] = useState<ClashRuleType>(TYPES[0])
   const [url, setUrl] = useState('')
   const [target, setTarget] = useState(TARGETS[0])
 
-  const curAutoCompletes = autoCompletes[type] || []
+  const curAutoCompletes = useMemo(() => {
+    return autoCompletes[type] || []
+  }, [autoCompletes, type])
+
   useEffect(() => {
     if (curAutoCompletes[0]) {
       setUrl(curAutoCompletes[0])
     }
-  }, [curAutoCompletes, setUrl])
+  }, [curAutoCompletes])
 
   /**
    * ui style
