@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.11.0 2022-07-12
+
+- chore: 在 SelectExport 中去掉删除的遗留项
+- feat: add note for webdav service config
+- fix: use ?? insteadof || for boolean fields, 修复是否自动更新, 无法取消掉的问题
+- fix: fix RuleAddModal 使用 clipboard 读取 url 不好使的问题
+- chore: add m1 arch build
+- chore: clean up or update deps, `@types/*`, `webdav` etc
+
 ## v0.10.0 2022-07-09
 
 - [x] 重构: 移除 easy-peasy / redux, 使用 valtio 作为全局状态管理
