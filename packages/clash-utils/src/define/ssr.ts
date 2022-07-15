@@ -30,15 +30,15 @@ e.g
   # udp: true
  */
 
-export interface ClashSsrServer {
+export interface ClashSsrProxyItem {
   'type': 'ssr'
   'name': string
   'server': string
   'port': number
-  'cipher': SsrCipher
+  'cipher': ClashSsr.Cipher
   'password': string
-  'obfs': SsrObfs
-  'protocol': SsrProtocol
+  'obfs': ClashSsr.Obfs
+  'protocol': ClashSsr.Protocol
   'obfs-param'?: string
   'protocol-param'?: string
   'udp'?: boolean
@@ -48,40 +48,42 @@ export interface ClashSsrServer {
  * Support Types
  */
 
-export type SsrCipher =
-  | 'rc4'
-  | 'rc4-md5'
-  | 'aes-128-gcm'
-  | 'aes-192-gcm'
-  | 'aes-256-gcm'
-  | 'aes-128-cfb'
-  | 'aes-192-cfb'
-  | 'aes-256-cfb'
-  | 'aes-128-ctr'
-  | 'aes-192-ctr'
-  | 'aes-256-ctr'
-  | 'chacha20'
-  | 'chacha20-ietf'
-  | 'chacha20-ietf-poly1305'
-  | 'xchacha20-ietf-poly1305'
+export namespace ClashSsr {
+  export type Cipher =
+    | 'rc4'
+    | 'rc4-md5'
+    | 'aes-128-gcm'
+    | 'aes-192-gcm'
+    | 'aes-256-gcm'
+    | 'aes-128-cfb'
+    | 'aes-192-cfb'
+    | 'aes-256-cfb'
+    | 'aes-128-ctr'
+    | 'aes-192-ctr'
+    | 'aes-256-ctr'
+    | 'chacha20'
+    | 'chacha20-ietf'
+    | 'chacha20-ietf-poly1305'
+    | 'xchacha20-ietf-poly1305'
 
-export type SsrObfs =
-  | 'plain'
-  | 'http_simple'
-  | 'http_post'
-  | 'random_head'
-  | 'tls1.2_ticket_auth'
-  | 'tls1.2_ticket_fastauth'
+  export type Obfs =
+    | 'plain'
+    | 'http_simple'
+    | 'http_post'
+    | 'random_head'
+    | 'tls1.2_ticket_auth'
+    | 'tls1.2_ticket_fastauth'
 
-export type SsrProtocol =
-  | 'origin'
-  | 'auth_sha1_v4'
-  | 'auth_aes128_md5'
-  | 'auth_aes128_sha1'
-  | 'auth_chain_a'
-  | 'auth_chain_b'
+  export type Protocol =
+    | 'origin'
+    | 'auth_sha1_v4'
+    | 'auth_aes128_md5'
+    | 'auth_aes128_sha1'
+    | 'auth_chain_a'
+    | 'auth_chain_b'
+}
 
-export function urlLineToClashSsrServer(str: string): ClashSsrServer {
+export function urlLineToClashSsrServer(str: string): ClashSsrProxyItem {
   // e.g hinet1.puffvip.com:1063:auth_aes128_sha1:chacha20:plain:UGFvZnU/?obfsparam=ZmE3Nzc4NzYzMS5taWNyb3NvZnQuY29t&protoparam=ODc2MzE6eHlqdHlza2Z5ZGhxc3M&remarks=W1YxXSDlj7Dmub4x&group=5rOh6IqZ5LqR
 
   const [prev, rest] = str.split('/?')
@@ -104,15 +106,15 @@ export function urlLineToClashSsrServer(str: string): ClashSsrServer {
   if (obfsparam) obfsparam = B64.decode(obfsparam)
   if (protoparam) protoparam = B64.decode(protoparam)
 
-  const ret: ClashSsrServer = {
+  const ret: ClashSsrProxyItem = {
     'name': `${group || ''} - ${remarks}` || '',
     'type': 'ssr',
     server,
     'port': Number(port),
-    'cipher': cipher as SsrCipher,
+    'cipher': cipher as ClashSsr.Cipher,
     password,
-    'obfs': obfs as SsrObfs,
-    'protocol': protocol as SsrProtocol,
+    'obfs': obfs as ClashSsr.Obfs,
+    'protocol': protocol as ClashSsr.Protocol,
     'obfs-param': obfsparam || '',
     'protocol-param': protoparam || '',
   }

@@ -1,4 +1,4 @@
-import { subscribeToClash } from '$clash-utils'
+import { ClashProxyItem, subscribeToClash } from '$clash-utils'
 import { runCommand } from '$ui/commands/run'
 import { Subscribe } from '$ui/common/define'
 import { valtioState } from '$ui/common/model/valtio-helper'
@@ -96,8 +96,7 @@ async function update({
 }) {
   const currentSubscribe = state.list.find((s) => s.url === url)
 
-  // TODO: ts
-  let servers: any[]
+  let servers: ClashProxyItem[]
   try {
     servers = await subscribeToClash({ url, forceUpdate })
   } catch (e) {
@@ -119,18 +118,14 @@ async function update({
     message.success(msg)
   }
 
+  // save
   if (currentSubscribe) currentSubscribe.updatedAt = Date.now()
-
-  // TODO: 会影响 electron-store 保存么?
-  // state.detail[url] = ref(servers)
   state.detail[url] = ref(servers)
 }
 
 /**
  * listeners
  */
-
-// listeners
 
 const scheduleAutoUpdateOnce = once(scheduleAutoUpdate)
 onInit(() => {

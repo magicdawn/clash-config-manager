@@ -4,8 +4,7 @@ import moment from 'moment'
 import path from 'path'
 import request from 'umi-request'
 import {
-  ClashSsrServer,
-  ClashVmessServer,
+  ClashProxyItem,
   urlLineToClashSsrServer,
   urlLineToClashVmessServer,
   VmessUrlLine,
@@ -56,7 +55,7 @@ function textToSubscribe(text: string) {
       let text = line.slice(idx + '://'.length)
       text = B64.decode(text)
 
-      let server: ClashSsrServer | ClashVmessServer | undefined
+      let server: ClashProxyItem | undefined
       if (type === 'vmess') {
         const line = JSON.parse(text) as VmessUrlLine
         server = urlLineToClashVmessServer(line)

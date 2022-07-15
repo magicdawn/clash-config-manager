@@ -76,7 +76,7 @@
     grpc-service-name: "example"
  */
 
-export interface ClashVmessServer {
+export interface ClashVmessProxyItem {
   'type': 'vmess'
 
   'name': string
@@ -84,7 +84,7 @@ export interface ClashVmessServer {
   'port': number
   'uuid': string
   'alterId': number
-  'cipher': ClashVmessCiper
+  'cipher': ClashVmess.Ciper
 
   // misc
   'udp'?: boolean
@@ -94,68 +94,70 @@ export interface ClashVmessServer {
   'tls'?: boolean
   'skip-cert-verify'?: boolean
 
-  'network'?: ClashVmessNetwork
+  'network'?: ClashVmess.Network
   // network opts
-  'ws-opts'?: ClashVmessWsOpts
-  'http-opts'?: ClashVmessHttpOpts
-  'h2-opts'?: ClashVmessH2Opts
-  'grpc-opts'?: ClashVmessGrpcOpts
+  'ws-opts'?: ClashVmess.WsOpts
+  'http-opts'?: ClashVmess.HttpOpts
+  'h2-opts'?: ClashVmess.H2Opts
+  'grpc-opts'?: ClashVmess.GrpcOpts
 }
 
-type ClashVmessCiper = 'auto' | 'aes-128-gcm' | 'chacha20-poly1305' | 'none'
+export namespace ClashVmess {
+  export type Ciper = 'auto' | 'aes-128-gcm' | 'chacha20-poly1305' | 'none'
 
-// vmess://{net: 'tcp', type: 'http'} = clash 中的 net:http
-// 见 https://github.com/kltk/v2ray-tools/blob/4dfac04496b84f31df99c31604e1e1ab315dec4c/src/vmess2config.js#L30
-type ClashVmessNetwork = 'tcp' | 'http' | 'h2' | 'quic' | 'kcp' | 'ws' | 'grpc'
+  // vmess://{net: 'tcp', type: 'http'} = clash 中的 net:http
+  // 见 https://github.com/kltk/v2ray-tools/blob/4dfac04496b84f31df99c31604e1e1ab315dec4c/src/vmess2config.js#L30
+  export type Network = 'tcp' | 'http' | 'h2' | 'quic' | 'kcp' | 'ws' | 'grpc'
 
-// ws-opts:
-//   path: /path
-//   headers:
-//     Host: v2ray.com
-//   max-early-data: 2048
-//   early-data-header-name: Sec-WebSocket-Protocol
-interface ClashVmessWsOpts {
-  'path'?: string
-  'headers'?: {
-    Host?: string
-    [key: string]: string | undefined
+  // ws-opts:
+  //   path: /path
+  //   headers:
+  //     Host: v2ray.com
+  //   max-early-data: 2048
+  //   early-data-header-name: Sec-WebSocket-Protocol
+  export interface WsOpts {
+    'path'?: string
+    'headers'?: {
+      Host?: string
+      [key: string]: string | undefined
+    }
+    'max-early-data'?: number
+    'early-data-header-name'?: string
   }
-  'max-early-data'?: number
-  'early-data-header-name'?: string
-}
 
-// http-opts:
-//   # method: "GET"
-//   # path:
-//   #   - '/'
-//   #   - '/video'
-//   # headers:
-//   #   Connection:
-//   #     - keep-alive
-interface ClashVmessHttpOpts {
-  method?: string
-  path?: string | string[]
-  headers?: {
-    [key: string]: string | undefined
+  // http-opts:
+  //   # method: "GET"
+  //   # path:
+  //   #   - '/'
+  //   #   - '/video'
+  //   # headers:
+  //   #   Connection:
+  //   #     - keep-alive
+  export interface HttpOpts {
+    method?: string
+    path?: string | string[]
+    headers?: {
+      [key: string]: string | undefined
+    }
   }
-}
 
-// h2-opts:
-//   host:
-//     - http.example.com
-//     - http-alt.example.com
-//   path: /
-interface ClashVmessH2Opts {
-  host?: string | string[]
-  path?: string
-  [key: string]: any
-}
+  // h2-opts:
+  //   host:
+  //     - http.example.com
+  //     - http-alt.example.com
+  //   path: /
+  export interface H2Opts {
+    host?: string | string[]
+    path?: string
+    [key: string]: any
+  }
 
-// grpc-opts:
-//     grpc-service-name: "example"
-interface ClashVmessGrpcOpts {
-  'grpc-service-name'?: string
-  [key: string]: any | undefined
+  // grpc-opts:
+  //     grpc-service-name: "example"
+  export interface GrpcOpts {
+    'grpc-service-name'?: string
+    [key: string]: any | undefined
+  }
 }
 
 /**
@@ -169,9 +171,9 @@ export interface VmessUrlLine {
   port: string
   id: string
   aid: string
-  net: ClashVmessNetwork
+  net: ClashVmess.Network
   type?: string
-  scy?: ClashVmessCiper
+  scy?: ClashVmess.Ciper
   host?: string
   path?: string
   tls?: string
@@ -183,7 +185,7 @@ function normalize(name: string) {
 }
 
 export function urlLineToClashVmessServer(line: VmessUrlLine) {
-  const server: ClashVmessServer = {
+  const server: ClashVmessProxyItem = {
     'type': 'vmess',
     'name': normalize(line.ps || ''),
     'server': line.add,
