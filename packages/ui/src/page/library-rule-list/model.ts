@@ -2,8 +2,6 @@ import { RuleItem } from '$ui/common/define'
 import { valtioState } from '$ui/common/model/valtio-helper'
 import { onInit, onReload } from '$ui/page/global-model'
 import storage from '$ui/storage'
-import { subscribeToClash } from '$ui/util/fn/clash'
-import { message } from 'antd'
 import _ from 'lodash'
 
 const RULE_LIST_STORAGE_KEY = 'rule_list'
@@ -24,7 +22,7 @@ const { state, load, init } = valtioState(
 )
 
 export { state }
-export const actions = { check, add, del, edit, update }
+export const actions = { check, add, del, edit }
 
 /**
  * listeners
@@ -73,21 +71,4 @@ function edit({ item, editItemIndex }: { item: RuleItem; editItemIndex: number }
 
 function del(index: number) {
   state.list.splice(index, 1)
-}
-
-async function update(payload: { item: RuleItem; index: number }) {
-  const { item } = payload
-  const { url } = item
-  if (!url) return
-
-  let servers
-  try {
-    servers = await subscribeToClash({ url, forceUpdate: true })
-  } catch (e) {
-    message.error('更新出错: \n' + e.stack || e)
-    throw e
-  }
-  message.success('更新成功')
-
-  state.detail[url] = servers
 }

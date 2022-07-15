@@ -1,6 +1,6 @@
 import Loading from '$ui/page/common/global/loading'
 import { rootActions } from '$ui/store'
-import gen from '$ui/util/fn/gen'
+import gen from '$ui/util/gen'
 import { message } from 'antd'
 import { createRef } from 'react'
 

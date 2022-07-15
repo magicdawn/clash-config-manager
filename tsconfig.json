@@ -9,7 +9,9 @@
       "$main": ["main/src/"],
       "$main/*": ["main/src/*"],
       "$ui": ["ui/src/"],
-      "$ui/*": ["ui/src/*"]
+      "$ui/*": ["ui/src/*"],
+      "$clash-utils": ["clash-utils/src/"],
+      "$clash-utils/*": ["clash-utils/src/*"]
     }
   },
   "ts-node": {
