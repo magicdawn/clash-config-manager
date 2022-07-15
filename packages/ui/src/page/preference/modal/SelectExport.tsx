@@ -199,9 +199,11 @@ export function SelectExportForStaticMethod() {
   )
 }
 
+type PickupData = Omit<StorageData, 'subscribe_detail'>
+
 // Merge is Object.assign for Types
-type StorageDataExtended = Merge<
-  StorageData,
+type PickupDataExtended = Merge<
+  PickupData,
   {
     current_config_v2: Merge<
       StorageData['current_config_v2'],
@@ -212,8 +214,8 @@ type StorageDataExtended = Merge<
   }
 >
 
-export async function pick(originalObj: StorageData) {
-  const obj = _.cloneDeep(originalObj) as StorageDataExtended
+export async function pick(originalObj: PickupData) {
+  const obj = _.cloneDeep(originalObj) as PickupDataExtended
 
   if (obj?.current_config_v2?.list) {
     obj.current_config_v2.list.forEach((item, i) => {
