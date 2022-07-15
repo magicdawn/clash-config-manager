@@ -194,7 +194,10 @@ export function urlLineToClashVmessServer(line: VmessUrlLine) {
     'network': line.net,
     'tls': Boolean(line.tls),
     'skip-cert-verify': true,
-    'servername': line.sni,
+  }
+
+  if (line.sni) {
+    server.servername = line.sni
   }
 
   // clash 不认识 tcp
@@ -215,32 +218,33 @@ export function urlLineToClashVmessServer(line: VmessUrlLine) {
   }
 
   // network opts
+  // yaml 不支持 undefined, 写成 null or ''
   if (line.host || line.path) {
     if (server.network === 'ws') {
       server['ws-opts'] = {
-        path: line.path,
+        path: line.path || '',
         headers: {
-          Host: line.host,
+          Host: line.host || '',
         },
       }
     }
     if (server.network === 'h2') {
       server['h2-opts'] = {
-        host: line.host,
-        path: line.path,
+        host: line.host || '',
+        path: line.path || '',
       }
     }
     if (server.network === 'http') {
       server['http-opts'] = {
-        path: line.path,
+        path: line.path || '',
         headers: {
-          Host: line.host,
+          Host: line.host || '',
         },
       }
     }
     if (server.network === 'grpc') {
       server['grpc-opts'] = {
-        'grpc-service-name': line.path,
+        'grpc-service-name': line.path || '',
       }
     }
   }

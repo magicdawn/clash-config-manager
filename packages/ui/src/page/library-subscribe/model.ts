@@ -7,6 +7,7 @@ import storage from '$ui/storage'
 import { message } from 'antd'
 import { find, once, pick } from 'lodash'
 import ms from 'ms'
+import { ref } from 'valtio'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
@@ -32,9 +33,11 @@ const { state, load, init } = valtioState<IState>(
       const list = storage.get(SUBSCRIBE_LIST_STORAGE_KEY) || []
 
       // 只保留当前 list 存在的订阅
-      const detail = pick(
-        storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY) || {},
-        list.map((item) => item.url).filter(Boolean)
+      const detail = ref(
+        pick(
+          storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY) || {},
+          list.map((item) => item.url).filter(Boolean)
+        )
       )
       return { list, detail }
     },
@@ -120,7 +123,7 @@ async function update({
 
   // TODO: 会影响 electron-store 保存么?
   // state.detail[url] = ref(servers)
-  state.detail[url] = servers
+  state.detail[url] = ref(servers)
 }
 
 /**
