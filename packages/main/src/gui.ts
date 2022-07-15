@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 import path from 'path'
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, shell } from 'electron'
 import { is } from 'electron-util'
 import _ from 'lodash'
 import * as remoteMain from '@electron/remote/main'
@@ -63,6 +63,13 @@ const createMainWindow = async () => {
 
   win.on('ready-to-show', () => {
     win.show()
+  })
+
+  // new-window event deprecated
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    // open url in a browser and prevent default
+    shell.openExternal(url)
+    return { action: 'deny' }
   })
 
   const preventClose = (e) => {

@@ -260,8 +260,8 @@ export default function Preference() {
 }
 
 interface ModalSyncConfigProps {
-  visible
-  setVisible
+  visible: boolean
+  setVisible: (visible: boolean) => void
   editItem?
   editItemIndex?
 }
@@ -317,7 +317,9 @@ function ModalSyncConfig(props: ModalSyncConfigProps) {
             <ul style={{ marginBottom: 0, paddingLeft: 25 }}>
               <li>
                 支持任意 webdav 协议的同步, 推荐使用坚果云{' '}
-                <a href='https://www.jianguoyun.com/'>https://www.jianguoyun.com/</a>
+                <a href='https://www.jianguoyun.com/' target='_blank' rel='noreferrer'>
+                  https://www.jianguoyun.com/
+                </a>
               </li>
               <li style={{ lineHeight: 1.5 }}>
                 存放在文件 <Tag color='warning'>{STORAGE_FILE}</Tag> 中, 以
