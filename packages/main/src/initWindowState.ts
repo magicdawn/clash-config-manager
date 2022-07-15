@@ -3,7 +3,7 @@ import path from 'path'
 import { app, Rectangle, screen } from 'electron'
 import { throttle } from 'lodash'
 
-function isValidNumber(n: number) {
+function isValidNumber(n?: number): n is number {
   return typeof n === 'number' && !isNaN(n)
 }
 
@@ -72,15 +72,12 @@ export async function loadWindowState() {
   if (bounds.x < currentRect.x || bounds.x > currentRect.x + currentRect.width) {
     bounds.x = currentRect.x
   }
-
   if (bounds.y < currentRect.y || bounds.y > currentRect.y + currentRect.height) {
     bounds.y = currentRect.y
   }
-
   if (bounds.width > currentRect.width) {
     bounds.width = currentRect.width
   }
-
   if (bounds.height > currentRect.height) {
     bounds.height = currentRect.height
   }

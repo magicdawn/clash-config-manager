@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 import path from 'path'
-import { app, BrowserWindow, shell } from 'electron'
+import { app, BrowserWindow, session, shell } from 'electron'
 import { is } from 'electron-util'
 import _ from 'lodash'
 import * as remoteMain from '@electron/remote/main'
@@ -27,8 +25,10 @@ export async function main() {
   initAppEvents()
   await app.whenReady()
 
+  addRequestExtraHeadersSupport()
   setMenu()
   loadDevExt()
+
   mainWindow = await createMainWindow()
   global.mainWindow = mainWindow
 
@@ -137,5 +137,21 @@ function initAppEvents() {
         // noop
       }
     }
+  })
+}
+
+function addRequestExtraHeadersSupport() {
+  // with this, we can set user-agent in front-end
+  // https://stackoverflow.com/a/35672988/2822866
+  session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+    let extraHeaders = {}
+    if (details.requestHeaders['x-extra-headers']) {
+      try {
+        extraHeaders = JSON.parse(details.requestHeaders['x-extra-headers'])
+      } catch (e) {
+        // noop
+      }
+    }
+    callback({ cancel: false, requestHeaders: { ...details.requestHeaders, ...extraHeaders } })
   })
 }

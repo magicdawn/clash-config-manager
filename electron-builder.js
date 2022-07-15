@@ -44,12 +44,7 @@ module.exports = {
     './package.json',
   ],
 
-  extraResources: [
-    {
-      from: './packages/main/src/bin/clash-config-manager.sh',
-      to: '.',
-    },
-  ],
+  extraResources: [],
 
   beforeBuild() {
     buildOnce()

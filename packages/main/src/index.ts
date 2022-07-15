@@ -1,21 +1,17 @@
-import unhandled from 'electron-unhandled'
-import debug from 'electron-debug'
-import contextMenu from 'electron-context-menu'
-import fixPath from 'fix-path'
+// init
 import './init/meta'
 import './ipc/index'
-import { isCli, initCommon } from './common'
-import { main as mainGui } from './gui'
-import { main as mainCli } from './cli'
+
+//
+import contextMenu from 'electron-context-menu'
+import debug from 'electron-debug'
+import unhandled from 'electron-unhandled'
+import fixPath from 'fix-path'
+import { main } from './main'
 
 unhandled()
-debug({ showDevTools: !isCli })
+debug()
 contextMenu()
 fixPath()
-initCommon()
 
-if (isCli) {
-  mainCli()
-} else {
-  mainGui()
-}
+main()

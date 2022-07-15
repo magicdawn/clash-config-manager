@@ -1,7 +1,8 @@
 import { ipcMain, dialog, BrowserWindow } from 'electron'
 
-ipcMain.handle('select-file', async (event, ...args) => {
+ipcMain.handle('select-file', async (event) => {
   const win = BrowserWindow.fromWebContents(event.sender)
+  if (!win) return
 
   const { canceled, filePaths } = await dialog.showOpenDialog(win, {
     properties: ['openFile'],
