@@ -2,6 +2,10 @@
 
 ## Todo
 
+- [ ] monaco editor, enable CMD+F find widget
+- [ ] monaco editor, enable CMD+K kill line
+- [ ] AddRuleModal 样式
+
 ### 2022-07-04
 
 - [ ] feat: 自动更新订阅, 规则
