@@ -123,7 +123,7 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
     existNames.push(use)
   }
 
-  const configYaml = Yaml.safeDump(config)
+  const configYaml = Yaml.dump(config)
   const file = getConfigFile(name)
   fse.writeFileSync(file, configYaml)
   console.log(configYaml)
