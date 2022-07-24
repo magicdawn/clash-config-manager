@@ -67,6 +67,10 @@ export default function ConfigEditor(props: IProps) {
       automaticLayout: true,
       renderFinalNewline: true,
       readOnly: readonly,
+      find: {
+        loop: false,
+        seedSearchStringFromSelection: 'selection',
+      },
     }
     return opts
   }, [readonly])

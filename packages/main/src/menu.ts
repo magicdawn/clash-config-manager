@@ -100,18 +100,18 @@ const macosTemplate = (options: { updateMenuItem: any }) =>
       ].filter(Boolean)
     ),
 
-    // {
-    //   role: 'editMenu',
-    // },
     {
-      label: '编辑',
-      submenu: [
-        { role: 'selectAll', label: '全选' },
-        { role: 'copy', label: '复制' },
-        { role: 'cut', label: '剪切' },
-        { role: 'paste', label: '粘贴' },
-      ],
+      role: 'editMenu',
     },
+    // {
+    //   label: '编辑',
+    //   submenu: [
+    //     { role: 'selectAll', label: '全选' },
+    //     { role: 'copy', label: '复制' },
+    //     { role: 'cut', label: '剪切' },
+    //     { role: 'paste', label: '粘贴' },
+    //   ],
+    // },
 
     // {
     //   role: 'viewMenu',

@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 import react from '@vitejs/plugin-react'
 import { join } from 'path'
 import { defineConfig, Plugin } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import { set } from 'lodash'
 
 // "vite-plugin-electron": "^0.4.4",
 // use "vite-plugin-electron/render", 基本就是 makeRendererHappyPlugin 的逻辑
 
-import { set } from 'lodash'
-import { builtinModules } from 'module'
-const builtinModulesFiltered = builtinModules.filter((name) => !name.startsWith('_'))
+import { builtinModules as __builtinModules } from 'module'
+const builtinModules = __builtinModules.filter((name) => !name.startsWith('_'))
 
 function makeRendererHappyPlugin(): Plugin {
-  const happyModules = ['electron', ...builtinModulesFiltered]
+  const happyModules = ['electron', ...builtinModules]
   const name = 'make-electron-renderer-happy'
   const modulePrefix = `virtual:${name}:`
 
@@ -21,12 +22,19 @@ function makeRendererHappyPlugin(): Plugin {
     name,
 
     config(config, env) {
+      const isDev = env.command === 'serve'
+      const isBuild = (env.command = 'build')
+
       set(config, 'optimizeDeps.exclude', [
         ...(config.optimizeDeps?.exclude || []),
         ...happyModules,
       ])
 
-      if (env.command === 'serve') {
+      // for embed deployment
+      set(config, 'base', config.base || './')
+
+      // dev 设置 alias, 提供 bridge virtual module
+      if (isDev) {
         const alias: Record<string, string> = {}
         for (const name of happyModules) {
           alias[name] = modulePrefix + name
@@ -34,7 +42,8 @@ function makeRendererHappyPlugin(): Plugin {
         set(config, 'resolve.alias', { ...config.resolve?.alias, ...alias })
       }
 
-      if (env.command === 'build') {
+      // build 设置 external
+      if (isBuild) {
         // Rollup ---- external ----
         let external = config.build?.rollupOptions?.external
 
@@ -53,7 +62,6 @@ function makeRendererHappyPlugin(): Plugin {
         } else {
           external = happyModules
         }
-
         set(config, 'build.rollupOptions.external', external)
 
         // Rollup ---- output.format ----
@@ -102,7 +110,7 @@ function makeRendererHappyPlugin(): Plugin {
           `
         }
 
-        if (builtinModulesFiltered.includes(m)) {
+        if (builtinModules.includes(m)) {
           const M = require(`node:${m}`)
           const namedExports = Object.keys(M).filter((name) => !name.startsWith('_'))
           const namedExportsStr = namedExports.join(',\n')
@@ -121,7 +129,7 @@ function makeRendererHappyPlugin(): Plugin {
         }
       }
 
-      // \0make-electron-happy:crypto
+      // make-electron-happy:crypto
       if (id.startsWith(modulePrefix)) {
         console.log(id)
         const m = id.slice(modulePrefix.length)
@@ -177,8 +185,5 @@ export default defineConfig({
     // minify: true,
     outDir: join(__dirname, '../../bundle/production/renderer/'),
     emptyOutDir: true,
-    rollupOptions: {
-      external: [...builtinModules, 'electron'],
-    },
   },
 })
