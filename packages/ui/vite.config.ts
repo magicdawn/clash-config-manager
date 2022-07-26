@@ -6,10 +6,12 @@ import { join } from 'path'
 import { defineConfig, Plugin } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import { set } from 'lodash'
-// import monacoEditorPlugin from 'vite-plugin-monaco-editor'
 
 // "vite-plugin-electron": "^0.4.4",
 // use "vite-plugin-electron/render", 基本就是 makeRendererHappyPlugin 的逻辑
+
+// 如果使用了 dynamic import, 会生成 defineProperty(exports, { __esModule: true })
+import polyfillExports from 'vite-plugin-electron-renderer/plugins/polyfill-exports'
 
 import { builtinModules as __builtinModules } from 'module'
 const builtinModules = __builtinModules.filter((name) => !name.startsWith('_'))
@@ -150,13 +152,13 @@ export default defineConfig({
 
     react(),
 
-    // monacoEditorPlugin({
-    //   // languageWorkers: ['editorWorkerService', 'css', 'yaml'],
-    // }),
+    /**
+     * make vite + electron happy
+     */
 
     // electronRenderer(),
     makeRendererHappyPlugin(),
-
+    polyfillExports(),
     // https://github.com/vitejs/vite/issues/3409
     viteCommonjs({
       include: ['react-command-palette'],
