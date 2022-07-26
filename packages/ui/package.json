@@ -92,6 +92,7 @@
     "vite": "^2.9.14",
     "vite-plugin-electron": "^0.8.1",
     "vite-plugin-electron-renderer": "^0.8.1",
+    "vite-plugin-monaco-editor": "^1.1.0",
     "vite-tsconfig-paths": "^3.5.0"
   }
 }

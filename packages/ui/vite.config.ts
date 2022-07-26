@@ -6,6 +6,7 @@ import { join } from 'path'
 import { defineConfig, Plugin } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import { set } from 'lodash'
+// import monacoEditorPlugin from 'vite-plugin-monaco-editor'
 
 // "vite-plugin-electron": "^0.4.4",
 // use "vite-plugin-electron/render", 基本就是 makeRendererHappyPlugin 的逻辑
@@ -143,10 +144,15 @@ function makeRendererHappyPlugin(): Plugin {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
     tsconfigPaths({
       root: join(__dirname, '../../'),
     }),
+
+    react(),
+
+    // monacoEditorPlugin({
+    //   // languageWorkers: ['editorWorkerService', 'css', 'yaml'],
+    // }),
 
     // electronRenderer(),
     makeRendererHappyPlugin(),

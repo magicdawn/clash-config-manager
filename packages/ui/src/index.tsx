@@ -4,6 +4,9 @@
 import '@icon-park/react/styles/index.css'
 import 'antd/dist/antd.css'
 
+// setup
+import './monaco'
+
 // deps
 import {
   AppstoreAddOutlined,
@@ -12,13 +15,12 @@ import {
   SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-
 import { ConfigProvider, Menu, MenuProps } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
 import _ from 'lodash'
 import { useMemo } from 'react'
 import { createRoot } from 'react-dom/client'
-import { HashRouter as Router, Link, RouteObject, useLocation, useRoutes } from 'react-router-dom'
+import { HashRouter, Link, RouteObject, useLocation, useRoutes } from 'react-router-dom'
 import Commands from './commands'
 import './page/common'
 import CurrentConfig from './page/current-config'
@@ -67,16 +69,6 @@ const usingRoutes: RouteObject[] = routes.map((r) => {
   }
 })
 
-function Root() {
-  return (
-    <ConfigProvider locale={zhCN}>
-      <Router>
-        <Routes />
-      </Router>
-    </ConfigProvider>
-  )
-}
-
 const getKey = (s: string) => _.trimStart(s, '/') || 'home'
 const menuItems: MenuProps['items'] = routes.map(({ title, path, icon }) => {
   return {
@@ -86,18 +78,29 @@ const menuItems: MenuProps['items'] = routes.map(({ title, path, icon }) => {
   }
 })
 
-function Routes() {
+function App() {
+  return (
+    <ConfigProvider locale={zhCN}>
+      <HashRouter>
+        <AppInner />
+      </HashRouter>
+    </ConfigProvider>
+  )
+}
+
+// useLocation() may be used only in the context of a <Router> component.
+// 最好, Router 套一层
+function AppInner() {
   const { pathname } = useLocation()
   const menuKey = useMemo(() => [getKey(pathname)], [pathname])
 
-  // <Routes></Routes>
-  const routesEl = useRoutes(usingRoutes)
+  const matchedEl = useRoutes(usingRoutes)
 
   return (
     <>
       <Menu selectedKeys={menuKey} mode='horizontal' items={menuItems} />
       <Commands />
-      <div>{routesEl}</div>
+      <div>{matchedEl}</div>
     </>
   )
 }
@@ -109,5 +112,5 @@ declare global {
   }
 }
 
-// render(<Root />, window.app)
-createRoot(window.app).render(<Root />)
+const root = createRoot(window.app)
+root.render(<App />)
