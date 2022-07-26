@@ -7,12 +7,6 @@
 - chore: update lots of deps, 666df98
 - chore: fix monaco-editor usage, adba7fa
 
-- feat: add note for webdav service config
-- fix: use ?? insteadof || for boolean fields, 修复是否自动更新, 无法取消掉的问题
-- fix: fix RuleAddModal 使用 clipboard 读取 url 不好使的问题
-- chore: add m1 arch build
-- chore: clean up or update deps, `@types/*`, `webdav` etc
-
 ## v0.11.0 2022-07-12
 
 - chore: 在 SelectExport 中去掉删除的遗留项
