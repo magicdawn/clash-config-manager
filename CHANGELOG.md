@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.1 2022-07-27
+
+- fix: 在 renderer 使用 esm, 解决 monaco editor yaml syntax 使用 `dynamic import` 的问题, c34815c
+
 ## v0.12.0 2022-07-27
 
 - fix: remove undefined in yaml, 7d5ea9b
