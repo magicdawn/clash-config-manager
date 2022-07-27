@@ -13,16 +13,16 @@ process.env.NODE_ENV = 'production'
 // multiarch 会调用多次 build
 const buildOnce = once(build)
 function build() {
-  if (process.env.SKIP_BUILD) {
+  if (process.env.SKIP_BUILD || process.argv.includes('--skip-build')) {
     return
   }
 
-  if (!process.env.SKIP_BUILD_MAIN) {
+  if (!(process.env.SKIP_BUILD_MAIN || process.argv.includes('--skip-build-main'))) {
     console.log('[build main]')
     sh('pnpm build:main')
   }
 
-  if (!process.env.SKIP_BUILD_UI) {
+  if (!(process.env.SKIP_BUILD_UI || process.argv.includes('--skip-build-ui'))) {
     console.log('[build ui]')
     sh('pnpm build:ui')
   }

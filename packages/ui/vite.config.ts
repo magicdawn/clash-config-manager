@@ -25,8 +25,8 @@ function makeRendererHappyPlugin(): Plugin {
     name,
 
     config(config, env) {
-      const isDev = env.command === 'serve'
-      const isBuild = (env.command = 'build')
+      // const isDev = env.command === 'serve'
+      const isBuild = env.command === 'build'
 
       set(config, 'optimizeDeps.exclude', [
         ...(config.optimizeDeps?.exclude || []),
@@ -36,48 +36,30 @@ function makeRendererHappyPlugin(): Plugin {
       // for embed deployment
       set(config, 'base', config.base || './')
 
-      // dev 设置 alias, 提供 bridge virtual module
-      if (isDev) {
-        const alias: Record<string, string> = {}
-        for (const name of happyModules) {
-          alias[name] = modulePrefix + name
-        }
-        set(config, 'resolve.alias', { ...config.resolve?.alias, ...alias })
+      // 设置 alias, 提供 bridge virtual module
+      const alias: Record<string, string> = {}
+      for (const name of happyModules) {
+        alias[name] = modulePrefix + name
       }
+      set(config, 'resolve.alias', { ...config.resolve?.alias, ...alias })
 
-      // build 设置 external
       if (isBuild) {
-        // Rollup ---- external ----
-        let external = config.build?.rollupOptions?.external
-
-        if (Array.isArray(external)) {
-          external = [...external, ...happyModules]
-        } else if (typeof external === 'string' || external instanceof RegExp) {
-          external = [external, ...happyModules]
-        } else if (typeof external === 'function') {
-          const original = external
-          external = function externalFn(source, importer, isResolved) {
-            if (happyModules.includes(source)) {
-              return true
+        // rollup cjs ignore ----
+        const ignore = config.build?.commonjsOptions?.ignore
+        let newIgnore = ignore
+        if (ignore) {
+          if (typeof ignore === 'function') {
+            newIgnore = (id) => {
+              if (happyModules.includes(id)) return true
+              return ignore(id)
             }
-            return original(source, importer, isResolved)
+          } else {
+            newIgnore = [...ignore, ...happyModules]
           }
         } else {
-          external = happyModules
+          newIgnore = [...happyModules]
         }
-        set(config, 'build.rollupOptions.external', external)
-
-        // Rollup ---- output.format ----
-        const output = config.build?.rollupOptions?.output
-        if (Array.isArray(output)) {
-          for (const o of output) {
-            if (!o.format) o.format = 'cjs'
-          }
-        } else {
-          if (!output?.format) {
-            set(config, 'build.rollupOptions.output.format', 'cjs')
-          }
-        }
+        set(config, 'build.commonjsOptions.ignore', newIgnore)
       }
     },
 
@@ -134,7 +116,7 @@ function makeRendererHappyPlugin(): Plugin {
 
       // make-electron-happy:crypto
       if (id.startsWith(modulePrefix)) {
-        console.log(id)
+        // console.log(id)
         const m = id.slice(modulePrefix.length)
         const code = getModuleCode(m)
         if (code) return code
@@ -190,7 +172,8 @@ export default defineConfig({
     port: 7749,
   },
   build: {
-    // minify: true,
+    target: 'modules',
+    minify: false,
     outDir: join(__dirname, '../../bundle/production/renderer/'),
     emptyOutDir: true,
   },
