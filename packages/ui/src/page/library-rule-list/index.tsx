@@ -264,7 +264,7 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
 
       let err: Error | undefined
       try {
-        Yaml.safeLoad(content)
+        Yaml.load(content)
       } catch (e) {
         err = e
       }
