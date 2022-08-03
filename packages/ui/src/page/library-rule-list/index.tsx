@@ -72,8 +72,6 @@ export default function LibraryRuleList() {
 
   return (
     <div className={styles.page}>
-      <h1>配置源管理</h1>
-
       <ModalAdd
         {...{ visible: showModal, setVisible: showModalSet, editItem, editItemIndex, editMode }}
       />
@@ -82,7 +80,7 @@ export default function LibraryRuleList() {
         size='default'
         header={
           <div className='header'>
-            <h4>配置源管理</h4>
+            <div style={{ fontSize: '2em' }}>配置源管理</div>
             <Button type='primary' onClick={add}>
               <FileAddOutlined />
             </Button>

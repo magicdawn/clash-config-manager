@@ -45,13 +45,13 @@ const routes = [
   {
     path: '/library-rule-list',
     component: LibraryRuleList,
-    title: '配置源管理',
+    title: '配置源(Partial Config)',
     icon: <AppstoreAddOutlined />,
   },
   {
     path: '/current-config',
     component: CurrentConfig,
-    title: '配置管理',
+    title: '配置组装(Config Builder)',
     icon: <SettingOutlined />,
   },
   {

@@ -75,7 +75,7 @@ export default function LibrarySubscribe() {
         size='small'
         header={
           <div className='header' style={{ display: 'flex', alignItems: 'center' }}>
-            <h2 style={{ margin: 0 }}>订阅管理</h2>
+            <div style={{ fontSize: '2em' }}>订阅管理</div>
             <Button type='primary' onClick={add}>
               +
             </Button>
