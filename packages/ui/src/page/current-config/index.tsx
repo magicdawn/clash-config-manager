@@ -32,12 +32,20 @@ export default function ConfigList() {
   const spanLeft = 4
   const spanRight = 16
 
+  const dividerFontSize = '2em'
+  // const subTitleFontSize = '1.5em'
+  const createDivider = (text: string) => (
+    <Divider orientation='left' orientationMargin={0} style={{ margin: '10px 0 0 0' }}>
+      <span style={{ fontSize: dividerFontSize }}>配置内容</span>
+    </Divider>
+  )
+
   return (
     <div className={styles.page}>
-      <Divider orientation='left'>配置内容</Divider>
+      {createDivider('配置内容')}
       <ConfigDND />
 
-      <Divider orientation='left'>配置文件</Divider>
+      {createDivider('配置文件')}
       <Row>
         <Col span={spanLeft}>
           <div
@@ -64,7 +72,6 @@ export default function ConfigList() {
           />
         </Col>
       </Row>
-
       <Row style={{ marginTop: 5 }}>
         <Col span={spanLeft}>
           <div
@@ -84,7 +91,6 @@ export default function ConfigList() {
           <Input value={getConfigFileDisplay(name)} disabled />
         </Col>
       </Row>
-
       <Button
         type='primary'
         block
@@ -94,7 +100,6 @@ export default function ConfigList() {
       >
         生成
       </Button>
-
       <Button
         type='default'
         block

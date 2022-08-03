@@ -3,7 +3,7 @@ import { cx } from '$ui/libs'
 import { rootState } from '$ui/store'
 import { limitLines } from '$ui/util/text-util'
 import { truthy } from '$ui/util/ts-filter'
-import { InfoCircleOutlined } from '@ant-design/icons'
+import { InfoCircleOutlined, QuestionCircleFilled } from '@ant-design/icons'
 import { useMemoizedFn } from 'ahooks'
 import { Tooltip } from 'antd'
 import { useMemo, useState } from 'react'
@@ -124,7 +124,19 @@ export function ConfigDND() {
     <div className={styles.dndPlayground}>
       <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
         <div className='col-left'>
-          <h1>当前配置</h1>
+          <div className='section-title'>
+            当前配置
+            <Tooltip
+              title={
+                <ul style={{ marginLeft: '-20px' }}>
+                  <li>从右侧拖拽订阅源 和 配置源到此处使用订阅或配置</li>
+                  <li>拖拽到使用中的配置到垃圾桶删除</li>
+                </ul>
+              }
+            >
+              <QuestionCircleFilled style={{ marginLeft: 5, fontSize: '80%' }} />
+            </Tooltip>
+          </div>
           <Droppable droppableId={'result-list'} direction='vertical'>
             {(provided, snapshot) => (
               <div ref={provided.innerRef} {...provided.droppableProps} className='result-list'>
@@ -159,7 +171,7 @@ export function ConfigDND() {
             )}
           </Droppable>
 
-          <h1>可用订阅</h1>
+          <div className='section-title'>可用订阅</div>
           <Droppable
             droppableId={'subscribe-source-list'}
             direction='horizontal'
@@ -185,7 +197,7 @@ export function ConfigDND() {
             )}
           </Droppable>
 
-          <h1>可用配置</h1>
+          <div className='section-title'>可用配置</div>
           <Droppable droppableId={'rule-source-list'} direction='horizontal' isDropDisabled={true}>
             {(provided, snapshot) => (
               <div ref={provided.innerRef} {...provided.droppableProps} className='source-list'>
