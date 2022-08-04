@@ -13,7 +13,7 @@ import fse from 'fs-extra'
 import Yaml from 'js-yaml'
 import path from 'path'
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { useSnapshot } from 'valtio'
+import { proxy, useSnapshot } from 'valtio'
 import RuleAddModal from './AddRuleModal'
 import ConfigEditor, { EditorRefInner } from './ConfigEditor'
 import styles from './index.module.less'
@@ -23,35 +23,56 @@ const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
 const TEMP_EDITING_FILE = path.join(remote.app.getPath('userData'), 'temp', '临时文件-关闭生效.yml')
 
-type EditMode = 'edit' | 'readonly'
+const editModalData = proxy({
+  editItem: undefined as RuleItem | null | undefined,
+  editItemIndex: undefined as number | null | undefined,
+  readonly: false,
+  showModal: false,
+})
+const updateEditModalData = function (payload: Partial<typeof editModalData>) {
+  Object.assign(editModalData, payload)
+}
 
 export default function LibraryRuleList() {
-  const [showModal, showModalSet] = useState(false)
-  const [editItem, editItemSet] = useState<RuleItem | null>(null)
-  const [editItemIndex, editItemIndexSet] = useState<number | null>(null)
-  const [editMode, editModeSet] = useState<EditMode>('edit')
-
   const { list } = useSnapshot(state)
 
   const add = useMemoizedFn(() => {
-    editItemSet(null)
-    editItemIndexSet(null)
-    editModeSet('edit')
-    showModalSet(true)
+    updateEditModalData({
+      editItem: null,
+      editItemIndex: null,
+      readonly: false,
+      showModal: true,
+    })
+  })
+
+  const addRuleConfig = useMemoizedFn(() => {
+    const editItem = getDefaultEditItem()
+    editItem.content = 'rules:\n  # add rules here\n  '
+
+    updateEditModalData({
+      editItem,
+      editItemIndex: null,
+      readonly: false,
+      showModal: true,
+    })
   })
 
   const edit = useMemoizedFn((item, index) => {
-    editItemSet(item)
-    editItemIndexSet(index)
-    editModeSet('edit')
-    showModalSet(true)
+    updateEditModalData({
+      editItem: item,
+      editItemIndex: index,
+      readonly: false,
+      showModal: true,
+    })
   })
 
   const view = useMemoizedFn((item, index) => {
-    editItemSet(item)
-    editItemIndexSet(index)
-    editModeSet('readonly')
-    showModalSet(true)
+    updateEditModalData({
+      editItem: item,
+      editItemIndex: index,
+      readonly: true,
+      showModal: true,
+    })
   })
 
   const disableEnterAsClick = useCallback((e) => {
@@ -72,18 +93,23 @@ export default function LibraryRuleList() {
 
   return (
     <div className={styles.page}>
-      <ModalAdd
-        {...{ visible: showModal, setVisible: showModalSet, editItem, editItemIndex, editMode }}
-      />
+      <ModalAdd />
 
       <List
         size='default'
         header={
           <div className='header'>
             <div style={{ fontSize: '2em' }}>配置源管理</div>
-            <Button type='primary' onClick={add}>
-              <FileAddOutlined />
-            </Button>
+            <span>
+              <Button type='ghost' onClick={addRuleConfig}>
+                <FileAddOutlined />
+                新建纯规则配置
+              </Button>
+              <Button type='primary' onClick={add} style={{ marginLeft: 5 }}>
+                <FileAddOutlined />
+                新建配置
+              </Button>
+            </span>
           </div>
         }
         bordered
@@ -165,23 +191,21 @@ export default function LibraryRuleList() {
   )
 }
 
-type ModalAddProps = {
-  visible: boolean
-  setVisible: (val: boolean) => void
-  editItem: RuleItem | null
-  editItemIndex: number | null
-  editMode: EditMode
-}
-
-function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: ModalAddProps) {
-  const readonly = editMode === 'readonly'
-
-  const getDefaultItem = () => ({
+const getDefaultEditItem = () =>
+  ({
     id: crypto.randomUUID(),
     type: 'local',
     name: '',
     url: '',
     content: '',
+  } as RuleItem)
+
+function ModalAdd() {
+  const { editItem, editItemIndex, readonly, showModal } = useSnapshot(editModalData)
+
+  const visible = showModal
+  const setVisible = useMemoizedFn((val: boolean) => {
+    editModalData.showModal = val
   })
 
   const [form] = Form.useForm()
@@ -193,7 +217,7 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
   const monacoEditorRef = useRef<EditorRefInner | null>(null)
 
   useUpdateEffect(() => {
-    const val = editItem || getDefaultItem()
+    const val = editItem || getDefaultEditItem()
 
     form.setFieldsValue(val)
     modifyOtherFormData({ id: val.id })
@@ -278,7 +302,7 @@ function ModalAdd({ visible, setVisible, editItem, editItemIndex, editMode }: Mo
     const err = actions.check({ item, editItemIndex })
     if (err) return message.error(err)
 
-    const mode = editItem ? 'edit' : 'add'
+    const mode = typeof editItemIndex === 'number' ? 'edit' : 'add'
     if (mode === 'add') {
       actions.add({ item })
     } else {

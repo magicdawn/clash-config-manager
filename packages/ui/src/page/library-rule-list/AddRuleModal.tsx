@@ -5,6 +5,7 @@ import { clipboard } from 'electron'
 import Yaml from 'js-yaml'
 import pify from 'promise.ify'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { tldExists } from 'tldjs'
 import URI from 'urijs'
 import { useSnapshot } from 'valtio'
 import { state } from './model'
@@ -45,7 +46,7 @@ export default function AddRuleModal(props: IProps) {
         return false
       }
 
-      const obj = Yaml.load(item.content)
+      const obj = Yaml.load(item.content) as object
       if (Object.keys(obj).length === 1 && Object.keys(obj).includes('rules')) {
         return true
       } else {
@@ -77,9 +78,16 @@ export default function AddRuleModal(props: IProps) {
     'DOMAIN-SUFFIX': [],
   }))
 
-  const changeProcessUrl = useMemoizedFn((u) => {
-    setProcessUrl(u)
-    const data = getAutoCompletes(u)
+  const changeProcessUrl = useMemoizedFn((url: string) => {
+    if (!url || !tldExists(url)) return
+
+    // add silly `http://` if needed
+    if (!url.includes(':')) {
+      url = 'http://' + url
+    }
+
+    setProcessUrl(url)
+    const data = getAutoCompletes(url)
     setAutoCompletes(data)
   })
 
