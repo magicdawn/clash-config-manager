@@ -473,10 +473,16 @@ function ModalAdd() {
               readonly={readonly}
               header={
                 <Space direction='horizontal'>
-                  <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('code')}>
+                  <Button
+                    disabled={readonly || editInEditorMaskVisible}
+                    onClick={() => editInEditor('code')}
+                  >
                     使用 vscode 编辑
                   </Button>
-                  <Button disabled={editInEditorMaskVisible} onClick={() => editInEditor('atom')}>
+                  <Button
+                    disabled={readonly || editInEditorMaskVisible}
+                    onClick={() => editInEditor('atom')}
+                  >
                     使用 Atom 编辑
                   </Button>
                 </Space>
