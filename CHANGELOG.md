@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.12.3 2022-07-27
+
+- chore: fix btn disabled conditions (12 days ago) <magicdawn>
+- c3f60c1 - feat: impl button 添加纯规则配置 (12 days ago) <magicdawn>
+- 411c95c - chore: tweak current-config page style (13 days ago) <magicdawn>
+- aced774 - chore: rename pages & adjust table title style (13 days ago) <magicdawn>
+- cbc9319 - chore(vite): fix dev (2 weeks ago) <magicdawn>
+- 20f8c43 - chore: clean up deps (2 weeks ago) <magicdawn>
+
 ## v0.12.2 2022-07-27
 
 - fix: fix yaml usage error
