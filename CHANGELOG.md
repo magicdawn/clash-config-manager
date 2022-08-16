@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.12.3 2022-07-27
+## v0.12.3 2022-08-16
 
 - chore: fix btn disabled conditions (12 days ago) <magicdawn>
 - c3f60c1 - feat: impl button 添加纯规则配置 (12 days ago) <magicdawn>
