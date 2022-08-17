@@ -203,8 +203,8 @@ export default defineConfig({
      */
 
     // electronRenderer(),
-    makeRendererHappyPlugin(),
-    polyfillExports(),
+    // makeRendererHappyPlugin(),
+    // polyfillExports(),
     // https://github.com/vitejs/vite/issues/3409
     viteCommonjs({
       include: ['react-command-palette'],

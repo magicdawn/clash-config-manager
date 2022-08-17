@@ -9,6 +9,7 @@ importers:
       '@magicdawn/prettier-config': ^0.0.2
       '@swc/core': ^1.2.220
       '@swc/helpers': ^0.4.3
+      '@tauri-apps/api': ^1.0.2
       '@types/fancy-log': ^2.0.0
       '@types/fs-extra': ^9.0.13
       '@types/jake': ^0.0.33
@@ -43,6 +44,7 @@ importers:
       webpack-merge: ^5.8.0
     dependencies:
       '@electron/remote': 2.0.8_electron@19.0.10
+      '@tauri-apps/api': 1.0.2
       electron-store: 8.1.0
       lodash: 4.17.21
     devDependencies:
@@ -83,15 +85,22 @@ importers:
 
   packages/clash-utils:
     specifiers:
+      '@types/crypto-js': ^4.1.1
+      base64-js: ^1.5.1
+      crypto-js: ^4.1.1
       dl-vampire: ^1.0.0
       env-paths: ^2.2.0
       moment: ^2.29.1
       umi-request: ^1.3.5
     dependencies:
+      base64-js: 1.5.1
+      crypto-js: 4.1.1
       dl-vampire: 1.0.0
       env-paths: 2.2.1
       moment: 2.29.3
       umi-request: 1.4.0
+    devDependencies:
+      '@types/crypto-js': 4.1.1
 
   packages/common:
     specifiers: {}
@@ -1085,6 +1094,11 @@ packages:
       defer-to-connect: 2.0.1
     dev: false
 
+  /@tauri-apps/api/1.0.2:
+    resolution: {integrity: sha512-yuNW0oeJ1/ZA7wNF1KgxhHrSu5viPVzY/UgUczzN5ptLM8dH15Juy5rEGkoHfeXGju90Y/l22hi3BtIrp/za+w==}
+    engines: {node: '>= 12.22.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
+    dev: false
+
   /@tootallnate/once/1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
     engines: {node: '>= 6'}
@@ -1123,6 +1137,10 @@ packages:
       '@types/node': 18.6.3
       '@types/responselike': 1.0.0
     dev: false
+
+  /@types/crypto-js/4.1.1:
+    resolution: {integrity: sha512-BG7fQKZ689HIoc5h+6D2Dgq1fABRa0RbBWKBd9SP/MVRVXROflpm5fhwyATX5duFmbStzyzyycPB8qUYKDH3NA==}
+    dev: true
 
   /@types/debug/4.1.7:
     resolution: {integrity: sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==}
@@ -1895,10 +1913,10 @@ packages:
     resolution: {integrity: sha512-m0+M53+HYMzqKxwNQZT143K7WwXEGUy9LY31l8dJphXx2P/FQod615mVbxHyqbDCG4J5bHdWm21qZ0e2DVY6CQ==}
     engines: {node: '>=14.0.0'}
     dependencies:
+      7zip-bin: 5.1.1
       '@develar/schema-utils': 2.6.5
       '@electron/universal': 1.2.1
       '@malept/flatpak-bundler': 0.4.0
-      7zip-bin: 5.1.1
       async-exit-hook: 2.0.1
       bluebird-lst: 1.0.9
       builder-util: 23.3.3
@@ -2190,7 +2208,6 @@ packages:
 
   /base64-js/1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
-    dev: true
 
   /big.js/3.2.0:
     resolution: {integrity: sha512-+hN/Zh2D08Mx65pZ/4g5bsmNiZUuChDiQfTUQ7qJr4/kuopCr88xZsAXv6mBoZEsUI4OuGHlX59qE94K2mMW8Q==}
@@ -2360,9 +2377,9 @@ packages:
   /builder-util/23.3.3:
     resolution: {integrity: sha512-MJZlUiq2PY5hjYv9+XNaoYdsITqvLgRDoHSFg/4nzpInbNxNjLQOolL04Zsyp+hgfcbFvMC4h0KkR1CMPHLWbA==}
     dependencies:
+      7zip-bin: 5.1.1
       '@types/debug': 4.1.7
       '@types/fs-extra': 9.0.13
-      7zip-bin: 5.1.1
       app-builder-bin: 4.0.0
       bluebird-lst: 1.0.9
       builder-util-runtime: 9.0.3
@@ -2906,6 +2923,10 @@ packages:
 
   /crypt/0.0.2:
     resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
+    dev: false
+
+  /crypto-js/4.1.1:
+    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
     dev: false
 
   /crypto-random-string/2.0.0:

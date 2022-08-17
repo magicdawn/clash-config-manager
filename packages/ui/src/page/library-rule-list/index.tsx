@@ -3,15 +3,15 @@ import { RuleItem } from '$ui/common/define'
 import useImmerState from '$ui/util/hooks/useImmerState'
 import { firstLine, limitLines } from '$ui/util/text-util'
 import { FileAddOutlined } from '@ant-design/icons'
-import * as remote from '@electron/remote'
+// import * as remote from '@electron/remote'
 import { LinkTwo, SdCard } from '@icon-park/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Button, Form, Input, List, message, Modal, Select, Space, Tooltip } from 'antd'
 import debugFactory from 'debug'
-import execa from 'execa'
-import fse from 'fs-extra'
+// import execa from 'execa'
+// import fse from 'fs-extra'
 import Yaml from 'js-yaml'
-import path from 'path'
+// import path from 'path'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { proxy, useSnapshot } from 'valtio'
 import RuleAddModal from './AddRuleModal'
@@ -21,7 +21,7 @@ import { actions, state } from './model'
 
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
-const TEMP_EDITING_FILE = path.join(remote.app.getPath('userData'), 'temp', '临时文件-关闭生效.yml')
+// const TEMP_EDITING_FILE = path.join(remote.app.getPath('userData'), 'temp', '临时文件-关闭生效.yml')
 
 const editModalData = proxy({
   editItem: undefined as RuleItem | null | undefined,
@@ -342,14 +342,14 @@ function ModalAdd() {
   const [editInEditorMaskVisible, setEditInEditorMaskVisible] = useState(false)
   const editInEditor = useMemoizedFn(async (editor = 'code') => {
     const content = form.getFieldValue('content')
-    await fse.outputFile(TEMP_EDITING_FILE, content, 'utf8')
+    // await fse.outputFile(TEMP_EDITING_FILE, content, 'utf8')
 
     // wait edit
     setEditInEditorMaskVisible(true)
     let execResults
-    const cmd = `${editor} --wait '${TEMP_EDITING_FILE}'`
+    // const cmd = `${editor} --wait '${TEMP_EDITING_FILE}'`
     try {
-      execResults = await execa.command(cmd, { shell: true })
+      // execResults = await execa.command(cmd, { shell: true })
     } catch (e) {
       message.error('执行命令出错: ' + e.message)
       return
@@ -357,7 +357,7 @@ function ModalAdd() {
       setEditInEditorMaskVisible(false)
     }
 
-    debug('exec: %o', { cmd, execResults })
+    // debug('exec: %o', { cmd, execResults })
     const { exitCode } = execResults || {}
     if (exitCode !== 0) {
       message.error(`执行命令出错: exitCode = ${exitCode}`)
@@ -365,11 +365,11 @@ function ModalAdd() {
     }
 
     // read & set
-    const newContent = await fse.readFile(TEMP_EDITING_FILE, 'utf8')
-    if (newContent !== content) {
-      form.setFieldsValue({ content: newContent })
-      message.success('文件内容已更新')
-    }
+    // const newContent = await fse.readFile(TEMP_EDITING_FILE, 'utf8')
+    // if (newContent !== content) {
+    //   form.setFieldsValue({ content: newContent })
+    //   message.success('文件内容已更新')
+    // }
   })
 
   const contentField = Form.useWatch('content', form)

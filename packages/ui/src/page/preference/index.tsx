@@ -6,13 +6,13 @@ import helper, { STORAGE_FILE } from '$ui/util/sync/webdav/helper'
 import { CloudDownloadOutlined, CloudUploadOutlined, SettingFilled } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Alert, Button, Card, Col, Input, message, Modal, Row, Space, Tag } from 'antd'
-import { ipcRenderer, shell } from 'electron'
-import fse from 'fs-extra'
-import launch from 'launch-editor'
+// import { ipcRenderer, shell } from 'electron'
+// import fse from 'fs-extra'
+// import launch from 'launch-editor'
 import _ from 'lodash'
 import moment from 'moment'
-import { tmpdir } from 'os'
-import path from 'path'
+// import { tmpdir } from 'os'
+// import path from 'path'
 import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import { pick as pickSelectExport, SelectExportForStaticMethod } from './modal/SelectExport'
@@ -40,41 +40,38 @@ export default function Preference() {
   const [exportFile, setExportFile] = useState('')
 
   const onExport = useMemoizedFn(async () => {
-    const file = path.join(tmpdir(), 'cfm', `${moment().format('YYYY_MM_DD__HH_mm')}.json`)
-
-    const outputData = storage.store
-    const data = _.omit(outputData, ['subscribe_detail'])
-    await fse.outputJson(file, data, { spaces: 2 })
-    setExportHelperVisible(true)
-    setExportFile(file)
+    // const file = path.join(tmpdir(), 'cfm', `${moment().format('YYYY_MM_DD__HH_mm')}.json`)
+    // const outputData = storage.data
+    // const data = _.omit(outputData, ['subscribe_detail'])
+    // await fse.outputJson(file, data, { spaces: 2 })
+    // setExportHelperVisible(true)
+    // setExportFile(file)
   })
 
   const onSelectImport = useMemoizedFn(async () => {
-    const file = path.join(
-      tmpdir(),
-      'cfm',
-      `${moment().format('选择导出__YYYY_MM_DD__HH_mm')}.json`
-    )
-    const fullData = storage.store
-    const outputData = _.omit(fullData, ['subscribe_detail'])
-
-    // 选择数据
-    const { cancel, data } = await pickSelectExport(outputData)
-    if (cancel) return
-    console.log(data)
-
-    await fse.outputJson(file, data, { spaces: 2 })
-    setExportHelperVisible(true)
-    setExportFile(file)
+    // const file = path.join(
+    //   tmpdir(),
+    //   'cfm',
+    //   `${moment().format('选择导出__YYYY_MM_DD__HH_mm')}.json`
+    // )
+    // const fullData = storage.data
+    // const outputData = _.omit(fullData, ['subscribe_detail'])
+    // // 选择数据
+    // const { cancel, data } = await pickSelectExport(outputData)
+    // if (cancel) return
+    // console.log(data)
+    // await fse.outputJson(file, data, { spaces: 2 })
+    // setExportHelperVisible(true)
+    // setExportFile(file)
   })
 
   const importAction = (importData) => {
-    const localData = { ...storage.store }
+    const localData = { ...storage.data }
     const merged = customMerge(localData, importData)
     console.log('customMerge', { localData, importData, merged })
 
     // reload electron-store
-    storage.store = merged
+    storage.data = merged
 
     // reload react store
     rootActions.global.reload()
@@ -83,17 +80,18 @@ export default function Preference() {
   }
 
   const onImport = useMemoizedFn(async () => {
-    const file = await ipcRenderer.invoke('select-file')
+    // const file = await ipcRenderer.invoke('select-file')
+    const file = ''
     if (!file) return
 
-    let importData
-    try {
-      importData = await fse.readJson(file)
-    } catch (e) {
-      console.log(e.stack || e)
-      return message.error('readJson fail: ' + '\n' + e.stack || e)
-    }
-    importAction(importData)
+    // let importData
+    // try {
+    //   importData = await fse.readJson(file)
+    // } catch (e) {
+    //   console.log(e.stack || e)
+    //   return message.error('readJson fail: ' + '\n' + e.stack || e)
+    // }
+    // importAction(importData)
   })
 
   const onImportPreset = useMemoizedFn(async () => {
@@ -101,15 +99,15 @@ export default function Preference() {
   })
 
   const openInEditor = useMemoizedFn((editor) => {
-    launch(
-      // file
-      exportFile,
-      // try specific editor bin first (optional)
-      editor,
-      (fileName, errorMsg) => {
-        message.error(errorMsg)
-      }
-    )
+    // launch(
+    //   // file
+    //   exportFile,
+    //   // try specific editor bin first (optional)
+    //   editor,
+    //   (fileName, errorMsg) => {
+    //     message.error(errorMsg)
+    //   }
+    // )
   })
 
   const rowGutter = { xs: 8, sm: 16, md: 24 }
@@ -131,7 +129,7 @@ export default function Preference() {
         <Space>
           <Button
             onClick={() => {
-              shell.showItemInFolder(exportFile)
+              // shell.showItemInFolder(exportFile)
             }}
           >
             在 Finder 中展示

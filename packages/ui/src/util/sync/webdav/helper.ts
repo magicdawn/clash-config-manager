@@ -1,7 +1,7 @@
 import storage from '$ui/storage'
 import { rootActions, rootState } from '$ui/store'
 import { message, Modal } from 'antd'
-import { dirname } from 'path'
+// import { dirname } from 'path'
 import { createClient } from 'webdav'
 import customMerge from './customMerge'
 import memo from 'memoize-one'
@@ -32,10 +32,10 @@ class DavHelper {
   private getDirLevels(dir: string) {
     const ret: string[] = []
     let cur = dir
-    do {
-      ret.unshift(cur)
-      cur = dirname(cur)
-    } while (cur !== '/')
+    // do {
+    //   ret.unshift(cur)
+    //   cur = dirname(cur)
+    // } while (cur !== '/')
     return ret
   }
 
@@ -83,7 +83,7 @@ class DavHelper {
   }
 
   async upload() {
-    const localData = storage.store
+    const localData = storage.data
     const remoteHasData = await this.exists()
 
     // 远程无数据
@@ -112,7 +112,7 @@ class DavHelper {
       return
     }
 
-    const data = storage.store
+    const data = storage.data
     const remoteHasData = await this.exists()
 
     if (!remoteHasData) {
@@ -136,12 +136,12 @@ class DavHelper {
     if (!yes) return
 
     const remoteData = await this.read()
-    const localData = { ...storage.store }
+    const localData = { ...storage.data }
     const merged = customMerge(localData, remoteData)
     console.log('customMerge', { remoteData, localData, merged })
 
     // reload electron-store & react global store
-    storage.store = merged
+    storage.data = merged
     rootActions.global.reload()
     message.success('下载成功')
   }
@@ -155,7 +155,7 @@ class DavHelper {
     const data = await this.read()
 
     // reload electron-store & react store
-    storage.store = data
+    storage.data = data
     rootActions.global.reload()
     message.success('下载成功')
   }

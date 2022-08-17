@@ -1,7 +1,7 @@
-import { homedir } from 'os'
-import { join as pathjoin } from 'path'
+// import { homedir } from 'os'
+// import { join as pathjoin } from 'path'
 import Yaml from 'js-yaml'
-import fse from 'fs-extra'
+// import fse from 'fs-extra'
 import request from 'umi-request'
 import { rootState, rootActions } from '$ui/store'
 import { ClashConfig, RuleItem, Subscribe } from '$ui/common/define'
@@ -71,7 +71,7 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
     }
 
     const cur = Yaml.load(usingContent)
-    const { rules, ...otherConfig } = cur
+    const { rules, ...otherConfig } = cur as any
     config = { ...otherConfig, ...config, rules: [...(config.rules || []), ...(rules || [])] }
   }
 
@@ -125,7 +125,7 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
 
   const configYaml = Yaml.dump(config)
   const file = getConfigFile(name)
-  fse.writeFileSync(file, configYaml)
+  // fse.writeFileSync(file, configYaml)
   console.log(configYaml)
   console.log('[done]: %s writed', file)
   return {
@@ -141,7 +141,8 @@ export const DEFAULT_NAME = 'clash-config-manager'
 
 export function getConfigFile(name?: string) {
   name = name || DEFAULT_NAME
-  return pathjoin(homedir(), `.config/clash/${name}.yaml`)
+  // return pathjoin(homedir(), `.config/clash/${name}.yaml`)
+  return ''
 }
 
 export function getConfigFileDisplay(name?: string) {

@@ -1,7 +1,7 @@
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { AutoComplete, Button, Col, Input, message, Modal, Row, Select, Space } from 'antd'
-import AppleScript from 'applescript'
-import { clipboard } from 'electron'
+// import AppleScript from 'applescript'
+// import { clipboard } from 'electron'
 import Yaml from 'js-yaml'
 import pify from 'promise.ify'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -92,10 +92,10 @@ export default function AddRuleModal(props: IProps) {
   })
 
   const readClipboardUrl = useCallback(() => {
-    const url = clipboard.readText()
-    if (url) {
-      changeProcessUrl(url)
-    }
+    // const url = clipboard.readText()
+    // if (url) {
+    //   changeProcessUrl(url)
+    // }
   }, [])
 
   const readChromeUrl = useCallback(async () => {
@@ -249,9 +249,11 @@ async function getChromeUrl() {
 			get URL of active tab of first window
 		end tell
 	`
-  const result = (await pify(AppleScript.execString, AppleScript)(script.trim())) as string[]
-  const url = result && result[0]
-  return url
+  // const result = (await pify(AppleScript.execString, AppleScript)(script.trim())) as string[]
+  // const url = result && result[0]
+  // return url
+
+  return ''
 }
 
 // FIXME

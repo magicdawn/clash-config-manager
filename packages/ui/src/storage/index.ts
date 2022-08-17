@@ -1,12 +1,13 @@
 /* eslint camelcase: off */
 
-import Store from 'electron-store'
+// import Store from 'electron-store'
 import { ConfigItem, RuleItem, Subscribe } from '$ui/common/define'
+import { TauriStore } from './tauri-store'
 
-const storage = new Store({
+const storage = new TauriStore({
   name: 'data',
   encryptionKey: 'clash-config-manager@@secret',
-  clearInvalidConfig: true,
+  // clearInvalidConfig: true,
 
   defaults: {
     subscribe_list: [] as Subscribe[],
@@ -30,7 +31,7 @@ const storage = new Store({
   },
 })
 
-type StoreData<T> = T extends Store<infer Inner> ? Inner : never
+type StoreData<T> = T extends TauriStore<infer Inner> ? Inner : never
 export type StorageData = StoreData<typeof storage>
 
 export default storage

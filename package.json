@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@electron/remote": "^2.0.8",
+    "@tauri-apps/api": "^1.0.2",
     "electron-store": "^8.1.0",
     "lodash": "^4.17.21"
   },
