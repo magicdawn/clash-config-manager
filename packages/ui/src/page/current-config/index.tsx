@@ -29,14 +29,14 @@ export default function ConfigList() {
     )
   })
 
-  const spanLeft = 4
+  const spanLeft = 3
   const spanRight = 16
 
   const dividerFontSize = '2em'
   // const subTitleFontSize = '1.5em'
   const createDivider = (text: string) => (
     <Divider orientation='left' orientationMargin={0} style={{ margin: '10px 0 0 0' }}>
-      <span style={{ fontSize: dividerFontSize }}>配置内容</span>
+      <span style={{ fontSize: dividerFontSize }}>{text}</span>
     </Divider>
   )
 
@@ -51,7 +51,7 @@ export default function ConfigList() {
           <div
             className='label'
             style={{
-              paddingRight: 5,
+              paddingRight: 10,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
@@ -77,7 +77,7 @@ export default function ConfigList() {
           <div
             className='label'
             style={{
-              paddingRight: 5,
+              paddingRight: 10,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
