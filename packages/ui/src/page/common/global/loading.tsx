@@ -34,11 +34,7 @@ function Loading({ visible }) {
       closable={false}
       bodyStyle={{ padding: 0, backgroundColor: 'transparent' }}
     >
-      <PacmanLoader
-        color={color}
-        size={100}
-        style={{ marginLeft: '-300px', marginTop: '-100px' }}
-      />
+      <PacmanLoader color={color} size={100} />
     </Modal>
   )
 }
@@ -58,3 +54,7 @@ const hide = wrapAction(() => {
 
 export { WrappedComponent, show, hide }
 export default { WrappedComponent, show, hide }
+
+// setTimeout(() => {
+//   show()
+// }, 1000)
