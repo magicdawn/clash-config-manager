@@ -2,6 +2,7 @@ import { Modal } from 'antd'
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import PacmanLoader from 'react-spinners/PacmanLoader'
+import { type IterableElement } from 'type-fest'
 import styles from './loading.module.less'
 import { wrapComponent } from './wrapComponent'
 
@@ -10,12 +11,10 @@ const colors = [
   'yellow',
   'pink',
   '#1890ff', // from antd
-]
+] as const
 
-// FIXME:
-// eslint-disable-next-line react/prop-types
-function Loading({ visible }) {
-  const [color, setColor] = useState('orange')
+function Loading({ visible }: { visible: boolean }) {
+  const [color, setColor] = useState<IterableElement<typeof colors>>('orange')
 
   useEffect(() => {
     if (visible) {
