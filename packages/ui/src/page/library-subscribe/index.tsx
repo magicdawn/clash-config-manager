@@ -265,7 +265,9 @@ function ModalAdd({
       onCancel={handleCancel}
       centered
     >
-      <Divider orientation='left'>基础设置</Divider>
+      <Divider orientation='left' orientationMargin={0}>
+        基础设置
+      </Divider>
       <Input
         className='input-row'
         value={name}
@@ -303,7 +305,7 @@ function ModalAdd({
         </div>
       )}
 
-      <Divider orientation='left'>
+      <Divider orientation='left' orientationMargin={0}>
         <Tooltip
           title={
             <p>

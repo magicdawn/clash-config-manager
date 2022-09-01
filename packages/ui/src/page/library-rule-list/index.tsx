@@ -389,43 +389,49 @@ function ModalAdd() {
       maskClosable={false}
       keyboard={false}
       footer={
-        <div className='footer'>
-          {type.value === 'local' && (
-            <>
-              {ruleAddVisible && (
-                <RuleAddModal
-                  visible={ruleAddVisible}
-                  setVisible={setRuleAddVisible}
-                  onOk={onAddRule}
-                />
-              )}
-
-              <Space direction='horizontal'>
-                {showAddRuleButton && (
-                  <Button disabled={editInEditorMaskVisible} onClick={handleAddRuleChrome}>
-                    从 Chrome 添加规则
-                  </Button>
+        !readonly && (
+          <div className='footer'>
+            {type.value === 'local' && (
+              <>
+                {ruleAddVisible && (
+                  <RuleAddModal
+                    visible={ruleAddVisible}
+                    setVisible={setRuleAddVisible}
+                    onOk={onAddRule}
+                  />
                 )}
-              </Space>
-            </>
-          )}
 
-          <div style={{ flex: 1 }}></div>
+                <Space direction='horizontal'>
+                  {showAddRuleButton && (
+                    <Button disabled={editInEditorMaskVisible} onClick={handleAddRuleChrome}>
+                      从 Chrome 添加规则
+                    </Button>
+                  )}
+                </Space>
+              </>
+            )}
 
-          <div className='btn-wrapper'>
-            <Button disabled={editInEditorMaskVisible} onClick={handleCancel}>
-              取消
-            </Button>
+            <div style={{ flex: 1 }}></div>
 
-            <Button disabled={editInEditorMaskVisible} type='default' onClick={handleOkAndGenerate}>
-              确定 (并重新生成)
-            </Button>
+            <div className='btn-wrapper'>
+              <Button disabled={editInEditorMaskVisible} onClick={handleCancel}>
+                取消
+              </Button>
 
-            <Button disabled={editInEditorMaskVisible} type='primary' onClick={handleOk}>
-              确定
-            </Button>
+              <Button
+                disabled={editInEditorMaskVisible}
+                type='default'
+                onClick={handleOkAndGenerate}
+              >
+                确定 (并重新生成)
+              </Button>
+
+              <Button disabled={editInEditorMaskVisible} type='primary' onClick={handleOk}>
+                确定
+              </Button>
+            </div>
           </div>
-        </div>
+        )
       }
     >
       <Form
