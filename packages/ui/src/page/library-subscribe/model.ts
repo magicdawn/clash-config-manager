@@ -53,6 +53,7 @@ export const actions = {
   edit,
   del,
   update,
+  toggleUrlVisible,
 }
 
 function check(payload: { url: string; name: string; editItemIndex?: number | null }) {
@@ -170,4 +171,9 @@ async function scheduleAutoUpdate() {
       await run()
     }, interval)
   }
+}
+
+function toggleUrlVisible(index: number) {
+  const cur = state.list[index]?.urlVisible ?? true
+  state.list[index].urlVisible = !cur
 }

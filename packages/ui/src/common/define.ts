@@ -10,6 +10,9 @@ export interface Subscribe {
   autoUpdate: boolean
   autoUpdateInterval?: number // 小时
   updatedAt?: number // ts
+
+  // visible
+  urlVisible?: boolean
 }
 
 export interface RuleItem {

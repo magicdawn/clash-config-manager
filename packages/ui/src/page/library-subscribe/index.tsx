@@ -1,4 +1,5 @@
 import { Subscribe } from '$ui/common/define'
+import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import {
   Button,
@@ -85,6 +86,23 @@ export default function LibrarySubscribe() {
         dataSource={list}
         renderItem={(item: Subscribe, index) => {
           const { url, name, excludeKeywords } = item
+          let { urlVisible } = item
+          if (typeof urlVisible !== 'boolean') urlVisible = true
+
+          let urlHided = ''
+          if (url) {
+            const u = new URL(url)
+            u.searchParams.forEach((val, key) => {
+              const keep = (n: number) =>
+                val.slice(0, n) + '*'.repeat(val.slice(n, -n).length) + val.slice(-n)
+
+              // keep 1/3 visible
+              const n = Math.floor(val.length / 3 / 2)
+              const valHided = keep(n)
+              u.searchParams.set(key, valHided)
+            })
+            urlHided = u.toString()
+          }
 
           // <div className='list-item'>
           //   <div className='name'>{name}</div>
@@ -137,8 +155,23 @@ export default function LibrarySubscribe() {
                   </Descriptions.Item>
                 )}
 
-                <Descriptions.Item label='链接' contentStyle={{ wordBreak: 'break-all' }}>
-                  {url}
+                <Descriptions.Item
+                  label={
+                    <>
+                      链接{' '}
+                      <span
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          actions.toggleUrlVisible(index)
+                        }}
+                      >
+                        {urlVisible ? <EyeFilled /> : <EyeInvisibleFilled />}
+                      </span>
+                    </>
+                  }
+                  contentStyle={{ wordBreak: 'break-all' }}
+                >
+                  {urlVisible ? url : urlHided}
                 </Descriptions.Item>
 
                 <Descriptions.Item label='操作'>
