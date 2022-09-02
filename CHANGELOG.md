@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.13.0 2022-09-02
+
+- chore: update deps
+- fix(ui): fix global Pacman Loading
+- chore: tweak style & fix edit partial config readonly mode
+- chore: add github actions config
+- feat: add hide icon for subscribe url
+- chore: update screenshots
+
 ## v0.12.3 2022-08-16
 
 - chore: fix btn disabled conditions (12 days ago) <magicdawn>
