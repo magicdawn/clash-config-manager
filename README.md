@@ -21,14 +21,22 @@
 - [x] 支持从 剪贴板/Chrome 快速添加规则
 - [x] 内置基础配置, 导入内置基础配置 + 添加一个 subscribe 即可开始使用.
 - [x] 支持类似 Atom / vscode 的 command palette 快速操作
-- [ ] 支持 `ccm://` 协议
-- [ ] 支持命令行
 
-## 截图
+## 预览
 
-![](https://i.loli.net/2020/09/22/7Xwu3PBRpi6xG1Y.png)
-![](https://i.loli.net/2020/09/22/9KHJ5WTEzeFaXsP.png)
-![Xnip2020-10-03_02-12-54.png](https://i.loli.net/2020/10/03/ZPn3QraOIKWsuvR.png)
+![image](https://user-images.githubusercontent.com/4067115/188063873-c00ed691-5464-4e43-8bf2-cddfb601e0fc.png)
+
+![image](https://user-images.githubusercontent.com/4067115/188063804-07b4bf95-f8f8-4917-b1a0-47cbd07cc24c.png)
+
+![image](https://user-images.githubusercontent.com/4067115/188063975-50d08893-d350-405a-baf8-dcc6bbaf1fc2.png)
+
+![image](https://user-images.githubusercontent.com/4067115/188064097-ecb5867f-d4b1-4e6b-97b2-f768f9271d26.png)
+
+![image](https://user-images.githubusercontent.com/4067115/188064169-3d07ed86-03d1-4d9d-befb-e97684383825.png)
+
+![image](https://user-images.githubusercontent.com/4067115/188064365-9dbf9152-9875-4a6c-b0d6-69a6238fb529.png)
+
+![image](https://user-images.githubusercontent.com/4067115/188064431-ce4d3639-aebc-45f1-b837-b6e117a3aced.png)
 
 ## 概念解释
 
