@@ -40,8 +40,9 @@ export default function LibrarySubscribe() {
     setShowModal(true)
   })
 
+  // 手动点: 强制更新; 其他场景: 不强制更新
   const update = useMemoizedFn((item) => {
-    actions.update({ url: item.url })
+    actions.update({ url: item.url, forceUpdate: true })
   })
 
   const disableEnterAsClick: KeyboardEventHandler = useCallback((e) => {
