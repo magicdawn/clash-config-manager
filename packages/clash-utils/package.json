@@ -1,5 +1,5 @@
 {
-  "name": "clash-utils",
+  "name": "clash-proxy-parser",
   "version": "0.0.1",
   "description": "parse subscribe text to clash proxy server config",
   "main": "dist/index.js",
@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "tsc",
     "build": "tsc",
-    "prepublishOnly": "build"
+    "prepublishOnly": "tsc"
   },
   "keywords": [
     "clash",
