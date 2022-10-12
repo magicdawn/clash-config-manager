@@ -8,6 +8,9 @@ report.*.json
 # the package
 /dist
 
+# tsc dist
+/packages/**/dist
+
 # changelog temp
 CHANGELOG.temp.md
 
