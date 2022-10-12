@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "parse subscribe text to clash proxy server config",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "tsc",
     "build": "tsc",
