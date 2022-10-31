@@ -12,14 +12,24 @@
     .btn() {
       height: 60px;
       font-size: 25px;
+      &:not(:first-child) {
+        margin-top: 30px;
+      }
+    }
+
+    .btn {
+      .btn();
     }
 
     .btn-gen {
       .btn();
     }
-
+    .btn-gen-force-update {
+      .btn();
+      background-color: bisque;
+      color: #444;
+    }
     .btn-add-rule {
-      margin-top: 30px;
       .btn();
     }
   }

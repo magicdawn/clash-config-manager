@@ -10,6 +10,10 @@ export default function Home() {
     runCommand('generate')
   }, [])
 
+  const generateForceUpdate = useCallback(() => {
+    runCommand('generate-force-update')
+  }, [])
+
   const { open: addRule, modal } = useAddRuleModal({
     mode: 'from-global',
     handleAdd(rule: string, ruleId: string) {
@@ -47,9 +51,20 @@ export default function Home() {
       {modal}
       <h1 className={styles.title}>快捷操作</h1>
       <div className={styles.btnGenWrapper} style={{ padding: 20 }}>
+        <Button
+          type='text'
+          shape='round'
+          className={styles.btnGenForceUpdate}
+          onClick={generateForceUpdate}
+          block
+        >
+          更新订阅, 重新生成配置文件
+        </Button>
+
         <Button type='primary' shape='round' className={styles.btnGen} onClick={generate} block>
           重新生成配置文件
         </Button>
+
         <Button type='default' shape='round' className={styles.btnAddRule} onClick={addRule} block>
           快捷添加规则
         </Button>
