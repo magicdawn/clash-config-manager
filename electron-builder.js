@@ -44,7 +44,7 @@ module.exports = {
     './package.json',
   ],
 
-  extraResources: [],
+  extraResources: ['./assets/**'],
 
   beforeBuild() {
     buildOnce()

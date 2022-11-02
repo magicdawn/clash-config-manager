@@ -166,7 +166,10 @@ function addRequestExtraHeadersSupport() {
 }
 
 function setTray() {
-  const tray = new Tray(path.join(__dirname, '../../../build/cat@2x.png'))
+  const icon = app.isPackaged
+    ? path.join(process.resourcesPath, 'assets/cat@2x.png')
+    : path.join(__dirname, '../../../assets/cat@2x.png')
+  const tray = new Tray(icon)
 
   const contextMenu = Menu.buildFromTemplate([
     {
