@@ -1,5 +1,5 @@
 import path from 'path'
-import { app, BrowserWindow, session, shell } from 'electron'
+import { app, BrowserWindow, Menu, session, shell, Tray } from 'electron'
 import { is } from 'electron-util'
 import _ from 'lodash'
 import * as remoteMain from '@electron/remote/main'
@@ -27,6 +27,7 @@ export async function main() {
 
   addRequestExtraHeadersSupport()
   setMenu()
+  setTray()
   loadDevExt()
 
   mainWindow = await createMainWindow()
@@ -74,11 +75,17 @@ const createMainWindow = async () => {
 
   const preventClose = (e) => {
     e.preventDefault()
+
+    const hideAction = () => {
+      win.hide()
+      app.dock.hide()
+    }
+
     if (win.isFullScreen()) {
-      win.once('leave-full-screen', () => win.hide())
+      win.once('leave-full-screen', () => hideAction())
       win.setFullScreen(false) // 直接 hide 全屏窗口会导致黑屏
     } else {
-      win.hide()
+      hideAction()
     }
   }
   const stopPreventClose = () => win.off('close', preventClose)
@@ -118,8 +125,10 @@ function initAppEvents() {
   })
 
   app.on('window-all-closed', () => {
+    // none mac
     if (!is.macos) {
       app.quit()
+      return
     }
   })
 
@@ -153,5 +162,40 @@ function addRequestExtraHeadersSupport() {
       }
     }
     callback({ cancel: false, requestHeaders: { ...details.requestHeaders, ...extraHeaders } })
+  })
+}
+
+function setTray() {
+  const tray = new Tray(path.join(__dirname, '../../../build/cat@2x.png'))
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: '显示窗口',
+      type: 'normal',
+      click() {
+        mainWindow?.show()
+        app.dock.show()
+      },
+    },
+    {
+      type: 'separator',
+    },
+    {
+      type: 'normal',
+      label: '更新订阅, 并重新生成配置',
+      click() {},
+    },
+    {
+      type: 'normal',
+      label: '重新生成配置',
+      click() {},
+    },
+  ])
+  // tray.setContextMenu(contextMenu)
+
+  tray.setToolTip('clash config manager')
+  tray.on('click', () => {
+    mainWindow?.show()
+    app.dock.show()
   })
 }

@@ -100,6 +100,11 @@ const macosTemplate = (options: { updateMenuItem: any }) =>
       ].filter(Boolean)
     ),
 
+    // 关闭窗口
+    {
+      role: 'fileMenu',
+    },
+
     {
       role: 'editMenu',
     },
@@ -113,20 +118,20 @@ const macosTemplate = (options: { updateMenuItem: any }) =>
     //   ],
     // },
 
-    // {
-    //   role: 'viewMenu',
-    // },
     {
-      label: '视图',
-      submenu: [
-        process.env.NODE_ENV === 'development' && { role: 'reload' },
-        { role: 'toggleDevTools', label: '开发者工具' },
-        { type: 'separator' },
-        { role: 'resetZoom', label: '实际大小' },
-        { role: 'zoomIn', label: '放大' },
-        { role: 'zoomOut', label: '缩小' },
-      ].filter(Boolean),
+      role: 'viewMenu',
     },
+    // {
+    //   label: '视图',
+    //   submenu: [
+    //     process.env.NODE_ENV === 'development' && { role: 'reload' },
+    //     { role: 'toggleDevTools', label: '开发者工具' },
+    //     { type: 'separator' },
+    //     { role: 'resetZoom', label: '实际大小' },
+    //     { role: 'zoomIn', label: '放大' },
+    //     { role: 'zoomOut', label: '缩小' },
+    //   ].filter(Boolean),
+    // },
 
     {
       role: 'help',
