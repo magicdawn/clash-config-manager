@@ -142,8 +142,9 @@ function initAppEvents() {
   //  - or clicking on the application's dock or taskbar icon.
   app.on('activate', async (e, hasVisibleWindows) => {
     console.log('app.activate, hasVisibleWindows = %s', hasVisibleWindows)
-    // 不需要在这里 mainWindow.show()
-    // mainWindow.show()
+    if (!hasVisibleWindows) {
+      restoreWindow()
+    }
   })
 
   app.on('before-quit', async () => {
@@ -180,11 +181,6 @@ function setTray() {
     ? path.join(process.resourcesPath, 'assets/cat@2x.png')
     : path.join(__dirname, '../../../assets/cat@2x.png')
 
-  const restoreWindow = () => {
-    mainWindow?.show()
-    app.dock.show()
-  }
-
   const tray = new Tray(icon)
   tray.setToolTip('clash config manager')
 
@@ -217,4 +213,9 @@ function setTray() {
     },
   ])
   tray.setContextMenu(contextMenu)
+}
+
+function restoreWindow() {
+  mainWindow?.show()
+  app.dock.show()
 }
