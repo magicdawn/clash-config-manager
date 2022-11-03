@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.15.0 2022-11-03
+
+- 订阅逻辑切换, 之前是使用自己 parse `ss://` / `vmess://` 协议, 改为
+  使用 `user-agent: ClashX`,让机场返回 clash config yaml, 从 yaml 中摘取 `proxies` 字段
+- `user-agent: ClashX` 会返回 `subscription-userinfo` header, 反应了使用量, 可以在更新订阅后直观看到使用量
+
 ## v0.14.0 2022-11-03
 
 - 修正订阅更新按钮改为从网络更新
