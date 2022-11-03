@@ -210,7 +210,10 @@ function setTray() {
     },
     {
       type: 'normal',
-      label: '当前 clash-config-manager',
+      label: '退出 clash-config-manager',
+      click() {
+        app.quit()
+      },
     },
   ])
   tray.setContextMenu(contextMenu)
