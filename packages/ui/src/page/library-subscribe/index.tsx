@@ -22,7 +22,7 @@ import styles from './index.module.less'
 import { actions, state } from './model'
 
 export default function LibrarySubscribe() {
-  const { list } = useSnapshot(state)
+  const { list, status } = useSnapshot(state)
 
   const [showModal, setShowModal] = useState(false)
   const [editItem, setEditItem] = useState<Subscribe | null>(null)
@@ -144,7 +144,15 @@ export default function LibrarySubscribe() {
                 style={{ width: '100%' }}
                 labelStyle={{ width: '120px', textAlign: 'center' }}
               >
-                <Descriptions.Item label='名称'>{name}</Descriptions.Item>
+                <Descriptions.Item label='名称'>
+                  {name}
+                  {status[url] ? (
+                    <>
+                      <br />
+                      {status[url]}
+                    </>
+                  ) : null}
+                </Descriptions.Item>
 
                 {excludeKeywords?.length && (
                   <Descriptions.Item label='排除关键词'>
@@ -334,7 +342,7 @@ function ModalAdd({
             max={autoUpdateIntervalMax}
             defaultValue={autoUpdateIntervalDefault}
             value={autoUpdateInterval}
-            onChange={(val) => setAutoUpdateInterval(val)}
+            onChange={(val) => val && setAutoUpdateInterval(val)}
           />
         </div>
       )}

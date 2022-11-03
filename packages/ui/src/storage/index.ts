@@ -11,6 +11,7 @@ const storage = new Store({
   defaults: {
     subscribe_list: [] as Subscribe[],
     subscribe_detail: {},
+    subscribe_status: {},
 
     rule_list: [] as RuleItem[],
 

@@ -83,6 +83,10 @@ export type ClashSsCipher =
 
 // ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTo5NDcxMTI1NS1hYjJlLTQxZGQtYjMwMS0xMDlkMWYwNDdlNzM@some.host.com:12345#xxxx_encode_url_component(name)__
 // ss://${B64_encode(ciper + ':' + password)}@host:port#encodeURLComponent(name)
+//
+// 实例
+// https://github.com/tindy2013/subconverter/blob/master/src/generator/config/subexport.cpp#L876
+// TODO: udp, plugin, plugin-opts
 export function urlLineToClashSsServer(str: string): ClashSsProxyItem {
   let rest = str.slice('ss://'.length)
 
@@ -106,9 +110,6 @@ export function urlLineToClashSsServer(str: string): ClashSsProxyItem {
     cipher: cipher as ClashSsCipher,
     password,
   }
-
-  // TODO: udp, plugin, plugin-opts
-  // no example found
 
   return ret
 }

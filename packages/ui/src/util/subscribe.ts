@@ -1,9 +1,13 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { md5, textToSubscribe } from '$clash-utils'
+import { ClashConfig } from '$ui/common/define'
 import envPaths from 'env-paths'
 import fse from 'fs-extra'
+import YAML from 'js-yaml'
 import moment from 'moment'
 import path from 'path'
 import request from 'umi-request'
+import bytes from 'bytes'
 
 const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 
@@ -29,26 +33,48 @@ async function urlToSubscribe({ url, forceUpdate: force }: { url: string; forceU
     shouldReuse = true
   }
 
+  // debugger
+
   let text: string
+  let valuableHeaders: Record<string, string> | undefined
+  let status: string | undefined
   if (shouldReuse) {
     text = fse.readFileSync(file, 'utf8')
   } else {
-    text = await readUrl({ url, file })
+    ;({ text, valuableHeaders } = await readUrl({ url, file }))
+    if (valuableHeaders?.['subscription-userinfo']) {
+      const val = valuableHeaders['subscription-userinfo']
+      status = subscriptionUserinfoToStatus(val)
+    } else {
+      status = ''
+    }
   }
 
-  return textToSubscribe(text)
+  // 自己解析
+  // const servers = textToSubscribe(text)
+
+  // ua: clashx, 抽出 proxies 即可
+  const servers = extractProxiesFromClashYaml(text)
+
+  return { servers, status }
 }
 
 const readUrl = async ({ url, file }: { url: string; file: string }) => {
-  const text = (await request.get(url, {
+  const res = await request.get(url, {
+    getResponse: true,
     responseType: 'text',
     headers: {
+      // https://github.com/tindy2013/subconverter/blob/d47b8868e5a235ee99f07a0dece8f237d90109c8/src/handler/interfaces.cpp#L64
       'x-extra-headers': JSON.stringify({
-        'user-agent': 'electron',
+        // 'user-agent': 'electron',
+        // 'user-agent': 'Shadowrocket',
+        // 'user-agent': 'Quantumult',
+        'user-agent': 'ClashX',
       }),
     },
-  })) as string
+  })
 
+  const text = res.data as string
   await fse.outputFile(file, text).then(
     () => {
       console.log('File %s writed', file)
@@ -58,5 +84,41 @@ const readUrl = async ({ url, file }: { url: string; file: string }) => {
     }
   )
 
-  return text
+  const headers = res.response.headers
+  const valuableHeaderFields = ['profile-update-interval', 'subscription-userinfo']
+  const valuableHeaders: Record<string, string> = {}
+
+  for (const k of valuableHeaderFields) {
+    if (headers.has(k)) {
+      valuableHeaders[k] = headers.get(k) as string
+    }
+  }
+
+  return { text, valuableHeaders }
+}
+
+function extractProxiesFromClashYaml(text: string) {
+  const config = YAML.load(text) as ClashConfig
+  return config.proxies
+}
+
+// upload=990312011; download=49112928036; total=107374182400; expire=1696997161
+function subscriptionUserinfoToStatus(text: string) {
+  const groups = text
+    .split(';')
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((s) => s.split('=').map((s) => s.trim()))
+
+  const data: Record<string, number> = {}
+  for (const [key, val] of groups) {
+    data[key] = Number(val)
+  }
+
+  const upload = bytes(data['upload'] as number)
+  const download = bytes(data['download'] as number)
+  const total = bytes(data['total'] as number)
+  const expire = moment.unix(data['expire'] as number).format('YYYY-MM-DD')
+
+  return `🚀 ↑: ${upload},  ↓: ${download},  TOT: ${total} 💡Expires: ${expire}`
 }

@@ -11,7 +11,7 @@ export function textToSubscribe(text: string) {
   text = B64.decode(text)
   const rawLines = text.split(/\r?\n/).filter(Boolean)
 
-  const lines = rawLines
+  const servers = rawLines
     .map((line) => {
       const idx = line.indexOf('://')
       const type = line.slice(0, idx)
@@ -33,5 +33,6 @@ export function textToSubscribe(text: string) {
       return server
     })
     .filter(truthy)
-  return lines
+
+  return servers
 }

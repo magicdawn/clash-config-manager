@@ -12,26 +12,32 @@ import { ref } from 'valtio'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
+const SUBSCRIBE_STATUS_STORAGE_KEY = 'subscrine_status'
 
 interface IState {
   list: Subscribe[]
   detail: Record<string, any>
+  status: Record<string, string> // 订阅状态
 }
 
 const { state, load, init } = valtioState<IState>(
   {
     list: [],
     detail: {},
+    status: {},
   },
   {
     persist(val) {
       storage.set(SUBSCRIBE_LIST_STORAGE_KEY, val.list)
+      storage.set(SUBSCRIBE_STATUS_STORAGE_KEY, val.status)
       // 只保留当前 list 存在的订阅
       const detail = pick(val.detail, val.list.map((item) => item.url).filter(Boolean))
       storage.set(SUBSCRIBE_DETAIL_STORAGE_KEY, detail)
     },
+
     load() {
       const list = storage.get(SUBSCRIBE_LIST_STORAGE_KEY) || []
+      const status: Record<string, string> = storage.get(SUBSCRIBE_STATUS_STORAGE_KEY) || {}
 
       // 只保留当前 list 存在的订阅
       const detail = ref(
@@ -40,7 +46,8 @@ const { state, load, init } = valtioState<IState>(
           list.map((item) => item.url).filter(Boolean)
         )
       )
-      return { list, detail }
+
+      return { list, detail, status }
     },
   }
 )
@@ -99,8 +106,9 @@ async function update({
   const currentSubscribe = state.list.find((s) => s.url === url)
 
   let servers: ClashProxyItem[]
+  let status: string | undefined
   try {
-    servers = await subscribeToClash({ url, forceUpdate })
+    ;({ servers, status } = await subscribeToClash({ url, forceUpdate }))
   } catch (e) {
     message.error('更新订阅出错: \n' + e.stack || e)
     throw e
@@ -123,6 +131,11 @@ async function update({
   // save
   if (currentSubscribe) currentSubscribe.updatedAt = Date.now()
   state.detail[url] = ref(servers)
+
+  // 经过网络更新, status 一定是 string, 可能是空 string
+  if (typeof status !== 'undefined') {
+    state.status[url] = status || ''
+  }
 }
 
 /**
