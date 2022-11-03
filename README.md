@@ -24,7 +24,7 @@
 
 ## 预览
 
-![image](https://user-images.githubusercontent.com/4067115/199678499-603532a0-cb20-4bf6-9a15-6689fee3a211.png)
+![image](https://user-images.githubusercontent.com/4067115/199737198-68e0e3b1-3b48-4b0d-bcbe-50a0257c08d5.png)
 
 ![image](https://user-images.githubusercontent.com/4067115/188063804-07b4bf95-f8f8-4917-b1a0-47cbd07cc24c.png)
 
