@@ -202,7 +202,7 @@ function setTray() {
       type: 'normal',
       label: '重新生成配置',
       click() {
-        //
+        mainWindow?.webContents.send('generate-force-update')
       },
     },
     {
