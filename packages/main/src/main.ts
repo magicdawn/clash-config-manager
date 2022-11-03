@@ -62,6 +62,9 @@ const createMainWindow = async () => {
     },
   })
 
+  // Emitted when the web page has been rendered (while not being shown) and window can be displayed without a visual flash.
+  // Please note that using this event implies that the renderer will be considered "visible" and paint even though show is false.
+  // This event will never fire if you use paintWhenInitiallyHidden: false
   win.on('ready-to-show', () => {
     win.show()
   })
@@ -132,8 +135,15 @@ function initAppEvents() {
     }
   })
 
-  app.on('activate', async () => {
-    mainWindow.show()
+  // Emitted when the application is activated.
+  // Various actions can trigger this event, such as
+  //  - launching the application for the first time,
+  //  - attempting to re - launch the application when it's already running,
+  //  - or clicking on the application's dock or taskbar icon.
+  app.on('activate', async (e, hasVisibleWindows) => {
+    console.log('app.activate, hasVisibleWindows = %s', hasVisibleWindows)
+    // 不需要在这里 mainWindow.show()
+    // mainWindow.show()
   })
 
   app.on('before-quit', async () => {
@@ -169,15 +179,30 @@ function setTray() {
   const icon = app.isPackaged
     ? path.join(process.resourcesPath, 'assets/cat@2x.png')
     : path.join(__dirname, '../../../assets/cat@2x.png')
-  const tray = new Tray(icon)
 
+  const restoreWindow = () => {
+    mainWindow?.show()
+    app.dock.show()
+  }
+
+  const tray = new Tray(icon)
+  tray.setToolTip('clash config manager')
+
+  // 不需要菜单, 点击恢复
+  // tray.on('click', restoreWindow)
+
+  // 菜单
   const contextMenu = Menu.buildFromTemplate([
     {
       label: '显示窗口',
       type: 'normal',
+      click: restoreWindow,
+    },
+    {
+      type: 'normal',
+      label: '重新生成配置',
       click() {
-        mainWindow?.show()
-        app.dock.show()
+        //
       },
     },
     {
@@ -185,20 +210,8 @@ function setTray() {
     },
     {
       type: 'normal',
-      label: '更新订阅, 并重新生成配置',
-      click() {},
-    },
-    {
-      type: 'normal',
-      label: '重新生成配置',
-      click() {},
+      label: '当前 clash-config-manager',
     },
   ])
-  // tray.setContextMenu(contextMenu)
-
-  tray.setToolTip('clash config manager')
-  tray.on('click', () => {
-    mainWindow?.show()
-    app.dock.show()
-  })
+  tray.setContextMenu(contextMenu)
 }
