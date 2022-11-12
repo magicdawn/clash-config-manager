@@ -18,9 +18,16 @@ import {
 import { ConfigProvider, Menu, MenuProps } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
 import _ from 'lodash'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { createRoot } from 'react-dom/client'
-import { HashRouter, Link, RouteObject, useLocation, useRoutes } from 'react-router-dom'
+import {
+  HashRouter,
+  Link,
+  RouteObject,
+  useLocation,
+  useNavigate,
+  useRoutes,
+} from 'react-router-dom'
 import Commands from './commands'
 import './page/common'
 import CurrentConfig from './page/current-config'
@@ -28,6 +35,8 @@ import Home from './page/home'
 import LibraryRuleList from './page/library-rule-list'
 import LibrarySubscribe from './page/library-subscribe'
 import Preference from './page/preference'
+import { useAddRuleModalFromGlobal } from './page/home/useAddRuleModal'
+import { setNavigateSingleton } from './page/global-model'
 
 const routes = [
   {
@@ -82,7 +91,7 @@ function App() {
   return (
     <ConfigProvider locale={zhCN}>
       <HashRouter>
-        <AppInner />
+        <RouterInner />
       </HashRouter>
     </ConfigProvider>
   )
@@ -90,16 +99,26 @@ function App() {
 
 // useLocation() may be used only in the context of a <Router> component.
 // 最好, Router 套一层
-function AppInner() {
+function RouterInner() {
+  // nav tab
   const { pathname } = useLocation()
   const menuKey = useMemo(() => [getKey(pathname)], [pathname])
 
+  // add rule
+  const { modal } = useAddRuleModalFromGlobal()
+
+  // navigate
+  const nav = useNavigate()
+  setNavigateSingleton(nav)
+
+  // routes match
   const matchedEl = useRoutes(usingRoutes)
 
   return (
     <>
       <Menu selectedKeys={menuKey} mode='horizontal' items={menuItems} />
       <Commands />
+      {modal}
       <div>{matchedEl}</div>
     </>
   )

@@ -202,6 +202,14 @@ function setTray() {
       },
     },
     {
+      type: 'normal',
+      label: '快捷添加规则',
+      click() {
+        restoreWindow()
+        mainWindow?.webContents.send('add-rule')
+      },
+    },
+    {
       type: 'separator',
     },
     {

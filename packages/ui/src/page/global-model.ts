@@ -1,9 +1,23 @@
 import Emitter from 'emittery'
+import { NavigateFunction } from 'react-router-dom'
 
 export const globalEmitter = new Emitter<{ init: undefined; reload: undefined }>()
 
+// : Parameters<NavigateFunction> 有重载的情况不准确
+const navigate: NavigateFunction = function (...args) {
+  // @ts-ignore
+  navigateSingleton?.(...args)
+}
+
 // actions
-export const actions = { init, reload }
+export const actions = {
+  init,
+  reload,
+
+  // router navigate
+  navigate,
+}
+
 function init() {
   globalEmitter.emit('init')
 }
@@ -17,4 +31,9 @@ export function onInit(cb: () => void) {
 }
 export function onReload(cb: () => void) {
   globalEmitter.on('reload', cb)
+}
+
+export let navigateSingleton: NavigateFunction | null = null
+export function setNavigateSingleton(nav: NavigateFunction) {
+  navigateSingleton = nav
 }

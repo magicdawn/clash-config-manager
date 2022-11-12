@@ -1,9 +1,8 @@
 import { runCommand } from '$ui/commands/run'
-import { rootActions, rootState } from '$ui/store'
-import { Button, message } from 'antd'
+import { Button } from 'antd'
 import { useCallback } from 'react'
 import styles from './index.module.less'
-import { useAddRuleModal } from './useAddRuleModal'
+import { addRuleStore } from './useAddRuleModal'
 
 export default function Home() {
   const generate = useCallback(() => {
@@ -14,41 +13,12 @@ export default function Home() {
     runCommand('generate-force-update')
   }, [])
 
-  const { open: addRule, modal } = useAddRuleModal({
-    mode: 'from-global',
-    handleAdd(rule: string, ruleId: string) {
-      if (!rule || !ruleId) {
-        return message.warn(`内容 or 待添加规则为空`)
-      }
-
-      const index = rootState.libraryRuleList.list.findIndex((item) => item.id === ruleId)
-      const ruleItem = rootState.libraryRuleList.list[index]
-      if (!ruleItem) {
-        return message.warn(`找不到待添加规则`)
-      }
-
-      const content = ruleItem.content || ''
-      if (content.split('\n').find((x: string) => x.includes(rule) && !x.trim().startsWith('#'))) {
-        return message.error(`rule ${rule} 已存在`)
-      }
-
-      // construct new content
-      const newContent = content.trimEnd() + '\n' + `  - ${rule}` + '\n'
-      // save new content
-      rootActions.libraryRuleList.edit({
-        editItemIndex: index,
-        item: { ...ruleItem, content: newContent },
-      })
-      message.success(`已添加规则 ${rule} 至 ${ruleItem.name}`)
-
-      // 生成
-      runCommand('generate')
-    },
-  })
+  const addRule = useCallback(() => {
+    addRuleStore.open()
+  }, [])
 
   return (
     <div className={styles.page}>
-      {modal}
       <h1 className={styles.title}>快捷操作</h1>
       <div className={styles.btnGenWrapper} style={{ padding: 20 }}>
         <Button

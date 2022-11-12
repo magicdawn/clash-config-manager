@@ -36,3 +36,5 @@ const unsub = devtools(rootState, {
   name: 'valtio rootState',
   enabled: process.env.NODE_ENV === 'development',
 })
+
+global.rootActions = rootActions

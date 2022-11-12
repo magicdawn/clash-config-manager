@@ -99,7 +99,17 @@ const readUrl = async ({ url, file }: { url: string; file: string }) => {
 
 function extractProxiesFromClashYaml(text: string) {
   const config = YAML.load(text) as ClashConfig
-  return config.proxies
+  const { proxies } = config
+
+  // 处理
+  // remove vmess proxy-item `udp:true`
+  proxies.forEach((p) => {
+    if (p.type === 'vmess') {
+      p.udp = undefined
+    }
+  })
+
+  return proxies
 }
 
 // upload=990312011; download=49112928036; total=107374182400; expire=1696997161
