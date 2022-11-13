@@ -381,7 +381,7 @@ function ModalAdd() {
     <Modal
       className={styles.modal}
       title='添加'
-      visible={visible}
+      open={visible}
       onOk={handleOk}
       onCancel={handleCancel}
       width={'90vw'}

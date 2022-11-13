@@ -146,7 +146,7 @@ export default function AddRuleModal(props: IProps) {
 
   return (
     <Modal
-      visible={visible}
+      open={visible}
       onOk={handleOk}
       onCancel={handleCancel}
       keyboard={false}

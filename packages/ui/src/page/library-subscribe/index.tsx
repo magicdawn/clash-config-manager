@@ -1,5 +1,10 @@
 import { Subscribe } from '$ui/common/define'
-import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons'
+import {
+  EyeFilled,
+  EyeInvisibleFilled,
+  EyeOutlined,
+  UnorderedListOutlined,
+} from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import {
   Button,
@@ -11,6 +16,7 @@ import {
   List,
   message,
   Modal,
+  Popover,
   Select,
   Space,
   Tag,
@@ -22,7 +28,7 @@ import styles from './index.module.less'
 import { actions, state } from './model'
 
 export default function LibrarySubscribe() {
-  const { list, status } = useSnapshot(state)
+  const { list } = useSnapshot(state)
 
   const [showModal, setShowModal] = useState(false)
   const [editItem, setEditItem] = useState<Subscribe | null>(null)
@@ -34,7 +40,64 @@ export default function LibrarySubscribe() {
     setShowModal(true)
   })
 
-  const edit = useMemoizedFn((item, index) => {
+  return (
+    <div className={styles.page}>
+      <ModalAdd
+        visible={showModal}
+        setVisible={setShowModal}
+        editItem={editItem}
+        editItemIndex={editItemIndex}
+      />
+
+      <List
+        size='small'
+        header={
+          <div className='header' style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ fontSize: '2em' }}>订阅管理</div>
+            <Button type='primary' onClick={add}>
+              +
+            </Button>
+          </div>
+        }
+        bordered
+        dataSource={list}
+        renderItem={(item: Subscribe, index) => (
+          <SubscribeItem
+            key={item.id}
+            {...{
+              item,
+              index,
+              setEditItem,
+              setEditItemIndex,
+              setShowModal,
+            }}
+          />
+        )}
+      />
+    </div>
+  )
+}
+
+function SubscribeItem({
+  item,
+  index,
+  setEditItem,
+  setEditItemIndex,
+  setShowModal,
+}: {
+  item: Subscribe
+  index: number
+  setEditItem: (item: Subscribe | null) => void
+  setEditItemIndex: (index: number | null) => void
+  setShowModal: (val: boolean) => void
+}) {
+  const { status, detail } = useSnapshot(state)
+
+  const { url, name, excludeKeywords } = item
+  let { urlVisible } = item
+  if (typeof urlVisible !== 'boolean') urlVisible = true
+
+  const edit = useMemoizedFn((item: Subscribe, index: number) => {
     setEditItem(item)
     setEditItemIndex(index)
     setShowModal(true)
@@ -64,152 +127,136 @@ export default function LibrarySubscribe() {
     })
   })
 
+  let urlHided = ''
+  if (url) {
+    const u = new URL(url)
+    u.searchParams.forEach((val, key) => {
+      const keep = (n: number) =>
+        val.slice(0, n) + '*'.repeat(val.slice(n, -n).length) + val.slice(-n)
+
+      // keep 1/3 visible
+      const n = Math.floor(val.length / 3 / 2)
+      const valHided = keep(n)
+      u.searchParams.set(key, valHided)
+    })
+    urlHided = u.toString()
+  }
+
+  const servers = detail[url]
+
+  // <div className='list-item'>
+  //   <div className='name'>{name}</div>
+  //   <div className='url'>{url}</div>
+  //   {excludeKeywords?.length && (
+  //     <div className='exclude'>
+  //       排除关键词:{' '}
+  //       {excludeKeywords.map((s) => (
+  //         <Tag key={s} color='warning'>
+  //           {s}
+  //         </Tag>
+  //       ))}
+  //     </div>
+  //   )}
+  // </div>
+  // <Space style={{ alignSelf: 'flex-end' }}>
+  //   <Button
+  //     type='primary'
+  //     onClick={(e) => edit(item, index)}
+  //     onKeyDown={disableEnterAsClick}
+  //   >
+  //     编辑
+  //   </Button>
+  //   <Button type='primary' onClick={() => update(item)} onKeyDown={disableEnterAsClick}>
+  //     更新
+  //   </Button>
+  //   <Button danger onClick={() => del(index)} onKeyDown={disableEnterAsClick}>
+  //     删除
+  //   </Button>
+  // </Space>
+
   return (
-    <div className={styles.page}>
-      <ModalAdd
-        visible={showModal}
-        setVisible={setShowModal}
-        editItem={editItem}
-        editItemIndex={editItemIndex}
-      />
-
-      <List
-        size='small'
-        header={
-          <div className='header' style={{ display: 'flex', alignItems: 'center' }}>
-            <div style={{ fontSize: '2em' }}>订阅管理</div>
-            <Button type='primary' onClick={add}>
-              +
-            </Button>
-          </div>
-        }
+    <List.Item style={{ display: 'flex', borderBottom: 'none' }}>
+      <Descriptions
         bordered
-        dataSource={list}
-        renderItem={(item: Subscribe, index) => {
-          const { url, name, excludeKeywords } = item
-          let { urlVisible } = item
-          if (typeof urlVisible !== 'boolean') urlVisible = true
+        column={1}
+        size='middle'
+        style={{ width: '100%' }}
+        labelStyle={{ width: '120px', textAlign: 'center' }}
+      >
+        <Descriptions.Item label='名称'>
+          {name}
+          {status[url] ? (
+            <>
+              <br />
+              {status[url]}
+            </>
+          ) : null}
+        </Descriptions.Item>
 
-          let urlHided = ''
-          if (url) {
-            const u = new URL(url)
-            u.searchParams.forEach((val, key) => {
-              const keep = (n: number) =>
-                val.slice(0, n) + '*'.repeat(val.slice(n, -n).length) + val.slice(-n)
+        {excludeKeywords?.length && (
+          <Descriptions.Item label='排除关键词'>
+            {excludeKeywords.map((s) => (
+              <Tag key={s} color='warning'>
+                {s}
+              </Tag>
+            ))}
+          </Descriptions.Item>
+        )}
 
-              // keep 1/3 visible
-              const n = Math.floor(val.length / 3 / 2)
-              const valHided = keep(n)
-              u.searchParams.set(key, valHided)
-            })
-            urlHided = u.toString()
-          }
-
-          // <div className='list-item'>
-          //   <div className='name'>{name}</div>
-          //   <div className='url'>{url}</div>
-          //   {excludeKeywords?.length && (
-          //     <div className='exclude'>
-          //       排除关键词:{' '}
-          //       {excludeKeywords.map((s) => (
-          //         <Tag key={s} color='warning'>
-          //           {s}
-          //         </Tag>
-          //       ))}
-          //     </div>
-          //   )}
-          // </div>
-          // <Space style={{ alignSelf: 'flex-end' }}>
-          //   <Button
-          //     type='primary'
-          //     onClick={(e) => edit(item, index)}
-          //     onKeyDown={disableEnterAsClick}
-          //   >
-          //     编辑
-          //   </Button>
-          //   <Button type='primary' onClick={() => update(item)} onKeyDown={disableEnterAsClick}>
-          //     更新
-          //   </Button>
-          //   <Button danger onClick={() => del(index)} onKeyDown={disableEnterAsClick}>
-          //     删除
-          //   </Button>
-          // </Space>
-
-          return (
-            <List.Item style={{ display: 'flex', borderBottom: 'none' }}>
-              <Descriptions
-                bordered
-                column={1}
-                size='middle'
-                style={{ width: '100%' }}
-                labelStyle={{ width: '120px', textAlign: 'center' }}
+        <Descriptions.Item
+          label={
+            <>
+              链接{' '}
+              <span
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  actions.toggleUrlVisible(index)
+                }}
               >
-                <Descriptions.Item label='名称'>
-                  {name}
-                  {status[url] ? (
-                    <>
-                      <br />
-                      {status[url]}
-                    </>
-                  ) : null}
-                </Descriptions.Item>
+                {urlVisible ? <EyeFilled /> : <EyeInvisibleFilled />}
+              </span>
+            </>
+          }
+          contentStyle={{ wordBreak: 'break-all' }}
+        >
+          {urlVisible ? url : urlHided}
+        </Descriptions.Item>
 
-                {excludeKeywords?.length && (
-                  <Descriptions.Item label='排除关键词'>
-                    {excludeKeywords.map((s) => (
-                      <Tag key={s} color='warning'>
-                        {s}
-                      </Tag>
+        <Descriptions.Item label='操作'>
+          <Space style={{ alignSelf: 'flex-end' }}>
+            <Button
+              type='primary'
+              onClick={(e) => edit(item, index)}
+              onKeyDown={disableEnterAsClick}
+            >
+              编辑
+            </Button>
+            <Button type='primary' onClick={() => update(item)} onKeyDown={disableEnterAsClick}>
+              更新
+            </Button>
+            <Button danger onClick={() => del(index)} onKeyDown={disableEnterAsClick}>
+              删除
+            </Button>
+            <Popover
+              placement='top'
+              title={'节点列表'}
+              content={
+                <div style={{ maxHeight: '50vh', overflowY: 'scroll' }}>
+                  <ul>
+                    {servers?.map((s) => (
+                      <li key={s.name}>{s.name}</li>
                     ))}
-                  </Descriptions.Item>
-                )}
-
-                <Descriptions.Item
-                  label={
-                    <>
-                      链接{' '}
-                      <span
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                          actions.toggleUrlVisible(index)
-                        }}
-                      >
-                        {urlVisible ? <EyeFilled /> : <EyeInvisibleFilled />}
-                      </span>
-                    </>
-                  }
-                  contentStyle={{ wordBreak: 'break-all' }}
-                >
-                  {urlVisible ? url : urlHided}
-                </Descriptions.Item>
-
-                <Descriptions.Item label='操作'>
-                  <Space style={{ alignSelf: 'flex-end' }}>
-                    <Button
-                      type='primary'
-                      onClick={(e) => edit(item, index)}
-                      onKeyDown={disableEnterAsClick}
-                    >
-                      编辑
-                    </Button>
-                    <Button
-                      type='primary'
-                      onClick={() => update(item)}
-                      onKeyDown={disableEnterAsClick}
-                    >
-                      更新
-                    </Button>
-                    <Button danger onClick={() => del(index)} onKeyDown={disableEnterAsClick}>
-                      删除
-                    </Button>
-                  </Space>
-                </Descriptions.Item>
-              </Descriptions>
-            </List.Item>
-          )
-        }}
-      />
-    </div>
+                  </ul>
+                </div>
+              }
+              trigger='click'
+            >
+              <Button icon={<UnorderedListOutlined />}>查看节点</Button>
+            </Popover>
+          </Space>
+        </Descriptions.Item>
+      </Descriptions>
+    </List.Item>
   )
 }
 
@@ -302,7 +349,7 @@ function ModalAdd({
       className={styles.modal}
       bodyStyle={{ paddingTop: 10 }}
       title='添加'
-      visible={visible}
+      open={visible}
       onOk={handleOk}
       onCancel={handleCancel}
       centered

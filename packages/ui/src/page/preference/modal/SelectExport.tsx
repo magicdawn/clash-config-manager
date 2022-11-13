@@ -67,7 +67,7 @@ export default function SelectExport({
   return (
     <Modal
       title='选择要导出的数据'
-      visible={visible}
+      open={visible}
       onCancel={onCancel}
       onOk={onOk}
       centered

@@ -17,7 +17,7 @@ const SUBSCRIBE_STATUS_STORAGE_KEY = 'subscrine_status'
 
 interface IState {
   list: Subscribe[]
-  detail: Record<string, any>
+  detail: Record<string, ClashProxyItem[] | undefined | null>
   status: Record<string, string> // 订阅状态
 }
 
@@ -43,7 +43,7 @@ const { state, load, init } = valtioState<IState>(
       // 只保留当前 list 存在的订阅
       const detail = ref(
         pick(
-          storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY) || {},
+          storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY) || ({} as IState['detail']),
           list.map((item) => item.url).filter(Boolean)
         )
       )

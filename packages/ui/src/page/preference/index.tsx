@@ -305,7 +305,7 @@ function ModalSyncConfig(props: ModalSyncConfigProps) {
       width={'80vw'}
       className={styles.modal}
       title='服务器设置'
-      visible={visible}
+      open={visible}
       onOk={handleOk}
       onCancel={handleCancel}
     >

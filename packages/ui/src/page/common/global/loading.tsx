@@ -26,7 +26,7 @@ function Loading({ visible }: { visible: boolean }) {
   return (
     <Modal
       wrapClassName={styles.modal}
-      visible={visible}
+      open={visible}
       title={null}
       footer={null}
       centered
