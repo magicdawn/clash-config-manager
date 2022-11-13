@@ -1,14 +1,15 @@
 import { ClashProxyItem } from '$clash-utils'
-import { runCommand } from '$ui/commands/run'
 import { Subscribe } from '$ui/common/define'
 import { valtioState } from '$ui/common/model/valtio-helper'
 import { onInit, onReload } from '$ui/page/global-model'
 import storage from '$ui/storage'
 import { subscribeToClash } from '$ui/util/subscribe'
 import { message } from 'antd'
+import { runCommand } from '$ui/commands/run'
 import { find, once, pick } from 'lodash'
 import ms from 'ms'
 import { ref } from 'valtio'
+import { restartAutoUpdate, scheduleAutoUpdateOnce } from './model.auto-update'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
@@ -81,18 +82,29 @@ function check(payload: { url: string; name: string; editItemIndex?: number | nu
 
 function add(payload: Subscribe) {
   state.list.push(payload)
+  restartAutoUpdate(payload)
 }
 
 function edit(payload: Subscribe & { editItemIndex: number }) {
   const { editItemIndex, ...subscribeItem } = payload
+
+  // bak & save
+  const previousSubscribeItem = state.list[editItemIndex]
   state.list[editItemIndex] = subscribeItem
+
+  if (
+    previousSubscribeItem.autoUpdateInterval !== subscribeItem.autoUpdateInterval ||
+    previousSubscribeItem.autoUpdate !== subscribeItem.autoUpdate
+  ) {
+    restartAutoUpdate(subscribeItem)
+  }
 }
 
 function del(index: number) {
   state.list.splice(index, 1)
 }
 
-async function update({
+export async function update({
   url,
   silent = false,
   successMsg,
@@ -104,6 +116,7 @@ async function update({
   forceUpdate?: boolean
 }) {
   const currentSubscribe = state.list.find((s) => s.url === url)
+  if (!currentSubscribe) return
 
   let servers: ClashProxyItem[]
   let status: string | undefined
@@ -131,6 +144,7 @@ async function update({
   // save
   if (currentSubscribe) currentSubscribe.updatedAt = Date.now()
   state.detail[url] = ref(servers)
+  restartAutoUpdate(currentSubscribe)
 
   // 经过网络更新, status 一定是 string, 可能是空 string
   if (typeof status !== 'undefined') {
@@ -142,50 +156,11 @@ async function update({
  * listeners
  */
 
-const scheduleAutoUpdateOnce = once(scheduleAutoUpdate)
 onInit(() => {
   init()
   scheduleAutoUpdateOnce()
 })
 onReload(load)
-
-/**
- * auto update
- */
-
-const timerRegistry: Record<string, NodeJS.Timer | undefined> = {}
-
-async function scheduleAutoUpdate() {
-  for (const sub of state.list) {
-    const { name, url, autoUpdate, autoUpdateInterval, updatedAt: lastUpdated } = sub
-    if (!autoUpdate || !autoUpdateInterval) continue
-
-    const run = async () => {
-      await update({
-        url,
-        forceUpdate: true,
-        successMsg: `自动更新订阅: ${name} 更新成功`,
-      })
-      await runCommand('generate')
-    }
-
-    const interval = ms(autoUpdateInterval + 'h')
-
-    // 启动时更新
-    // 使用场景: 定时12小时更新, 退出了, 第二天打开自动更新, 但当天重启不会更新
-    if (!lastUpdated || Date.now() >= lastUpdated + interval) {
-      await run()
-    }
-
-    if (timerRegistry[name]) {
-      clearInterval(timerRegistry[name])
-      timerRegistry[name] = undefined
-    }
-    timerRegistry[name] = setInterval(async () => {
-      await run()
-    }, interval)
-  }
-}
 
 function toggleUrlVisible(index: number) {
   const cur = state.list[index]?.urlVisible ?? true
