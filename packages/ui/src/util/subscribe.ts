@@ -103,11 +103,11 @@ function extractProxiesFromClashYaml(text: string) {
 
   // 处理
   // remove vmess proxy-item `udp:true`
-  proxies.forEach((p) => {
-    if (p.type === 'vmess') {
-      p.udp = undefined
-    }
-  })
+  // proxies.forEach((p) => {
+  //   if (p.type === 'vmess') {
+  //     p.udp = undefined
+  //   }
+  // })
 
   return proxies
 }

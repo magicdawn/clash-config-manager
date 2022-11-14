@@ -2,6 +2,7 @@ import { runCommand } from '$ui/commands/run'
 import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/util/gen'
 import { useMemoizedFn } from 'ahooks'
 import { Button, Col, Divider, Input, message, Row } from 'antd'
+import { shell } from 'electron'
 import launch from 'launch-editor'
 import { useSnapshot } from 'valtio'
 import { ConfigDND } from './ConfigDND'
@@ -29,10 +30,15 @@ export default function ConfigList() {
     )
   })
 
+  const onOpenInFinder = useMemoizedFn(() => {
+    const file = getConfigFile(state.name)
+    shell.showItemInFolder(file)
+  })
+
   const spanLeft = 3
   const spanRight = 16
 
-  const dividerFontSize = '2em'
+  const dividerFontSize = '1.2em'
   // const subTitleFontSize = '1.5em'
   const createDivider = (text: string) => (
     <Divider orientation='left' orientationMargin={0} style={{ margin: '10px 0 0 0' }}>
@@ -95,29 +101,22 @@ export default function ConfigList() {
         type='primary'
         block
         shape='round'
-        style={{ marginTop: '10px' }}
+        style={{ marginTop: 8 }}
         onClick={onGenConfigClick}
       >
         生成
       </Button>
-      <Button
-        type='default'
-        block
-        shape='round'
-        style={{ marginTop: '10px' }}
-        onClick={() => onOpenConfigClick('code')}
-      >
-        打开(vscode)
-      </Button>
-      <Button
-        type='default'
-        block
-        shape='round'
-        style={{ marginTop: '10px' }}
-        onClick={() => onOpenConfigClick('atom')}
-      >
-        打开(Atom)
-      </Button>
+      <div className={styles.openBtns}>
+        <Button type='default' shape='round' onClick={() => onOpenConfigClick('code')}>
+          使用 vscode 打开
+        </Button>
+        <Button type='default' shape='round' onClick={() => onOpenConfigClick('subl')}>
+          使用 subl 打开
+        </Button>
+        <Button type='default' shape='round' onClick={() => onOpenInFinder()}>
+          在 Finder 中打开
+        </Button>
+      </div>
     </div>
   )
 }

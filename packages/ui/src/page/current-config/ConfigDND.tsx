@@ -13,7 +13,7 @@ import styles from './ConfigDND.module.less'
 import { state } from './model'
 
 function modifyResultList(action: (list: ConfigItem[]) => void) {
-  action(rootState.currentConfig.list)
+  action(state.list)
 }
 
 export function ConfigDND() {

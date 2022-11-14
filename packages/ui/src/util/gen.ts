@@ -124,6 +124,12 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
     existNames.push(use)
   }
 
+  // final rules
+  // 未匹配使用 DIRECT
+  if (!config.rules?.at(-1)?.startsWith('MATCH,')) {
+    config.rules?.push('MATCH,DIRECT')
+  }
+
   const configYaml = Yaml.dump(config)
   const file = getConfigFile(name)
   fse.writeFileSync(file, configYaml)
