@@ -21,6 +21,7 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
 
   // 具体 item
   const resultItemList = resultList
+    .filter((x) => !x.disabled) // remove toggle off item
     .map(({ type, id }) => {
       if (type === 'subscribe') {
         const item = subscribeList.find((x) => x.id === id)
@@ -70,7 +71,7 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
       continue
     }
 
-    const cur = Yaml.load(usingContent)
+    const cur = Yaml.load(usingContent) as any
     const { rules, ...otherConfig } = cur
     config = { ...otherConfig, ...config, rules: [...(config.rules || []), ...(rules || [])] }
   }

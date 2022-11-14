@@ -120,7 +120,7 @@ export default function Preference() {
 
       <Modal
         title='已导出'
-        visible={exportHelperVisible}
+        open={exportHelperVisible}
         onOk={() => setExportHelperVisible(false)}
         onCancel={() => setExportHelperVisible(false)}
         centered

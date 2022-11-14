@@ -26,6 +26,7 @@ export interface RuleItem {
 export interface ConfigItem {
   type: 'subscribe' | 'rule'
   id: string
+  disabled?: boolean
 }
 
 export { default as ClashConfig } from './define/ClashConfig'

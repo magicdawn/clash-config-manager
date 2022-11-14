@@ -107,7 +107,7 @@ export default function ConfigList() {
         style={{ marginTop: '10px' }}
         onClick={() => onOpenConfigClick('code')}
       >
-        打开(Code)
+        打开(vscode)
       </Button>
       <Button
         type='default'

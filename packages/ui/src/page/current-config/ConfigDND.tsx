@@ -5,11 +5,12 @@ import { limitLines } from '$ui/util/text-util'
 import { truthy } from '$ui/util/ts-filter'
 import { InfoCircleOutlined, QuestionCircleFilled } from '@ant-design/icons'
 import { useMemoizedFn } from 'ahooks'
-import { Tooltip } from 'antd'
+import { Switch, Tooltip } from 'antd'
 import { useMemo, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useSnapshot } from 'valtio'
 import styles from './ConfigDND.module.less'
+import { state } from './model'
 
 function modifyResultList(action: (list: ConfigItem[]) => void) {
   action(rootState.currentConfig.list)
@@ -65,17 +66,17 @@ export function ConfigDND() {
     return new Set(resultList.map((x) => x.id))
   }, [resultList])
 
-  const [trashDropDisabled, setTrashDropDisabled] = useState(true)
+  const [disableDropOnTrash, setDisableDropOnTrash] = useState(true)
 
   const onDragStart = useMemoizedFn((start) => {
     const droppableId = start.source.droppableId
     if (droppableId === 'result-list') {
-      setTrashDropDisabled(false)
+      setDisableDropOnTrash(false)
     }
   })
 
   const onDragEnd = useMemoizedFn((result, provided) => {
-    setTrashDropDisabled(true)
+    setDisableDropOnTrash(true)
 
     // console.log(result)
     // {reason, draggableId, type}
@@ -91,7 +92,7 @@ export function ConfigDND() {
       return
     }
 
-    let addItem
+    let addItem: ConfigItem | undefined
     const modifyActions: Array<(list: ConfigItem[]) => void> = []
     if (source.droppableId === 'rule-source-list') {
       const id = ruleSourceList[source.index].id
@@ -109,6 +110,7 @@ export function ConfigDND() {
 
     if (!addItem) {
       console.log('no item, result = ', result)
+      return
     }
 
     const newindex = destination.index
@@ -116,7 +118,7 @@ export function ConfigDND() {
       for (const action of modifyActions) {
         action(list)
       }
-      list.splice(newindex, 0, addItem)
+      list.splice(newindex, 0, addItem!)
     })
   })
 
@@ -155,7 +157,7 @@ export function ConfigDND() {
           <Droppable
             droppableId={'trash'}
             direction='horizontal'
-            isDropDisabled={trashDropDisabled}
+            isDropDisabled={disableDropOnTrash}
           >
             {(provided, snapshot) => (
               <div
@@ -189,7 +191,7 @@ export function ConfigDND() {
                         item={item}
                         index={index}
                         isDragDisabled={resultIdSet.has(item.id)}
-                      ></Source>
+                      />
                     )
                   })}
                 </div>
@@ -226,22 +228,43 @@ export function ConfigDND() {
 
 interface SourceProps {
   item
-  type
+  type: 'source' | 'result'
   isDragDisabled?: boolean
-  index
+  index: number
 }
 
 const Source = ({ item, type, isDragDisabled, index }: SourceProps) => {
   const { text, id } = item
+
+  // toggle
+  const { list } = useSnapshot(state)
+  const itemInConfigList = useMemo(() => {
+    return list.find((x) => x.id === id)
+  }, [list])
+  const toggleEnabled = !itemInConfigList?.disabled
+
   return (
     <Draggable draggableId={`${type}-${id}`} index={index} isDragDisabled={isDragDisabled}>
       {(provided, snapshot) => (
         <div
-          className={cx('item', { disabled: isDragDisabled })}
+          className={cx('item', { disabled: isDragDisabled }, { 'toggle-off': !toggleEnabled })}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
+          {type === 'result' && (
+            <Switch
+              className={'toggle'}
+              size='small'
+              defaultChecked
+              checked={toggleEnabled}
+              onChange={(v) => {
+                const itemInConfigList = state.list.find((x) => x.id === id)
+                if (!itemInConfigList) return
+                itemInConfigList.disabled = !v
+              }}
+            />
+          )}
           <div className='text' style={{ textAlign: 'center' }}>
             {text}
             <Tooltip

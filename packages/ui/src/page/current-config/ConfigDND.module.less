@@ -105,7 +105,12 @@
         height: 50px;
         border: 1px solid purple;
         border-radius: 4px;
+        position: relative;
+
         background-color: bisque;
+        &.toggle-off {
+          background-color: lighten(bisque, 8%);
+        }
 
         margin-top: 4px;
         &:first-child {
@@ -119,6 +124,17 @@
         .help-icon {
           margin-left: 5px;
           cursor: pointer;
+        }
+
+        .toggle {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        .ant-switch-checked {
+          background-color: darken(bisque, 30%);
         }
       }
     }
