@@ -6,9 +6,7 @@ import fse from 'fs-extra'
 import { homedir } from 'os'
 import { join as pathjoin } from 'path'
 
-export default async function genConfig(options: { forceUpdate?: boolean } = {}) {
-  const { forceUpdate = false } = options
-
+export function getUsingItems() {
   // subscribe
   const subscribeList = rootState.librarySubscribe.list
 
@@ -16,7 +14,7 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
   const ruleList = rootState.libraryRuleList.list
 
   // 只放 {type, id}
-  const { list: resultList, name } = rootState.currentConfig
+  const { list: resultList } = rootState.currentConfig
 
   // 具体 item
   const resultItemList = resultList
@@ -37,10 +35,20 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
     })
     .filter(Boolean)
 
-  const subscribeArr = resultItemList
+  const subscribeItems = resultItemList
     .filter((x) => x?.type === 'subscribe')
     .map((x) => x?.item) as Subscribe[]
-  const ruleArr = resultItemList.filter((x) => x?.type === 'rule').map((x) => x?.item) as RuleItem[]
+
+  const ruleItems = resultItemList
+    .filter((x) => x?.type === 'rule')
+    .map((x) => x?.item) as RuleItem[]
+
+  return { subscribeItems, ruleItems }
+}
+
+export default async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean } = {}) {
+  const { name } = rootState.currentConfig
+  const { subscribeItems, ruleItems } = getUsingItems()
 
   /**
    * config merge
@@ -53,18 +61,18 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
   }
 
   // 批量更新远程规则
-  const remotes = ruleArr.filter(
+  const remoteRuleItems = ruleItems.filter(
     (item) => item.type === 'remote' || item.type === 'remote-rule-provider'
   )
   await pmap(
-    remotes,
+    remoteRuleItems,
     async (item) => {
       await rootActions.libraryRuleList.updateRemote({ item, forceUpdate })
     },
     5
   )
 
-  for (const item of ruleArr) {
+  for (const item of ruleItems) {
     const { type } = item
 
     if (type === 'local') {
@@ -116,7 +124,7 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
 
   // batch update subscribe
   await pmap(
-    subscribeArr,
+    subscribeItems,
     (item) =>
       rootActions.librarySubscribe.update({
         url: item.url,
@@ -126,7 +134,7 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
     5
   )
 
-  for (const item of subscribeArr) {
+  for (const item of subscribeItems) {
     const { url } = item
     let servers = rootState.librarySubscribe.detail[url] || []
     config.proxies = config.proxies.concat(servers)
