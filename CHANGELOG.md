@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.16.0 2022-11-15
+
+- 订阅: 支持查看节点
+- 配置组装: 使用中的配置, 支持 toggle
+- 配置源: 支持 `rule-provider` 类型的远程规则, 为了使用 https://github.com/Loyalsoldier/clash-rules, 但是生成的配置文件非常大...
+
 ## v0.15.0 2022-11-03
 
 - 订阅逻辑切换, 之前是使用自己 parse `ss://` / `vmess://` 协议, 改为
