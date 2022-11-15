@@ -2,7 +2,7 @@
   "name": "clash-config-manager",
   "productName": "clash-config-manager",
   "bundleId": "fun.magicdawn.clash-config-manager",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "clash configuration manager",
   "license": "MIT",
   "repository": "magicdawn/clash-config-manager",
