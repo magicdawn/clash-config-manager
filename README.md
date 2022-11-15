@@ -13,14 +13,14 @@
 
 ## 功能
 
-- [x] 支持 v2ray 纯服务器订阅,不含规则, 比如 iOS 端 ShadowRocket 的 subscribe 所使用的格式
-- [x] 支持远程规则 / 支持 clash 规则订阅. (不推荐这种,自定义规则的 target 需要与订阅里的 proxy group 一致, 不方便写自定义规则)
-- [x] 支持导入导出数据, webdav 备份数据, 支持合并数据, 支持导出部分数据用于分享
-- [x] 支持在应用中编辑规则
+- [x] 支持从订阅中摘取 proxies
+- [x] 支持远程规则
+- [x] 支持远程 rule-providers. 类似 rule-providers / RULE-SET 的配置会转换成基础的 clash 规则, 无需 Clash pro / ClashX Pro
+- [x] 支持快捷新建规则, 支持从 Chrome 当前 Tab 或 剪贴板 读取 url, 支持根据 url 解析成 DOMAIN-KEYWORD / DOMAIN-SUFFIX 规则
 - [x] 支持在 vscode/Atom 中编辑规则
-- [x] 支持从 剪贴板/Chrome 快速添加规则
+- [x] 支持导入导出数据, webdav 备份数据, 支持合并数据, 支持导出部分数据用于分享
 - [x] 内置基础配置, 导入内置基础配置 + 添加一个 subscribe 即可开始使用.
-- [x] 支持类似 Atom / vscode 的 command palette 快速操作
+- [x] 支持类似 vscode 的 command palette 快速操作
 - [x] 支持解析 `subscription-userinfo` header
 
 ## 预览
