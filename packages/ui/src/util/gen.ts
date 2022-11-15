@@ -1,11 +1,10 @@
-import { homedir } from 'os'
-import { join as pathjoin } from 'path'
-import Yaml from 'js-yaml'
-import fse from 'fs-extra'
-import request from 'umi-request'
-import { rootState, rootActions } from '$ui/store'
 import { ClashConfig, RuleItem, Subscribe } from '$ui/common/define'
 import { ProxyGroupType } from '$ui/common/define/ClashConfig'
+import { pmap, YAML } from '$ui/libs'
+import { rootActions, rootState } from '$ui/store'
+import fse from 'fs-extra'
+import { homedir } from 'os'
+import { join as pathjoin } from 'path'
 
 export default async function genConfig(options: { forceUpdate?: boolean } = {}) {
   const { forceUpdate = false } = options
@@ -38,42 +37,70 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
     })
     .filter(Boolean)
 
-  // reverse: GUI最前面的优先
-  const subscribeArr = resultItemList.filter((x) => x?.type === 'subscribe') as {
-    item: Subscribe
-    type: 'subscribe'
-  }[]
-  const ruleArr = resultItemList.filter((x) => x?.type === 'rule') as {
-    item: RuleItem
-    type: 'rule'
-  }[]
+  const subscribeArr = resultItemList
+    .filter((x) => x?.type === 'subscribe')
+    .map((x) => x?.item) as Subscribe[]
+  const ruleArr = resultItemList.filter((x) => x?.type === 'rule').map((x) => x?.item) as RuleItem[]
 
   /**
    * config merge
    */
   let config: Partial<ClashConfig> = {}
+  const updateConfig = (partial: Partial<ClashConfig>) => {
+    const { rules, ...otherConfig } = partial
+    // reverse: GUI最前面的优先
+    config = { ...otherConfig, ...config, rules: [...(config.rules || []), ...(rules || [])] }
+  }
 
-  for (const r of ruleArr) {
-    const { item } = r
-    const { type, url, content } = item
-    let usingContent = content
+  // 批量更新远程规则
+  const remotes = ruleArr.filter(
+    (item) => item.type === 'remote' || item.type === 'remote-rule-provider'
+  )
+  await pmap(
+    remotes,
+    async (item) => {
+      await rootActions.libraryRuleList.updateRemote(item, forceUpdate)
+    },
+    5
+  )
 
-    // remote: url -> content
-    if (type === 'remote') {
-      usingContent = await request.get(url!, {
-        responseType: 'text',
-        headers: { 'x-extra-headers': JSON.stringify({ 'user-agent': 'clash' }) },
-      })
-    }
+  for (const item of ruleArr) {
+    const { type } = item
 
-    if (!usingContent) {
-      console.warn('content 为空')
+    if (type === 'local') {
+      const partial = YAML.load(item.content) as Partial<ClashConfig>
+      updateConfig(partial)
       continue
     }
 
-    const cur = Yaml.load(usingContent) as any
-    const { rules, ...otherConfig } = cur
-    config = { ...otherConfig, ...config, rules: [...(config.rules || []), ...(rules || [])] }
+    if (type === 'remote') {
+      const content = item.content!
+      const partial = YAML.load(content) as Partial<ClashConfig>
+      updateConfig(partial)
+      continue
+    }
+
+    if (type === 'remote-rule-provider') {
+      const { payload = [], providerBehavior, providerPolicy } = item
+
+      let rules: string[]
+      if (providerBehavior === 'classical') {
+        rules = payload.map((s) => `${s},${providerPolicy}`)
+      } else if (providerBehavior === 'domain') {
+        rules = payload.map((s) => `DOMAIN,${s},${providerPolicy}`)
+      } else {
+        rules = payload.map((s) => {
+          if (s.includes(':')) {
+            return `IP-CIDR6,${s},${providerPolicy}`
+          } else {
+            return `IP-CIDR,${s},${providerPolicy}`
+          }
+        })
+      }
+
+      updateConfig({ rules })
+      continue
+    }
   }
 
   /**
@@ -87,17 +114,27 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
     config['proxy-groups'] = []
   }
 
-  for (const s of subscribeArr) {
-    const { item } = s
-    const { url } = item
-    let servers
+  // batch update subscribe
+  await pmap(
+    subscribeArr,
+    (item) =>
+      rootActions.librarySubscribe.update({
+        url: item.url,
+        silent: true,
+        forceUpdate,
+      }),
+    5
+  )
 
-    // update subscribe
-    await rootActions.librarySubscribe.update({ url, silent: true, forceUpdate })
-    // eslint-disable-next-line prefer-const
-    servers = rootState.librarySubscribe.detail[url]
+  for (const item of subscribeArr) {
+    const { url } = item
+    let servers = rootState.librarySubscribe.detail[url] || []
     config.proxies = config.proxies.concat(servers)
   }
+
+  /**
+   * 自动处理 proxy group
+   */
 
   const proxyGroups = config['proxy-groups']
   const allProxies = config.proxies.map((row) => row.name)
@@ -130,7 +167,7 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
     config.rules?.push('MATCH,DIRECT')
   }
 
-  const configYaml = Yaml.dump(config)
+  const configYaml = YAML.dump(config)
   const file = getConfigFile(name)
   fse.writeFileSync(file, configYaml)
   console.log(configYaml)
