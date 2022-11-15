@@ -18,7 +18,7 @@ import {
 import { ConfigProvider, Menu, MenuProps } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
 import _ from 'lodash'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   HashRouter,
@@ -29,15 +29,16 @@ import {
   useRoutes,
 } from 'react-router-dom'
 import Commands from './commands'
+import { showCodeModal } from './common/ModalCodeViewer'
+import './ipc'
 import './page/common'
 import CurrentConfig from './page/current-config'
+import { setNavigateSingleton } from './page/global-model'
 import Home from './page/home'
+import { useAddRuleModalFromGlobal } from './page/home/useAddRuleModal'
 import LibraryRuleList from './page/library-rule-list'
 import LibrarySubscribe from './page/library-subscribe'
 import Preference from './page/preference'
-import { useAddRuleModalFromGlobal } from './page/home/useAddRuleModal'
-import { setNavigateSingleton } from './page/global-model'
-import { showCodeModal } from './common/ModalCodeViewer'
 
 const routes = [
   {

@@ -59,7 +59,7 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
   await pmap(
     remotes,
     async (item) => {
-      await rootActions.libraryRuleList.updateRemote(item, forceUpdate)
+      await rootActions.libraryRuleList.updateRemote({ item, forceUpdate })
     },
     5
   )

@@ -9,6 +9,8 @@ export async function updateRemoteConfig(item: RemoteRuleItem, forceUpdate = fal
   // save
   item.content = content
   if (byRequest) item.updatedAt = Date.now()
+
+  return { byRequest }
 }
 
 export async function updateRemoteRuleProvider(
@@ -26,4 +28,6 @@ export async function updateRemoteRuleProvider(
   // save
   item.payload = payload
   if (byRequest) item.updatedAt = Date.now()
+
+  return { byRequest }
 }

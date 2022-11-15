@@ -24,6 +24,15 @@
   }
 }
 
+.list-component {
+  border-radius: 5px;
+
+  :global(.ant-list-items) {
+    max-height: calc(100vh - 138px);
+    overflow-y: scroll;
+  }
+}
+
 .modal {
   :global {
     .label {

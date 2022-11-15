@@ -102,7 +102,7 @@ export default function LibraryRuleList() {
 
   const updateRmote = useMemoizedFn(async (index: number) => {
     const item = state.list[index]
-    return actions.updateRemote(item, true)
+    return actions.updateRemote({ item, forceUpdate: true })
   })
 
   const viewRmoteContents = useMemoizedFn(async (index: number) => {
@@ -111,10 +111,10 @@ export default function LibraryRuleList() {
 
     let content: string
     if (item.type === 'remote') {
-      if (!item.content) await actions.updateRemote(item)
+      if (!item.content) await actions.updateRemote({ item })
       content = item.content!
     } else {
-      if (!item.payload?.length) await actions.updateRemote(item)
+      if (!item.payload?.length) await actions.updateRemote({ item })
       content = YAML.dump({ payload: item.payload }) as string
     }
 
@@ -149,12 +149,14 @@ export default function LibraryRuleList() {
             </span>
           </div>
         }
+        className={styles.listComponent}
         bordered
         dataSource={list}
+        rowKey='id'
         renderItem={(item, index) => {
           const { type, name, id } = item
           return (
-            <List.Item key={id} style={{ display: 'flex' }}>
+            <List.Item style={{ display: 'flex' }}>
               <div className='list-item'>
                 <div className='name' style={{ display: 'flex', height: 24, alignItems: 'center' }}>
                   <span>名称: {name}</span>
@@ -278,20 +280,19 @@ function ModalAddOrEdit() {
   debugModal('render() type = %s', type)
 
   useEffect(() => {
+    if (!visible) return
+
     const val = { ...(editItem || getDefaultEditItem()) } // get rid of proxy
     debugModal('ModalAddOrEdit: updating form fields', val)
     form.setFieldsValue(val)
-  }, [editItem, visible])
 
-  useUpdateEffect(() => {
-    if (!visible) return
     setTimeout(() => {
       const editor = monacoEditorRef.current
       if (!editor) return
       editor.focus()
       editor.setPosition({ lineNumber: 1, column: 1 })
     }, 100)
-  }, [visible])
+  }, [editItem, visible])
 
   const clean = () => {
     form.resetFields()

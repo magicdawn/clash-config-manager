@@ -5,6 +5,7 @@ import storage from '$ui/storage'
 import { updateRemoteConfig, updateRemoteRuleProvider } from '$ui/util/remote-rules'
 import { message } from 'antd'
 import _ from 'lodash'
+import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './model.auto-update'
 
 const RULE_LIST_STORAGE_KEY = 'rule_list'
 
@@ -30,7 +31,10 @@ export const actions = { check, add, del, edit, updateRemote }
  * listeners
  */
 
-onInit(init)
+onInit(() => {
+  init()
+  scheduleAutoUpdate()
+})
 onReload(load)
 
 /**
@@ -73,26 +77,41 @@ function check({
 
 function add({ item }: { item: RuleItem }) {
   state.list.push(item)
+  restartAutoUpdate(item)
 }
 
 function edit({ item, editItemIndex }: { item: RuleItem; editItemIndex: number }) {
   state.list[editItemIndex] = item
+  restartAutoUpdate(item)
 }
 
 function del(index: number) {
+  stopAutoUpdate(state.list[index])
   state.list.splice(index, 1)
 }
 
-async function updateRemote(item: RuleItem, forceUpdate = false) {
+export async function updateRemote({
+  item,
+  forceUpdate = false,
+  silent = false,
+}: {
+  item: RuleItem
+  forceUpdate?: boolean
+  silent?: boolean
+}) {
   const type = item.type
   if (type === 'local') return
 
+  let byRequest = false
+
   if (type === 'remote') {
-    await updateRemoteConfig(item, forceUpdate) // why config, because this url can return a partial clash config
+    ;({ byRequest } = await updateRemoteConfig(item, forceUpdate)) // why config, because this url can return a partial clash config
   }
   if (type === 'remote-rule-provider') {
-    await updateRemoteRuleProvider(item, forceUpdate)
+    ;({ byRequest } = await updateRemoteRuleProvider(item, forceUpdate))
   }
 
-  message.success(`更新 ${item.name} 成功`)
+  if (byRequest && !silent) {
+    message.success(`更新 ${item.name} 成功`)
+  }
 }

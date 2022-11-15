@@ -78,7 +78,5 @@ export async function runCommand(key: CMD) {
   await cmd.command()
 }
 
-import { ipcRenderer } from 'electron'
-ipcRenderer.on('generate-force-update', () => {
-  runCommand('generate-force-update')
-})
+export const runGenerate = () => commandGen({ forceUpdate: false })
+export const runGenerateForceUpdate = () => commandGen({ forceUpdate: true })

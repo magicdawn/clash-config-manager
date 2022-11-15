@@ -3,7 +3,7 @@ import envPaths from 'env-paths'
 import fse from 'fs-extra'
 import moment from 'moment'
 import path from 'path'
-import { readUrl } from 'dl-vampire'
+import request from 'umi-request'
 
 const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 
@@ -24,7 +24,8 @@ export async function readUrlWithCache(url: string, forceUpdate = false) {
   if (shouldReuse) {
     text = fse.readFileSync(file, 'utf8')
   } else {
-    text = await readUrl({ url, file, encoding: 'utf8' })
+    text = await request.get(url, { responseType: 'text' })
+    await fse.outputFile(file, text, 'utf8')
   }
 
   return { text, byRequest: !shouldReuse }
