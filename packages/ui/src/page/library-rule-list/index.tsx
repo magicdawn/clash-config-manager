@@ -1,4 +1,4 @@
-import { runCommand } from '$ui/commands/run'
+import { runGenerate } from '$ui/commands/run'
 import { LocalRuleItem, RuleItem } from '$ui/common/define'
 import { showCode } from '$ui/common/ModalCodeViewer'
 import { YAML } from '$ui/libs'
@@ -6,7 +6,7 @@ import { firstLine, limitLines } from '$ui/util/text-util'
 import { FileAddOutlined } from '@ant-design/icons'
 import * as remote from '@electron/remote'
 import { LinkTwo, SdCard } from '@icon-park/react'
-import { useMemoizedFn, useUpdateEffect } from 'ahooks'
+import { useMemoizedFn } from 'ahooks'
 import {
   AutoComplete,
   Button,
@@ -322,7 +322,8 @@ function ModalAddOrEdit() {
     await new Promise((r) => {
       setTimeout(r, 10)
     })
-    runCommand('generate')
+
+    runGenerate()
   })
 
   const onInputPressEnter = useMemoizedFn((e) => {

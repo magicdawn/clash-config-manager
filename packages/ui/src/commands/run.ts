@@ -66,17 +66,5 @@ export const commands = [
   },
 ]
 
-type CMD = 'generate' | 'generate-force-update'
-
-export async function runCommand(key: CMD) {
-  const cmd = commands.find((x) => x.key === key)
-  if (!cmd) {
-    console.error('runCommand %s: command not found')
-    return
-  }
-
-  await cmd.command()
-}
-
 export const runGenerate = () => commandGen({ forceUpdate: false })
 export const runGenerateForceUpdate = () => commandGen({ forceUpdate: true })

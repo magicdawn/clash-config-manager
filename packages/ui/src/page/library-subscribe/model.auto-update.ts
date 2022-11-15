@@ -2,7 +2,7 @@
  * auto update
  */
 
-import { runCommand } from '$ui/commands/run'
+import { runGenerate } from '$ui/commands/run'
 import { Subscribe } from '$ui/common/define'
 import { once } from 'lodash'
 import ms from 'ms'
@@ -46,7 +46,7 @@ export async function restartAutoUpdate(item: Subscribe, runImmediate = false) {
       successMsg: `自动更新订阅: ${name} 更新成功`,
     })
 
-    await runCommand('generate')
+    await runGenerate()
   }
 
   const interval = ms(autoUpdateInterval + 'h')

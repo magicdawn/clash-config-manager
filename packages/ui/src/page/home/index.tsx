@@ -1,4 +1,4 @@
-import { runCommand } from '$ui/commands/run'
+import { runGenerate, runGenerateForceUpdate } from '$ui/commands/run'
 import { Button } from 'antd'
 import { useCallback } from 'react'
 import styles from './index.module.less'
@@ -6,11 +6,11 @@ import { addRuleStore } from './useAddRuleModal'
 
 export default function Home() {
   const generate = useCallback(() => {
-    runCommand('generate')
+    runGenerate()
   }, [])
 
   const generateForceUpdate = useCallback(() => {
-    runCommand('generate-force-update')
+    runGenerateForceUpdate()
   }, [])
 
   const addRule = useCallback(() => {

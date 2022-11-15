@@ -1,4 +1,4 @@
-import { runCommand } from '$ui/commands/run'
+import { runGenerate } from '$ui/commands/run'
 import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/util/gen'
 import { useMemoizedFn } from 'ahooks'
 import { Button, Col, Divider, Input, message, Row } from 'antd'
@@ -13,7 +13,7 @@ export default function ConfigList() {
   const { name } = useSnapshot(state)
 
   const onGenConfigClick = useMemoizedFn(async () => {
-    return runCommand('generate')
+    return runGenerate()
   })
 
   const onOpenConfigClick = useMemoizedFn((editor = 'code') => {

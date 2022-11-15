@@ -1,4 +1,4 @@
-import { runCommand } from '$ui/commands/run'
+import { runGenerate } from '$ui/commands/run'
 import { rootActions, rootState } from '$ui/store'
 import { message } from 'antd'
 import { ipcRenderer } from 'electron'
@@ -87,7 +87,7 @@ export function useAddRuleModalFromGlobal() {
       message.success(`已添加规则 ${rule} 至 ${ruleItem.name}`)
 
       // 生成
-      runCommand('generate')
+      runGenerate()
     },
   })
 }
