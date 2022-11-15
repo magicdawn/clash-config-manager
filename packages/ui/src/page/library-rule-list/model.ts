@@ -83,15 +83,15 @@ function del(index: number) {
   state.list.splice(index, 1)
 }
 
-async function updateRemote(item: RuleItem) {
+async function updateRemote(item: RuleItem, forceUpdate = false) {
   const type = item.type
   if (type === 'local') return
 
   if (type === 'remote') {
-    await updateRemoteConfig(item) // why config, because this url can return a partial clash config
+    await updateRemoteConfig(item, forceUpdate) // why config, because this url can return a partial clash config
   }
   if (type === 'remote-rule-provider') {
-    await updateRemoteRuleProvider(item)
+    await updateRemoteRuleProvider(item, forceUpdate)
   }
 
   message.success(`更新 ${item.name} 成功`)

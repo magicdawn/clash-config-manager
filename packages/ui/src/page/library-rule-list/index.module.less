@@ -32,18 +32,25 @@
       padding-right: 10px;
     }
 
-    .input-row {
-      margin-bottom: 10px;
-    }
-
     .footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    .ant-form > .ant-row {
-      margin-bottom: 10px;
+    // .ant-form > .ant-row {
+    //   margin-bottom: 10px;
+    // }
+
+    .ant-form {
+      .ant-form-item {
+        // margin-bottom: 10px;
+
+        &.url,
+        &.auto-update {
+          margin-bottom: 0px;
+        }
+      }
     }
   }
 }

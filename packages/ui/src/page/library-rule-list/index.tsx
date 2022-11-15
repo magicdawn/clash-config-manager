@@ -10,8 +10,10 @@ import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import {
   AutoComplete,
   Button,
+  Checkbox,
   Form,
   Input,
+  InputNumber,
   List,
   message,
   Modal,
@@ -89,7 +91,7 @@ export default function LibraryRuleList() {
     })
   })
 
-  const del = useMemoizedFn((item: RuleItem, index: number) => {
+  const del = useMemoizedFn((index: number) => {
     Modal.confirm({
       title: '确认删除?',
       onOk() {
@@ -100,27 +102,22 @@ export default function LibraryRuleList() {
 
   const updateRmote = useMemoizedFn(async (index: number) => {
     const item = state.list[index]
-    return actions.updateRemote(item)
+    return actions.updateRemote(item, true)
   })
 
   const viewRmoteContents = useMemoizedFn(async (index: number) => {
     const item = state.list[index]
     if (item.type === 'local') return
 
-    // update
-    const update = () => actions.updateRemote(item)
-
     let content: string
     if (item.type === 'remote') {
-      if (!item.content) await update()
+      if (!item.content) await actions.updateRemote(item)
       content = item.content!
     } else {
-      if (!item.payload?.length) await update()
+      if (!item.payload?.length) await actions.updateRemote(item)
       content = YAML.dump({ payload: item.payload }) as string
     }
 
-    // TODO: use ModalEditor
-    console.log(content)
     showCode(content)
   })
 
@@ -188,6 +185,8 @@ export default function LibraryRuleList() {
                       title={
                         <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
                           {item.url}
+                          {/* debug use */}
+                          {/* <p style={{ maxWidth: 500 }}>{JSON.stringify(item)}</p> */}
                         </div>
                       }
                     >
@@ -220,7 +219,7 @@ export default function LibraryRuleList() {
                   <Button
                     type='primary'
                     danger
-                    onClick={() => del(item, index)}
+                    onClick={() => del(index)}
                     onKeyDown={disableEnterAsClick}
                   >
                     删除
@@ -338,17 +337,35 @@ function ModalAddOrEdit() {
     {
       const { id, name, type } = values
       if (type === 'local') {
-        item = { id, name, type, content: values.content }
+        item = {
+          id,
+          name,
+          type,
+
+          content: values.content,
+        }
       }
       if (type === 'remote') {
-        item = { id, name, type, url: values.url }
+        item = {
+          id,
+          name,
+          type,
+
+          url: values.url,
+          autoUpdate: values.autoUpdate,
+          autoUpdateInterval: values.autoUpdateInterval || autoUpdateIntervalDefault,
+        }
       }
       if (type === 'remote-rule-provider') {
         item = {
           id,
           name,
           type,
+
           url: values.url,
+          autoUpdate: values.autoUpdate,
+          autoUpdateInterval: values.autoUpdateInterval || autoUpdateIntervalDefault,
+
           providerBehavior: values.providerBehavior,
           providerPolicy: values.providerPolicy || name,
         }
@@ -384,6 +401,8 @@ function ModalAddOrEdit() {
 
     const err = actions.check({ item, editItemIndex })
     if (err) return message.error(err)
+
+    debug('submit item = %o', item)
 
     const mode = typeof editItemIndex === 'number' ? 'edit' : 'add'
     if (mode === 'add') {
@@ -459,6 +478,12 @@ function ModalAddOrEdit() {
     return Boolean(contentField?.indexOf?.('rules:') > -1)
   }, [contentField])
 
+  // min={1} // 1h
+  // max={240} // 240h = 10d
+  const [autoUpdateIntervalMin, autoUpdateIntervalMax] = [1, 240]
+  const autoUpdateIntervalDefault = 24 // 每天更新
+  const autoUpdate: boolean = Form.useWatch('autoUpdate', form)
+
   return (
     <Modal
       className={styles.modal}
@@ -522,6 +547,8 @@ function ModalAddOrEdit() {
         name='basic'
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        initialValues={{ autoUpdateInterval: autoUpdateIntervalDefault }}
+        disabled={readonly}
       >
         {/* required to store 'id' in form data */}
         <Form.Item name='id' hidden>
@@ -589,14 +616,45 @@ function ModalAddOrEdit() {
         )}
 
         {(type === 'remote' || type === 'remote-rule-provider') && (
-          <Form.Item label='URL' name='url' rules={[{ required: true, message: 'url不能为空' }]}>
-            <Input.TextArea
-              className='input-row'
-              onPressEnter={onInputPressEnter}
-              autoSize={{ minRows: 3, maxRows: 10 }}
-              disabled={readonly}
-            />
-          </Form.Item>
+          <>
+            <Form.Item
+              label='URL'
+              name='url'
+              rules={[{ required: true, message: 'url不能为空' }]}
+              className='url'
+            >
+              <Input.TextArea
+                className='input-row'
+                onPressEnter={onInputPressEnter}
+                autoSize={{ minRows: 1, maxRows: 4 }}
+                disabled={readonly}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name='autoUpdate'
+              label=''
+              wrapperCol={{ offset: 3 }}
+              className='auto-update'
+              valuePropName='checked'
+            >
+              <Checkbox style={{ marginLeft: 0 }}>自动更新节点</Checkbox>
+            </Form.Item>
+
+            {autoUpdate && (
+              <Form.Item
+                name='autoUpdateInterval'
+                label='更新间隔'
+                className='auto-update-interval'
+              >
+                <InputNumber
+                  addonAfter={'小时'}
+                  min={autoUpdateIntervalMin}
+                  max={autoUpdateIntervalMax}
+                />
+              </Form.Item>
+            )}
+          </>
         )}
 
         {type === 'remote-rule-provider' && (
