@@ -16,13 +16,18 @@ export async function readUrlWithCache(url: string, forceUpdate = false) {
   // 今天之内的更新不会再下载
   const isRecent = (mtime: Date) =>
     moment(mtime).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')
-  if (!forceUpdate && fse.existsSync(file) && (stat = fse.statSync(file)) && isRecent(stat.mtime)) {
+  if (
+    !forceUpdate &&
+    (await fse.pathExists(file)) &&
+    (stat = await fse.stat(file)) &&
+    isRecent(stat.mtime)
+  ) {
     shouldReuse = true
   }
 
   let text: string
   if (shouldReuse) {
-    text = fse.readFileSync(file, 'utf8')
+    text = await fse.readFile(file, 'utf8')
   } else {
     text = await request.get(url, { responseType: 'text' })
     await fse.outputFile(file, text, 'utf8')

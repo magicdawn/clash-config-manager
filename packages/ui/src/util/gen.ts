@@ -169,7 +169,8 @@ export default async function genConfig(options: { forceUpdate?: boolean } = {})
 
   const configYaml = YAML.dump(config)
   const file = getConfigFile(name)
-  fse.writeFileSync(file, configYaml)
+  await fse.outputFile(file, configYaml)
+
   console.log(configYaml)
   console.log('[done]: %s writed', file)
   return {

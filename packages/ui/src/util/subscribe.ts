@@ -29,7 +29,12 @@ async function urlToSubscribe({ url, forceUpdate: force }: { url: string; forceU
   // 今天之内的更新不会再下载
   const isRecent = (mtime: Date) =>
     moment(mtime).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')
-  if (!force && fse.existsSync(file) && (stat = fse.statSync(file)) && isRecent(stat.mtime)) {
+  if (
+    !force &&
+    (await fse.pathExists(file)) &&
+    (stat = await fse.stat(file)) &&
+    isRecent(stat.mtime)
+  ) {
     shouldReuse = true
   }
 
@@ -39,7 +44,7 @@ async function urlToSubscribe({ url, forceUpdate: force }: { url: string; forceU
   let valuableHeaders: Record<string, string> | undefined
   let status: string | undefined
   if (shouldReuse) {
-    text = fse.readFileSync(file, 'utf8')
+    text = await fse.readFile(file, 'utf8')
   } else {
     ;({ text, valuableHeaders } = await readUrl({ url, file }))
     if (valuableHeaders?.['subscription-userinfo']) {
@@ -75,14 +80,8 @@ const readUrl = async ({ url, file }: { url: string; file: string }) => {
   })
 
   const text = res.data as string
-  await fse.outputFile(file, text).then(
-    () => {
-      console.log('File %s writed', file)
-    },
-    (e) => {
-      console.error(e.stack || e)
-    }
-  )
+  await fse.outputFile(file, text)
+  console.log('File %s writed', file)
 
   const headers = res.response.headers
   const valuableHeaderFields = ['profile-update-interval', 'subscription-userinfo']
