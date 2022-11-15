@@ -22,5 +22,8 @@ jobs:
       # install deps
       - run: pnpm install --frozen-lockfile
 
+      # build only
+      - run: pnpm build
+
       # build .app file
-      - run: pnpm dist:pack
+      # - run: pnpm dist:pack
