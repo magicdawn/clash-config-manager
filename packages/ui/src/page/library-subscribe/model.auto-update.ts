@@ -6,9 +6,16 @@ import { runCommand } from '$ui/commands/run'
 import { Subscribe } from '$ui/common/define'
 import { once } from 'lodash'
 import ms from 'ms'
+import { currentConfigUsingAndEnabled } from '../current-config/model'
 import { state, update } from './model'
 
 const timerRegistry: Record<string, NodeJS.Timer | undefined> = {}
+const cleanupTimer = (timerKey: string) => {
+  if (timerRegistry[timerKey]) {
+    clearInterval(timerRegistry[timerKey])
+    delete timerRegistry[timerKey]
+  }
+}
 
 export const scheduleAutoUpdateOnce = once(scheduleAutoUpdate)
 
@@ -18,28 +25,27 @@ export async function scheduleAutoUpdate() {
   }
 }
 
-export async function restartAutoUpdate(sub: Subscribe, runImmediate = false) {
-  const { id, name, url, autoUpdate, autoUpdateInterval, updatedAt: lastUpdated } = sub
+export function stopAutoUpdate(id: string) {
+  cleanupTimer(id)
+}
 
+export async function restartAutoUpdate(item: Subscribe, runImmediate = false) {
+  const { id, name, url, autoUpdate, autoUpdateInterval, updatedAt: lastUpdated } = item
   const timerKey = id
-  const cleanupTimer = () => {
-    if (timerRegistry[timerKey]) {
-      clearInterval(timerRegistry[timerKey])
-      timerRegistry[timerKey] = undefined
-    }
-  }
-
   if (!autoUpdate || !autoUpdateInterval) {
-    cleanupTimer()
+    cleanupTimer(timerKey)
     return
   }
 
   const run = async () => {
+    if (!currentConfigUsingAndEnabled(item)) return
+
     await update({
       url,
       forceUpdate: true,
       successMsg: `自动更新订阅: ${name} 更新成功`,
     })
+
     await runCommand('generate')
   }
 
@@ -53,7 +59,7 @@ export async function restartAutoUpdate(sub: Subscribe, runImmediate = false) {
     }
   }
 
-  cleanupTimer()
+  cleanupTimer(timerKey)
   timerRegistry[timerKey] = setInterval(async () => {
     await run()
   }, interval)

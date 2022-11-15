@@ -5,11 +5,9 @@ import { onInit, onReload } from '$ui/page/global-model'
 import storage from '$ui/storage'
 import { subscribeToClash } from '$ui/util/subscribe'
 import { message } from 'antd'
-import { runCommand } from '$ui/commands/run'
-import { find, once, pick } from 'lodash'
-import ms from 'ms'
+import { find, pick } from 'lodash'
 import { ref } from 'valtio'
-import { restartAutoUpdate, scheduleAutoUpdateOnce } from './model.auto-update'
+import { restartAutoUpdate, scheduleAutoUpdateOnce, stopAutoUpdate } from './model.auto-update'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
@@ -101,6 +99,7 @@ function edit(payload: Subscribe & { editItemIndex: number }) {
 }
 
 function del(index: number) {
+  stopAutoUpdate(state.list[index].id)
   state.list.splice(index, 1)
 }
 

@@ -2,7 +2,10 @@ import { proxy } from 'valtio'
 import { devtools } from 'valtio/utils'
 
 import { actions as globalActions } from './page/global-model'
-import { state as currentConfig } from './page/current-config/model'
+import {
+  state as currentConfig,
+  actions as currentConfigActions,
+} from './page/current-config/model'
 import {
   state as libraryRuleList,
   actions as libraryRuleListActions,
@@ -24,6 +27,7 @@ export const rootActions = {
   global: globalActions,
   libraryRuleList: libraryRuleListActions,
   librarySubscribe: librarySubscribeActions,
+  currentConfig: currentConfigActions,
 }
 
 // init on start

@@ -6,13 +6,14 @@ import { runGenerate } from '$ui/commands/run'
 import { RuleItem } from '$ui/common/define'
 import { debounce, DebouncedFunc, once } from 'lodash'
 import ms from 'ms'
+import { currentConfigUsingAndEnabled } from '../current-config/model'
 import { state, updateRemote } from './model'
 
 const timerRegistry: Record<string, NodeJS.Timer | undefined> = {}
 const cleanupTimer = (timerKey: string) => {
   if (timerRegistry[timerKey]) {
     clearInterval(timerRegistry[timerKey])
-    timerRegistry[timerKey] = undefined
+    delete timerRegistry[timerKey]
   }
 }
 
@@ -39,8 +40,8 @@ export async function restartAutoUpdate(item: RuleItem, runImmediate = false) {
   if (item.type === 'local') return
 
   const { id, autoUpdate, autoUpdateInterval, updatedAt: lastUpdated } = item
-
   const timerKey = id
+
   if (!autoUpdate || !autoUpdateInterval) {
     cleanupTimer(timerKey)
     return
@@ -52,14 +53,18 @@ export async function restartAutoUpdate(item: RuleItem, runImmediate = false) {
   // 使用场景: 定时12小时更新, 退出了, 第二天打开自动更新, 但当天重启不会更新
   if (runImmediate) {
     if (!lastUpdated || Date.now() >= lastUpdated + interval) {
-      await updateRemote({ item, forceUpdate: true })
-      await runGenerate()
+      if (currentConfigUsingAndEnabled(item)) {
+        await updateRemote({ item, forceUpdate: true })
+        await runGenerate()
+      }
     }
   }
 
   cleanupTimer(timerKey)
   timerRegistry[timerKey] = setInterval(async () => {
-    await updateRemote({ item, forceUpdate: true })
-    runGenerateDebounced()
+    if (currentConfigUsingAndEnabled(item)) {
+      await updateRemote({ item, forceUpdate: true })
+      runGenerateDebounced()
+    }
   }, interval)
 }

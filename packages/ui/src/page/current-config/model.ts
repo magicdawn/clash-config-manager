@@ -1,4 +1,4 @@
-import { ConfigItem } from '$ui/common/define'
+import { ConfigItem, RuleItem, Subscribe } from '$ui/common/define'
 import { valtioState } from '$ui/common/model/valtio-helper'
 import { onInit, onReload } from '$ui/page/global-model'
 import storage from '$ui/storage'
@@ -25,8 +25,16 @@ const { state, load, init } = valtioState<IState>(
     },
   }
 )
-export { state }
+
+const actions = { currentConfigUsingAndEnabled }
+
+export { state, actions }
 
 // listeners
 onInit(init)
 onReload(load)
+
+export function currentConfigUsingAndEnabled(item: Subscribe | RuleItem) {
+  const using = state.list.find((x) => x.id === item.id)
+  return using && !using.disabled
+}
