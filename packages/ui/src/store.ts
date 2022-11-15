@@ -37,4 +37,6 @@ const unsub = devtools(rootState, {
   enabled: process.env.NODE_ENV === 'development',
 })
 
+// fixme
 global.rootActions = rootActions
+global.rootState = rootState

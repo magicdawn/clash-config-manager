@@ -6,21 +6,20 @@ import { truthy } from '$ui/util/ts-filter'
 import { InfoCircleOutlined, QuestionCircleFilled } from '@ant-design/icons'
 import { useMemoizedFn } from 'ahooks'
 import { Switch, Tooltip } from 'antd'
-import { useMemo, useState } from 'react'
+import debugFactory from 'debug'
+import { useEffect, useMemo, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useSnapshot } from 'valtio'
 import styles from './ConfigDND.module.less'
 import { state } from './model'
 
-function modifyResultList(action: (list: ConfigItem[]) => void) {
-  action(state.list)
-}
+const dndDebug = debugFactory('app:page:current-config:ConfigDND')
 
 export function ConfigDND() {
   // subscribe
   const rootStateSnap = useSnapshot(rootState)
-  const subscribeList = rootStateSnap.librarySubscribe.list
 
+  const subscribeList = rootStateSnap.librarySubscribe.list
   const subscribeSourceList = useMemo(() => {
     return subscribeList.map((item) => {
       return {
@@ -45,7 +44,7 @@ export function ConfigDND() {
   }, [ruleList])
 
   // 只放 {type, id}
-  const resultList = rootStateSnap.currentConfig.list
+  const { list: resultList } = useSnapshot(state)
 
   // 具体 item
   const resultItemList = useMemo(() => {
@@ -60,6 +59,14 @@ export function ConfigDND() {
       })
       .filter(truthy)
   }, [resultList, ruleSourceList])
+
+  // 从 list 删除已经不存在的 id
+  useEffect(() => {
+    if (resultList.length === resultItemList.length) return
+    state.list = state.list.filter((item) => {
+      return resultItemList.find((x) => x.id === item.id)
+    })
+  }, [resultList, resultItemList])
 
   // id set
   const resultIdSet = useMemo(() => {
@@ -83,17 +90,17 @@ export function ConfigDND() {
     const { source, destination } = result
     if (!destination || !destination.droppableId) return
 
-    // from result-list to trash
+    // left -> trash
     if (source.droppableId === 'result-list' && destination.droppableId === 'trash') {
       const delIndex = source.index
-      modifyResultList((list) => {
-        list.splice(delIndex, 1) // remove
-      })
+      state.list.splice(delIndex, 1) // remove
       return
     }
 
     let addItem: ConfigItem | undefined
     const modifyActions: Array<(list: ConfigItem[]) => void> = []
+
+    // right -> left
     if (source.droppableId === 'rule-source-list') {
       const id = ruleSourceList[source.index].id
       addItem = { type: 'rule', id }
@@ -103,6 +110,7 @@ export function ConfigDND() {
       addItem = { type: 'subscribe', id }
     }
 
+    // left 自己排序
     if (source.droppableId === 'result-list') {
       addItem = resultList[source.index]
       modifyActions.push((l) => l.splice(source.index, 1)) // remove source
@@ -114,12 +122,10 @@ export function ConfigDND() {
     }
 
     const newindex = destination.index
-    modifyResultList((list) => {
-      for (const action of modifyActions) {
-        action(list)
-      }
-      list.splice(newindex, 0, addItem!)
-    })
+    for (const action of modifyActions) {
+      action(state.list)
+    }
+    state.list.splice(newindex, 0, addItem!)
   })
 
   return (
