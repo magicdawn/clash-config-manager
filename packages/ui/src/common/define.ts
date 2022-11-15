@@ -15,13 +15,47 @@ export interface Subscribe {
   urlVisible?: boolean
 }
 
-export interface RuleItem {
+export type LocalRuleItem = {
+  type: 'local'
   id: string
-  type: string
   name: string
-  url?: string
+
+  content: string
+}
+
+export type RemoteRuleItem = {
+  type: 'remote'
+  id: string
+  name: string
+
+  url: string
+  autoUpdate?: boolean
+  autoUpdateInterval?: number // 小时
+  updatedAt?: number // ts
+
+  // 内容
   content?: string
 }
+
+export interface RemoteRuleProviderRuleItem {
+  type: 'remote-rule-provider'
+  id: string
+  name: string
+
+  url: string
+  autoUpdate?: boolean
+  autoUpdateInterval?: number // 小时
+  updatedAt?: number // ts
+
+  // type=remote-provider
+  providerBehavior: 'domain' | 'ipcidr' | 'classical'
+  providerPolicy: 'DIRECT' | 'REJECT' | 'Proxy' | string
+
+  // 内容
+  payload?: string[]
+}
+
+export type RuleItem = LocalRuleItem | RemoteRuleItem | RemoteRuleProviderRuleItem
 
 export interface ConfigItem {
   type: 'subscribe' | 'rule'

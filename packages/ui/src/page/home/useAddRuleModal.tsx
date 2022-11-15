@@ -68,6 +68,10 @@ export function useAddRuleModalFromGlobal() {
         return message.warn(`找不到待添加规则`)
       }
 
+      if (ruleItem.type !== 'local') {
+        return
+      }
+
       const content = ruleItem.content || ''
       if (content.split('\n').find((x: string) => x.includes(rule) && !x.trim().startsWith('#'))) {
         return message.error(`rule ${rule} 已存在`)

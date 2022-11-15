@@ -289,7 +289,7 @@ importers:
       builtin-modules: 3.3.0
       globby: 11.1.0
       gulp: 4.0.2
-      husky: 8.0.1
+      husky: 8.0.2
       less: 4.1.3
       lint-staged: 13.0.3
       prettier: 2.7.1
@@ -5346,6 +5346,12 @@ packages:
 
   /husky/8.0.1:
     resolution: {integrity: sha512-xs7/chUH/CKdOCs7Zy0Aev9e/dKOMZf3K1Az1nar3tzlv0jfqnYtu235bstsWTmXOR0EfINrPa97yy4Lz6RiKw==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
+  /husky/8.0.2:
+    resolution: {integrity: sha512-Tkv80jtvbnkK3mYWxPZePGFpQ/tT3HNSs/sasF9P2YfkMezDl3ON37YN6jUUI4eTg5LcyVynlb6r4eyvOmspvg==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true

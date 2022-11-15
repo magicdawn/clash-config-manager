@@ -1,18 +1,30 @@
 import { runCommand } from '$ui/commands/run'
-import { RuleItem } from '$ui/common/define'
-import useImmerState from '$ui/util/hooks/useImmerState'
+import { LocalRuleItem, RuleItem } from '$ui/common/define'
+import { showCode } from '$ui/common/ModalCodeViewer'
+import { YAML } from '$ui/libs'
 import { firstLine, limitLines } from '$ui/util/text-util'
 import { FileAddOutlined } from '@ant-design/icons'
 import * as remote from '@electron/remote'
 import { LinkTwo, SdCard } from '@icon-park/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { Button, Form, Input, List, message, Modal, Select, Space, Tooltip } from 'antd'
+import {
+  AutoComplete,
+  Button,
+  Form,
+  Input,
+  List,
+  message,
+  Modal,
+  Select,
+  Space,
+  Tooltip,
+} from 'antd'
 import debugFactory from 'debug'
 import execa from 'execa'
 import fse from 'fs-extra'
 import Yaml from 'js-yaml'
 import path from 'path'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { KeyboardEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { proxy, useSnapshot } from 'valtio'
 import RuleAddModal from './AddRuleModal'
 import ConfigEditor, { EditorRefInner } from './ConfigEditor'
@@ -22,6 +34,8 @@ import { actions, state } from './model'
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
 const TEMP_EDITING_FILE = path.join(remote.app.getPath('userData'), 'temp', '临时文件-关闭生效.yml')
+
+const newUUID = () => crypto.randomUUID()
 
 const editModalData = proxy({
   editItem: undefined as RuleItem | null | undefined,
@@ -38,7 +52,7 @@ export default function LibraryRuleList() {
 
   const add = useMemoizedFn(() => {
     updateEditModalData({
-      editItem: null,
+      editItem: getDefaultEditItem(),
       editItemIndex: null,
       readonly: false,
       showModal: true,
@@ -57,7 +71,7 @@ export default function LibraryRuleList() {
     })
   })
 
-  const edit = useMemoizedFn((item, index) => {
+  const edit = useMemoizedFn((item: RuleItem, index: number) => {
     updateEditModalData({
       editItem: item,
       editItemIndex: index,
@@ -66,7 +80,7 @@ export default function LibraryRuleList() {
     })
   })
 
-  const view = useMemoizedFn((item, index) => {
+  const view = useMemoizedFn((item: RuleItem, index: number) => {
     updateEditModalData({
       editItem: item,
       editItemIndex: index,
@@ -75,14 +89,7 @@ export default function LibraryRuleList() {
     })
   })
 
-  const disableEnterAsClick = useCallback((e) => {
-    // disable enter
-    if (e.keyCode === 13) {
-      e.preventDefault()
-    }
-  }, [])
-
-  const del = useMemoizedFn((item, index) => {
+  const del = useMemoizedFn((item: RuleItem, index: number) => {
     Modal.confirm({
       title: '确认删除?',
       onOk() {
@@ -91,9 +98,42 @@ export default function LibraryRuleList() {
     })
   })
 
+  const updateRmote = useMemoizedFn(async (index: number) => {
+    const item = state.list[index]
+    return actions.updateRemote(item)
+  })
+
+  const viewRmoteContents = useMemoizedFn(async (index: number) => {
+    const item = state.list[index]
+    if (item.type === 'local') return
+
+    // update
+    const update = () => actions.updateRemote(item)
+
+    let content: string
+    if (item.type === 'remote') {
+      if (!item.content) await update()
+      content = item.content!
+    } else {
+      if (!item.payload?.length) await update()
+      content = YAML.dump({ payload: item.payload }) as string
+    }
+
+    // TODO: use ModalEditor
+    console.log(content)
+    showCode(content)
+  })
+
+  // disable enter
+  const disableEnterAsClick: KeyboardEventHandler = useCallback((e) => {
+    if (e.key.toLowerCase() === 'enter') {
+      e.preventDefault()
+    }
+  }, [])
+
   return (
     <div className={styles.page}>
-      <ModalAdd />
+      <ModalAddOrEdit />
 
       <List
         size='default'
@@ -115,9 +155,9 @@ export default function LibraryRuleList() {
         bordered
         dataSource={list}
         renderItem={(item, index) => {
-          const { type, name, url, content = '' } = item as RuleItem
+          const { type, name, id } = item
           return (
-            <List.Item style={{ display: 'flex' }}>
+            <List.Item key={id} style={{ display: 'flex' }}>
               <div className='list-item'>
                 <div className='name' style={{ display: 'flex', height: 24, alignItems: 'center' }}>
                   <span>名称: {name}</span>
@@ -135,54 +175,78 @@ export default function LibraryRuleList() {
                     <Tooltip
                       title={
                         <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-                          {limitLines(content, 10)}
+                          {limitLines(item.content, 10)}
                         </div>
                       }
                     >
                       <div className='ellipsis' style={{ color: 'blue' }}>
-                        内容: {firstLine(content)}
+                        内容: {firstLine(item.content)}
                       </div>
                     </Tooltip>
                   ) : (
                     <Tooltip
                       title={
-                        <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{url}</div>
+                        <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
+                          {item.url}
+                        </div>
                       }
                     >
                       <div className='ellipsis' style={{ color: 'blue' }}>
-                        链接: {url}
+                        链接: {item.url}
                       </div>
                     </Tooltip>
                   )}
                 </div>
               </div>
 
-              <Space style={{ display: 'flex', alignItems: 'center' }}>
-                <Button
-                  type='primary'
-                  onClick={(e) => edit(item, index)}
-                  onKeyDown={disableEnterAsClick}
-                >
-                  编辑
-                </Button>
+              <div>
+                <Space style={{ display: 'flex', alignItems: 'center' }}>
+                  <Button
+                    type='primary'
+                    onClick={(e) => edit(item, index)}
+                    onKeyDown={disableEnterAsClick}
+                  >
+                    编辑
+                  </Button>
 
-                <Button
-                  type='default'
-                  onClick={(e) => view(item, index)}
-                  onKeyDown={disableEnterAsClick}
-                >
-                  查看
-                </Button>
+                  <Button
+                    type='default'
+                    onClick={(e) => view(item, index)}
+                    onKeyDown={disableEnterAsClick}
+                  >
+                    查看
+                  </Button>
 
-                <Button
-                  type='primary'
-                  danger
-                  onClick={() => del(item, index)}
-                  onKeyDown={disableEnterAsClick}
-                >
-                  删除
-                </Button>
-              </Space>
+                  <Button
+                    type='primary'
+                    danger
+                    onClick={() => del(item, index)}
+                    onKeyDown={disableEnterAsClick}
+                  >
+                    删除
+                  </Button>
+                </Space>
+
+                {(type === 'remote' || type === 'remote-rule-provider') && (
+                  <Space style={{ display: 'flex', alignItems: 'center', marginTop: 5 }}>
+                    <Button
+                      type='primary'
+                      onClick={(e) => updateRmote(index)}
+                      onKeyDown={disableEnterAsClick}
+                    >
+                      更新
+                    </Button>
+
+                    <Button
+                      type='default'
+                      onKeyDown={disableEnterAsClick}
+                      onClick={(e) => viewRmoteContents(index)}
+                    >
+                      查看内容
+                    </Button>
+                  </Space>
+                )}
+              </div>
             </List.Item>
           )
         }}
@@ -193,45 +257,42 @@ export default function LibraryRuleList() {
 
 const getDefaultEditItem = () =>
   ({
-    id: crypto.randomUUID(),
+    id: newUUID(),
     type: 'local',
     name: '',
-    url: '',
     content: '',
-  } as RuleItem)
+  } as LocalRuleItem)
 
-function ModalAdd() {
-  const { editItem, editItemIndex, readonly, showModal } = useSnapshot(editModalData)
+const debugModal = debugFactory('app:page:library-rule-list:ModalAddOrEdit')
 
-  const visible = showModal
+function ModalAddOrEdit() {
+  const { editItem, editItemIndex, readonly, showModal: visible } = useSnapshot(editModalData)
+
+  const monacoEditorRef = useRef<EditorRefInner>(null)
+  const [form] = Form.useForm()
+
   const setVisible = useMemoizedFn((val: boolean) => {
     editModalData.showModal = val
   })
 
-  const [form] = Form.useForm()
-  const [formFields, setFormFields] = useState<any[]>([])
+  const type: string = Form.useWatch('type', form)
+  debugModal('render() type = %s', type)
 
-  const [otherFormData, modifyOtherFormData] = useImmerState<{ id?: string }>({})
-  const [type, setType] = useImmerState({ value: editItem?.type || 'local' })
-
-  const monacoEditorRef = useRef<EditorRefInner | null>(null)
+  useEffect(() => {
+    const val = { ...(editItem || getDefaultEditItem()) } // get rid of proxy
+    debugModal('ModalAddOrEdit: updating form fields', val)
+    form.setFieldsValue(val)
+  }, [editItem, visible])
 
   useUpdateEffect(() => {
-    const val = editItem || getDefaultEditItem()
-
-    form.setFieldsValue(val)
-    modifyOtherFormData({ id: val.id })
-    setType({ value: val.type })
-
-    if (visible) {
-      setTimeout(() => {
-        const editor = monacoEditorRef.current
-        if (!editor) return
-        editor.focus()
-        editor.setPosition({ lineNumber: 1, column: 1 })
-      }, 100)
-    }
-  }, [editItem, visible])
+    if (!visible) return
+    setTimeout(() => {
+      const editor = monacoEditorRef.current
+      if (!editor) return
+      editor.focus()
+      editor.setPosition({ lineNumber: 1, column: 1 })
+    }, 100)
+  }, [visible])
 
   const clean = () => {
     form.resetFields()
@@ -270,33 +331,55 @@ function ModalAdd() {
     form.submit()
   })
 
-  const handleSubmit = useMemoizedFn((item: RuleItem) => {
-    const { content } = item
+  const handleSubmit = useMemoizedFn((values: RuleItem) => {
+    console.log(values)
 
-    // add more data
-    const { id } = otherFormData
-    item.id = id!
-    item.type = type.value
-
-    const typeValue = type.value
-    if (typeValue === 'local') {
-      if (!content) {
-        return message.error('content can not be empty')
+    let item: RuleItem | undefined
+    {
+      const { id, name, type } = values
+      if (type === 'local') {
+        item = { id, name, type, content: values.content }
       }
-
-      let err: Error | undefined
-      try {
-        Yaml.load(content)
-      } catch (e) {
-        err = e
+      if (type === 'remote') {
+        item = { id, name, type, url: values.url }
       }
-      if (err) {
-        return message.error('yaml load fail: ' + err.stack || err.message)
+      if (type === 'remote-rule-provider') {
+        item = {
+          id,
+          name,
+          type,
+          url: values.url,
+          providerBehavior: values.providerBehavior,
+          providerPolicy: values.providerPolicy || name,
+        }
       }
     }
 
-    if (typeValue === 'remote') {
-      item.content = ''
+    if (!item) return
+
+    // validate
+    {
+      const { type } = item
+
+      if (type === 'local') {
+        if (!item.content) {
+          return message.error('content can not be empty')
+        }
+
+        let err: Error | undefined
+        try {
+          Yaml.load(item.content)
+        } catch (e) {
+          err = e
+        }
+        if (err) {
+          return message.error('yaml load fail: ' + err.stack || err.message)
+        }
+      }
+
+      if (type === 'remote') {
+        //
+      }
     }
 
     const err = actions.check({ item, editItemIndex })
@@ -320,14 +403,13 @@ function ModalAdd() {
     console.log('Failed:', errorInfo)
   }
 
-  const [ruleAddVisible, setRuleAddVisible] = useState(false)
+  const [addRuleModalVisible, setAddRuleModalVisible] = useState(false)
 
   const handleAddRuleChrome = useCallback(() => {
-    setRuleAddVisible(true)
+    setAddRuleModalVisible(true)
   }, [])
 
   const onAddRule = useMemoizedFn((rule) => {
-    // debugger
     let content = form.getFieldValue('content') || ''
 
     if (content.split('\n').find((x: string) => x.includes(rule) && !x.trim().startsWith('#'))) {
@@ -391,12 +473,12 @@ function ModalAdd() {
       footer={
         !readonly && (
           <div className='footer'>
-            {type.value === 'local' && (
+            {type === 'local' && (
               <>
-                {ruleAddVisible && (
+                {addRuleModalVisible && (
                   <RuleAddModal
-                    visible={ruleAddVisible}
-                    setVisible={setRuleAddVisible}
+                    visible={addRuleModalVisible}
+                    setVisible={setAddRuleModalVisible}
                     onOk={onAddRule}
                   />
                 )}
@@ -440,20 +522,19 @@ function ModalAdd() {
         name='basic'
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        fields={formFields}
-        onFieldsChange={(changedFields, allFields) => {
-          setFormFields(allFields)
-        }}
       >
-        <Form.Item label='类型' name='type' rules={[{ required: true, message: '类型不能为空' }]}>
-          <Select
-            style={{ width: '200px' }}
-            disabled={readonly}
-            value={type.value}
-            onChange={(value) => setType({ value })}
-          >
+        {/* required to store 'id' in form data */}
+        <Form.Item name='id' hidden>
+          <Input />
+        </Form.Item>
+
+        {/* value={type}
+            onChange={(value) => setType({ value })} */}
+        <Form.Item name='type' label='类型' rules={[{ required: true, message: '类型不能为空' }]}>
+          <Select style={{ width: '200px' }} disabled={readonly}>
             <Option value='local'>本地存储</Option>
-            <Option value='remote'>远程规则列表</Option>
+            <Option value='remote'>远程 config</Option>
+            <Option value='remote-rule-provider'>远程 rule-provider</Option>
           </Select>
         </Form.Item>
 
@@ -466,15 +547,14 @@ function ModalAdd() {
           />
         </Form.Item>
 
-        {type.value === 'local' ? (
+        {type === 'local' && (
           <Form.Item
             label='content'
             name='content'
             rules={[{ required: true, message: '内容不能为空' }]}
           >
             <ConfigEditor
-              id={otherFormData.id}
-              visible={visible}
+              open={visible}
               editorRef={monacoEditorRef}
               readonly={readonly}
               header={
@@ -506,7 +586,9 @@ function ModalAdd() {
               }}
             />
           </Form.Item>
-        ) : (
+        )}
+
+        {(type === 'remote' || type === 'remote-rule-provider') && (
           <Form.Item label='URL' name='url' rules={[{ required: true, message: 'url不能为空' }]}>
             <Input.TextArea
               className='input-row'
@@ -515,6 +597,53 @@ function ModalAdd() {
               disabled={readonly}
             />
           </Form.Item>
+        )}
+
+        {type === 'remote-rule-provider' && (
+          <>
+            <Form.Item
+              label='Behavior'
+              name='providerBehavior'
+              rules={[{ required: true, message: '需要选择 rule provider behavior' }]}
+            >
+              <Select
+                style={{ width: '200px' }}
+                disabled={readonly}
+                options={[
+                  {
+                    label: 'domain',
+                    value: 'domain',
+                  },
+                  {
+                    label: 'ipcidr',
+                    value: 'ipcidr',
+                  },
+                  {
+                    label: 'classical',
+                    value: 'classical',
+                  },
+                ]}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label='Policy'
+              name='providerPolicy'
+              rules={[{ required: false, message: '需要指定 rule provider policy' }]}
+            >
+              <AutoComplete
+                style={{ width: '200px' }}
+                disabled={readonly}
+                placeholder='默认使用名称作为 policy'
+              >
+                {['DIRECT', 'REJECT', 'Proxy'].map((t) => (
+                  <Option key={t} value={t}>
+                    {t}
+                  </Option>
+                ))}
+              </AutoComplete>
+            </Form.Item>
+          </>
         )}
       </Form>
     </Modal>

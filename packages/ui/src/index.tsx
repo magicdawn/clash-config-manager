@@ -37,6 +37,7 @@ import LibrarySubscribe from './page/library-subscribe'
 import Preference from './page/preference'
 import { useAddRuleModalFromGlobal } from './page/home/useAddRuleModal'
 import { setNavigateSingleton } from './page/global-model'
+import { showCodeModal } from './common/ModalCodeViewer'
 
 const routes = [
   {
@@ -105,7 +106,7 @@ function RouterInner() {
   const menuKey = useMemo(() => [getKey(pathname)], [pathname])
 
   // add rule
-  const { modal } = useAddRuleModalFromGlobal()
+  const { modal: addRuleModal } = useAddRuleModalFromGlobal()
 
   // navigate
   const nav = useNavigate()
@@ -118,7 +119,8 @@ function RouterInner() {
     <>
       <Menu selectedKeys={menuKey} mode='horizontal' items={menuItems} />
       <Commands />
-      {modal}
+      {addRuleModal}
+      {showCodeModal}
       <div>{matchedEl}</div>
     </>
   )

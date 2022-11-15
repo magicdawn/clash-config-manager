@@ -9,18 +9,17 @@ import style from './ConfigEditor.module.less'
 export type EditorRefInner = monaco.editor.IStandaloneCodeEditor
 
 interface IProps {
-  id?: string
-  value?: string
-  onChange?: (val: string) => void
   readonly: boolean
+  open: boolean
+  value?: string // value is required, but antd <Form.Item> can auto bind
+  onChange?: (val: string) => void
   spinProps?: SpinProps
-  header: ReactNode
-  visible: boolean
+  header?: ReactNode
   editorRef?: MutableRefObject<EditorRefInner | null>
 }
 
 export default function ConfigEditor(props: IProps) {
-  const { value, onChange, readonly, spinProps, header, visible, editorRef } = props
+  const { value, onChange, readonly, spinProps, header, open, editorRef } = props
 
   const ref = useRef<EditorRefInner | null>(null)
 
@@ -80,7 +79,7 @@ export default function ConfigEditor(props: IProps) {
   }, [readonly, ref])
 
   useUpdateEffect(() => {
-    if (visible) {
+    if (open) {
       ref.current?.setSelection({
         endColumn: 0,
         endLineNumber: 0,
@@ -88,11 +87,11 @@ export default function ConfigEditor(props: IProps) {
         startLineNumber: 0,
       })
     }
-  }, [visible])
+  }, [open])
 
   return (
     <>
-      <Spin {...spinProps}>
+      <Spin spinning={false} {...spinProps}>
         {header}
         <div style={{ width: '100%', height: '50vh', marginTop: 10 }} className={style.editor}>
           <MonacoEditor
