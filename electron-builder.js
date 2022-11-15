@@ -1,6 +1,6 @@
 const { execSync } = require('child_process')
-const pkg = require('./packages/main/package.json')
 const { once } = require('lodash')
+const pkg = require('./packages/main/package.json')
 
 const sh = (cmd) => {
   console.log('[exec]: %s', cmd)
@@ -28,6 +28,7 @@ function build() {
   }
 }
 
+/** @type {import('electron-builder').Configuration} */
 module.exports = {
   appId: pkg.bundleId,
   productName: pkg.productName,
@@ -46,9 +47,11 @@ module.exports = {
 
   extraResources: ['./assets/**'],
 
-  beforeBuild() {
+  async beforeBuild() {
     buildOnce()
   },
+
+  artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
 
   mac: {
     category: 'public.app-category.developer-tools',
