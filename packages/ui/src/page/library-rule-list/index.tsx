@@ -32,7 +32,13 @@ import { proxy, useSnapshot } from 'valtio'
 import RuleAddModal from './AddRuleModal'
 import styles from './index.module.less'
 import { actions, state } from './model'
-import { CodeEditor, CodeThemeSelect, EditorRefInner, showCode } from '$ui/common/code'
+import {
+  CodeEditor,
+  CodeEditorHelp,
+  CodeThemeSelect,
+  EditorRefInner,
+  showCode,
+} from '$ui/common/code'
 
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
@@ -605,7 +611,9 @@ function ModalAddOrEdit() {
                   </Space>
 
                   <Col flex={1}></Col>
-                  <span style={{ marginRight: 5 }}>编辑器主题:</span>
+
+                  <CodeEditorHelp />
+                  <span style={{ margin: '0 5px' }}>编辑器主题:</span>
                   <CodeThemeSelect />
                 </Row>
               }

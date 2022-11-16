@@ -1,14 +1,57 @@
 import { state as preferenceState } from '$ui/page/preference/model'
+import { QuestionCircleFilled } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { Spin } from 'antd'
+import { Spin, Tag, Tooltip } from 'antd'
 import { SpinProps } from 'antd/lib/spin'
 import * as EditorApi from 'monaco-editor/esm/vs/editor/editor.api'
-import { MutableRefObject, ReactNode, useMemo, useRef } from 'react'
+import { CSSProperties, MutableRefObject, ReactNode, useMemo, useRef } from 'react'
 import MonacoEditor, { EditorDidMount, EditorWillMount, monaco } from 'react-monaco-editor'
 import { useSnapshot } from 'valtio'
 import style from './CodeEditor.module.less'
 
 export type EditorRefInner = monaco.editor.IStandaloneCodeEditor
+
+export function CodeEditorHelp({
+  style,
+  className,
+}: {
+  style?: CSSProperties
+  className?: string
+}) {
+  return (
+    <Tooltip
+      placement='left'
+      title={
+        <ul style={{ marginLeft: '-20px', minWidth: 250 }}>
+          <li>
+            <span>
+              <Tag>CMD+-</Tag>缩小 font-size
+            </span>
+            <span>
+              <Tag>CMD+=</Tag>增加 font-size
+            </span>
+            <span>
+              <Tag>CMD+-</Tag>重置 font-size
+            </span>
+          </li>
+          <li>
+            <Tag>CMD+Ctrl+UP</Tag> 当前行上移
+            <Tag>CMD+Ctrl+DOWN</Tag> 当前行下移
+          </li>
+          <li>
+            <Tag>Alt+UP</Tag> 当前行上移
+            <Tag>Alt+DOWN</Tag> 当前行下移
+          </li>
+          <li>
+            <Tag>CMD+/</Tag> 注释/取消注释
+          </li>
+        </ul>
+      }
+    >
+      <QuestionCircleFilled style={{ ...style }} className={className} />
+    </Tooltip>
+  )
+}
 
 interface IProps {
   readonly: boolean
@@ -19,6 +62,21 @@ interface IProps {
   header?: ReactNode
   editorRef?: MutableRefObject<EditorRefInner | null>
 }
+
+const fontSize = 15
+const fontFamily = `
+Hack
+Jetbrains Mono
+Menlo
+Consolas
+Ubuntu Mono
+`
+  .split('\n')
+  .map((x) => x.trim())
+  .filter(Boolean)
+  .map((name) => JSON.stringify(name))
+  .join(', ')
+// console.log(fontFamily)
 
 export function CodeEditor(props: IProps) {
   //  'vs' (default), 'vs-dark', 'hc-black', 'hc-light
@@ -73,15 +131,13 @@ export function CodeEditor(props: IProps) {
       scrollbar: {
         horizontal: 'hidden',
       },
-      fontSize: 14,
-      fontFamily: 'Menlo, Hack, "Ubuntu Mono"',
+      fontSize,
+      fontFamily,
       automaticLayout: true,
       renderFinalNewline: true,
       readOnly: readonly,
       trimAutoWhitespace: true,
       contextmenu: true,
-      // mouseWheelZoom: false,
-      // mouseWheelScrollSensitivity: 0.1,
       occurrencesHighlight: false,
       find: {
         loop: false,
@@ -103,8 +159,6 @@ export function CodeEditor(props: IProps) {
         startColumn: 0,
         startLineNumber: 0,
       })
-
-      // ref.current?.executeCommand('user',  )
     }
   }, [open])
 
