@@ -4,8 +4,8 @@
 import '@icon-park/react/styles/index.css'
 import 'antd/dist/antd.css'
 
-// setup
-import './monaco'
+// monaco setup
+import './common/monaco'
 
 // deps
 import {
@@ -29,7 +29,7 @@ import {
   useRoutes,
 } from 'react-router-dom'
 import Commands from './commands'
-import { showCodeModal } from './common/ModalCodeViewer'
+import { showCodeModal } from './common/code/ModalCodeViewer'
 import './ipc'
 import './page/common'
 import CurrentConfig from './page/current-config'

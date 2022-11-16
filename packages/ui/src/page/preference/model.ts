@@ -10,6 +10,7 @@ interface IState {
     user: string
     pass: string
   }
+  vscodeTheme?: string
 }
 
 const { state, init, load } = valtioState<IState>(
@@ -19,6 +20,7 @@ const { state, init, load } = valtioState<IState>(
       user: '',
       pass: '',
     },
+    vscodeTheme: '',
   },
   {
     load() {

@@ -1,6 +1,5 @@
 import { runGenerate } from '$ui/commands/run'
 import { LocalRuleItem, RuleItem } from '$ui/common/define'
-import { showCode } from '$ui/common/ModalCodeViewer'
 import { YAML } from '$ui/libs'
 import { firstLine, limitLines } from '$ui/util/text-util'
 import { FileAddOutlined } from '@ant-design/icons'
@@ -11,12 +10,14 @@ import {
   AutoComplete,
   Button,
   Checkbox,
+  Col,
   Form,
   Input,
   InputNumber,
   List,
   message,
   Modal,
+  Row,
   Select,
   Space,
   Tooltip,
@@ -29,9 +30,9 @@ import path from 'path'
 import { KeyboardEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { proxy, useSnapshot } from 'valtio'
 import RuleAddModal from './AddRuleModal'
-import ConfigEditor, { EditorRefInner } from './ConfigEditor'
 import styles from './index.module.less'
 import { actions, state } from './model'
+import { CodeEditor, CodeThemeSelect, EditorRefInner, showCode } from '$ui/common/code'
 
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
@@ -582,25 +583,31 @@ function ModalAddOrEdit() {
             name='content'
             rules={[{ required: true, message: '内容不能为空' }]}
           >
-            <ConfigEditor
+            <CodeEditor
               open={visible}
               editorRef={monacoEditorRef}
               readonly={readonly}
               header={
-                <Space direction='horizontal'>
-                  <Button
-                    disabled={readonly || editInEditorMaskVisible}
-                    onClick={() => editInEditor('code')}
-                  >
-                    使用 vscode 编辑
-                  </Button>
-                  <Button
-                    disabled={readonly || editInEditorMaskVisible}
-                    onClick={() => editInEditor('atom')}
-                  >
-                    使用 Atom 编辑
-                  </Button>
-                </Space>
+                <Row style={{ alignItems: 'center' }}>
+                  <Space direction='horizontal'>
+                    <Button
+                      disabled={readonly || editInEditorMaskVisible}
+                      onClick={() => editInEditor('code')}
+                    >
+                      使用 vscode 编辑
+                    </Button>
+                    <Button
+                      disabled={readonly || editInEditorMaskVisible}
+                      onClick={() => editInEditor('atom')}
+                    >
+                      使用 Atom 编辑
+                    </Button>
+                  </Space>
+
+                  <Col flex={1}></Col>
+                  <span style={{ marginRight: 8 }}>编辑器主题</span>
+                  <CodeThemeSelect style={{ width: 150 }} />
+                </Row>
               }
               spinProps={{
                 size: 'large',

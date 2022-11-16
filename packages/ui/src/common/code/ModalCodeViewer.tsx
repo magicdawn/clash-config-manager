@@ -1,6 +1,6 @@
-import ConfigEditor from '$ui/page/library-rule-list/ConfigEditor'
 import { Modal } from 'antd'
 import { proxy, useSnapshot } from 'valtio'
+import { CodeEditor } from './CodeEditor'
 
 const state = proxy({
   open: false,
@@ -24,7 +24,7 @@ export function ModalCodeViewer() {
         })
       }}
     >
-      <ConfigEditor readonly open={open} value={code} />
+      <CodeEditor readonly open={open} value={code} />
     </Modal>
   )
 }

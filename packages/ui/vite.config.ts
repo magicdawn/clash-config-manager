@@ -3,7 +3,7 @@
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 import react from '@vitejs/plugin-react'
 import { set } from 'lodash'
-import { join } from 'path'
+import path, { join } from 'path'
 import { defineConfig, Plugin } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
@@ -221,6 +221,15 @@ export default defineConfig({
   css: {
     modules: {
       localsConvention: 'camelCaseOnly',
+    },
+  },
+
+  resolve: {
+    alias: {
+      'monaco-themes-json-dir': path.join(
+        path.dirname(require.resolve('monaco-themes/package')),
+        'themes'
+      ),
     },
   },
 

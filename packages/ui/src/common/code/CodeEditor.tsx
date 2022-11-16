@@ -1,10 +1,12 @@
+import { state as preferenceState } from '$ui/page/preference/model'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Spin } from 'antd'
 import { SpinProps } from 'antd/lib/spin'
-import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api'
+import * as EditorApi from 'monaco-editor/esm/vs/editor/editor.api'
 import { MutableRefObject, ReactNode, useMemo, useRef } from 'react'
 import MonacoEditor, { EditorDidMount, EditorWillMount, monaco } from 'react-monaco-editor'
-import style from './ConfigEditor.module.less'
+import { useSnapshot } from 'valtio'
+import style from './CodeEditor.module.less'
 
 export type EditorRefInner = monaco.editor.IStandaloneCodeEditor
 
@@ -18,7 +20,10 @@ interface IProps {
   editorRef?: MutableRefObject<EditorRefInner | null>
 }
 
-export default function ConfigEditor(props: IProps) {
+export function CodeEditor(props: IProps) {
+  //  'vs' (default), 'vs-dark', 'hc-black', 'hc-light
+  const theme = useSnapshot(preferenceState).vscodeTheme || 'vs'
+
   const { value, onChange, readonly, spinProps, header, open, editorRef } = props
 
   const ref = useRef<EditorRefInner | null>(null)
@@ -46,6 +51,13 @@ export default function ConfigEditor(props: IProps) {
     model?.updateOptions({
       tabSize: 2,
     })
+
+    // CMD+S 保存
+    //
+
+    // CMD+Ctrl+Up/Down move line up/down
+    //
+    // editor.getAction()
   })
 
   const editorOnChange = useMemoizedFn((newValue, e) => {
@@ -53,7 +65,7 @@ export default function ConfigEditor(props: IProps) {
   })
 
   const options = useMemo(() => {
-    const opts: monacoEditor.editor.IStandaloneEditorConstructionOptions = {
+    const opts: EditorApi.editor.IStandaloneEditorConstructionOptions = {
       minimap: { enabled: false },
       overviewRulerBorder: true,
       // renderIndentGuides: true,
@@ -66,6 +78,11 @@ export default function ConfigEditor(props: IProps) {
       automaticLayout: true,
       renderFinalNewline: true,
       readOnly: readonly,
+      trimAutoWhitespace: true,
+      contextmenu: true,
+      // mouseWheelZoom: false,
+      // mouseWheelScrollSensitivity: 0.1,
+      occurrencesHighlight: false,
       find: {
         loop: false,
         seedSearchStringFromSelection: 'selection',
@@ -86,6 +103,8 @@ export default function ConfigEditor(props: IProps) {
         startColumn: 0,
         startLineNumber: 0,
       })
+
+      // ref.current?.executeCommand('user',  )
     }
   }, [open])
 
@@ -96,7 +115,7 @@ export default function ConfigEditor(props: IProps) {
         <div style={{ width: '100%', height: '50vh', marginTop: 10 }} className={style.editor}>
           <MonacoEditor
             language='yaml'
-            theme='quite-light'
+            theme={theme}
             value={value}
             options={options}
             onChange={editorOnChange}

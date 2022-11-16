@@ -27,6 +27,8 @@ const storage = new Store({
         user: '',
         pass: '',
       },
+
+      vscodeTheme: '',
     },
   },
 })
