@@ -27,4 +27,10 @@ monaco.editor.addKeybindingRules([
     keybinding: KeyMod.CtrlCmd | KeyCode.Digit0,
     command: 'editor.action.fontZoomReset',
   },
+
+  // cmd+shift+D duplicate line
+  {
+    keybinding: KeyMod.CtrlCmd | KeyMod.Shift | KeyCode.KeyD,
+    command: 'editor.action.duplicateSelection',
+  },
 ])
