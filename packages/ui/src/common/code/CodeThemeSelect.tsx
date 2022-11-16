@@ -16,16 +16,18 @@ export function CodeThemeSelect({
   style,
   className,
   disabled = false,
+  width = 150,
 }: {
   style?: CSSProperties
   className?: string
   disabled?: boolean
+  width?: number
 }) {
   const theme = useSnapshot(preferenceState).vscodeTheme || 'vs'
 
   return (
     <Select
-      style={style}
+      style={{ width, ...style }}
       className={className}
       options={options}
       value={theme}

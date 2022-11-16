@@ -1,6 +1,7 @@
 import { Modal } from 'antd'
 import { proxy, useSnapshot } from 'valtio'
 import { CodeEditor } from './CodeEditor'
+import { CodeThemeSelect } from './CodeThemeSelect'
 
 const state = proxy({
   open: false,
@@ -15,8 +16,9 @@ export function ModalCodeViewer() {
   return (
     <Modal
       open={open}
-      title='查看 Yaml'
+      title={<>查看 Yaml</>}
       width='80vw'
+      style={{ position: 'relative' }}
       onCancel={() => {
         state.open = false
         setTimeout(() => {
@@ -24,6 +26,12 @@ export function ModalCodeViewer() {
         })
       }}
     >
+      <div
+        style={{ position: 'absolute', left: '50%', top: 0, transform: 'translate(-50%, 10px)' }}
+      >
+        <span style={{ marginRight: 5 }}>编辑器主题:</span>
+        <CodeThemeSelect width={200} />
+      </div>
       <CodeEditor readonly open={open} value={code} />
     </Modal>
   )

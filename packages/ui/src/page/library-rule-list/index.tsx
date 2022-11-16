@@ -605,8 +605,8 @@ function ModalAddOrEdit() {
                   </Space>
 
                   <Col flex={1}></Col>
-                  <span style={{ marginRight: 8 }}>编辑器主题</span>
-                  <CodeThemeSelect style={{ width: 150 }} />
+                  <span style={{ marginRight: 5 }}>编辑器主题:</span>
+                  <CodeThemeSelect />
                 </Row>
               }
               spinProps={{
