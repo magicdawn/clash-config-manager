@@ -39,6 +39,7 @@ import { useAddRuleModalFromGlobal } from './page/home/useAddRuleModal'
 import LibraryRuleList from './page/library-rule-list'
 import LibrarySubscribe from './page/library-subscribe'
 import Preference from './page/preference'
+import styles from './index.module.less'
 
 const routes = [
   {
@@ -118,7 +119,7 @@ function RouterInner() {
 
   return (
     <>
-      <Menu selectedKeys={menuKey} mode='horizontal' items={menuItems} />
+      <Menu selectedKeys={menuKey} mode='horizontal' items={menuItems} className={styles.navMenu} />
       <Commands />
       {addRuleModal}
       {showCodeModal}

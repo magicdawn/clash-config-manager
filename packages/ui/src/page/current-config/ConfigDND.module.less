@@ -1,20 +1,34 @@
+@item-height: 45px;
+
 .dnd-playground {
+  flex: 1 1 0;
+  overflow: hidden;
+
   display: flex;
   flex-direction: row;
-
-  @item-height: 40px;
+  margin: 0 -15px;
 
   :global {
     .col-left,
     .col-right {
+      height: 100%;
       width: 50%;
-      // padding: 0 10px;
     }
+
     .col-left {
-      padding-right: 10px;
+      padding: 0 5px 0 15px;
+      display: flex;
+      flex-direction: column;
+
+      .result-list {
+        flex: 1 1 0;
+        overflow: hidden;
+      }
     }
+
     .col-right {
-      padding-left: 10px;
+      padding: 0 15px 0 5px;
+      overflow-y: scroll;
     }
 
     .section-title {
@@ -25,7 +39,7 @@
 
     .trash-wrapper {
       position: fixed;
-      top: 48px;
+      top: 46px;
       right: 8px;
 
       width: 60px;
@@ -95,16 +109,19 @@
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
-      min-height: 50px;
       border: 1px solid peru;
       padding: 2px;
       border-radius: 4px;
+
+      min-height: 50px;
+      max-height: 100%;
+      overflow-y: scroll;
 
       .item {
         width: 100%;
         margin-left: auto;
         margin-right: auto;
-        height: @item-height * 0.8;
+        height: @item-height;
         border: 1px solid purple;
         border-radius: 4px;
         position: relative;

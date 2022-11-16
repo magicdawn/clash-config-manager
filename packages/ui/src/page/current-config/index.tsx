@@ -41,9 +41,11 @@ export default function ConfigList() {
   const dividerFontSize = '1.2em'
   // const subTitleFontSize = '1.5em'
   const createDivider = (text: string) => (
-    <Divider orientation='left' orientationMargin={0} style={{ margin: '10px 0 0 0' }}>
-      <span style={{ fontSize: dividerFontSize }}>{text}</span>
-    </Divider>
+    <div>
+      <Divider orientation='left' orientationMargin={0}>
+        <span style={{ fontSize: dividerFontSize }}>{text}</span>
+      </Divider>
+    </div>
   )
 
   return (

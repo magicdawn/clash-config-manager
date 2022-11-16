@@ -135,6 +135,7 @@ export function ConfigDND() {
           <div className='section-title'>
             当前配置
             <Tooltip
+              placement='right'
               title={
                 <ul style={{ marginLeft: '-20px' }}>
                   <li>从右侧拖拽订阅源 和 配置源到此处使用订阅或配置</li>
