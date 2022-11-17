@@ -28,15 +28,19 @@ function getChangelog() {
   return curChangelog
 }
 
+const changelogTempFile = PROJECT_ROOT + '/CHANGELOG.temp.md'
+export function releaseChangelog() {
+  fse.writeFileSync(changelogTempFile, getChangelog(), 'utf8')
+  log('[changelog]: changelog.temp.md generated')
+}
+
 export async function release() {
   // 1. add Changelog
   // 2. npm version patch or minor
 
   // 3.prepare
   // 	- get changelog of this version
-  const changelogTempFile = PROJECT_ROOT + '/CHANGELOG.temp.md'
-  fse.writeFileSync(changelogTempFile, getChangelog(), 'utf8')
-  log('[changelog]: changelog.temp.md generated')
+  releaseChangelog()
 
   // 4.push
   sh('git push origin --all && git push origin --tags')

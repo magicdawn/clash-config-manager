@@ -1,0 +1,41 @@
+on:
+  push:
+    tags:
+      - 'v0*'
+
+jobs:
+  release:
+    runs-on: macos-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with: { version: 7 }
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'pnpm'
+
+      # install deps
+      - run: pnpm install --frozen-lockfile
+
+      # generate current release changelog
+      - run: pnpm jake release:changelog
+
+      # electron build
+      - run: pnpm dist:mac
+
+      # create release & upload to release
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: CHANGELOG.temp.md
+          fail_on_unmatched_files: true
+          files: |
+            './dist/latest-mac.yml'
+            './dist/clash-config-manager-{{ github.ref_name }}*'
