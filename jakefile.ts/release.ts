@@ -1,5 +1,16 @@
 /* eslint-disable camelcase */
 
+/**
+ * 使用 GitHub Ations 发布步骤
+ * 1. add Changelog
+ * 2. npm version patch or minor
+ * 3. git push origin --all && git push origin --tags
+ * 由 tags 触发 release
+ *
+ *
+ * 使用本地 build 并上传, jake release 即可.
+ */
+
 import fse from 'fs-extra'
 import globby from 'globby'
 import log from 'fancy-log'
