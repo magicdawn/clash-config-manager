@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.17.0 2022-11-17
+
+- b26f0bf tweak tooltip style
+- 11d8f3e feat: add duplicate line key-binding
+- 59561f2 feat: add monaco-editor custom keybinding
+- 4b31d88 feat: current-config add scroll bar
+- 0a84843 chore: tweak theme selector
+- 88b3353 feat: add monaco themes
+- cde1426 feat: rm runCommand
+- 42e431b feat: do not update not used items
+- 6b1773b feat: auto-update, do not update item not using or disabled
+- 58c14eb dep: update electron to latest
+- 16bb2b6 ci: build only
+- 6f57caa chore: electron-build.js tweak artifactName
+- a54562f fix: remove renderer fs sync calls
+
 ## v0.16.0 2022-11-15
 
 - 订阅: 支持查看节点
