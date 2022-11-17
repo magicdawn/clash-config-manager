@@ -163,9 +163,13 @@
 .tooltip-detail {
   max-height: 50vh;
   overflow-y: scroll;
-  white-space: pre;
+  word-break: break-all;
+
+  &.yaml {
+    white-space: pre;
+  }
 }
 
 .tooltip-detail-overlay {
-  max-width: 60vw;
+  max-width: 50vw;
 }

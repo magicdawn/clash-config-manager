@@ -26,6 +26,7 @@ export function ConfigDND() {
         ...item,
         text: item.name,
         tooltip: item.url,
+        tooltipIsYaml: false,
       }
     })
   }, [subscribeList])
@@ -38,6 +39,7 @@ export function ConfigDND() {
         id: item.id,
         text: item.name,
         tooltip: item.type === 'local' ? limitLines(item.content, 100) : item.url,
+        tooltipIsYaml: item.type === 'local',
         type: item.type, // rule-type
       }
     })
@@ -276,7 +278,12 @@ const Source = ({ item, type, isDragDisabled, index }: SourceProps) => {
             {text}
             <Tooltip
               overlayClassName={styles.tooltipDetailOverlay}
-              title={<div className={styles.tooltipDetail}>{item.tooltip}</div>}
+              title={
+                <div className={cx(styles.tooltipDetail, { [styles.yaml]: item.tooltipIsYaml })}>
+                  {item.tooltip}
+                </div>
+              }
+              placement={type === 'result' ? 'right' : 'left'}
             >
               <InfoCircleOutlined className='help-icon' />
             </Tooltip>
