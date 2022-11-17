@@ -3,6 +3,10 @@ on:
     tags:
       - 'v0*'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   release:
     runs-on: macos-latest
