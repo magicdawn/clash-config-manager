@@ -24,9 +24,9 @@
     "build:main": "pnpm -F main build",
     "build:ui": "pnpm -F ui build",
     "dist:pack": "electron-builder --dir",
-    "dist:mac": "electron-builder --macos",
-    "dist:mac:dmg": "electron-builder --macos dmg",
-    "dist": "electron-builder --macos --linux --windows"
+    "dist:mac": "electron-builder --macos --publish never",
+    "dist:mac:dmg": "electron-builder --macos dmg --publish never",
+    "dist": "electron-builder --macos --linux --windows --publish never"
   },
   "dependencies": {
     "@electron/remote": "^2.0.8",
