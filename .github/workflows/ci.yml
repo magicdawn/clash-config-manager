@@ -22,6 +22,12 @@ jobs:
       # install deps
       - run: pnpm install --frozen-lockfile
 
+      # turbo cache
+      - uses: actions/cache@v3
+        with:
+          path: node_modules/.cache/turbo
+          key: turbo-cache-${{ runner.os }}
+
       # build only
       - run: pnpm build
 
