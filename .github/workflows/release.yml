@@ -48,4 +48,4 @@ jobs:
           fail_on_unmatched_files: true
           files: |
             ./dist/latest-mac.yml
-            ./dist/clash-config-manager-${{ github.ref_name }}*
+            ./dist/clash-config-manager-${{ github.ref_name }}-*.*
