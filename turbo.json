@@ -1,0 +1,18 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "clash-proxy-parser#build": {
+      "outputs": ["dist/**"]
+    },
+    "main#build": {
+      "outputs": ["../../bundle/production/main/**"]
+    },
+    "ui#build": {
+      "outputs": ["../../bundle/production/renderer/**"]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["bundle/production/**"]
+    }
+  }
+}

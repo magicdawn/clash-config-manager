@@ -24,3 +24,5 @@ CHANGELOG.temp.md
 *.log
 
 src-tauri/target
+
+.turbo
