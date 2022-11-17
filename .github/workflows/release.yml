@@ -24,6 +24,12 @@ jobs:
       # install deps
       - run: pnpm install --frozen-lockfile
 
+      # turbo cache
+      - uses: actions/cache@v3
+        with:
+          path: node_modules/.cache/turbo
+          key: turbo-cache-${{ runner.os }}
+
       # generate current release changelog
       - run: pnpm jake release:changelog
 
