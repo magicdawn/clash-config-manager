@@ -40,6 +40,17 @@ jobs:
       # electron build
       - run: pnpm dist:mac
 
+      # v1.2.3 -> 1.2.3
+      - id: github-script
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const version = context.ref.slice('refs/tags/v'.length)
+            core.setOutput('version', version)
+
+      # use
+      # - run: echo "${{steps.github-script.outputs.id}}"
+
       # create release & upload to release
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -48,4 +59,4 @@ jobs:
           fail_on_unmatched_files: true
           files: |
             ./dist/latest-mac.yml
-            ./dist/clash-config-manager-${{ github.ref_name }}-*.*
+            ./dist/clash-config-manager-${{ steps.github-script.outputs.version }}-*.*
