@@ -16,6 +16,7 @@
   "scripts": {
     "prepare": "husky install",
     "postinstall": "electron-builder install-app-deps",
+    "dev": "concurrently -k npm:dev:main npm:dev:ui",
     "dev:main": "pnpm -F main dev",
     "dev:ui": "pnpm -F ui dev",
     "dev:start-main": "electron bundle/development/main/index.js",
@@ -47,6 +48,7 @@
     "@types/prettier": "2.7.1",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.41.0",
+    "concurrently": "^7.6.0",
     "electron": "^21.2.3",
     "electron-builder": "^23.6.0",
     "eslint": "^8.26.0",
