@@ -18,9 +18,13 @@ export const actions = {
   navigate,
 }
 
+let inited = false
 function init() {
+  if (inited) return
   globalEmitter.emit('init')
+  inited = true
 }
+
 function reload() {
   globalEmitter.emit('reload')
 }

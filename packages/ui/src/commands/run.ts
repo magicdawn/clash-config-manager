@@ -3,6 +3,7 @@ import { rootActions } from '$ui/store'
 import gen from '$ui/util/gen'
 import { message } from 'antd'
 import { createRef } from 'react'
+import { setTimeout as delay } from 'timers/promises'
 
 export const commandPaletteRef = createRef<any>()
 export const close = () =>
@@ -15,20 +16,17 @@ export const close = () =>
 
 const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {}) => {
   let delayShowTimer: ReturnType<typeof setTimeout> | undefined
-  if (forceUpdate) {
-    Loading.show()
-  } else {
-    delayShowTimer = setTimeout(() => {
-      Loading.show()
-    }, 100)
-  }
+  Loading.show()
 
   // init first
   rootActions.global.init()
 
-  let result
+  // let loading show
+  await delay(100)
+
+  let result: Awaited<ReturnType<typeof gen>>
   try {
-    result = await gen({ forceUpdate }) // {forceUpdate}
+    result = await gen({ forceUpdate })
   } catch (e) {
     message.error('生成失败: ', e.message)
     throw e
