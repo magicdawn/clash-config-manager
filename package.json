@@ -28,7 +28,8 @@
     "dist:pack": "electron-builder --dir",
     "dist:mac": "electron-builder --macos --publish never",
     "dist:mac:dmg": "electron-builder --macos dmg --publish never",
-    "dist": "electron-builder --macos --linux --windows --publish never"
+    "dist": "electron-builder --macos --linux --windows --publish never",
+    "dist-and-install": "pnpm dist:pack && rm -rf /Applications/clash-config-manager.app && cp -R ./dist/mac/clash-config-manager.app /Applications/"
   },
   "dependencies": {
     "@electron/remote": "^2.0.9",
