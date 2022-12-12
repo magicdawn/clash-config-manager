@@ -1,13 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { md5, textToSubscribe } from '$clash-utils'
+import { md5 } from '$clash-utils'
 import { ClashConfig } from '$ui/common/define'
+import bytes from 'bytes'
 import envPaths from 'env-paths'
 import fse from 'fs-extra'
 import YAML from 'js-yaml'
 import moment from 'moment'
 import path from 'path'
 import request from 'umi-request'
-import bytes from 'bytes'
 
 const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 

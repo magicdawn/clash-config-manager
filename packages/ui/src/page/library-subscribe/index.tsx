@@ -1,10 +1,5 @@
-import { Subscribe } from '$ui/common/define'
-import {
-  EyeFilled,
-  EyeInvisibleFilled,
-  EyeOutlined,
-  UnorderedListOutlined,
-} from '@ant-design/icons'
+import { Subscribe, SubscribeSpecialType } from '$ui/common/define'
+import { EyeFilled, EyeInvisibleFilled, UnorderedListOutlined } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import {
   Button,
@@ -22,10 +17,11 @@ import {
   Tag,
   Tooltip,
 } from 'antd'
-import { ChangeEventHandler, KeyboardEventHandler, useCallback, useState } from 'react'
+import { ChangeEventHandler, KeyboardEventHandler, useCallback, useMemo, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import styles from './index.module.less'
 import { actions, state } from './model'
+import { defaultNodefreeSubscribe, NodefreeData, nodefreeGetUrls } from './special/nodefree'
 
 export default function LibrarySubscribe() {
   const { list } = useSnapshot(state)
@@ -36,6 +32,18 @@ export default function LibrarySubscribe() {
 
   const add = useMemoizedFn(() => {
     setEditItem(null)
+    setEditItemIndex(null)
+    setShowModal(true)
+  })
+
+  const shouldShowNodefreeAddBtn = !list.find((item) => item.specialType === 'nodefree')
+
+  const addNodefree = useMemoizedFn(() => {
+    if (!shouldShowNodefreeAddBtn) {
+      throw new Error('unexpected case')
+    }
+
+    setEditItem({ ...defaultNodefreeSubscribe })
     setEditItemIndex(null)
     setShowModal(true)
   })
@@ -54,9 +62,16 @@ export default function LibrarySubscribe() {
         header={
           <div className='header' style={{ display: 'flex', alignItems: 'center' }}>
             <div style={{ fontSize: '2em' }}>订阅管理</div>
-            <Button type='primary' onClick={add}>
-              +
-            </Button>
+            <span>
+              {shouldShowNodefreeAddBtn && (
+                <Button type='primary' onClick={addNodefree} style={{ marginRight: 5 }}>
+                  + nodefree
+                </Button>
+              )}
+              <Button type='primary' onClick={add}>
+                +
+              </Button>
+            </span>
           </div>
         }
         bordered
@@ -93,7 +108,7 @@ function SubscribeItem({
 }) {
   const { status, detail } = useSnapshot(state)
 
-  const { url, name, excludeKeywords } = item
+  const { url, name, excludeKeywords, special, specialType, specialData } = item
   let { urlVisible } = item
   if (typeof urlVisible !== 'boolean') urlVisible = true
 
@@ -144,36 +159,6 @@ function SubscribeItem({
 
   const servers = detail[url]
 
-  // <div className='list-item'>
-  //   <div className='name'>{name}</div>
-  //   <div className='url'>{url}</div>
-  //   {excludeKeywords?.length && (
-  //     <div className='exclude'>
-  //       排除关键词:{' '}
-  //       {excludeKeywords.map((s) => (
-  //         <Tag key={s} color='warning'>
-  //           {s}
-  //         </Tag>
-  //       ))}
-  //     </div>
-  //   )}
-  // </div>
-  // <Space style={{ alignSelf: 'flex-end' }}>
-  //   <Button
-  //     type='primary'
-  //     onClick={(e) => edit(item, index)}
-  //     onKeyDown={disableEnterAsClick}
-  //   >
-  //     编辑
-  //   </Button>
-  //   <Button type='primary' onClick={() => update(item)} onKeyDown={disableEnterAsClick}>
-  //     更新
-  //   </Button>
-  //   <Button danger onClick={() => del(index)} onKeyDown={disableEnterAsClick}>
-  //     删除
-  //   </Button>
-  // </Space>
-
   return (
     <List.Item style={{ display: 'flex', borderBottom: 'none' }}>
       <Descriptions
@@ -203,24 +188,30 @@ function SubscribeItem({
           </Descriptions.Item>
         )}
 
-        <Descriptions.Item
-          label={
-            <>
-              链接{' '}
-              <span
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  actions.toggleUrlVisible(index)
-                }}
-              >
-                {urlVisible ? <EyeFilled /> : <EyeInvisibleFilled />}
-              </span>
-            </>
-          }
-          contentStyle={{ wordBreak: 'break-all' }}
-        >
-          {urlVisible ? url : urlHided}
-        </Descriptions.Item>
+        {!specialType && (
+          <Descriptions.Item
+            label={
+              <>
+                链接{' '}
+                <span
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    actions.toggleUrlVisible(index)
+                  }}
+                >
+                  {urlVisible ? <EyeFilled /> : <EyeInvisibleFilled />}
+                </span>
+              </>
+            }
+            contentStyle={{ wordBreak: 'break-all' }}
+          >
+            {urlVisible ? url : urlHided}
+          </Descriptions.Item>
+        )}
+
+        {specialType === 'nodefree' && (
+          <Descriptions.Item label='抓取天数'>{specialData?.recentDays}</Descriptions.Item>
+        )}
 
         <Descriptions.Item label='操作'>
           <Space style={{ alignSelf: 'flex-end' }}>
@@ -239,7 +230,7 @@ function SubscribeItem({
             </Button>
             <Popover
               placement='top'
-              title={'节点列表'}
+              title={`节点列表(${servers?.length})`}
               content={
                 <div style={{ maxHeight: '50vh', overflowY: 'scroll' }}>
                   <ul>
@@ -253,6 +244,25 @@ function SubscribeItem({
             >
               <Button icon={<UnorderedListOutlined />}>查看节点</Button>
             </Popover>
+
+            {specialType === 'nodefree' && (
+              <Popover
+                placement='top'
+                title={`链接列表(${specialData?.recentDays})`}
+                content={
+                  <div style={{ maxHeight: '200px', overflowY: 'scroll' }}>
+                    <ul>
+                      {nodefreeGetUrls(item)?.map((url) => (
+                        <li key={url}>{url}</li>
+                      ))}
+                    </ul>
+                  </div>
+                }
+                trigger='click'
+              >
+                <Button icon={<UnorderedListOutlined />}>查看链接列表</Button>
+              </Popover>
+            )}
           </Space>
         </Descriptions.Item>
       </Descriptions>
@@ -277,6 +287,10 @@ function ModalAdd({
   const [excludeKeywords, setExcludeKeywords] = useState(editItem?.excludeKeywords || [])
   const [autoUpdate, setAutoUpdate] = useState(true)
 
+  const [special, setSpecial] = useState<boolean | undefined>(undefined)
+  const [specialType, setSpecialType] = useState<SubscribeSpecialType | undefined>(undefined)
+  const [specialData, setSpecialData] = useState<any | undefined>(undefined)
+
   // min={1} // 1h
   // max={240} // 240h = 10d
   const [autoUpdateIntervalMin, autoUpdateIntervalMax] = [1, 240]
@@ -292,7 +306,25 @@ function ModalAdd({
     setExcludeKeywords(editItem?.excludeKeywords || [])
     setAutoUpdate(editItem?.autoUpdate ?? true)
     setAutoUpdateInterval(editItem?.autoUpdateInterval || autoUpdateIntervalDefault)
+
+    if (editItem?.special && editItem.specialType === 'nodefree') {
+      setSpecial(editItem.special)
+      setSpecialType(editItem.specialType)
+      setSpecialData(editItem.specialData)
+    }
   }, [editItem, visible])
+
+  const clean = () => {
+    setUrl('')
+    setName('')
+    setId('')
+    setExcludeKeywords([])
+    setAutoUpdate(true)
+    setAutoUpdateInterval(autoUpdateIntervalDefault)
+    setSpecial(undefined)
+    setSpecialType(undefined)
+    setSpecialData(undefined)
+  }
 
   type OnChange = ChangeEventHandler<HTMLInputElement>
   const onUrlChange: OnChange = useCallback((e) => {
@@ -306,12 +338,6 @@ function ModalAdd({
     console.log('onExcludeKeywordsChange', value)
     setExcludeKeywords(value)
   }, [])
-
-  const clean = () => {
-    setUrl('')
-    setName('')
-    setId('')
-  }
 
   const handleCancel = useCallback(() => {
     setVisible(false)
@@ -331,9 +357,20 @@ function ModalAdd({
       return message.error(err)
     }
 
-    const mode = editItem ? 'edit' : 'add'
+    const mode = typeof editItemIndex === 'number' ? 'edit' : 'add'
 
-    const subscribeItem = { url, name, id, excludeKeywords, autoUpdate, autoUpdateInterval }
+    let subscribeItem: Subscribe = {
+      url,
+      name,
+      id,
+      excludeKeywords,
+      autoUpdate,
+      autoUpdateInterval,
+    }
+    if (special && specialType && specialData) {
+      subscribeItem = { ...subscribeItem, special, specialType, specialData }
+    }
+
     if (mode === 'add') {
       actions.add(subscribeItem)
     } else {
@@ -342,6 +379,10 @@ function ModalAdd({
 
     setVisible(false)
     clean()
+  })
+
+  const onNodefreeRecentDaysChange = useMemoizedFn((recentDays: number) => {
+    setSpecialData((val: NodefreeData) => ({ ...val, recentDays }))
   })
 
   return (
@@ -366,12 +407,25 @@ function ModalAdd({
       />
 
       <Input
+        hidden={specialType === 'nodefree'}
         className='input-row'
         value={url}
         onChange={onUrlChange}
         onPressEnter={handleOk}
         prefix={<label className='label'>订阅链接:</label>}
       />
+
+      {specialType === 'nodefree' && (
+        <InputNumber
+          style={{ display: 'flex', width: '100%', marginBottom: 10 }}
+          prefix={<label className='label'>抓取天数:</label>}
+          value={specialData?.recentDays}
+          onChange={onNodefreeRecentDaysChange}
+          onPressEnter={handleOk}
+          min={1}
+          max={10}
+        />
+      )}
 
       <Checkbox
         checked={autoUpdate}

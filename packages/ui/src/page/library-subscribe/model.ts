@@ -5,9 +5,10 @@ import { onInit, onReload } from '$ui/page/global-model'
 import storage from '$ui/storage'
 import { subscribeToClash } from '$ui/util/subscribe'
 import { message } from 'antd'
-import { find, pick } from 'lodash'
+import { find, isEqual, pick, uniqWith } from 'lodash'
 import { ref } from 'valtio'
 import { restartAutoUpdate, scheduleAutoUpdateOnce, stopAutoUpdate } from './model.auto-update'
+import { nodefreeGetUrls } from './special/nodefree'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
@@ -39,12 +40,13 @@ const { state, load, init } = valtioState<IState>(
       const status: Record<string, string> = storage.get(SUBSCRIBE_STATUS_STORAGE_KEY) || {}
 
       // 只保留当前 list 存在的订阅
-      const detail = ref(
-        pick(
-          storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY) || ({} as IState['detail']),
-          list.map((item) => item.url).filter(Boolean)
-        )
+      const detail = pick(
+        storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY) || ({} as IState['detail']),
+        list.map((item) => item.url).filter(Boolean)
       )
+      for (const [url, servers] of Object.entries(detail)) {
+        servers?.forEach((s) => ref(s)) // do not observe server object
+      }
 
       return { list, detail, status }
     },
@@ -117,13 +119,64 @@ export async function update({
   const currentSubscribe = state.list.find((s) => s.url === url)
   if (!currentSubscribe) return
 
-  let servers: ClashProxyItem[]
+  let servers: ClashProxyItem[] = []
   let status: string | undefined
-  try {
-    ;({ servers, status } = await subscribeToClash({ url, forceUpdate }))
-  } catch (e) {
-    message.error('更新订阅出错: \n' + e.stack || e)
-    throw e
+
+  // special nodefree
+  if (currentSubscribe.specialType === 'nodefree') {
+    const urls = nodefreeGetUrls(currentSubscribe)
+    if (!urls.length) return
+    servers = (
+      await Promise.all(
+        urls.map(async (url) => {
+          let currentServers: ClashProxyItem[] = []
+          let err: Error | undefined
+          try {
+            ;({ servers: currentServers } = await subscribeToClash({ url, forceUpdate }))
+          } catch (e) {
+            err = e
+          }
+          if (err) {
+            console.error('nodefree %s failed', url, err)
+          }
+          return currentServers
+        })
+      )
+    ).flat()
+
+    if (!servers.length) {
+      message.error('更新订阅出错: 所有链接均未返回节点')
+      return
+    }
+
+    // uniq
+    servers = uniqWith(servers, isEqual)
+
+    // name 不能是 duplicate
+    const names = new Set<string>()
+    servers.forEach((item) => {
+      if (!names.has(item.name)) {
+        names.add(item.name)
+        return
+      }
+
+      let i = 1
+      let newName = () => item.name + ` (DUP-${i})`
+      while (names.has(newName())) i++
+
+      item.name = newName()
+      names.add(item.name)
+    })
+  }
+
+  // normal
+  else {
+    try {
+      ;({ servers, status } = await subscribeToClash({ url, forceUpdate }))
+    } catch (e) {
+      message.error('更新订阅出错: \n' + e.stack || e)
+      throw e
+    }
   }
 
   const keywords = currentSubscribe?.excludeKeywords || []
@@ -142,7 +195,8 @@ export async function update({
 
   // save
   if (currentSubscribe) currentSubscribe.updatedAt = Date.now()
-  state.detail[url] = ref(servers)
+  servers.forEach((s) => ref(s)) // prevent observe server inner
+  state.detail[url] = servers
   restartAutoUpdate(currentSubscribe)
 
   // 经过网络更新, status 一定是 string, 可能是空 string

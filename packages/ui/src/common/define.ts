@@ -1,4 +1,4 @@
-export interface Subscribe {
+export interface Subscribe<ExtData = any> {
   id: string
   name: string
   url: string
@@ -13,7 +13,15 @@ export interface Subscribe {
 
   // visible
   urlVisible?: boolean
+
+  // 扩展
+  special?: boolean
+  specialType?: SubscribeSpecialType
+  specialData?: ExtData
 }
+
+// add more special types here
+export type SubscribeSpecialType = 'nodefree'
 
 export type LocalRuleItem = {
   type: 'local'
