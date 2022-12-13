@@ -61,7 +61,7 @@
 4. 这种可以使用, 但是 2 中的 rules 如果想使用 proxy, 需要知道 1 里面的 proxy-group 中的名称. 不是很灵活, 建议使用纯服务器订阅 / 规则分开处理.
 
 比如, rules 里写了 "proxy-group: XXX-Provider"
-2 中添加的规则需要使用这个名字, 比如 `- DOMAIN-KEYWORD,google,XXX-Provider`, 活着使用 `Proxy`, 本软件中 `Proxy` 总是存在
+2 中添加的规则需要使用这个名字, 比如 `- DOMAIN-KEYWORD,google,XXX-Provider`, 或者使用 `Proxy`, 本软件中 `Proxy` 总是存在
 
 ## 功能
 
