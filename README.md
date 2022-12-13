@@ -22,6 +22,7 @@
 - [x] 内置基础配置, 导入内置基础配置 + 添加一个 subscribe 即可开始使用.
 - [x] 支持类似 vscode 的 command palette 快速操作
 - [x] 支持解析 `subscription-userinfo` header
+- [x] 支持使用多个订阅, 参见多个订阅
 
 ## 预览
 
@@ -57,11 +58,70 @@
 1. 添加一个远程规则, 地址填订阅地址
 2. 添加一个本地自定义规则, 内容填写 `rules: ...blabla`
 3. 在当前配置页使用这两个配置源, 生成配置. 在 clashX 里选择 `clash-config-mananger` 即可.
-4. 这种可以使用, 但是 2 中的 rules 如果想使用 proxy, 需要直到 1 里面的 proxy-group 中的名称. 不是很灵活, 建议使用纯服务器订阅 / 规则分开处理.
+4. 这种可以使用, 但是 2 中的 rules 如果想使用 proxy, 需要知道 1 里面的 proxy-group 中的名称. 不是很灵活, 建议使用纯服务器订阅 / 规则分开处理.
 
 比如, rules 里写了 "proxy-group: XXX-Provider"
 2 中添加的规则需要使用这个名字, 比如 `- DOMAIN-KEYWORD,google,XXX-Provider`
 
-## 其他
+## 功能
+
+### command palette
 
 - 使用 cmd + shift + p 打开 command palette
+
+### `forceUpdate`
+
+订阅 & 远程配置默认会使用缓存, 当天有效, 如果不想使用缓存:
+
+- 可以使用主页按钮 "更新订阅,并重新生成配置文件"
+- 或者 command palette 里的 `强制更新`
+
+### 多个订阅
+
+- 可以使用多个订阅
+- 每个订阅会生成 `<订阅>` / `<订阅>-最快` / `<订阅>-可用` / `<订阅>-手选` 分组, 分别对应 `url-test` / `fallback` / `select` 类型的分组
+- 会生成额外 proxy-group, `ALL` / `ALL-最快` / `ALL-可用` / `ALL-手选`
+
+例如有订阅 sub1 & sub2, 会自动生成:
+
+- `Proxy` => 选择(ALL, ALL-最快, ALL-可用, ALL-手选, sub1, sub1-最快, sub1-可用, sub1-手选, sub2, sub2-最快, sub2-可用, sub2-手选)
+- `ALL` => 选择(ALL-最快, ALL-可用, ALL-手选)
+- `ALL-最快` => url-test(sub1 & sub2 所有节点)
+- `ALL-可用` => fallback(sub1 & sub2 所有节点)
+- `ALL-手选` => select(sub1 & sub2 所有节点)
+- `sub1` => 选择(sub1-最快, sub1-可用, sub1-手选)
+- `sub1-最快` => url-test(sub1 所有节点)
+- `sub1-可用` => fsub1back(sub1 所有节点)
+- `sub1-手选` => select(sub1 所有节点)
+- `sub2` => 选择(sub2-最快, sub2-可用, sub2-手选)
+- `sub2-最快` => url-test(sub2 所有节点)
+- `sub2-可用` => fallback(sub2 所有节点)
+- `sub2-手选` => select(sub2 所有节点)
+
+### 规则 TARGET
+
+```yml
+rules:
+  - DOMAIN-SUFFIX,youtube.com,<TARGET>
+  #                             ⏫
+```
+
+规则的 `TARGET` 可以是
+
+- 标准的 `DIRECT` / `REJECT` / `no-resolve`
+- `Proxy` 本项目固定使用的 proxy-group 名称
+- 自动生成的分组名 (例如 ALL, sub1, sub2 ....)
+- 自定义名称
+
+#### 自定义名称 TARGET
+
+例如 `DOMAIN-SUFFIX,youtube.com,youtube.com` 这样的话 clash-config-manager 会自动生成名为 `youtube.com` proxy-group
+可以从 GUI 中选择 `DIRECT` / `Proxy` / `根据订阅生成的组名` / `REJECT`
+
+## 更新日志
+
+[CHANGELOG.md](CHANGELOG.md)
+
+## License
+
+the MIT License http://magicdawn.mit-license.org
