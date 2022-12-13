@@ -1,13 +1,14 @@
+import { cacheDir } from '$ui/common'
 import { RemoteRuleItem, RemoteRuleProviderRuleItem } from '$ui/common/define'
 import { YAML } from '$ui/libs'
-import * as remote from '@electron/remote'
 import fse from 'fs-extra'
 import path from 'path'
 import { readUrlWithCache } from './remote'
 
-const userDataPath = remote.app.getPath('userData')
+// use cacheDir because this is cleanable
+// you can recover from url settings
 export function externalFileForRuleItem(id: string) {
-  return path.join(userDataPath, `data-rule-${id}.yml`) // close to data.json
+  return path.join(cacheDir, `remote-rule-content/${id}.yml`)
 }
 
 async function saveRomoteRuleItem(id: string, content: string) {
