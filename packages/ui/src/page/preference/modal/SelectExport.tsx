@@ -1,12 +1,12 @@
-import { StorageData } from '$ui/storage'
+import { ConfigItem } from '$ui/common/define'
+import { ExportData } from '$ui/storage'
 import { truthy } from '$ui/util/ts-filter'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Modal, Tree } from 'antd'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
-import { proxy, useSnapshot } from 'valtio'
 import { Merge } from 'type-fest'
-import { ConfigItem } from '$ui/common/define'
+import { proxy, useSnapshot } from 'valtio'
 
 type SelectExportProps = {
   visible: boolean
@@ -94,6 +94,19 @@ type TreeData = {
   children?: TreeData[]
 }
 
+const displayNames: Record<string, string> = {
+  'subscribe_list': '订阅管理 (有泄露风险,谨慎分享)',
+  'rule_list': '配置源管理',
+  'current_config_v2': '配置管理',
+  'current_config_v2.list': '使用中的列表',
+  'current_config_v2.name': '配置文件名称',
+  'preference': '偏好设置',
+  'preference.syncConfig': '同步数据配置',
+  'preference.syncConfig.user': '用户名',
+  'preference.syncConfig.pass': '密码(有泄露风险,谨慎分享)',
+  'preference.vscodeTheme': '内置 monaco 编辑器主题',
+}
+
 function generateTreeData(obj: object, keyPrefix = '') {
   const treeData: TreeData[] = []
 
@@ -126,23 +139,13 @@ function generateTreeData(obj: object, keyPrefix = '') {
     return treeData
   }
 
-  for (const i of Object.keys(obj)) {
-    let title = i
-    const key = keyPrefix + i
-
-    if (key === 'subscribe_list') title = '订阅管理 (有泄露风险,谨慎分享)'
-    if (key === 'rule_list') title = '配置源管理'
-    if (key === 'current_config_v2') title = '配置管理'
-    if (key === 'current_config_v2.list') title = '使用中的列表'
-    if (key === 'current_config_v2.name') title = '配置文件名称'
-    if (key === 'preference.syncConfig') title = '同步数据配置'
-    if (key === 'preference.syncConfig.user') title = '用户名'
-    if (key === 'preference.syncConfig.pass') title = '密码(有泄露风险,谨慎分享)'
-
+  for (const currentKey of Object.keys(obj)) {
+    const key = keyPrefix + currentKey
+    const title = displayNames[key] || currentKey
     treeData.push({
       key,
       title,
-      children: generateTreeData(obj[i], key + '.'),
+      children: generateTreeData(obj[currentKey], key + '.'),
     })
   }
 
@@ -199,14 +202,14 @@ export function SelectExportForStaticMethod() {
   )
 }
 
-type PickupData = Omit<StorageData, 'subscribe_detail'>
+type PickupData = Omit<ExportData, 'subscribe_detail' | 'subscribe_status'>
 
 // Merge is Object.assign for Types
 type PickupDataExtended = Merge<
   PickupData,
   {
     current_config_v2: Merge<
-      StorageData['current_config_v2'],
+      ExportData['current_config_v2'],
       {
         list: (ConfigItem & { name?: string })[]
       }
@@ -214,33 +217,35 @@ type PickupDataExtended = Merge<
   }
 >
 
-export async function pick(originalObj: PickupData) {
-  const obj = _.cloneDeep(originalObj) as PickupDataExtended
+export async function pickSelectExport(selectFrom: ExportData) {
+  const exportData = _.cloneDeep(selectFrom) as PickupDataExtended
 
-  if (obj?.current_config_v2?.list) {
-    obj.current_config_v2.list.forEach((item, i) => {
+  // current_config_v2 添加 name 字段
+  if (exportData?.current_config_v2?.list) {
+    exportData.current_config_v2.list.forEach((item, i) => {
       const { id } = item
       const target =
-        obj?.subscribe_list?.find((i) => i.id === id) || obj?.rule_list?.find((i) => i.id === id)
+        exportData?.subscribe_list?.find((i) => i.id === id) ||
+        exportData?.rule_list?.find((i) => i.id === id)
       item.name = target?.name
     })
-    obj.current_config_v2.list = obj.current_config_v2.list.filter((item) => {
+    exportData.current_config_v2.list = exportData.current_config_v2.list.filter((item) => {
       return !!item.name
     })
   }
 
-  const treeData = generateTreeData(obj)
+  const treeData = generateTreeData(exportData)
 
   const { cancel, keys } = await new Promise<SelectResult>((resolve) => {
     Object.assign(proxyProps, { treeData, visible: true, resolve })
   })
 
-  if (cancel) {
+  if (cancel || !keys?.length) {
     return { cancel, keys }
   }
 
   // sleect
-  const data = _.pick(originalObj, keys!)
+  const data = _.pick(selectFrom, keys)
 
   // clean
   clean(data)

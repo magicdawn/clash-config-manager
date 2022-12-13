@@ -11,6 +11,7 @@
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "jsx": "react-jsx",
+    "skipLibCheck": true,
     "plugins": [
       {
         "name": "typescript-plugin-css-modules",

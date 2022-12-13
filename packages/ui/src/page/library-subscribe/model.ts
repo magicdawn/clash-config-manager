@@ -12,7 +12,7 @@ import { nodefreeGetUrls } from './special/nodefree'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
-const SUBSCRIBE_STATUS_STORAGE_KEY = 'subscrine_status'
+const SUBSCRIBE_STATUS_STORAGE_KEY = 'subscribe_status'
 
 interface IState {
   list: Subscribe[]

@@ -1,4 +1,4 @@
-import storage from '$ui/storage'
+import storage, { getExportData } from '$ui/storage'
 import { rootActions, rootState } from '$ui/store'
 import useImmerState from '$ui/util/hooks/useImmerState'
 import customMerge from '$ui/util/sync/webdav/customMerge'
@@ -9,15 +9,14 @@ import { Alert, Button, Card, Col, Input, message, Modal, Row, Space, Tag } from
 import { ipcRenderer, shell } from 'electron'
 import fse from 'fs-extra'
 import launch from 'launch-editor'
-import _ from 'lodash'
 import moment from 'moment'
 import { tmpdir } from 'os'
 import path from 'path'
 import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
-import { pick as pickSelectExport, SelectExportForStaticMethod } from './modal/SelectExport'
 import PRESET_JSON_DATA from '../../assets/基本数据规则.json'
 import styles from './index.module.less'
+import { pickSelectExport, SelectExportForStaticMethod } from './modal/SelectExport'
 
 export default function Preference() {
   const [showModal, setShowModal] = useState(false)
@@ -36,17 +35,15 @@ export default function Preference() {
     await helper.forceDownload()
   })
 
-  const [exportHelperVisible, setExportHelperVisible] = useState(false)
-  const [exportFile, setExportFile] = useState('')
+  const [exportSuccessModalVisible, setExportSuccessModalVisible] = useState(false)
+  const [exportSuccessFile, setExportSuccessFile] = useState('')
 
   const onExport = useMemoizedFn(async () => {
     const file = path.join(tmpdir(), 'cfm', `${moment().format('YYYY_MM_DD__HH_mm')}.json`)
-
-    const outputData = storage.store
-    const data = _.omit(outputData, ['subscribe_detail'])
+    const data = getExportData()
     await fse.outputJson(file, data, { spaces: 2 })
-    setExportHelperVisible(true)
-    setExportFile(file)
+    setExportSuccessModalVisible(true)
+    setExportSuccessFile(file)
   })
 
   const onSelectImport = useMemoizedFn(async () => {
@@ -55,17 +52,15 @@ export default function Preference() {
       'cfm',
       `${moment().format('选择导出__YYYY_MM_DD__HH_mm')}.json`
     )
-    const fullData = storage.store
-    const outputData = _.omit(fullData, ['subscribe_detail'])
 
     // 选择数据
-    const { cancel, data } = await pickSelectExport(outputData)
+    const { cancel, data } = await pickSelectExport(getExportData())
     if (cancel) return
     console.log(data)
 
     await fse.outputJson(file, data, { spaces: 2 })
-    setExportHelperVisible(true)
-    setExportFile(file)
+    setExportSuccessModalVisible(true)
+    setExportSuccessFile(file)
   })
 
   const importAction = (importData) => {
@@ -103,7 +98,7 @@ export default function Preference() {
   const openInEditor = useMemoizedFn((editor) => {
     launch(
       // file
-      exportFile,
+      exportSuccessFile,
       // try specific editor bin first (optional)
       editor,
       (fileName, errorMsg) => {
@@ -120,18 +115,18 @@ export default function Preference() {
 
       <Modal
         title='已导出'
-        open={exportHelperVisible}
-        onOk={() => setExportHelperVisible(false)}
-        onCancel={() => setExportHelperVisible(false)}
+        open={exportSuccessModalVisible}
+        onOk={() => setExportSuccessModalVisible(false)}
+        onCancel={() => setExportSuccessModalVisible(false)}
         centered
         maskClosable={false}
         keyboard={true}
       >
-        <div style={{ marginBottom: 12 }}>文件位置: {exportFile}</div>
+        <div style={{ marginBottom: 12 }}>文件位置: {exportSuccessFile}</div>
         <Space>
           <Button
             onClick={() => {
-              shell.showItemInFolder(exportFile)
+              shell.showItemInFolder(exportSuccessFile)
             }}
           >
             在 Finder 中展示

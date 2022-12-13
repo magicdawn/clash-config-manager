@@ -21,6 +21,7 @@
     "dev:ui": "pnpm -F ui dev",
     "dev:start-main": "electron bundle/development/main/index.js",
     "dev:watch-main": "nodemon bundle/development/main/index.js --exec electron --watch bundle/development/main/",
+    "typecheck": "tsc --noEmit",
     "build": "turbo build",
     "build:raw": "pnpm build:main && pnpm build:ui",
     "build:main": "turbo --filter main build",

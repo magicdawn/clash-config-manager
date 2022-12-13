@@ -1,7 +1,8 @@
 /* eslint camelcase: off */
 
-import Store from 'electron-store'
 import { ConfigItem, RuleItem, Subscribe } from '$ui/common/define'
+import Store from 'electron-store'
+import _ from 'lodash'
 
 const storage = new Store({
   name: 'data',
@@ -27,16 +28,20 @@ const storage = new Store({
         user: '',
         pass: '',
       },
-
       vscodeTheme: '',
     },
   },
 })
 
-type StoreData<T> = T extends Store<infer Inner> ? Inner : never
-export type StorageData = StoreData<typeof storage>
+export type StorageData = typeof storage extends Store<infer T> ? T : never
 
 export default storage
+
+export function getExportData() {
+  const fullData = storage.store
+  return _.omit(fullData, ['subscribe_detail', 'subscribe_status'])
+}
+export type ExportData = ReturnType<typeof getExportData>
 
 // FIXME: debug only
 // ;(global as any).estore = storage
