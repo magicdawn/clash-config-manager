@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.18.1 2022-12-13
+
+- fix config merge in generate logic
+
 ## v0.18.0 2022-12-13
 
 - feat: 支持多个订阅, 每个订阅会生成 `<订阅>` / `<订阅>-最快` / `<订阅>-可用` / `<订阅>-手选` 分组, 分别对应 `url-test` / `fallback` / `select` 类型的分组
