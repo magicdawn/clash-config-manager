@@ -80,15 +80,15 @@
 
 - 可以使用多个订阅
 - 每个订阅会生成 `<订阅>` / `<订阅>-最快` / `<订阅>-可用` / `<订阅>-手选` 分组, 分别对应 `url-test` / `fallback` / `select` 类型的分组
-- 会生成额外 proxy-group, `ALL` / `ALL-最快` / `ALL-可用` / `ALL-手选`
+- 会生成额外 proxy-group, `所有节点` / `所有节点-最快` / `所有节点-可用` / `所有节点-手选`
 
 例如有订阅 sub1 & sub2, 会自动生成:
 
-- `Proxy` => 选择(ALL, ALL-最快, ALL-可用, ALL-手选, sub1, sub1-最快, sub1-可用, sub1-手选, sub2, sub2-最快, sub2-可用, sub2-手选)
-- `ALL` => 选择(ALL-最快, ALL-可用, ALL-手选)
-- `ALL-最快` => url-test(sub1 & sub2 所有节点)
-- `ALL-可用` => fallback(sub1 & sub2 所有节点)
-- `ALL-手选` => select(sub1 & sub2 所有节点)
+- `Proxy` => 选择(所有节点, 所有节点-最快, 所有节点-可用, 所有节点-手选, sub1, sub1-最快, sub1-可用, sub1-手选, sub2, sub2-最快, sub2-可用, sub2-手选)
+- `所有节点` => 选择(所有节点-最快, 所有节点-可用, 所有节点-手选)
+- `所有节点-最快` => url-test(sub1 & sub2 所有节点)
+- `所有节点-可用` => fallback(sub1 & sub2 所有节点)
+- `所有节点-手选` => select(sub1 & sub2 所有节点)
 - `sub1` => 选择(sub1-最快, sub1-可用, sub1-手选)
 - `sub1-最快` => url-test(sub1 所有节点)
 - `sub1-可用` => fsub1back(sub1 所有节点)
