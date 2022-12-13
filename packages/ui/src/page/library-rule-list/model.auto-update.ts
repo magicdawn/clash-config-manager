@@ -17,9 +17,12 @@ const cleanupTimer = (timerKey: string) => {
   }
 }
 
-export const scheduleAutoUpdateOnce = once(scheduleAutoUpdate)
+// fixme
+;(global as any).ruleListTimerRegistry = timerRegistry
 
-export async function scheduleAutoUpdate() {
+export const scheduleAutoUpdate = once(schedule)
+
+async function schedule() {
   for (const item of state.list) {
     restartAutoUpdate(item, true)
   }
@@ -42,9 +45,9 @@ export async function restartAutoUpdate(item: RuleItem, runImmediate = false) {
   const { id, autoUpdate, autoUpdateInterval, updatedAt: lastUpdated } = item
   const timerKey = id
 
+  // autoUpdate not enabled
   if (!autoUpdate || !autoUpdateInterval) {
-    cleanupTimer(timerKey)
-    return
+    return cleanupTimer(timerKey)
   }
 
   const interval = ms(autoUpdateInterval + 'h')

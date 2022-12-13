@@ -17,9 +17,12 @@ const cleanupTimer = (timerKey: string) => {
   }
 }
 
-export const scheduleAutoUpdateOnce = once(scheduleAutoUpdate)
+// fixme
+;(global as any).subscribeTimerRegistry = timerRegistry
 
-export async function scheduleAutoUpdate() {
+export const scheduleAutoUpdate = once(schedule)
+
+async function schedule() {
   for (const sub of state.list) {
     restartAutoUpdate(sub, true)
   }

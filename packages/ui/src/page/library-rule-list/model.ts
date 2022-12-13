@@ -49,7 +49,10 @@ export const actions = { check, add, del, edit, updateRemote }
 
 onInit(() => {
   init()
-  scheduleAutoUpdate()
+  // wait all init done
+  process.nextTick(() => {
+    scheduleAutoUpdate()
+  })
 })
 onReload(load)
 

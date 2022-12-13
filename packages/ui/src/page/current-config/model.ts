@@ -41,6 +41,9 @@ export { state, actions }
 onInit(init)
 onReload(load)
 
+/**
+ * 用于 auto-update 判断
+ */
 export function currentConfigUsingAndEnabled(item: Subscribe | RuleItem) {
   const using = state.list.find((x) => x.id === item.id)
   return using && !using.disabled

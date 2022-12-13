@@ -7,7 +7,7 @@ import { subscribeToClash } from '$ui/util/subscribe'
 import { message } from 'antd'
 import { find, isEqual, pick, uniqWith } from 'lodash'
 import { ref } from 'valtio'
-import { restartAutoUpdate, scheduleAutoUpdateOnce, stopAutoUpdate } from './model.auto-update'
+import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './model.auto-update'
 import { nodefreeGetUrls } from './special/nodefree'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
@@ -211,7 +211,10 @@ export async function update({
 
 onInit(() => {
   init()
-  scheduleAutoUpdateOnce()
+  // wait all init done
+  process.nextTick(() => {
+    scheduleAutoUpdate()
+  })
 })
 onReload(load)
 
