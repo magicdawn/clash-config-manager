@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.18.0 2022-12-13
+
+- feat: 支持多个订阅, 每个订阅会生成 `<订阅>` / `<订阅>-最快` / `<订阅>-可用` / `<订阅>-首选` 分组, 分别对应 `url-test` / `fallback` / `select` 类型的分组
+- feat: 支持添加特殊订阅 nodefree
+- feat: 将 remote / remote-rule-provider 内容移出 electron-store, 解决因此导致的卡顿
+
 ## v0.17.0 2022-11-17
 
 - b26f0bf tweak tooltip style
