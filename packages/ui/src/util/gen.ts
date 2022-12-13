@@ -6,6 +6,7 @@ import fse from 'fs-extra'
 import { homedir } from 'os'
 import { join as pathjoin } from 'path'
 import { getRuleItemContent } from './remote-rules'
+import _ from 'lodash'
 
 export function getUsingItems() {
   // subscribe
@@ -55,10 +56,32 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
    * config merge
    */
   let config: Partial<ClashConfig> = {}
+
+  // 值为 array 的 key 集合
+  type ClashConfigKeysWithArrayValue = {
+    [k in keyof ClashConfig]: ClashConfig[k] extends any[] ? k : never
+  }[keyof ClashConfig]
+
   const updateConfig = (partial: Partial<ClashConfig>) => {
-    const { rules, ...otherConfig } = partial
-    // reverse: GUI最前面的优先
-    config = { ...otherConfig, ...config, rules: [...(config.rules || []), ...(rules || [])] }
+    const arrayValuedKeys: ClashConfigKeysWithArrayValue[] = ['rules', 'proxies', 'proxy-groups']
+
+    config = {
+      ..._.omit(partial, arrayValuedKeys),
+      ...config, // GUI最前面的优先
+    }
+
+    // 数组类, append
+    arrayValuedKeys.forEach((key) => {
+      if (partial[key]?.length) {
+        // don't know how to handle this in TypeScript
+        // @ts-ignore
+        config[key] = [
+          //
+          ...(config[key] || []),
+          ...(partial[key] || []),
+        ]
+      }
+    })
   }
 
   // 批量更新远程规则
@@ -136,7 +159,7 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
 
   for (const item of subscribeItems) {
     const { url } = item
-    let servers = rootState.librarySubscribe.detail[url] || []
+    const servers = rootState.librarySubscribe.detail[url] || []
     config.proxies = config.proxies.concat(servers)
   }
 

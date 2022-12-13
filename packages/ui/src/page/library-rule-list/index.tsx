@@ -654,7 +654,7 @@ function ModalAddOrEdit() {
               className='auto-update'
               valuePropName='checked'
             >
-              <Checkbox style={{ marginLeft: 0 }}>自动更新节点</Checkbox>
+              <Checkbox style={{ marginLeft: 0 }}>自动更新</Checkbox>
             </Form.Item>
 
             {autoUpdate && (
