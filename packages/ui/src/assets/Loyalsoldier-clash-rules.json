@@ -1,0 +1,114 @@
+{
+  "rule_list": [
+    {
+      "id": "71b8d498-0292-48c0-8192-b87c0e33da3d",
+      "name": "GFWList 域名列表 gfw.txt",
+      "type": "remote-rule-provider",
+      "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt",
+      "autoUpdate": true,
+      "autoUpdateInterval": 15,
+      "providerBehavior": "domain",
+      "providerPolicy": "Proxy",
+      "updatedAt": 1670954297968
+    },
+    {
+      "id": "1da9721f-75a2-4df7-abb7-d31ddb04bb8b",
+      "name": "广告域名列表 reject.txt",
+      "type": "remote-rule-provider",
+      "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt",
+      "autoUpdate": true,
+      "autoUpdateInterval": 24,
+      "providerBehavior": "domain",
+      "providerPolicy": "REJECT",
+      "updatedAt": 1670954338970
+    },
+    {
+      "id": "3cde5a67-a2fd-4b1e-ac57-6cc4f67e719a",
+      "name": "GreatFire 域名列表 greatfire.txt",
+      "type": "remote-rule-provider",
+      "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/greatfire.txt",
+      "autoUpdate": true,
+      "autoUpdateInterval": 24,
+      "providerBehavior": "domain",
+      "providerPolicy": "Proxy",
+      "updatedAt": 1670954341987
+    },
+    {
+      "id": "7b6c8792-c414-463d-9c2d-6a256a623240",
+      "name": "局域网 IP 及保留 IP 地址列表 lancidr.txt",
+      "type": "remote-rule-provider",
+      "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/lancidr.txt",
+      "autoUpdate": true,
+      "autoUpdateInterval": 24,
+      "providerBehavior": "ipcidr",
+      "providerPolicy": "DIRECT",
+      "updatedAt": 1670941969375
+    },
+    {
+      "id": "06e8229a-7352-4824-b110-17ec19be873b",
+      "name": "中国大陆 IP 地址列表 cncidr.txt",
+      "type": "remote-rule-provider",
+      "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cncidr.txt",
+      "autoUpdate": true,
+      "autoUpdateInterval": 24,
+      "providerBehavior": "ipcidr",
+      "providerPolicy": "DIRECT",
+      "updatedAt": 1668538911724
+    },
+    {
+      "id": "7e8054a2-a1f2-480c-94aa-ba8b872e4d03",
+      "name": "代理域名列表 proxy.txt",
+      "type": "remote-rule-provider",
+      "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/proxy.txt",
+      "autoUpdate": true,
+      "autoUpdateInterval": 15,
+      "providerBehavior": "domain",
+      "providerPolicy": "Proxy",
+      "updatedAt": 1670933841117
+    },
+    {
+      "id": "e3d7ea99-b5a3-4c33-beba-dfc3ae4ddb17",
+      "name": "私有网络专用域名列表 private.txt",
+      "type": "remote-rule-provider",
+      "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/private.txt",
+      "autoUpdate": true,
+      "autoUpdateInterval": 24,
+      "providerBehavior": "domain",
+      "providerPolicy": "DIRECT",
+      "updatedAt": 1670933842183
+    },
+    {
+      "id": "0648e59f-f4a1-4220-87a5-bc7404b70bd9",
+      "name": "Telegram 使用的 IP 地址列表 telegramcidr.txt",
+      "type": "remote-rule-provider",
+      "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/telegramcidr.txt",
+      "autoUpdate": true,
+      "autoUpdateInterval": 24,
+      "providerBehavior": "ipcidr",
+      "providerPolicy": "Proxy",
+      "updatedAt": 1670933843937
+    },
+    {
+      "id": "2a43b00c-63eb-42bb-a75a-3815830c939d",
+      "name": "Apple 在中国大陆可直连的域名列表 apple.txt",
+      "type": "remote-rule-provider",
+      "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/apple.txt",
+      "autoUpdate": true,
+      "autoUpdateInterval": 24,
+      "providerBehavior": "domain",
+      "providerPolicy": "Apple",
+      "updatedAt": 1670954345033
+    },
+    {
+      "id": "a5fbf76e-512a-4dfd-89f0-336cce49286e",
+      "name": "iCloud 域名列表 icloud.txt",
+      "type": "remote-rule-provider",
+      "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/icloud.txt",
+      "autoUpdate": true,
+      "autoUpdateInterval": 24,
+      "providerBehavior": "domain",
+      "providerPolicy": "iCloud",
+      "updatedAt": 1670933938072
+    }
+  ]
+}

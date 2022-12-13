@@ -61,7 +61,7 @@
 4. 这种可以使用, 但是 2 中的 rules 如果想使用 proxy, 需要知道 1 里面的 proxy-group 中的名称. 不是很灵活, 建议使用纯服务器订阅 / 规则分开处理.
 
 比如, rules 里写了 "proxy-group: XXX-Provider"
-2 中添加的规则需要使用这个名字, 比如 `- DOMAIN-KEYWORD,google,XXX-Provider`
+2 中添加的规则需要使用这个名字, 比如 `- DOMAIN-KEYWORD,google,XXX-Provider`, 活着使用 `Proxy`, 本软件中 `Proxy` 总是存在
 
 ## 功能
 
@@ -98,6 +98,27 @@
 - `sub2-可用` => fallback(sub2 所有节点)
 - `sub2-手选` => select(sub2 所有节点)
 
+### 配置类型
+
+- `本地存储`: 存储在本机中, 可以是 partial config
+- `远程 config`: url 返回一个配置, 可以是 partial config, 例如只包含 `rules: []`
+- `远程 rule-providers`
+
+#### 远程 rule-providers
+
+clash-config-manager 支持在 ClashX 非 Pro 中使用 rule-set.
+通过处理将 rule-set 变成普通规则.
+
+- 下载 [packages/ui/src/assets/Loyalsoldier-clash-rules.json](packages/ui/src/assets/Loyalsoldier-clash-rules.json)
+- 导入 json
+- 到配置组装中启用这些配置.
+- 点击生成即可.
+
+上面的 json 是我添加好导出的, 你也可以自己添加 rule-set
+
+- rule-set transform 到普通规则后, 配置文件会变得很大, ClashX 可能会变得很慢.
+- 更推荐直接使用 ClashX Meta: 它支持 GEO-SITE 类型的规则
+
 ### 规则 TARGET
 
 ```yml
@@ -108,12 +129,12 @@ rules:
 
 规则的 `TARGET` 可以是
 
-- 标准的 `DIRECT` / `REJECT` / `no-resolve`
+- clash 内置的 `DIRECT` / `REJECT` / `no-resolve`
 - `Proxy` 本项目固定使用的 proxy-group 名称
 - 自动生成的分组名 (例如 ALL, sub1, sub2 ....)
 - 自定义名称
 
-#### 自定义名称 TARGET
+#### 自定义名称作为 TARGET
 
 例如 `DOMAIN-SUFFIX,youtube.com,youtube.com` 这样的话 clash-config-manager 会自动生成名为 `youtube.com` proxy-group
 可以从 GUI 中选择 `DIRECT` / `Proxy` / `根据订阅生成的组名` / `REJECT`
