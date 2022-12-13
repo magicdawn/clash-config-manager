@@ -40,6 +40,7 @@ import LibraryRuleList from './page/library-rule-list'
 import LibrarySubscribe from './page/library-subscribe'
 import Preference from './page/preference'
 import styles from './index.module.less'
+import { routeTitles } from './storage'
 
 const routes = [
   {
@@ -51,28 +52,31 @@ const routes = [
   {
     path: '/library-subscribe',
     component: LibrarySubscribe,
-    title: '订阅管理',
+    title: '',
     icon: <PayCircleOutlined />,
   },
   {
     path: '/library-rule-list',
     component: LibraryRuleList,
-    title: '配置源(Partial Config)',
+    title: '',
     icon: <AppstoreAddOutlined />,
   },
   {
     path: '/current-config',
     component: CurrentConfig,
-    title: '配置组装(Config Builder)',
+    title: '',
     icon: <SettingOutlined />,
   },
   {
     path: '/preference',
     component: Preference,
-    title: '偏好设置',
+    title: '',
     icon: <UserOutlined />,
   },
 ]
+routes.forEach((r) => {
+  r.title ||= routeTitles[r.path.slice(1)]
+})
 
 const usingRoutes: RouteObject[] = routes.map((r) => {
   return {

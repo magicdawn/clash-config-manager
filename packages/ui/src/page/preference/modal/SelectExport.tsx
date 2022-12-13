@@ -1,5 +1,5 @@
 import { ConfigItem } from '$ui/common/define'
-import { ExportData } from '$ui/storage'
+import { ExportData, storageDataDisplayNames } from '$ui/storage'
 import { truthy } from '$ui/util/ts-filter'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Modal, Tree } from 'antd'
@@ -94,19 +94,6 @@ type TreeData = {
   children?: TreeData[]
 }
 
-const displayNames: Record<string, string> = {
-  'subscribe_list': '订阅管理 (有泄露风险,谨慎分享)',
-  'rule_list': '配置源管理',
-  'current_config_v2': '配置管理',
-  'current_config_v2.list': '使用中的列表',
-  'current_config_v2.name': '配置文件名称',
-  'preference': '偏好设置',
-  'preference.syncConfig': '同步数据配置',
-  'preference.syncConfig.user': '用户名',
-  'preference.syncConfig.pass': '密码(有泄露风险,谨慎分享)',
-  'preference.vscodeTheme': '内置 monaco 编辑器主题',
-}
-
 function generateTreeData(obj: object, keyPrefix = '') {
   const treeData: TreeData[] = []
 
@@ -141,7 +128,7 @@ function generateTreeData(obj: object, keyPrefix = '') {
 
   for (const currentKey of Object.keys(obj)) {
     const key = keyPrefix + currentKey
-    const title = displayNames[key] || currentKey
+    const title = storageDataDisplayNames[key] || currentKey
     treeData.push({
       key,
       title,

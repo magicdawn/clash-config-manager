@@ -12,11 +12,10 @@ const RULE_LIST_STORAGE_KEY = 'rule_list'
 const { state, load, init } = valtioState(
   {
     list: [] as RuleItem[],
-    detail: {} as Record<string, any>,
   },
   {
     load() {
-      return { list: storage.get(RULE_LIST_STORAGE_KEY), detail: {} }
+      return { list: storage.get(RULE_LIST_STORAGE_KEY) }
     },
     persist(val) {
       storage.set(RULE_LIST_STORAGE_KEY, val.list)
