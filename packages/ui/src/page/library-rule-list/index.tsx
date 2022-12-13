@@ -39,6 +39,7 @@ import {
   EditorRefInner,
   showCode,
 } from '$ui/common/code'
+import { getRuleItemContent } from '$ui/util/remote-rules'
 
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
@@ -116,16 +117,14 @@ export default function LibraryRuleList() {
     const item = state.list[index]
     if (item.type === 'local') return
 
-    let content: string
-    if (item.type === 'remote') {
-      if (!item.content) await actions.updateRemote({ item })
-      content = item.content!
-    } else {
-      if (!item.payload?.length) await actions.updateRemote({ item })
-      content = YAML.dump({ payload: item.payload }) as string
+    let content: string | undefined
+    if (item.type === 'remote' || item.type === 'remote-rule-provider') {
+      content = await getRuleItemContent(item.id)
+      if (!content) await actions.updateRemote({ item })
+      content = await getRuleItemContent(item.id)
     }
 
-    showCode(content)
+    showCode(content || '')
   })
 
   // disable enter

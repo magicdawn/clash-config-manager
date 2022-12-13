@@ -9,15 +9,32 @@ import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './model.a
 
 const RULE_LIST_STORAGE_KEY = 'rule_list'
 
+// remove legacy remote.item.content | remote-rule-provider.item.payload
+// these content may be long long
+// AND lag electron-store from get/set
+function cleanUpLegacyFields(list: RuleItem[]) {
+  list.forEach((item) => {
+    if (item.type === 'remote' || item.type === 'remote-rule-provider') {
+      // @ts-ignore
+      delete item.content
+      // @ts-ignore
+      delete item.payload
+    }
+  })
+}
+
 const { state, load, init } = valtioState(
   {
     list: [] as RuleItem[],
   },
   {
     load() {
-      return { list: storage.get(RULE_LIST_STORAGE_KEY) }
+      const list = storage.get(RULE_LIST_STORAGE_KEY)
+      cleanUpLegacyFields(list)
+      return { list }
     },
     persist(val) {
+      cleanUpLegacyFields(val.list)
       storage.set(RULE_LIST_STORAGE_KEY, val.list)
     },
   }

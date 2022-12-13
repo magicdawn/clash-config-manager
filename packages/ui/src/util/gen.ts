@@ -5,6 +5,7 @@ import { rootActions, rootState } from '$ui/store'
 import fse from 'fs-extra'
 import { homedir } from 'os'
 import { join as pathjoin } from 'path'
+import { getRuleItemContent } from './remote-rules'
 
 export function getUsingItems() {
   // subscribe
@@ -82,14 +83,17 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
     }
 
     if (type === 'remote') {
-      const content = item.content!
+      const content = await getRuleItemContent(item.id)
       const partial = YAML.load(content) as Partial<ClashConfig>
       updateConfig(partial)
       continue
     }
 
     if (type === 'remote-rule-provider') {
-      const { payload = [], providerBehavior, providerPolicy } = item
+      const { providerBehavior, providerPolicy } = item
+      const content = await getRuleItemContent(item.id)
+      const yamlObj = YAML.load(content) as { payload: string[] }
+      const { payload } = yamlObj
 
       let rules: string[]
       if (providerBehavior === 'classical') {

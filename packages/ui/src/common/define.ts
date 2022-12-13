@@ -42,7 +42,7 @@ export type RemoteRuleItem = {
   updatedAt?: number // ts
 
   // 内容
-  content?: string
+  // content?: string
 }
 
 export interface RemoteRuleProviderRuleItem {
@@ -60,7 +60,7 @@ export interface RemoteRuleProviderRuleItem {
   providerPolicy: 'DIRECT' | 'REJECT' | 'Proxy' | string
 
   // 内容
-  payload?: string[]
+  // payload?: string[]
 }
 
 export type RuleItem = LocalRuleItem | RemoteRuleItem | RemoteRuleProviderRuleItem
