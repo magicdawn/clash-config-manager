@@ -109,8 +109,7 @@
 clash-config-manager 支持在 ClashX 非 Pro 中使用 rule-set.
 通过处理将 rule-set 变成普通规则.
 
-- 下载 [packages/ui/src/assets/Loyalsoldier-clash-rules.json](packages/ui/src/assets/Loyalsoldier-clash-rules.json)
-- 导入 json
+- 偏好设置, 导入应用内置的 rule-providers 设置
 - 到配置组装中启用这些配置.
 - 点击生成即可.
 
