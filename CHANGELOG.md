@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.18.2 2022-12-14
+
+- fix export / import json logic
+
 ## v0.18.1 2022-12-13
 
 - fix config merge in generate logic
