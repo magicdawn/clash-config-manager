@@ -1,11 +1,11 @@
-import storage, { getExportData } from '$ui/storage'
+import storage, { customMerge, getExportData } from '$ui/storage'
 import { rootActions, rootState } from '$ui/store'
 import useImmerState from '$ui/util/hooks/useImmerState'
-import customMerge from '$ui/util/sync/webdav/customMerge'
 import helper, { STORAGE_FILE } from '$ui/util/sync/webdav/helper'
 import { CloudDownloadOutlined, CloudUploadOutlined, SettingFilled } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Alert, Button, Card, Col, Input, message, Modal, Row, Space, Tag } from 'antd'
+import debugFactory from 'debug'
 import { ipcRenderer, shell } from 'electron'
 import fse from 'fs-extra'
 import launch from 'launch-editor'
@@ -14,9 +14,18 @@ import { tmpdir } from 'os'
 import path from 'path'
 import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
-import PRESET_JSON_DATA from '../../assets/基本数据规则.json'
 import styles from './index.module.less'
-import { pickSelectExport, SelectExportForStaticMethod } from './modal/SelectExport'
+import { pickDataFrom, SelectExportForStaticMethod } from './modal/SelectExport'
+import reusePromise from 'reuse-promise'
+
+const debug = debugFactory('app:page:preference')
+
+const getAssetsDir = reusePromise(
+  async () => {
+    return await ipcRenderer.invoke('getAssetsDir')
+  },
+  { memorize: true }
+)
 
 export default function Preference() {
   const [showModal, setShowModal] = useState(false)
@@ -46,7 +55,7 @@ export default function Preference() {
     setExportSuccessFile(file)
   })
 
-  const onSelectImport = useMemoizedFn(async () => {
+  const onSelectExport = useMemoizedFn(async () => {
     const file = path.join(
       tmpdir(),
       'cfm',
@@ -54,7 +63,7 @@ export default function Preference() {
     )
 
     // 选择数据
-    const { cancel, data } = await pickSelectExport(getExportData())
+    const { cancel, data } = await pickDataFrom(getExportData())
     if (cancel) return
     console.log(data)
 
@@ -63,10 +72,20 @@ export default function Preference() {
     setExportSuccessFile(file)
   })
 
-  const importAction = (importData) => {
+  const importAction = async (importData: any) => {
+    // 选择数据
+    const { cancel, data: selectedData } = await pickDataFrom(importData)
+    debug(
+      'importAction: %O, select result: cancel = %s, selectedData = %O',
+      importData,
+      cancel,
+      selectedData
+    )
+    if (cancel || !selectedData) return
+
     const localData = { ...storage.store }
-    const merged = customMerge(localData, importData)
-    console.log('customMerge', { localData, importData, merged })
+    const merged = customMerge(localData, selectedData)
+    debug('importAction customMerge %O', { localData, importData, selectedData, merged })
 
     // reload electron-store
     storage.store = merged
@@ -77,11 +96,8 @@ export default function Preference() {
     message.success('导入成功: 已与本地配置合并')
   }
 
-  const onImport = useMemoizedFn(async () => {
-    const file = await ipcRenderer.invoke('select-file')
-    if (!file) return
-
-    let importData
+  const importFile = async (file: string) => {
+    let importData: any
     try {
       importData = await fse.readJson(file)
     } catch (e) {
@@ -89,10 +105,21 @@ export default function Preference() {
       return message.error('readJson fail: ' + '\n' + e.stack || e)
     }
     importAction(importData)
+  }
+
+  const onSelectFileAndImport = useMemoizedFn(async () => {
+    const file = await ipcRenderer.invoke('select-file')
+    if (!file) return
+    await importFile(file)
   })
 
-  const onImportPreset = useMemoizedFn(async () => {
-    importAction(PRESET_JSON_DATA)
+  const onImportBundledPreset = useMemoizedFn(async () => {
+    const presetFile = path.join(await getAssetsDir(), 'json/基本数据规则.json')
+    importFile(presetFile)
+  })
+  const onImportBundledRuleSets = useMemoizedFn(async () => {
+    const presetFile = path.join(await getAssetsDir(), 'json/Loyalsoldier-clash-rules.json')
+    importFile(presetFile)
   })
 
   const openInEditor = useMemoizedFn((editor) => {
@@ -220,10 +247,10 @@ export default function Preference() {
             <SelectExportForStaticMethod />
             <Space direction='vertical' size={20} style={{ width: '100%' }}>
               <Button block type='primary' onClick={onExport}>
-                <CloudUploadOutlined /> 导出到 JSON
+                <CloudUploadOutlined /> 导出全部数据到 JSON
               </Button>
-              <Button block onClick={onSelectImport}>
-                <CloudUploadOutlined /> 高级导出
+              <Button block onClick={onSelectExport}>
+                <CloudUploadOutlined /> 选择导出数据到 JSON
               </Button>
             </Space>
           </Card>
@@ -239,12 +266,16 @@ export default function Preference() {
             }
           >
             <Space direction='vertical' size={20} style={{ width: '100%' }}>
-              <Button type='primary' block onClick={onImport}>
+              <Button type='primary' block onClick={onSelectFileAndImport}>
                 <CloudUploadOutlined /> 从 JSON 导入
               </Button>
 
-              <Button block onClick={onImportPreset}>
+              <Button block onClick={onImportBundledPreset}>
                 <CloudUploadOutlined /> 导入应用内置的基本设置
+              </Button>
+
+              <Button block onClick={onImportBundledRuleSets}>
+                <CloudUploadOutlined /> 导入应用内置的远程 rule-providers 设置
               </Button>
             </Space>
           </Card>

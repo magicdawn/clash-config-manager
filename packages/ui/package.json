@@ -53,6 +53,7 @@
     "react-router-dom": "^6.4.5",
     "react-spinkit": "^3.0.0",
     "react-spinners": "^0.13.7",
+    "reuse-promise": "^2.0.0",
     "shallowequal": "^1.1.0",
     "spawn-sync": "^2.0.0",
     "tldjs": "^2.3.1",

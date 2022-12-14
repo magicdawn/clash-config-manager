@@ -2,7 +2,10 @@
 
 import { ConfigItem, RuleItem, Subscribe } from '$ui/common/define'
 import Store from 'electron-store'
-import _ from 'lodash'
+import _, { omit } from 'lodash'
+import { keysToOmit } from './config'
+
+export { customMerge } from './customMerge'
 
 const storage = new Store({
   name: 'data',
@@ -41,7 +44,7 @@ export type StorageData = typeof storage extends Store<infer T> ? T : never
  */
 export function getExportData() {
   const fullData = storage.store
-  return _.omit(fullData, ['subscribe_detail', 'subscribe_status'])
+  return omit(fullData, keysToOmit)
 }
 export type ExportData = ReturnType<typeof getExportData>
 

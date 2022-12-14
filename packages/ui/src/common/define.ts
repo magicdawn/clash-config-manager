@@ -7,7 +7,7 @@ export interface Subscribe<ExtData = any> {
   excludeKeywords?: string[]
 
   // 自动更新订阅?
-  autoUpdate: boolean
+  autoUpdate?: boolean
   autoUpdateInterval?: number // 小时
   updatedAt?: number // ts
 

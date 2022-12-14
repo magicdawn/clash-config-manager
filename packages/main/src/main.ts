@@ -9,6 +9,7 @@ import { load as loadDevExt } from './dev/ext'
 import { loadWindowState, saveWindowState } from './initWindowState'
 import './ipc/index'
 import setMenu from './menu'
+import { assetsDir } from './ipc/common'
 
 // Prevent window from being garbage collected
 let mainWindow: BrowserWindow
@@ -177,10 +178,7 @@ function addRequestExtraHeadersSupport() {
 }
 
 function setTray() {
-  const icon = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets/cat@2x.png')
-    : path.join(__dirname, '../../../assets/cat@2x.png')
-
+  const icon = path.join(assetsDir, 'cat@2x.png')
   const tray = new Tray(icon)
   tray.setToolTip('clash config manager')
 

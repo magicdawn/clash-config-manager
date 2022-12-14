@@ -204,24 +204,24 @@ type PickupDataExtended = Merge<
   }
 >
 
-export async function pickSelectExport(selectFrom: ExportData) {
-  const exportData = _.cloneDeep(selectFrom) as PickupDataExtended
+export async function pickDataFrom(dataFrom: any) {
+  const treeSource = _.cloneDeep(dataFrom) as Partial<PickupDataExtended>
 
   // current_config_v2 添加 name 字段
-  if (exportData?.current_config_v2?.list) {
-    exportData.current_config_v2.list.forEach((item, i) => {
+  if (treeSource?.current_config_v2?.list) {
+    treeSource.current_config_v2.list.forEach((item, i) => {
       const { id } = item
       const target =
-        exportData?.subscribe_list?.find((i) => i.id === id) ||
-        exportData?.rule_list?.find((i) => i.id === id)
+        treeSource?.subscribe_list?.find((i) => i.id === id) ||
+        treeSource?.rule_list?.find((i) => i.id === id)
       item.name = target?.name
     })
-    exportData.current_config_v2.list = exportData.current_config_v2.list.filter((item) => {
+    treeSource.current_config_v2.list = treeSource.current_config_v2.list.filter((item) => {
       return !!item.name
     })
   }
 
-  const treeData = generateTreeData(exportData)
+  const treeData = generateTreeData(treeSource)
 
   const { cancel, keys } = await new Promise<SelectResult>((resolve) => {
     Object.assign(proxyProps, { treeData, visible: true, resolve })
@@ -232,7 +232,7 @@ export async function pickSelectExport(selectFrom: ExportData) {
   }
 
   // sleect
-  const data = _.pick(selectFrom, keys)
+  const data = _.pick(dataFrom, keys)
 
   // clean
   clean(data)
