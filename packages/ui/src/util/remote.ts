@@ -1,12 +1,12 @@
 import { md5 } from '$clash-utils'
-import { cacheDir } from '$ui/common'
+import { appCacheDir } from '$ui/common'
 import fse from 'fs-extra'
 import moment from 'moment'
 import path from 'path'
 import request from 'umi-request'
 
 export async function readUrlWithCache(url: string, forceUpdate = false) {
-  const file = path.join(cacheDir, 'readUrl', md5(url))
+  const file = path.join(appCacheDir, 'readUrl', md5(url))
 
   let shouldReuse = false
   let stat: fse.Stats

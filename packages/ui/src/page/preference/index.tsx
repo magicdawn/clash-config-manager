@@ -1,3 +1,4 @@
+import { getAssetsDir, appTempDir } from '$ui/common'
 import storage, { customMerge, getExportData } from '$ui/storage'
 import { rootActions, rootState } from '$ui/store'
 import useImmerState from '$ui/util/hooks/useImmerState'
@@ -10,22 +11,13 @@ import { ipcRenderer, shell } from 'electron'
 import fse from 'fs-extra'
 import launch from 'launch-editor'
 import moment from 'moment'
-import { tmpdir } from 'os'
 import path from 'path'
 import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import styles from './index.module.less'
 import { pickDataFrom, SelectExportForStaticMethod } from './modal/SelectExport'
-import reusePromise from 'reuse-promise'
 
 const debug = debugFactory('app:page:preference')
-
-const getAssetsDir = reusePromise(
-  async () => {
-    return await ipcRenderer.invoke('getAssetsDir')
-  },
-  { memorize: true }
-)
 
 export default function Preference() {
   const [showModal, setShowModal] = useState(false)
@@ -48,7 +40,7 @@ export default function Preference() {
   const [exportSuccessFile, setExportSuccessFile] = useState('')
 
   const onExport = useMemoizedFn(async () => {
-    const file = path.join(tmpdir(), 'cfm', `${moment().format('YYYY_MM_DD__HH_mm')}.json`)
+    const file = path.join(appTempDir, `${moment().format('YYYY_MM_DD__HH_mm')}.json`)
     const data = getExportData()
     await fse.outputJson(file, data, { spaces: 2 })
     setExportSuccessModalVisible(true)
@@ -56,11 +48,7 @@ export default function Preference() {
   })
 
   const onSelectExport = useMemoizedFn(async () => {
-    const file = path.join(
-      tmpdir(),
-      'cfm',
-      `${moment().format('选择导出__YYYY_MM_DD__HH_mm')}.json`
-    )
+    const file = path.join(appTempDir, `${moment().format('选择导出__YYYY_MM_DD__HH_mm')}.json`)
 
     // 选择数据
     const { cancel, data } = await pickDataFrom(getExportData())

@@ -1,4 +1,4 @@
-import { cacheDir } from '$ui/common'
+import { appCacheDir } from '$ui/common'
 import { RemoteRuleItem, RemoteRuleProviderRuleItem } from '$ui/common/define'
 import { YAML } from '$ui/libs'
 import fse from 'fs-extra'
@@ -8,7 +8,7 @@ import { readUrlWithCache } from './remote'
 // use cacheDir because this is cleanable
 // you can recover from url settings
 export function externalFileForRuleItem(id: string) {
-  return path.join(cacheDir, `remote-rule-content/${id}.yml`)
+  return path.join(appCacheDir, `remote-rule-content/${id}.yml`)
 }
 
 async function saveRomoteRuleItem(id: string, content: string) {
