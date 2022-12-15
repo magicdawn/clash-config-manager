@@ -1,5 +1,13 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.locale": "en",
-  "files.exclude": {}
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": false
+  }
 }
