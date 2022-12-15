@@ -1,5 +1,8 @@
-// https://github.com/microsoft/monaco-editor/issues/102
-import * as monaco from 'monaco-editor'
+import { monaco } from './setup'
+
+/**
+ * https://github.com/microsoft/monaco-editor/issues/102
+ */
 
 const { KeyCode, KeyMod } = monaco
 
