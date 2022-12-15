@@ -4,15 +4,14 @@
     "clash-proxy-parser#build": {
       "outputs": ["dist/**"]
     },
+    "build": {
+      "dependsOn": ["^build"]
+    },
     "main#build": {
       "outputs": ["../../bundle/production/main/**"]
     },
     "ui#build": {
       "outputs": ["../../bundle/production/renderer/**"]
-    },
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["bundle/production/**"]
     }
   }
 }
