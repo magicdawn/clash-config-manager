@@ -22,7 +22,8 @@ const storage = new Store({
     current_config_v2: {
       list: [] as ConfigItem[],
       name: 'clash-config-manager',
-      forceUpdate: true,
+      generateAllProxyGroup: false,
+      generateSubNameProxyGroup: false,
     },
 
     preference: {

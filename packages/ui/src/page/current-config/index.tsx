@@ -1,7 +1,7 @@
 import { runGenerate } from '$ui/commands/run'
 import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/util/gen'
 import { useMemoizedFn } from 'ahooks'
-import { Button, Col, Divider, Input, message, Row } from 'antd'
+import { Button, Checkbox, Col, Divider, Input, message, Row, Tag } from 'antd'
 import { shell } from 'electron'
 import launch from 'launch-editor'
 import { useSnapshot } from 'valtio'
@@ -10,7 +10,7 @@ import styles from './index.module.less'
 import { state } from './model'
 
 export default function ConfigList() {
-  const { name } = useSnapshot(state)
+  const { name, generateAllProxyGroup, generateSubNameProxyGroup } = useSnapshot(state)
 
   const onGenConfigClick = useMemoizedFn(async () => {
     return runGenerate()
@@ -54,51 +54,76 @@ export default function ConfigList() {
       <ConfigDND />
 
       {createDivider('配置文件')}
+
       <Row>
-        <Col span={spanLeft}>
-          <div
-            className='label'
-            style={{
-              paddingRight: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              height: '32px',
-            }}
-          >
-            配置名称
-          </div>
+        <Col flex='auto' style={{ marginRight: 10 }}>
+          <Row>
+            <Col>
+              <div
+                className='label'
+                style={{
+                  paddingRight: 10,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  height: '32px',
+                }}
+              >
+                配置名称
+              </div>
+            </Col>
+            <Col flex={1}>
+              <Input
+                placeholder={DEFAULT_NAME}
+                value={name}
+                onChange={(e) => {
+                  const name = e.target.value
+                  state.name = name
+                }}
+              />
+            </Col>
+          </Row>
+          <Row style={{ marginTop: 5 }}>
+            <Col>
+              <div
+                className='label'
+                style={{
+                  paddingRight: 10,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  height: '32px',
+                }}
+              >
+                文件地址
+              </div>
+            </Col>
+            <Col flex={1}>
+              <Input value={getConfigFileDisplay(name)} disabled />
+            </Col>
+          </Row>
         </Col>
-        <Col span={spanRight}>
-          <Input
-            placeholder={DEFAULT_NAME}
-            value={name}
+        <Col flex='170px' style={{ textAlign: 'right' }}>
+          <Checkbox
+            checked={generateAllProxyGroup}
             onChange={(e) => {
-              const name = e.target.value
-              state.name = name
-            }}
-          />
-        </Col>
-      </Row>
-      <Row style={{ marginTop: 5 }}>
-        <Col span={spanLeft}>
-          <div
-            className='label'
-            style={{
-              paddingRight: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              height: '32px',
+              state.generateAllProxyGroup = e.target.checked
             }}
           >
-            文件地址
-          </div>
-        </Col>
-        <Col span={spanRight}>
-          <Input value={getConfigFileDisplay(name)} disabled />
+            生成 <Tag style={{ marginRight: 0 }}>所有节点</Tag> 组
+          </Checkbox>
+
+          <Checkbox
+            checked={generateSubNameProxyGroup}
+            onChange={(e) => {
+              state.generateSubNameProxyGroup = e.target.checked
+            }}
+          >
+            生成 <Tag style={{ marginRight: 0 }}>订阅名同名</Tag> 组
+          </Checkbox>
         </Col>
       </Row>
+
       <Button
         type='primary'
         block

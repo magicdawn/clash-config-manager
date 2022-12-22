@@ -9,11 +9,15 @@ const CURRENT_CONFIG_STORAGE_KEY = 'current_config_v2'
 interface IState {
   list: ConfigItem[]
   name: string
+  generateAllProxyGroup: boolean
+  generateSubNameProxyGroup: boolean
 }
 
 const defaultState: IState = {
   list: [],
   name: '',
+  generateAllProxyGroup: false,
+  generateSubNameProxyGroup: false,
 }
 
 const allowedKeys = Object.keys(defaultState)
