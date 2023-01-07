@@ -315,16 +315,15 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
   }
 }
 
+// default parameter 不能处理空字符串的情况
 export const DEFAULT_NAME = 'clash-config-manager'
 
-// default parameter 不能处理空字符串的情况
-
 export function getConfigFile(name?: string) {
-  name = name || DEFAULT_NAME
+  name ||= DEFAULT_NAME
   return pathjoin(homedir(), `.config/clash/${name}.yaml`)
 }
 
 export function getConfigFileDisplay(name?: string) {
-  name = name || DEFAULT_NAME
+  name ||= DEFAULT_NAME
   return `~/.config/clash/${name}.yaml`
 }
