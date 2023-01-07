@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.18.3 2023-01-08
+
+- 5385e3c feat: 支持 proxy-group.filter, 示例 `{name: 🇯🇵JPN, type: select, proxies: [], filter: JPN}`
+- d1a8b54 feat: make ALL group & sub-name group 可配置
+- 6a875dc chore: 缩减 monaco editor 使用
+- 2071b8d feat: 规范 cache / temp dir 的使用
+
 ## v0.18.2 2022-12-14
 
 - fix export / import json logic
