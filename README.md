@@ -98,6 +98,16 @@
 - `sub2-可用` => fallback(sub2 所有节点)
 - `sub2-手选` => select(sub2 所有节点)
 
+### proxy-group filter
+
+```yml
+proxy-groups:
+  - { name: 🇯🇵JPN, type: select, proxies: [], filter: JPN }
+  - { name: 🇭🇰HKG, type: select, proxies: [], filter: HKG }
+```
+
+支持通过名称筛选 proxies, 组成新的 proxy-group
+
 ### 配置类型
 
 - `本地存储`: 存储在本机中, 可以是 partial config
