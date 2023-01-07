@@ -41,6 +41,7 @@ export interface ProxyGroup {
   type: ProxyGroupType
   url?: string
   interval?: number
+  filter?: string
 }
 
 export enum ProxyGroupType {
