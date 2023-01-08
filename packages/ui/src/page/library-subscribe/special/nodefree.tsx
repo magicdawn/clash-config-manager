@@ -27,9 +27,9 @@ export function nodefreeGetUrls(subscribe: NodefreeSubscribe): string[] {
     return []
   }
 
-  // https://nodefree.org/dy/202212/20221205.yaml
+  // https://nodefree.org/dy/2023/01/2023010x.yaml
   const tpl = (m: moment.Moment) =>
-    `https://nodefree.org/dy/${m.format('YYYYMM')}/${m.format('YYYYMMDD')}.yaml`
+    `https://nodefree.org/dy/${m.format('YYYY')}/${m.format('MM')}/${m.format('YYYYMMDD')}.yaml`
 
   const urls: string[] = []
   for (let i = 1; i <= recentDays; i++) {
