@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
 
 // styles
+import 'antd/dist/reset.css'
 import '@icon-park/react/styles/index.css'
-import 'antd/dist/antd.css'
 
 // monaco setup
 import './common/monaco'
