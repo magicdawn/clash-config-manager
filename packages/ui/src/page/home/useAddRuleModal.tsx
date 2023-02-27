@@ -59,13 +59,13 @@ export function useAddRuleModalFromGlobal() {
     mode: 'from-global',
     handleAdd(rule: string, ruleId: string) {
       if (!rule || !ruleId) {
-        return message.warn(`内容 or 待添加规则为空`)
+        return message.warning(`内容 or 待添加规则为空`)
       }
 
       const index = rootState.libraryRuleList.list.findIndex((item) => item.id === ruleId)
       const ruleItem = rootState.libraryRuleList.list[index]
       if (!ruleItem) {
-        return message.warn(`找不到待添加规则`)
+        return message.warning(`找不到待添加规则`)
       }
 
       if (ruleItem.type !== 'local') {

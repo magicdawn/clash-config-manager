@@ -197,14 +197,7 @@ function setTray() {
     },
     {
       type: 'normal',
-      label: '重新生成配置', // 通常在 tray 点击这个是想更新订阅
-      click() {
-        mainWindow?.webContents.send('update-subscribe-and-generate')
-      },
-    },
-    {
-      type: 'normal',
-      label: '更新订阅和规则,重新生成配置',
+      label: '更新订阅并重新生成配置',
       click() {
         mainWindow?.webContents.send('generate-force-update')
       },
