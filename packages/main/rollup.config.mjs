@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { dirname, join } from 'path'
 import { defineConfig } from 'rollup'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
@@ -6,6 +6,10 @@ import json from '@rollup/plugin-json'
 import esbuild from 'rollup-plugin-esbuild'
 import tsconfigPaths from 'rollup-plugin-tsconfig-paths'
 import replace from '@rollup/plugin-replace'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 const env = process.env.NODE_ENV

@@ -9,9 +9,20 @@ module.exports = {
         es2021: true,
       },
       extends: ['eslint:recommended', 'prettier'],
-      rules: {
-        //
+      rules: {},
+    },
+    {
+      files: ['*.mjs'],
+      env: {
+        node: true,
+        es2021: true,
       },
+      parserOptions: {
+        sourceType: 'module',
+        ecmaVersion: 'latest',
+      },
+      extends: ['eslint:recommended', 'prettier'],
+      rules: {},
     },
     {
       files: ['*.ts', '*.tsx'],
