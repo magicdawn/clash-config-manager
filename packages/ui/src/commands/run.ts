@@ -37,7 +37,7 @@ const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {
 
   const { success, msg, filename } = result || {}
   if (success) {
-    message.success(`生成成功: ${filename} 已更新`)
+    message.success(msg)
   } else {
     message.error(msg || '生成失败')
   }

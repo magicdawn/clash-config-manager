@@ -304,14 +304,22 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
 
   const configYaml = YAML.dump(config)
   const file = getConfigFile(name)
-  await fse.outputFile(file, configYaml)
+
+  let msg = ''
+  if ((await fse.exists(file)) && configYaml === (await fse.readFile(file, 'utf-8'))) {
+    // content not changed
+    msg = `无变化, 已跳过生成`
+  } else {
+    await fse.outputFile(file, configYaml)
+    msg = `生成成功: ${file} 已更新`
+  }
 
   console.log(configYaml)
   console.log('[done]: %s writed', file)
   return {
     success: true,
     filename: file,
-    msg: `${file} writed`,
+    msg,
   }
 }
 
