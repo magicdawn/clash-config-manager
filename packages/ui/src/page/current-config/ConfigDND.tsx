@@ -2,7 +2,6 @@ import { ConfigItem } from '$ui/common/define'
 import { cx } from '$ui/libs'
 import { rootState } from '$ui/store'
 import { limitLines } from '$ui/util/text-util'
-import { truthy } from '$ui/util/ts-filter'
 import { InfoCircleOutlined, QuestionCircleFilled } from '@ant-design/icons'
 import { useMemoizedFn } from 'ahooks'
 import { Switch, Tooltip } from 'antd'
@@ -59,7 +58,7 @@ export function ConfigDND() {
           return ruleSourceList.find((x) => x.id === id)
         }
       })
-      .filter(truthy)
+      .filter(Boolean)
   }, [resultList, ruleSourceList])
 
   // 从 list 删除已经不存在的 id
