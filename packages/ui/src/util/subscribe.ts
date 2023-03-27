@@ -5,9 +5,9 @@ import bytes from 'bytes'
 import envPaths from 'env-paths'
 import fse from 'fs-extra'
 import YAML from 'js-yaml'
+import ky from 'ky'
 import moment from 'moment'
 import path from 'path'
-import request from 'umi-request'
 
 const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 
@@ -65,9 +65,7 @@ async function urlToSubscribe({ url, forceUpdate: force }: { url: string; forceU
 }
 
 const readUrl = async ({ url, file }: { url: string; file: string }) => {
-  const res = await request.get(url, {
-    getResponse: true,
-    responseType: 'text',
+  const res = await ky.get(url, {
     headers: {
       // https://github.com/tindy2013/subconverter/blob/d47b8868e5a235ee99f07a0dece8f237d90109c8/src/handler/interfaces.cpp#L64
       'x-extra-headers': JSON.stringify({
@@ -79,11 +77,11 @@ const readUrl = async ({ url, file }: { url: string; file: string }) => {
     },
   })
 
-  const text = res.data as string
+  const text = await res.text()
   await fse.outputFile(file, text)
   console.log('File %s writed', file)
 
-  const headers = res.response.headers
+  const headers = res.headers
   const valuableHeaderFields = ['profile-update-interval', 'subscription-userinfo']
   const valuableHeaders: Record<string, string> = {}
 

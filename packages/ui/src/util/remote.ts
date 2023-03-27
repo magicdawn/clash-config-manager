@@ -1,9 +1,9 @@
 import { md5 } from '$clash-utils'
 import { appCacheDir } from '$ui/common'
 import fse from 'fs-extra'
+import ky from 'ky'
 import moment from 'moment'
 import path from 'path'
-import request from 'umi-request'
 
 export async function readUrlWithCache(url: string, forceUpdate = false) {
   const file = path.join(appCacheDir, 'readUrl', md5(url))
@@ -27,7 +27,7 @@ export async function readUrlWithCache(url: string, forceUpdate = false) {
   if (shouldReuse) {
     text = await fse.readFile(file, 'utf8')
   } else {
-    text = await request.get(url, { responseType: 'text' })
+    text = await ky.get(url).text()
     await fse.outputFile(file, text, 'utf8')
   }
 
