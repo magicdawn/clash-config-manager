@@ -90,8 +90,9 @@
         margin-left: 10px;
 
         &.disabled {
-          background-color: gold;
           cursor: not-allowed;
+          color: #222;
+          background-color: gold;
         }
 
         display: flex;
@@ -125,10 +126,15 @@
         border: 1px solid purple;
         border-radius: 4px;
         position: relative;
+        color: #222;
 
         background-color: bisque;
         &.toggle-off {
           background-color: lighten(bisque, 8%);
+
+          :global(.dark-theme) & {
+            background-color: lighten(bisque, 5%);
+          }
         }
 
         margin-top: 4px;

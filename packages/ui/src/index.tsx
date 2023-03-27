@@ -3,6 +3,7 @@
 // styles
 import '@icon-park/react/styles/index.css'
 import 'antd/dist/reset.css'
+import './index.less'
 
 // monaco setup
 import './common/monaco'
@@ -15,7 +16,7 @@ import {
   SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-import { ConfigProvider, Menu, MenuProps } from 'antd'
+import { ConfigProvider, Menu, MenuProps, theme } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
 import _ from 'lodash'
 import { useMemo } from 'react'
@@ -41,6 +42,7 @@ import LibraryRuleList from './page/library-rule-list'
 import LibrarySubscribe from './page/library-subscribe'
 import Preference from './page/preference'
 import { routeTitles } from './storage'
+import { useIsDarkMode } from './util/hooks/useIsDarkMode'
 
 const routes = [
   {
@@ -95,12 +97,15 @@ const menuItems: MenuProps['items'] = routes.map(({ title, path, icon }) => {
 })
 
 function App() {
+  const isDark = useIsDarkMode()
+  const algorithm = isDark ? theme.darkAlgorithm : theme.defaultAlgorithm
+
   return (
-    <ConfigProvider locale={zhCN}>
-      <HashRouter>
+    <HashRouter>
+      <ConfigProvider locale={zhCN} theme={{ algorithm }}>
         <RouterInner />
-      </HashRouter>
-    </ConfigProvider>
+      </ConfigProvider>
+    </HashRouter>
   )
 }
 

@@ -5,7 +5,7 @@ import useImmerState from '$ui/util/hooks/useImmerState'
 import helper, { STORAGE_FILE } from '$ui/util/sync/webdav/helper'
 import { CloudDownloadOutlined, CloudUploadOutlined, SettingFilled } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { Alert, Button, Card, Col, Input, Modal, Row, Space, Tag, message } from 'antd'
+import { Alert, Button, Card, Col, Input, message, Modal, Radio, Row, Space, Tag } from 'antd'
 import debugFactory from 'debug'
 import { ipcRenderer, shell } from 'electron'
 import fse from 'fs-extra'
@@ -15,7 +15,8 @@ import path from 'path'
 import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import styles from './index.module.less'
-import { SelectExportForStaticMethod, pickDataFrom } from './modal/SelectExport'
+import { pickDataFrom, SelectExportForStaticMethod } from './modal/SelectExport'
+import { state, Theme } from './model'
 
 const debug = debugFactory('app:page:preference')
 
@@ -124,6 +125,8 @@ export default function Preference() {
 
   const rowGutter = { xs: 8, sm: 16, md: 24 }
 
+  const { theme } = useSnapshot(state)
+
   return (
     <div className={styles.page}>
       <ModalSyncConfig {...{ visible: showModal, setVisible: setShowModal }} />
@@ -163,7 +166,19 @@ export default function Preference() {
         </Space>
       </Modal>
 
-      <div style={{ textAlign: 'right' }}>
+      <Row>
+        <Radio.Group
+          buttonStyle='solid'
+          value={theme || 'light'}
+          onChange={(e) => (state.theme = e.target.value)}
+        >
+          <Radio.Button value={'light' satisfies Theme}>浅色模式</Radio.Button>
+          <Radio.Button value={'dark' satisfies Theme}>深色模式</Radio.Button>
+          <Radio.Button value={'follow-system' satisfies Theme}>跟随系统</Radio.Button>
+        </Radio.Group>
+
+        <Col flex={1}></Col>
+
         <Button
           type='primary'
           onClick={() => {
@@ -173,7 +188,7 @@ export default function Preference() {
           <SettingFilled />
           配置同步参数
         </Button>
-      </div>
+      </Row>
 
       <Row gutter={rowGutter} style={{ marginTop: 10 }}>
         {/* 上传区 */}
@@ -304,7 +319,7 @@ function ModalSyncConfig(props: ModalSyncConfigProps) {
     const { davServerUrl, user, pass } = data
 
     if (!davServerUrl || !user || !pass) {
-      return message.warn('davServerUrl & user & pass 不能为空')
+      return message.warning('davServerUrl & user & pass 不能为空')
     }
 
     // save

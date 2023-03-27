@@ -152,6 +152,11 @@ export async function update({
     // uniq
     servers = uniqWith(servers, isEqual)
 
+    // name 处理
+    servers.forEach((s) => {
+      s.name = s.name.replace(/^[-_]/, '')
+    })
+
     // name 不能是 duplicate
     const names = new Set<string>()
     servers.forEach((item) => {

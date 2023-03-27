@@ -4,6 +4,9 @@ import storage from '$ui/storage'
 
 const STORAGE_KEY = 'preference'
 
+export const themes = ['light', 'dark', 'follow-system'] as const
+export type Theme = typeof themes extends ReadonlyArray<infer T> ? T : never
+
 interface IState {
   syncConfig: {
     davServerUrl: string
@@ -11,6 +14,7 @@ interface IState {
     pass: string
   }
   vscodeTheme?: string
+  theme?: Theme
 }
 
 const { state, init, load } = valtioState<IState>(

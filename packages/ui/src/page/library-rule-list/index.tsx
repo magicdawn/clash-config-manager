@@ -7,6 +7,7 @@ import {
   showCode,
 } from '$ui/common/code'
 import { LocalRuleItem, RuleItem } from '$ui/common/define'
+import { useIsDarkMode } from '$ui/util/hooks/useIsDarkMode'
 import { getRuleItemContent } from '$ui/util/remote-rules'
 import { firstLine, limitLines } from '$ui/util/text-util'
 import { FileAddOutlined } from '@ant-design/icons'
@@ -22,12 +23,12 @@ import {
   Input,
   InputNumber,
   List,
+  message,
   Modal,
   Row,
   Select,
   Space,
   Tooltip,
-  message,
 } from 'antd'
 import debugFactory from 'debug'
 import execa from 'execa'
@@ -133,6 +134,9 @@ export default function LibraryRuleList() {
     }
   }, [])
 
+  const isDark = useIsDarkMode()
+  const iconFill = isDark ? '#eee' : '#333'
+
   return (
     <div className={styles.page}>
       <ModalAddOrEdit />
@@ -167,9 +171,9 @@ export default function LibraryRuleList() {
                   <span>名称: {name}</span>
                   <span style={{ marginLeft: 5, marginTop: 4 }}>
                     {type === 'local' ? (
-                      <SdCard theme='outline' size='18' fill='#333' title='本地规则' />
+                      <SdCard theme='outline' size='18' fill={iconFill} title='本地规则' />
                     ) : (
-                      <LinkTwo theme='outline' size='18' fill='#333' title='远程规则' />
+                      <LinkTwo theme='outline' size='18' fill={iconFill} title='远程规则' />
                     )}
                   </span>
                 </div>
@@ -183,9 +187,7 @@ export default function LibraryRuleList() {
                         </div>
                       }
                     >
-                      <div className='ellipsis' style={{ color: 'blue' }}>
-                        内容: {firstLine(item.content)}
-                      </div>
+                      <div className='ellipsis'>内容: {firstLine(item.content)}</div>
                     </Tooltip>
                   ) : (
                     <Tooltip
@@ -197,9 +199,7 @@ export default function LibraryRuleList() {
                         </div>
                       }
                     >
-                      <div className='ellipsis' style={{ color: 'blue' }}>
-                        链接: {item.url}
-                      </div>
+                      <div className='ellipsis'>链接: {item.url}</div>
                     </Tooltip>
                   )}
                 </div>

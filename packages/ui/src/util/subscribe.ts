@@ -95,6 +95,9 @@ const readUrl = async ({ url, file }: { url: string; file: string }) => {
 }
 
 function extractProxiesFromClashYaml(text: string) {
+  // type tag
+  text = text.replace(/!<str>/g, '!!str')
+
   const config = YAML.load(text) as ClashConfig
   const { proxies } = config
 

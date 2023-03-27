@@ -13,6 +13,14 @@
       margin-right: 5px;
     }
 
+    // https://css-tricks.com/a-complete-guide-to-dark-mode-on-the-web/
+    .info {
+      color: #0033cc;
+      :global(.dark-theme) & {
+        color: #809fff;
+      }
+    }
+
     .ellipsis {
       word-break: break-all;
       overflow: hidden;
