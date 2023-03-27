@@ -1,5 +1,24 @@
 # Changelog
 
+## v0.19.0 2023-03-28
+
+- 升级 ant-design 到 v5, v5 UI 非常好看 👍
+- 深色模式
+
+更多更改:
+
+- 80253ee feat: dark mode
+- 8074a58 chore: use ky insteads of umi-request
+- 3f35b52 feat: organize imports for source code
+- 28a717d feat: 配置无变化时不再写入文件
+- 03eb92c chore: use rollup v3
+- 637d2a8 chore: update more deps
+- 3390341 chore: ncu-safe
+- a274463 feat: clean up tray menu
+- ff0f449 chore: update deps & update antd v5
+- 3182029 chore: fix nodefree urls
+- 5b0035d chore: tweak
+
 ## v0.18.3 2023-01-08
 
 - 5385e3c feat: 支持 proxy-group.filter, 示例 `{name: 🇯🇵JPN, type: select, proxies: [], filter: JPN}`
