@@ -1,16 +1,16 @@
-import path from 'path'
-import fse from 'fs-extra'
-import { app, Menu, shell, dialog, BrowserWindow, MenuItemConstructorOptions } from 'electron'
-import {
-  is,
-  appMenu,
-  aboutMenuItem,
-  openUrlMenuItem,
-  openNewGitHubIssue,
-  debugInfo,
-} from 'electron-util'
 import storage from '$ui/storage/index'
 import debugFactory from 'debug'
+import { BrowserWindow, Menu, MenuItemConstructorOptions, app, dialog, shell } from 'electron'
+import {
+  aboutMenuItem,
+  appMenu,
+  debugInfo,
+  is,
+  openNewGitHubIssue,
+  openUrlMenuItem,
+} from 'electron-util'
+import fse from 'fs-extra'
+import path from 'path'
 import { updateMenuItem } from './auto-update/index'
 
 const debug = debugFactory('ccm:menu')

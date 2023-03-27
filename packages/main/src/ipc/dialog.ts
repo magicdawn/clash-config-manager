@@ -1,4 +1,4 @@
-import { ipcMain, dialog, BrowserWindow } from 'electron'
+import { BrowserWindow, dialog, ipcMain } from 'electron'
 
 ipcMain.handle('select-file', async (event) => {
   const win = BrowserWindow.fromWebContents(event.sender)

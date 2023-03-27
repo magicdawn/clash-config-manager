@@ -1,5 +1,5 @@
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { AutoComplete, Button, Col, Input, message, Modal, Row, Select, Space } from 'antd'
+import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space, message } from 'antd'
 import AppleScript from 'applescript'
 import { clipboard } from 'electron'
 import Yaml from 'js-yaml'

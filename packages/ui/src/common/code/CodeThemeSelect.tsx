@@ -1,8 +1,8 @@
 import { Select } from 'antd'
 import { ComponentProps, CSSProperties } from 'react'
 import { useSnapshot } from 'valtio'
-import { builtinThemes, userDefinedThemes } from '../monaco/theme'
 import { state as preferenceState } from '../../page/preference/model'
+import { builtinThemes, userDefinedThemes } from '../monaco/theme'
 
 type TOptions = ComponentProps<typeof Select>['options']
 

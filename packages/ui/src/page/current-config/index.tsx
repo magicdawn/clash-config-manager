@@ -1,7 +1,7 @@
 import { runGenerate } from '$ui/commands/run'
 import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/util/gen'
 import { useMemoizedFn } from 'ahooks'
-import { Button, Checkbox, Col, Divider, Input, message, Row, Tag } from 'antd'
+import { Button, Checkbox, Col, Divider, Input, Row, Tag, message } from 'antd'
 import { shell } from 'electron'
 import launch from 'launch-editor'
 import { useSnapshot } from 'valtio'

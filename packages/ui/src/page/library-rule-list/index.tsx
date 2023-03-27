@@ -1,6 +1,13 @@
 import { runGenerate } from '$ui/commands/run'
+import {
+  CodeEditor,
+  CodeEditorHelp,
+  CodeThemeSelect,
+  EditorRefInner,
+  showCode,
+} from '$ui/common/code'
 import { LocalRuleItem, RuleItem } from '$ui/common/define'
-import { YAML } from '$ui/libs'
+import { getRuleItemContent } from '$ui/util/remote-rules'
 import { firstLine, limitLines } from '$ui/util/text-util'
 import { FileAddOutlined } from '@ant-design/icons'
 import * as remote from '@electron/remote'
@@ -15,12 +22,12 @@ import {
   Input,
   InputNumber,
   List,
-  message,
   Modal,
   Row,
   Select,
   Space,
   Tooltip,
+  message,
 } from 'antd'
 import debugFactory from 'debug'
 import execa from 'execa'
@@ -32,14 +39,6 @@ import { proxy, useSnapshot } from 'valtio'
 import RuleAddModal from './AddRuleModal'
 import styles from './index.module.less'
 import { actions, state } from './model'
-import {
-  CodeEditor,
-  CodeEditorHelp,
-  CodeThemeSelect,
-  EditorRefInner,
-  showCode,
-} from '$ui/common/code'
-import { getRuleItemContent } from '$ui/util/remote-rules'
 
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')

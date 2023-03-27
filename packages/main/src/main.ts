@@ -1,15 +1,15 @@
-import path from 'path'
+import * as remoteMain from '@electron/remote/main'
 import { app, BrowserWindow, Menu, session, shell, Tray } from 'electron'
 import { is } from 'electron-util'
 import _ from 'lodash'
-import * as remoteMain from '@electron/remote/main'
+import path from 'path'
 
-import './init/meta'
 import { load as loadDevExt } from './dev/ext'
+import './init/meta'
 import { loadWindowState, saveWindowState } from './initWindowState'
+import { assetsDir } from './ipc/common'
 import './ipc/index'
 import setMenu from './menu'
-import { assetsDir } from './ipc/common'
 
 // Prevent window from being garbage collected
 let mainWindow: BrowserWindow

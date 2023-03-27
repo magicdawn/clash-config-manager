@@ -1,8 +1,6 @@
 import * as remote from '@electron/remote'
 import { ipcRenderer } from 'electron'
 import envPaths from 'env-paths'
-import { tmpdir } from 'os'
-import path from 'path'
 import reusePromise from 'reuse-promise'
 
 export const APP_NAME = 'clash-config-manager'

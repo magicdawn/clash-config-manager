@@ -41,8 +41,8 @@
     "@types/bytes": "^3.1.1",
     "@types/debug": "^4.1.7",
     "@types/ms": "^0.7.31",
-    "esbuild": "^0.17.10",
-    "rollup": "^3.17.3",
+    "esbuild": "^0.17.14",
+    "rollup": "^3.20.2",
     "rollup-plugin-esbuild": "^5.0.0",
     "rollup-plugin-tsconfig-paths": "^1.4.0"
   }

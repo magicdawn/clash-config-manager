@@ -2,7 +2,7 @@
 
 import { ConfigItem, RuleItem, Subscribe } from '$ui/common/define'
 import Store from 'electron-store'
-import _, { omit } from 'lodash'
+import { omit } from 'lodash'
 import { keysToOmit } from './config'
 
 export { customMerge } from './customMerge'

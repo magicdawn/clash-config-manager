@@ -1,5 +1,5 @@
-import { proxy, subscribe, snapshot } from 'valtio'
 import _ from 'lodash'
+import { proxy, subscribe } from 'valtio'
 
 export type Options<State> = {
   persist?: (state: State) => void

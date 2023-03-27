@@ -1,7 +1,7 @@
-import fs from 'fs-extra'
-import path from 'path'
 import { app, Rectangle, screen } from 'electron'
+import fs from 'fs-extra'
 import { throttle } from 'lodash'
+import path from 'path'
 
 function isValidNumber(n?: number): n is number {
   return typeof n === 'number' && !isNaN(n)

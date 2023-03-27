@@ -1,11 +1,11 @@
-import ms from 'ms'
-import { is } from 'electron-util'
-import { autoUpdater } from 'electron-updater'
-import electronLog from 'electron-log'
-import setMenu from '../menu'
-import _ from 'lodash'
-import debugFactory from 'debug'
 import bytes from 'bytes'
+import debugFactory from 'debug'
+import electronLog from 'electron-log'
+import { autoUpdater } from 'electron-updater'
+import { is } from 'electron-util'
+import _ from 'lodash'
+import ms from 'ms'
+import setMenu from '../menu'
 
 const debug = debugFactory('ccm:auto-update')
 

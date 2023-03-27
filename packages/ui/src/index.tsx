@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
 
 // styles
-import 'antd/dist/reset.css'
 import '@icon-park/react/styles/index.css'
+import 'antd/dist/reset.css'
 
 // monaco setup
 import './common/monaco'
@@ -30,6 +30,7 @@ import {
 } from 'react-router-dom'
 import Commands from './commands'
 import { showCodeModal } from './common/code/ModalCodeViewer'
+import styles from './index.module.less'
 import './ipc'
 import './page/common'
 import CurrentConfig from './page/current-config'
@@ -39,7 +40,6 @@ import { useAddRuleModalFromGlobal } from './page/home/useAddRuleModal'
 import LibraryRuleList from './page/library-rule-list'
 import LibrarySubscribe from './page/library-subscribe'
 import Preference from './page/preference'
-import styles from './index.module.less'
 import { routeTitles } from './storage'
 
 const routes = [

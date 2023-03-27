@@ -1,11 +1,11 @@
-import { getAssetsDir, appTempDir } from '$ui/common'
+import { appTempDir, getAssetsDir } from '$ui/common'
 import storage, { customMerge, getExportData } from '$ui/storage'
 import { rootActions, rootState } from '$ui/store'
 import useImmerState from '$ui/util/hooks/useImmerState'
 import helper, { STORAGE_FILE } from '$ui/util/sync/webdav/helper'
 import { CloudDownloadOutlined, CloudUploadOutlined, SettingFilled } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { Alert, Button, Card, Col, Input, message, Modal, Row, Space, Tag } from 'antd'
+import { Alert, Button, Card, Col, Input, Modal, Row, Space, Tag, message } from 'antd'
 import debugFactory from 'debug'
 import { ipcRenderer, shell } from 'electron'
 import fse from 'fs-extra'
@@ -15,7 +15,7 @@ import path from 'path'
 import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import styles from './index.module.less'
-import { pickDataFrom, SelectExportForStaticMethod } from './modal/SelectExport'
+import { SelectExportForStaticMethod, pickDataFrom } from './modal/SelectExport'
 
 const debug = debugFactory('app:page:preference')
 

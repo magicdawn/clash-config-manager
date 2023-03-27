@@ -1,4 +1,4 @@
-import { ipcMain, dialog, BrowserWindow, app } from 'electron'
+import { app, ipcMain } from 'electron'
 import path from 'path'
 
 export const assetsDir = app.isPackaged

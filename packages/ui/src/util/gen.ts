@@ -1,12 +1,12 @@
 import { ClashConfig, RuleItem, Subscribe } from '$ui/common/define'
 import { ProxyGroupType } from '$ui/common/define/ClashConfig'
-import { pmap, YAML } from '$ui/libs'
+import { YAML, pmap } from '$ui/libs'
 import { rootActions, rootState } from '$ui/store'
 import fse from 'fs-extra'
+import _ from 'lodash'
 import { homedir } from 'os'
 import { join as pathjoin } from 'path'
 import { getRuleItemContent } from './remote-rules'
-import _ from 'lodash'
 import { truthy } from './ts-filter'
 
 export function getUsingItems() {

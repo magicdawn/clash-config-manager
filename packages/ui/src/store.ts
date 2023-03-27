@@ -1,11 +1,11 @@
 import { proxy } from 'valtio'
 import { devtools } from 'valtio/utils'
 
-import { actions as globalActions } from './page/global-model'
 import {
   state as currentConfig,
   actions as currentConfigActions,
 } from './page/current-config/model'
+import { actions as globalActions } from './page/global-model'
 import {
   state as libraryRuleList,
   actions as libraryRuleListActions,

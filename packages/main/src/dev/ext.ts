@@ -1,7 +1,7 @@
-import os from 'os'
-import fs from 'fs-extra'
-import { session } from 'electron'
 import debugFactory from 'debug'
+import { session } from 'electron'
+import fs from 'fs-extra'
+import os from 'os'
 
 const debug = debugFactory('ccm:dev:ext')
 
