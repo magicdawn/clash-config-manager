@@ -13,6 +13,9 @@ jobs:
   build-app:
     runs-on: macos-latest
 
+    # success or timeout
+    timeout-minutes: 10
+
     steps:
       - uses: actions/checkout@v3
 
