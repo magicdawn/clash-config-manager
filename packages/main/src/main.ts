@@ -168,7 +168,7 @@ function addRequestExtraHeadersSupport() {
     let extraHeaders = {}
     if (details.requestHeaders['x-extra-headers']) {
       try {
-        extraHeaders = JSON.parse(details.requestHeaders['x-extra-headers'])
+        extraHeaders = JSON.parse(details.requestHeaders['x-extra-headers']) as any
       } catch (e) {
         // noop
       }
@@ -180,7 +180,7 @@ function addRequestExtraHeadersSupport() {
 function setTray() {
   const icon = path.join(assetsDir, 'cat@2x.png')
   const tray = new Tray(icon)
-  tray.setToolTip('clash config manager')
+  tray.setToolTip('Clash Config Manager')
 
   // 不需要菜单, 点击恢复
   // tray.on('click', restoreWindow)
