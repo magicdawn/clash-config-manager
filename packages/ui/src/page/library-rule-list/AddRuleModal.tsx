@@ -150,7 +150,7 @@ export default function AddRuleModal(props: IProps) {
       open={visible}
       onOk={handleOk}
       onCancel={handleCancel}
-      keyboard={false}
+      keyboard={true}
       maskClosable={false}
       title='添加规则'
       width={'95vw'}

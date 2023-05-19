@@ -12,7 +12,7 @@ import './ipc/index'
 import setMenu from './menu'
 
 // Prevent window from being garbage collected
-let mainWindow: BrowserWindow
+export let mainWindow: BrowserWindow
 
 declare global {
   namespace NodeJS {

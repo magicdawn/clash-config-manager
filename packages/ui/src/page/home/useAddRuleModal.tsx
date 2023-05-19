@@ -13,6 +13,13 @@ const store = proxy({
   },
   setVisible: (val: boolean) => {
     store.modalVisible = val
+
+    ipcRenderer.invoke('set-top-most', val)
+    if (val) {
+      document.title += ` - 已置顶`
+    } else {
+      document.title = document.title.split(' - ')[0]
+    }
   },
   open: () => {
     store.setVisible(true)
