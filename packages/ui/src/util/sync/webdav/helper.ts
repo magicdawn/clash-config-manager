@@ -1,6 +1,6 @@
 import storage, { customMerge } from '$ui/storage'
-import { rootActions, rootState } from '$ui/store'
-import { Modal, message } from 'antd'
+import { message, rootActions, rootState } from '$ui/store'
+import { Modal } from 'antd'
 import memo from 'memoize-one'
 import { dirname } from 'path'
 import { createClient } from 'webdav'
@@ -98,7 +98,7 @@ class DavHelper {
     const remoteData = await this.read()
 
     // 合并数据
-    const data = customMerge(remoteData, localData)
+    const data = customMerge(remoteData as any, localData)
     console.log('customMerge', { remoteData, localData, merged: data })
 
     await this.write(data)
@@ -136,7 +136,7 @@ class DavHelper {
 
     const remoteData = await this.read()
     const localData = { ...storage.store }
-    const merged = customMerge(localData, remoteData)
+    const merged = customMerge(localData, remoteData as any)
     console.log('customMerge', { remoteData, localData, merged })
 
     // reload electron-store & react global store
@@ -154,7 +154,7 @@ class DavHelper {
     const data = await this.read()
 
     // reload electron-store & react store
-    storage.store = data
+    storage.store = data as any
     rootActions.global.reload()
     message.success('下载成功')
   }

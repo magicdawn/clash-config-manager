@@ -1,7 +1,6 @@
 import Loading from '$ui/page/common/global/loading'
-import { rootActions } from '$ui/store'
+import { message, rootActions } from '$ui/store'
 import gen from '$ui/util/gen'
-import { message } from 'antd'
 import { createRef } from 'react'
 import { setTimeout as delay } from 'timers/promises'
 

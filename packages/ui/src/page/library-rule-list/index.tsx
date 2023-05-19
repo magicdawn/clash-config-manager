@@ -7,6 +7,7 @@ import {
   showCode,
 } from '$ui/common/code'
 import { LocalRuleItem, RuleItem } from '$ui/common/define'
+import { message } from '$ui/store'
 import { useIsDarkMode } from '$ui/util/hooks/useIsDarkMode'
 import { getRuleItemContent } from '$ui/util/remote-rules'
 import { firstLine, limitLines } from '$ui/util/text-util'
@@ -23,7 +24,6 @@ import {
   Input,
   InputNumber,
   List,
-  message,
   Modal,
   Row,
   Select,

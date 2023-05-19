@@ -1,6 +1,5 @@
 import { runGenerate } from '$ui/commands/run'
-import { rootActions, rootState } from '$ui/store'
-import { message } from 'antd'
+import { message, rootActions, rootState } from '$ui/store'
 import { ipcRenderer } from 'electron'
 import { proxy, useSnapshot } from 'valtio'
 import AddRuleModal, { Mode } from '../library-rule-list/AddRuleModal'

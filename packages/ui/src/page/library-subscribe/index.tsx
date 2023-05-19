@@ -1,4 +1,5 @@
 import { Subscribe, SubscribeSpecialType } from '$ui/common/define'
+import { message } from '$ui/store'
 import { EyeFilled, EyeInvisibleFilled, UnorderedListOutlined } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import {
@@ -15,7 +16,6 @@ import {
   Space,
   Tag,
   Tooltip,
-  message,
 } from 'antd'
 import { ChangeEventHandler, KeyboardEventHandler, useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
@@ -349,7 +349,7 @@ function ModalAdd({
     e?.stopPropagation()
 
     if (!url || !name) {
-      return message.warn('url & name 不能为空')
+      return message.warning('url & name 不能为空')
     }
 
     const err = actions.check({ url, name, editItemIndex })
