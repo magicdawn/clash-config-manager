@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.19.1 2023-05-20
+
+- 添加规则弹窗打开时, 窗口置顶. 方便从浏览器或其他地方复制 url.
+- 升级依赖
+
+更多更改:
+
+- cbdb23b chore: none ncu-safe deps
+- 58fd67d chore: ncu-safe -r
+- 9c5723f feat: set window top most when AddRuleModal show
+- 5c9854f feat: use antd.App & antd.App.useApp
+- f2985c8 chore: tweak
+- 290bcd5 chore: add timeout limit to ci.yml
+- b83109f chore: ci only on main branch
+- 076311b chore: use ts-reset
+
 ## v0.19.0 2023-03-28
 
 - 升级 ant-design 到 v5, v5 UI 非常好看 👍
