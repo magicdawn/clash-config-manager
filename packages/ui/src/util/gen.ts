@@ -4,6 +4,7 @@ import { YAML, pmap } from '$ui/libs'
 import { rootActions, rootState } from '$ui/store'
 import fse from 'fs-extra'
 import _ from 'lodash'
+import moment from 'moment'
 import { homedir } from 'os'
 import { join as pathjoin } from 'path'
 import { getRuleItemContent } from './remote-rules'
@@ -305,9 +306,15 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
   const configYaml = YAML.dump(config)
   const file = getConfigFile(name)
 
-  let msg = ''
-  if ((await fse.exists(file)) && configYaml === (await fse.readFile(file, 'utf-8'))) {
-    // content not changed
+  let stat: fse.Stats
+  const unchangedSkipWrite =
+    (await fse.exists(file)) &&
+    configYaml === (await fse.readFile(file, 'utf-8')) &&
+    (stat = await fse.stat(file)) &&
+    moment(stat.mtimeMs).startOf('day').valueOf() === moment().startOf('day').valueOf() // same day
+
+  let msg: string
+  if (unchangedSkipWrite) {
     msg = `无变化, 已跳过生成`
   } else {
     await fse.outputFile(file, configYaml)
