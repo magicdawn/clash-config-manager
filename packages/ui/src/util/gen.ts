@@ -313,11 +313,13 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
     (stat = await fse.stat(file)) &&
     moment(stat.mtimeMs).startOf('day').valueOf() === moment().startOf('day').valueOf() // same day
 
+  let writed = false
   let msg: string
   if (unchangedSkipWrite) {
     msg = `无变化, 已跳过生成`
   } else {
     await fse.outputFile(file, configYaml)
+    writed = true
     msg = `生成成功: ${file} 已更新`
   }
 
@@ -327,6 +329,7 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
     success: true,
     filename: file,
     msg,
+    writed,
   }
 }
 

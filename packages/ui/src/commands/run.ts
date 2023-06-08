@@ -1,6 +1,7 @@
 import Loading from '$ui/page/common/global/loading'
 import { message, rootActions } from '$ui/store'
 import gen from '$ui/util/gen'
+import { shell } from 'electron'
 import { createRef } from 'react'
 import { setTimeout as delay } from 'timers/promises'
 
@@ -34,11 +35,17 @@ const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {
     Loading.hide()
   }
 
-  const { success, msg, filename } = result || {}
-  if (success) {
-    message.success(msg)
-  } else {
+  const { success, msg, filename, writed } = result || {}
+  if (!success) {
     message.error(msg || '生成失败')
+    return
+  }
+
+  message.success(msg)
+
+  if (writed) {
+    // reload config
+    shell.openExternal('clash://update-config')
   }
 }
 

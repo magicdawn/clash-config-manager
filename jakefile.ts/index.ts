@@ -1,3 +1,4 @@
+import 'jake'
 import { sh } from './util'
 
 desc('同 `gulp -T`')
