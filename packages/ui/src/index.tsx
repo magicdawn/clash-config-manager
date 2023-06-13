@@ -23,12 +23,14 @@ import _ from 'lodash'
 import { useMemo } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
-  HashRouter,
   Link,
-  RouteObject,
+  Outlet,
+  Route,
+  RouterProvider,
+  createHashRouter,
+  createRoutesFromElements,
   useLocation,
   useNavigate,
-  useRoutes,
 } from 'react-router-dom'
 import Commands from './commands'
 import { showCodeModal } from './common/code/ModalCodeViewer'
@@ -82,13 +84,6 @@ routes.forEach((r) => {
   r.title ||= routeTitles[r.path.slice(1)]
 })
 
-const usingRoutes: RouteObject[] = routes.map((r) => {
-  return {
-    path: r.path,
-    element: <r.component />,
-  }
-})
-
 const getKey = (s: string) => _.trimStart(s, '/') || 'home'
 const menuItems: MenuProps['items'] = routes.map(({ title, path, icon }) => {
   return {
@@ -98,25 +93,24 @@ const menuItems: MenuProps['items'] = routes.map(({ title, path, icon }) => {
   }
 })
 
+const router = createHashRouter(
+  createRoutesFromElements(
+    <Route path='/' Component={RootLayout}>
+      {routes.map((r) => (
+        <Route key={r.path} path={r.path} Component={r.component} />
+      ))}
+    </Route>
+  )
+)
+
 function App() {
+  return <RouterProvider router={router} />
+}
+
+function RootLayout() {
   const isDark = useIsDarkMode()
   const algorithm = isDark ? theme.darkAlgorithm : theme.defaultAlgorithm
 
-  return (
-    <HashRouter>
-      <ConfigProvider locale={zhCN} theme={{ algorithm }}>
-        <AntdApp message={messageConfig}>
-          <SetupAntdStatic />
-          <RouterInner />
-        </AntdApp>
-      </ConfigProvider>
-    </HashRouter>
-  )
-}
-
-// useLocation() may be used only in the context of a <Router> component.
-// 最好, Router 套一层
-function RouterInner() {
   // nav tab
   const { pathname } = useLocation()
   const menuKey = useMemo(() => [getKey(pathname)], [pathname])
@@ -128,17 +122,27 @@ function RouterInner() {
   const nav = useNavigate()
   setNavigateSingleton(nav)
 
-  // routes match
-  const matchedEl = useRoutes(usingRoutes)
-
   return (
-    <>
-      <Menu selectedKeys={menuKey} mode='horizontal' items={menuItems} className={styles.navMenu} />
-      <Commands />
-      {addRuleModal}
-      {showCodeModal}
-      <div>{matchedEl}</div>
-    </>
+    <ConfigProvider locale={zhCN} theme={{ algorithm }}>
+      <AntdApp message={messageConfig}>
+        <SetupAntdStatic />
+
+        <Menu
+          selectedKeys={menuKey}
+          mode='horizontal'
+          items={menuItems}
+          className={styles.navMenu}
+        />
+
+        <Commands />
+
+        {addRuleModal}
+        {showCodeModal}
+
+        {/* render routes */}
+        <Outlet />
+      </AntdApp>
+    </ConfigProvider>
   )
 }
 
