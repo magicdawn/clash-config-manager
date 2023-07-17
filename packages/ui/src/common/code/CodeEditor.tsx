@@ -134,7 +134,7 @@ export function CodeEditor(props: IProps) {
       fontSize,
       fontFamily,
       automaticLayout: true,
-      renderFinalNewline: true,
+      renderFinalNewline: 'on',
       readOnly: readonly,
       trimAutoWhitespace: true,
       contextmenu: true,

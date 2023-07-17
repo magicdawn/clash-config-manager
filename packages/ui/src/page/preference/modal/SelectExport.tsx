@@ -110,11 +110,13 @@ function generateTreeData(obj: object, keyPrefix = '') {
       let title = `index=${index}`
 
       if (keyPrefix === 'subscribe_list.' || keyPrefix === 'rule_list.') {
-        title += ` (${item.name})`
+        title += ` (${(item as any).name})`
       }
 
       if (keyPrefix === 'current_config_v2.list.') {
-        title += ` -> ${item.type === 'subscribe' ? '订阅' : '配置源'} (${item.name})`
+        title += ` -> ${(item as any).type === 'subscribe' ? '订阅' : '配置源'} (${
+          (item as any).name
+        })`
       }
 
       treeData.push({

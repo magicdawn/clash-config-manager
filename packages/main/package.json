@@ -1,24 +1,9 @@
 {
   "name": "main",
-  "version": "0.4.0",
   "private": true,
-  "productName": "clash-config-manager",
-  "bundleId": "fun.magicdawn.clash-config-manager",
-  "description": "clash configuration manager",
-  "license": "MIT",
-  "repository": "magicdawn/clash-config-manager",
-  "main": "../../bundle/development/index.js",
-  "author": {
-    "name": "magicdawn",
-    "email": "magicdawn@qq.com",
-    "url": "https://magicdawn.fun"
-  },
   "scripts": {
-    "dev": "rollup -c -w",
-    "build": "NODE_ENV=production rollup -c",
-    "pack": "electron-builder --dir",
-    "dist:mac": "electron-builder --macos",
-    "dist": "electron-builder --macos --linux --windows"
+    "dev": "tsup --watch",
+    "build": "tsup"
   },
   "dependencies": {
     "bytes": "^3.1.2",
@@ -34,16 +19,9 @@
     "ms": "^2.1.3"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^25.0.3",
-    "@rollup/plugin-json": "^6.0.0",
-    "@rollup/plugin-node-resolve": "^15.1.0",
-    "@rollup/plugin-replace": "^5.0.2",
     "@types/bytes": "^3.1.1",
     "@types/debug": "^4.1.8",
     "@types/ms": "^0.7.31",
-    "esbuild": "^0.18.13",
-    "rollup": "^3.26.2",
-    "rollup-plugin-esbuild": "^5.0.0",
-    "rollup-plugin-tsconfig-paths": "^1.5.1"
+    "tsup": "^7.1.0"
   }
 }

@@ -64,7 +64,7 @@ function makeRendererHappyPlugin(): Plugin {
         setup(build) {
           // without prefix
           build.onResolve({ filter }, (args) => {
-            console.log('esbuild onResolve %s', args.path)
+            // console.log('esbuild onResolve %s', args.path)
             return {
               path: args.path,
               namespace: pluginName,
@@ -72,7 +72,7 @@ function makeRendererHappyPlugin(): Plugin {
             }
           })
           build.onLoad({ filter, namespace: pluginName }, (args) => {
-            console.log('esbuild onLoad %s', args.path)
+            // console.log('esbuild onLoad %s', args.path)
             return {
               contents: `module.exports = require("${args.path}")`,
             }
