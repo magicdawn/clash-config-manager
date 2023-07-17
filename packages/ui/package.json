@@ -83,7 +83,6 @@
     "@types/urijs": "^1.19.19",
     "@vitejs/plugin-react": "^4.0.3",
     "builtin-modules": "^3.3.0",
-    "globby": "^11.1.0",
     "gulp": "^4.0.2",
     "husky": "latest",
     "less": "^4.1.3",

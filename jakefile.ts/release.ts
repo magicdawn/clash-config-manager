@@ -11,11 +11,11 @@
  * 使用本地 build 并上传, jake release 即可.
  */
 
-import fse from 'fs-extra'
-import globby from 'globby'
 import log from 'fancy-log'
+import fg from 'fast-glob'
+import fse from 'fs-extra'
 import { version } from '../package.json'
-import { sh, PROJECT_ROOT } from './util'
+import { PROJECT_ROOT, sh } from './util'
 
 function getChangelog() {
   const fullChangeLog = fse.readFileSync(PROJECT_ROOT + '/CHANGELOG.md', 'utf8')
@@ -69,7 +69,7 @@ export async function release() {
   sh(`gh release create v${version} -F ${changelogTempFile}`)
 
   // find out files
-  const files = globby.sync(`./dist/clash-config-manager-${version}*`, { cwd: PROJECT_ROOT })
+  const files = fg.sync(`./dist/clash-config-manager-${version}*`, { cwd: PROJECT_ROOT })
   sh(`gh release upload v${version} ./dist/latest-mac.yml ${files.join(' ')}`)
 
   // notification
