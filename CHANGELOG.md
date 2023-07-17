@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.19.2 2023-07-17
+
+- fix: 包含 filter 的 proxy-group, proxies filter 结果为空时, clashx 报错的问题. (移除该 proxy-group)
+- feat: ClashX.Meta 配置文件迁移到了 `~/.config/clash.meta/` 文件夹了, 该工具支持 `Clash.Meta` 勾选
+
+详细:
+
+- deps change in several commits
+- 78bd471 updated at 2023-06-08 16:17 by mc git-up
+- 2f02e9f feat: migrate to data router
+- 86d9fe2 feat: only skip write when content unchanged & mtime is today
+
 ## v0.19.1 2023-05-20
 
 - 添加规则弹窗打开时, 窗口置顶. 方便从浏览器或其他地方复制 url.

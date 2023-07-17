@@ -2,7 +2,7 @@ import { runGenerate } from '$ui/commands/run'
 import { message } from '$ui/store'
 import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/util/gen'
 import { useMemoizedFn } from 'ahooks'
-import { Button, Checkbox, Col, Divider, Input, Row, Tag } from 'antd'
+import { Button, Checkbox, Col, Divider, Input, Row, Space, Tag, Tooltip } from 'antd'
 import { shell } from 'electron'
 import launch from 'launch-editor'
 import { useSnapshot } from 'valtio'
@@ -11,7 +11,7 @@ import styles from './index.module.less'
 import { state } from './model'
 
 export default function ConfigList() {
-  const { name, generateAllProxyGroup, generateSubNameProxyGroup } = useSnapshot(state)
+  const { name, clashMeta, generateAllProxyGroup, generateSubNameProxyGroup } = useSnapshot(state)
 
   const onGenConfigClick = useMemoizedFn(async () => {
     return runGenerate()
@@ -55,56 +55,62 @@ export default function ConfigList() {
       <ConfigDND />
 
       {createDivider('配置文件')}
-
       <Row>
-        <Col flex='auto' style={{ marginRight: 10 }}>
-          <Row>
-            <Col>
-              <div
-                className='label'
-                style={{
-                  paddingRight: 10,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'flex-end',
-                  height: '32px',
-                }}
-              >
-                配置名称
-              </div>
-            </Col>
-            <Col flex={1}>
-              <Input
-                placeholder={DEFAULT_NAME}
-                value={name}
-                onChange={(e) => {
-                  const name = e.target.value
-                  state.name = name
-                }}
-              />
-            </Col>
-          </Row>
-          <Row style={{ marginTop: 5 }}>
-            <Col>
-              <div
-                className='label'
-                style={{
-                  paddingRight: 10,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'flex-end',
-                  height: '32px',
-                }}
-              >
-                文件地址
-              </div>
-            </Col>
-            <Col flex={1}>
-              <Input value={getConfigFileDisplay(name)} disabled />
-            </Col>
-          </Row>
+        <Col>
+          <div
+            className='label'
+            style={{
+              paddingRight: 10,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              height: '32px',
+            }}
+          >
+            配置名称
+          </div>
         </Col>
-        <Col flex='170px' style={{ textAlign: 'right' }}>
+        <Col flex={1}>
+          <Input
+            placeholder={DEFAULT_NAME}
+            value={name}
+            onChange={(e) => {
+              const name = e.target.value
+              state.name = name
+            }}
+          />
+        </Col>
+      </Row>
+      <Row style={{ marginTop: 5 }}>
+        <Col>
+          <div
+            className='label'
+            style={{
+              paddingRight: 10,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              height: '32px',
+            }}
+          >
+            文件地址
+          </div>
+        </Col>
+        <Col flex={1}>
+          <Input value={getConfigFileDisplay(name, clashMeta)} disabled />
+        </Col>
+      </Row>
+      <Row style={{ marginTop: 8 }}>
+        <Space size={'large'}>
+          <Checkbox
+            checked={clashMeta}
+            onChange={(e) => {
+              state.clashMeta = e.target.checked
+            }}
+          >
+            <Tooltip title='生成到 ~/.config/clash.meta/ 文件夹'>为 Clash.Meta 生成</Tooltip>
+          </Checkbox>
+
           <Checkbox
             checked={generateAllProxyGroup}
             onChange={(e) => {
@@ -122,7 +128,7 @@ export default function ConfigList() {
           >
             生成 <Tag style={{ marginRight: 0 }}>订阅名同名</Tag> 组
           </Checkbox>
-        </Col>
+        </Space>
       </Row>
 
       <Button

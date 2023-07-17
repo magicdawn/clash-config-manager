@@ -9,6 +9,7 @@ const CURRENT_CONFIG_STORAGE_KEY = 'current_config_v2'
 interface IState {
   list: ConfigItem[]
   name: string
+  clashMeta: boolean
   generateAllProxyGroup: boolean
   generateSubNameProxyGroup: boolean
 }
@@ -18,6 +19,7 @@ const defaultState: IState = {
   name: '',
   generateAllProxyGroup: false,
   generateSubNameProxyGroup: false,
+  clashMeta: false,
 }
 
 const allowedKeys = Object.keys(defaultState)
@@ -39,7 +41,7 @@ const { state, load, init } = valtioState<IState>(
 
 const actions = { currentConfigUsingAndEnabled }
 
-export { state, actions }
+export { actions, state }
 
 // listeners
 onInit(init)
