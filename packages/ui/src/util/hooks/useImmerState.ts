@@ -1,4 +1,4 @@
-import produce from 'immer'
+import { produce } from 'immer'
 import { useCallback, useState } from 'react'
 
 const reducer = produce((draft, payload) => {

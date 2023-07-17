@@ -31,7 +31,7 @@ import {
   Tooltip,
 } from 'antd'
 import debugFactory from 'debug'
-import execa from 'execa'
+import { execaCommand } from 'execa'
 import fse from 'fs-extra'
 import Yaml from 'js-yaml'
 import path from 'path'
@@ -267,7 +267,7 @@ const getDefaultEditItem = () =>
     type: 'local',
     name: '',
     content: '',
-  } as LocalRuleItem)
+  }) as LocalRuleItem
 
 const debugModal = debugFactory('app:page:library-rule-list:ModalAddOrEdit')
 
@@ -457,7 +457,7 @@ function ModalAddOrEdit() {
     let execResults
     const cmd = `${editor} --wait '${TEMP_EDITING_FILE}'`
     try {
-      execResults = await execa.command(cmd, { shell: true })
+      execResults = await execaCommand(cmd, { shell: true })
     } catch (e) {
       message.error('执行命令出错: ' + e.message)
       return

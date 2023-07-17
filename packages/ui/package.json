@@ -29,10 +29,10 @@
     "classnames": "^2.3.2",
     "debug": "^4.3.4",
     "dl-vampire": "^1.4.1",
-    "emittery": "^0.13.1",
-    "env-paths": "^2.2.1",
-    "execa": "^5.1.1",
-    "immer": "^9.0.21",
+    "emittery": "^1.0.1",
+    "env-paths": "^3.0.0",
+    "execa": "^7.1.1",
+    "immer": "^10.0.2",
     "js-yaml": "^4.1.0",
     "ky": "^0.33.3",
     "launch-editor": "^2.6.0",
@@ -59,7 +59,7 @@
     "tldjs": "^2.3.1",
     "urijs": "^1.19.11",
     "valtio": "^1.10.7",
-    "webdav": "^4.11.2",
+    "webdav": "^5.2.3",
     "webdav-fs": "^4.0.1"
   },
   "devDependencies": {
