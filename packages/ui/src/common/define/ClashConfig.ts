@@ -5,6 +5,7 @@ import { ClashProxyItem } from '$clash-utils'
 export default interface ClashConfig {
   'proxies': ClashProxyItem[]
   'proxy-groups': ProxyGroup[]
+  'proxy-providers': ProxyProviders | undefined
   'port': number
   'socks-port': number
   'mixed-port': number
@@ -37,6 +38,7 @@ export interface FallbackFilter {
 
 export interface ProxyGroup {
   name: string
+  use?: string[]
   proxies: string[]
   type: ProxyGroupType
   url?: string
@@ -48,4 +50,21 @@ export enum ProxyGroupType {
   Fallback = 'fallback',
   Select = 'select',
   URLTest = 'url-test',
+}
+
+export interface ProxyProviders {
+  [name: string]: ProxyProvider
+}
+
+export interface ProxyProvider {
+  'type': 'file' | 'http'
+  'path': string
+  'url'?: string
+  'interval'?: number
+  'health-check': ProxyProviderHealthCheck
+}
+
+export interface ProxyProviderHealthCheck {
+  enable: boolean
+  url: string
 }

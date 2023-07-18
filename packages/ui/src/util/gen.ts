@@ -165,6 +165,7 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
   /* #endregion */
 
   /* #region proxy-groups */
+
   // subscribe 自动生成 proxy groups
   const subscribeTragets = subscribeItems.map((sub) => sub.name)
 
@@ -289,6 +290,16 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
       proxies: defaultProxiesForProxyGroup,
     }
     proxyGroups.push(newgroup)
+  }
+
+  // proxy-providers
+  const proxyProviderNames = Object.keys(config['proxy-providers'] || {})
+  if (proxyProviderNames.length) {
+    proxyGroups.forEach((pg) => {
+      if (!pg.proxies.length && !pg.use?.length) {
+        pg.use ||= proxyProviderNames
+      }
+    })
   }
 
   // done for proxy-groups
