@@ -18,7 +18,7 @@ export default function ConfigList() {
   })
 
   const onOpenConfigClick = useMemoizedFn((editor = 'code') => {
-    const file = getConfigFile(state.name)
+    const file = getConfigFile(state.name, state.clashMeta)
     launch(
       // file
       file,
@@ -32,7 +32,7 @@ export default function ConfigList() {
   })
 
   const onOpenInFinder = useMemoizedFn(() => {
-    const file = getConfigFile(state.name)
+    const file = getConfigFile(state.name, state.clashMeta)
     shell.showItemInFolder(file)
   })
 
