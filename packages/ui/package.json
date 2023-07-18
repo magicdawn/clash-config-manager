@@ -39,7 +39,7 @@
     "react-command-palette": "^0.22.1",
     "react-dom": "^18.2.0",
     "react-monaco-editor": "^0.53.0",
-    "react-router-dom": "^6.14.1",
+    "react-router-dom": "^6.14.2",
     "react-spinkit": "^3.0.0",
     "react-spinners": "^0.13.8",
     "reuse-promise": "^2.0.0",
