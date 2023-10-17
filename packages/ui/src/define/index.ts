@@ -47,25 +47,7 @@ export type RemoteRuleItem = {
   // content?: string
 }
 
-export interface RemoteRuleProviderRuleItem {
-  type: 'remote-rule-provider'
-  id: string
-  name: string
-
-  url: string
-  autoUpdate?: boolean
-  autoUpdateInterval?: number // 小时
-  updatedAt?: number // ts
-
-  // type=remote-provider
-  providerBehavior: 'domain' | 'ipcidr' | 'classical'
-  providerPolicy: 'DIRECT' | 'REJECT' | 'Proxy' | string
-
-  // 内容
-  // payload?: string[]
-}
-
-export type RuleItem = LocalRuleItem | RemoteRuleItem | RemoteRuleProviderRuleItem
+export type RuleItem = LocalRuleItem | RemoteRuleItem
 
 export interface ConfigItem {
   type: 'subscribe' | 'rule'

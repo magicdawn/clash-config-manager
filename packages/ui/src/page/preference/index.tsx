@@ -106,10 +106,6 @@ export default function Preference() {
     const presetFile = path.join(await getAssetsDir(), 'json/基本数据规则.json')
     importFile(presetFile)
   })
-  const onImportBundledRuleSets = useMemoizedFn(async () => {
-    const presetFile = path.join(await getAssetsDir(), 'json/Loyalsoldier-clash-rules.json')
-    importFile(presetFile)
-  })
 
   const openInEditor = useMemoizedFn((editor) => {
     launch(
@@ -275,10 +271,6 @@ export default function Preference() {
 
               <Button block onClick={onImportBundledPreset}>
                 <CloudUploadOutlined /> 导入应用内置的基本设置
-              </Button>
-
-              <Button block onClick={onImportBundledRuleSets}>
-                <CloudUploadOutlined /> 导入应用内置的远程 rule-providers 设置
               </Button>
             </Space>
           </Card>

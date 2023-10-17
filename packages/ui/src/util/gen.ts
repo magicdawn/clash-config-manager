@@ -88,9 +88,7 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
   }
 
   // 批量更新远程规则
-  const remoteRuleItems = ruleItems.filter(
-    (item) => item.type === 'remote' || item.type === 'remote-rule-provider'
-  )
+  const remoteRuleItems = ruleItems.filter((item) => item.type === 'remote')
   await pmap(
     remoteRuleItems,
     async (item) => {
@@ -112,31 +110,6 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
       const content = await getRuleItemContent(item.id)
       const partial = YAML.load(content) as Partial<ClashConfig>
       updateConfig(partial)
-      continue
-    }
-
-    if (type === 'remote-rule-provider') {
-      const { providerBehavior, providerPolicy } = item
-      const content = await getRuleItemContent(item.id)
-      const yamlObj = YAML.load(content) as { payload: string[] }
-      const { payload } = yamlObj
-
-      let rules: string[]
-      if (providerBehavior === 'classical') {
-        rules = payload.map((s) => `${s},${providerPolicy}`)
-      } else if (providerBehavior === 'domain') {
-        rules = payload.map((s) => `DOMAIN,${s},${providerPolicy}`)
-      } else {
-        rules = payload.map((s) => {
-          if (s.includes(':')) {
-            return `IP-CIDR6,${s},${providerPolicy}`
-          } else {
-            return `IP-CIDR,${s},${providerPolicy}`
-          }
-        })
-      }
-
-      updateConfig({ rules })
       continue
     }
   }
@@ -165,7 +138,6 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
   /* #endregion */
 
   /* #region proxy-groups */
-
   // subscribe 自动生成 proxy groups
   const subscribeTragets = subscribeItems.map((sub) => sub.name)
 

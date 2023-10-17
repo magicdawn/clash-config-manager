@@ -3,24 +3,30 @@ import { RuleItem } from '$ui/define'
 import { onInit, onReload } from '$ui/page/global-model'
 import storage from '$ui/storage'
 import { message } from '$ui/store'
-import { updateRemoteConfig, updateRemoteRuleProvider } from '$ui/util/remote-rules'
+import { updateRemoteConfig } from '$ui/util/remote-rules'
 import _ from 'lodash'
 import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './model.auto-update'
 
 const RULE_LIST_STORAGE_KEY = 'rule_list'
 
-// remove legacy remote.item.content | remote-rule-provider.item.payload
+// remove legacy remote.item.content
 // these content may be long long
 // AND lag electron-store from get/set
 function cleanUpLegacyFields(list: RuleItem[]) {
   list.forEach((item) => {
-    if (item.type === 'remote' || item.type === 'remote-rule-provider') {
+    if (item.type === 'remote') {
       // @ts-ignore
       delete item.content
-      // @ts-ignore
-      delete item.payload
     }
   })
+}
+
+// 2023-10-17 移除 type=remote-rule-provider 支持
+// 这里做一下清理
+function getTidyList(list: RuleItem[]): RuleItem[] {
+  const list2 = list.filter((x) => x.type === 'local' || x.type === 'remote')
+  cleanUpLegacyFields(list2)
+  return list2
 }
 
 const { state, load, init } = valtioState(
@@ -29,13 +35,13 @@ const { state, load, init } = valtioState(
   },
   {
     load() {
-      const list = storage.get(RULE_LIST_STORAGE_KEY)
-      cleanUpLegacyFields(list)
+      let list = storage.get(RULE_LIST_STORAGE_KEY)
+      list = getTidyList(list)
       return { list }
     },
     persist(val) {
-      cleanUpLegacyFields(val.list)
-      storage.set(RULE_LIST_STORAGE_KEY, val.list)
+      const list = getTidyList(val.list)
+      storage.set(RULE_LIST_STORAGE_KEY, list)
     },
   }
 )
@@ -76,7 +82,7 @@ function check({
   if (_.find(list, { name })) {
     return 'name已存在'
   }
-  if (type === 'remote' || type === 'remote-rule-provider') {
+  if (type === 'remote') {
     if (_.find(list, { url: item.url })) {
       return 'url已存在'
     }
@@ -86,10 +92,8 @@ function check({
     // do not check content
     // we don't care
   }
+
   if (type === 'remote') {
-    //
-  }
-  if (type === 'remote-rule-provider') {
     //
   }
 }
@@ -125,9 +129,6 @@ export async function updateRemote({
 
   if (type === 'remote') {
     ;({ byRequest } = await updateRemoteConfig(item, forceUpdate)) // why config, because this url can return a partial clash config
-  }
-  if (type === 'remote-rule-provider') {
-    ;({ byRequest } = await updateRemoteRuleProvider(item, forceUpdate))
   }
 
   if (byRequest && !silent) {

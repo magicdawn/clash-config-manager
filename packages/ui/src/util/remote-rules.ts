@@ -1,6 +1,5 @@
 import { appCacheDir } from '$ui/common'
-import { RemoteRuleItem, RemoteRuleProviderRuleItem } from '$ui/define'
-import { YAML } from '$ui/libs'
+import { RemoteRuleItem } from '$ui/define'
 import fse from 'fs-extra'
 import path from 'path'
 import { readUrlWithCache } from './remote'
@@ -25,26 +24,6 @@ export async function getRuleItemContent(id: string) {
 export async function updateRemoteConfig(item: RemoteRuleItem, forceUpdate = false) {
   const { url } = item
   const { text: content, byRequest } = await readUrlWithCache(url, forceUpdate)
-
-  // save
-  await saveRomoteRuleItem(item.id, content)
-  if (byRequest) item.updatedAt = Date.now()
-
-  return { byRequest }
-}
-
-export async function updateRemoteRuleProvider(
-  item: RemoteRuleProviderRuleItem,
-  forceUpdate = false
-) {
-  const { url } = item
-  const { text: content, byRequest } = await readUrlWithCache(url, forceUpdate)
-
-  // validate
-  const payload: string[] = (YAML.load(content) as { payload: string[] }).payload
-  if (!payload || !Array.isArray(payload)) {
-    throw new Error('expect {payload: string[]} for rule-provider')
-  }
 
   // save
   await saveRomoteRuleItem(item.id, content)

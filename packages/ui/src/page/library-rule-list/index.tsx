@@ -16,7 +16,6 @@ import * as remote from '@electron/remote'
 import { LinkTwo, SdCard } from '@icon-park/react'
 import { useMemoizedFn } from 'ahooks'
 import {
-  AutoComplete,
   Button,
   Checkbox,
   Col,
@@ -118,7 +117,7 @@ export default function LibraryRuleList() {
     if (item.type === 'local') return
 
     let content: string | undefined
-    if (item.type === 'remote' || item.type === 'remote-rule-provider') {
+    if (item.type === 'remote') {
       content = await getRuleItemContent(item.id)
       if (!content) await actions.updateRemote({ item })
       content = await getRuleItemContent(item.id)
@@ -233,7 +232,7 @@ export default function LibraryRuleList() {
                   </Button>
                 </Space>
 
-                {(type === 'remote' || type === 'remote-rule-provider') && (
+                {type === 'remote' && (
                   <Space style={{ display: 'flex', alignItems: 'center', marginTop: 5 }}>
                     <Button
                       type='primary'
@@ -361,20 +360,6 @@ function ModalAddOrEdit() {
           url: values.url,
           autoUpdate: values.autoUpdate,
           autoUpdateInterval: values.autoUpdateInterval || autoUpdateIntervalDefault,
-        }
-      }
-      if (type === 'remote-rule-provider') {
-        item = {
-          id,
-          name,
-          type,
-
-          url: values.url,
-          autoUpdate: values.autoUpdate,
-          autoUpdateInterval: values.autoUpdateInterval || autoUpdateIntervalDefault,
-
-          providerBehavior: values.providerBehavior,
-          providerPolicy: values.providerPolicy || name,
         }
       }
     }
@@ -566,9 +551,8 @@ function ModalAddOrEdit() {
             onChange={(value) => setType({ value })} */}
         <Form.Item name='type' label='类型' rules={[{ required: true, message: '类型不能为空' }]}>
           <Select style={{ width: '200px' }} disabled={readonly}>
-            <Option value='local'>本地存储</Option>
+            <Option value='local'>本地 config</Option>
             <Option value='remote'>远程 config</Option>
-            <Option value='remote-rule-provider'>远程 rule-provider</Option>
           </Select>
         </Form.Item>
 
@@ -630,7 +614,7 @@ function ModalAddOrEdit() {
           </Form.Item>
         )}
 
-        {(type === 'remote' || type === 'remote-rule-provider') && (
+        {type === 'remote' && (
           <>
             <Form.Item
               label='URL'
@@ -669,53 +653,6 @@ function ModalAddOrEdit() {
                 />
               </Form.Item>
             )}
-          </>
-        )}
-
-        {type === 'remote-rule-provider' && (
-          <>
-            <Form.Item
-              label='Behavior'
-              name='providerBehavior'
-              rules={[{ required: true, message: '需要选择 rule provider behavior' }]}
-            >
-              <Select
-                style={{ width: '200px' }}
-                disabled={readonly}
-                options={[
-                  {
-                    label: 'domain',
-                    value: 'domain',
-                  },
-                  {
-                    label: 'ipcidr',
-                    value: 'ipcidr',
-                  },
-                  {
-                    label: 'classical',
-                    value: 'classical',
-                  },
-                ]}
-              />
-            </Form.Item>
-
-            <Form.Item
-              label='Policy'
-              name='providerPolicy'
-              rules={[{ required: false, message: '需要指定 rule provider policy' }]}
-            >
-              <AutoComplete
-                style={{ width: '200px' }}
-                disabled={readonly}
-                placeholder='默认使用名称作为 policy'
-              >
-                {['DIRECT', 'REJECT', 'Proxy'].map((t) => (
-                  <Option key={t} value={t}>
-                    {t}
-                  </Option>
-                ))}
-              </AutoComplete>
-            </Form.Item>
           </>
         )}
       </Form>
