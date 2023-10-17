@@ -122,8 +122,18 @@ export function CodeEditor(props: IProps) {
     onChange?.(newValue)
   })
 
+  type EOptions = EditorApi.editor.IStandaloneEditorConstructionOptions
+
+  const readOnlyOptions = (readOnly: boolean): Partial<EOptions> => {
+    return {
+      readOnly,
+      cursorStyle: readOnly ? 'underline-thin' : 'line-thin',
+      cursorBlinking: readOnly ? 'solid' : undefined,
+    }
+  }
+
   const options = useMemo(() => {
-    const opts: EditorApi.editor.IStandaloneEditorConstructionOptions = {
+    const opts: EOptions = {
       minimap: { enabled: false },
       overviewRulerBorder: true,
       // renderIndentGuides: true,
@@ -135,7 +145,7 @@ export function CodeEditor(props: IProps) {
       fontFamily,
       automaticLayout: true,
       renderFinalNewline: 'on',
-      readOnly: readonly,
+      ...readOnlyOptions(readonly),
       trimAutoWhitespace: true,
       contextmenu: true,
       occurrencesHighlight: false,
@@ -148,7 +158,10 @@ export function CodeEditor(props: IProps) {
   }, [readonly])
 
   useUpdateEffect(() => {
-    ref.current?.updateOptions({ ...options, readOnly: readonly })
+    ref.current?.updateOptions({
+      ...options,
+      ...readOnlyOptions(readonly),
+    })
   }, [readonly, ref])
 
   useUpdateEffect(() => {
