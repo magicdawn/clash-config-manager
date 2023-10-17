@@ -1,4 +1,4 @@
-import { Subscribe, SubscribeSpecialType } from '$ui/common/define'
+import { Subscribe, SubscribeSpecialType } from '$ui/define'
 import { message } from '$ui/store'
 import { EyeFilled, EyeInvisibleFilled, UnorderedListOutlined } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
@@ -233,11 +233,7 @@ function SubscribeItem({
               title={`节点列表(${servers?.length})`}
               content={
                 <div style={{ maxHeight: '50vh', overflowY: 'scroll' }}>
-                  <ul>
-                    {servers?.map((s) => (
-                      <li key={s.name}>{s.name}</li>
-                    ))}
-                  </ul>
+                  <ul>{servers?.map((s) => <li key={s.name}>{s.name}</li>)}</ul>
                 </div>
               }
               trigger='click'
@@ -251,11 +247,7 @@ function SubscribeItem({
                 title={`链接列表(${specialData?.recentDays})`}
                 content={
                   <div style={{ maxHeight: '200px', overflowY: 'scroll' }}>
-                    <ul>
-                      {nodefreeGetUrls(item)?.map((url) => (
-                        <li key={url}>{url}</li>
-                      ))}
-                    </ul>
+                    <ul>{nodefreeGetUrls(item)?.map((url) => <li key={url}>{url}</li>)}</ul>
                   </div>
                 }
                 trigger='click'

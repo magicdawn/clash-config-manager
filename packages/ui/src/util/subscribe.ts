@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { md5 } from '$clash-utils'
-import { ClashConfig } from '$ui/common/define'
+import { ClashConfig } from '$ui/define'
 import bytes from 'bytes'
 import envPaths from 'env-paths'
 import fse from 'fs-extra'

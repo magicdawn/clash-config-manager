@@ -1,3 +1,5 @@
+export { ClashConfig } from './ClashConfig'
+
 export interface Subscribe<ExtData = any> {
   id: string
   name: string
@@ -70,5 +72,3 @@ export interface ConfigItem {
   id: string
   disabled?: boolean
 }
-
-export { default as ClashConfig } from './define/ClashConfig'

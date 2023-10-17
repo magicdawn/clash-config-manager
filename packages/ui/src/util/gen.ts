@@ -1,5 +1,5 @@
-import { ClashConfig, RuleItem, Subscribe } from '$ui/common/define'
-import { ProxyGroupType } from '$ui/common/define/ClashConfig'
+import { ClashConfig, RuleItem, Subscribe } from '$ui/define'
+import { ProxyGroupType } from '$ui/define/ClashConfig'
 import { YAML, pmap } from '$ui/libs'
 import { rootActions, rootState } from '$ui/store'
 import fse from 'fs-extra'

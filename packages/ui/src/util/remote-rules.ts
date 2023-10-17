@@ -1,5 +1,5 @@
 import { appCacheDir } from '$ui/common'
-import { RemoteRuleItem, RemoteRuleProviderRuleItem } from '$ui/common/define'
+import { RemoteRuleItem, RemoteRuleProviderRuleItem } from '$ui/define'
 import { YAML } from '$ui/libs'
 import fse from 'fs-extra'
 import path from 'path'

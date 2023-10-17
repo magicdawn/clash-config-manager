@@ -1,4 +1,4 @@
-import { type StorageData } from '.'
+import { type StorageData } from './index'
 
 export const keysToOmit = [
   'subscribe_detail' as const,

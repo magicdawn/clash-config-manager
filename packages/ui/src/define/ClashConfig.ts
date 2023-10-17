@@ -2,7 +2,7 @@
 
 import { ClashProxyItem } from '$clash-utils'
 
-export default interface ClashConfig {
+export interface ClashConfig {
   'proxies': ClashProxyItem[]
   'proxy-groups': ProxyGroup[]
   'proxy-providers': ProxyProviders | undefined

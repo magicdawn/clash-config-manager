@@ -6,7 +6,7 @@ import {
   EditorRefInner,
   showCode,
 } from '$ui/common/code'
-import { LocalRuleItem, RuleItem } from '$ui/common/define'
+import { LocalRuleItem, RuleItem } from '$ui/define'
 import { message } from '$ui/store'
 import { useIsDarkMode } from '$ui/util/hooks/useIsDarkMode'
 import { getRuleItemContent } from '$ui/util/remote-rules'

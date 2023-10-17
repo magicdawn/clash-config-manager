@@ -1,4 +1,4 @@
-import { Subscribe } from '$ui/common/define'
+import { Subscribe } from '$ui/define'
 import moment from 'moment'
 
 export type NodefreeData = {

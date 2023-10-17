@@ -63,7 +63,7 @@
     "fs-extra": "^11.1.1",
     "husky": "^8.0.3",
     "jake": "^10.8.7",
-    "lint-staged": "^15.0.1",
+    "lint-staged": "^14",
     "minimist": "^1.2.8",
     "napa": "^3.0.0",
     "nodemon": "^3.0.1",

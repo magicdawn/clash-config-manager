@@ -3,13 +3,13 @@
  */
 
 import { runGenerate } from '$ui/commands/run'
-import { RuleItem } from '$ui/common/define'
+import { RuleItem } from '$ui/define'
 import { debounce, DebouncedFunc, once } from 'lodash'
 import ms from 'ms'
 import { currentConfigUsingAndEnabled } from '../current-config/model'
 import { state, updateRemote } from './model'
 
-const timerRegistry: Record<string, NodeJS.Timer | undefined> = {}
+const timerRegistry: Record<string, NodeJS.Timeout | undefined> = {}
 const cleanupTimer = (timerKey: string) => {
   if (timerRegistry[timerKey]) {
     clearInterval(timerRegistry[timerKey])

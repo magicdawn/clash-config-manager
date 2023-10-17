@@ -1,5 +1,5 @@
-import { ConfigItem, RuleItem, Subscribe } from '$ui/common/define'
 import { valtioState } from '$ui/common/model/valtio-helper'
+import { ConfigItem, RuleItem, Subscribe } from '$ui/define'
 import { onInit, onReload } from '$ui/page/global-model'
 import storage from '$ui/storage'
 import _ from 'lodash'

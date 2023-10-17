@@ -1,4 +1,4 @@
-import { ConfigItem } from '$ui/common/define'
+import { ConfigItem } from '$ui/define'
 import { cx } from '$ui/libs'
 import { rootState } from '$ui/store'
 import { limitLines } from '$ui/util/text-util'

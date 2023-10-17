@@ -12,10 +12,10 @@
       "$ui/*": ["ui/src/*"],
       "$clash-utils": ["clash-utils/src/"],
       "$clash-utils/*": ["clash-utils/src/*"]
-    }
+    },
+    "noEmit": true
   },
   "ts-node": {
-    "transpileOnly": true,
     "swc": true,
     "compilerOptions": {
       "module": "CommonJS"

@@ -1,6 +1,6 @@
 import { ClashProxyItem } from '$clash-utils'
-import { Subscribe } from '$ui/common/define'
 import { valtioState } from '$ui/common/model/valtio-helper'
+import { Subscribe } from '$ui/define'
 import { onInit, onReload } from '$ui/page/global-model'
 import storage from '$ui/storage'
 import { message } from '$ui/store'

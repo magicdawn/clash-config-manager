@@ -1,6 +1,6 @@
 /* eslint camelcase: off */
 
-import { ConfigItem, RuleItem, Subscribe } from '$ui/common/define'
+import { ConfigItem, RuleItem, Subscribe } from '$ui/define'
 import Store from 'electron-store'
 import { omit } from 'lodash'
 import { keysToOmit } from './config'
