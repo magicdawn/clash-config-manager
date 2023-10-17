@@ -5,7 +5,11 @@ import { ClashProxyItem } from '$clash-utils'
 export interface ClashConfig {
   'proxies': ClashProxyItem[]
   'proxy-groups': ProxyGroup[]
-  'proxy-providers': ProxyProviders | undefined
+  'proxy-providers'?: ProxyProviders
+
+  'rules': string[]
+  'rule-providers'?: RuleProviders
+
   'port': number
   'socks-port': number
   'mixed-port': number
@@ -18,7 +22,6 @@ export interface ClashConfig {
   'interface-name': string
   'hosts': null
   'dns': DNS
-  'rules': string[]
 }
 
 export interface DNS {
@@ -67,4 +70,21 @@ export interface ProxyProvider {
 export interface ProxyProviderHealthCheck {
   enable: boolean
   url: string
+}
+
+export interface RuleProviders {
+  [name: string]: RuleProvider
+}
+
+/**
+ * @see https://dreamacro.github.io/clash/premium/rule-providers.html
+ * @see https://wiki.metacubex.one/config/rules/rule-provider/
+ */
+export interface RuleProvider {
+  behavior: 'domain' | 'ipcidr' | 'classical'
+  type: 'file' | 'http'
+  path: string
+  url?: string
+  format?: 'yaml' | 'text'
+  interval?: number
 }

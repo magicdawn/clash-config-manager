@@ -61,9 +61,12 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
   let config: Partial<ClashConfig> = {}
 
   // 值为 array 的 key 集合
-  type ClashConfigKeysWithArrayValue = {
-    [k in keyof ClashConfig]: ClashConfig[k] extends any[] ? k : never
-  }[keyof ClashConfig]
+  type ClashConfigKeysWithArrayValue = Exclude<
+    {
+      [k in keyof ClashConfig]: ClashConfig[k] extends any[] ? k : never
+    }[keyof ClashConfig],
+    undefined
+  >
 
   const updateConfig = (partial: Partial<ClashConfig>) => {
     const arrayValuedKeys: ClashConfigKeysWithArrayValue[] = ['rules', 'proxies', 'proxy-groups']
@@ -279,11 +282,22 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
 
   /* #endregion */
 
-  // final rules
-  // 未匹配使用 DIRECT
+  /* #region premium only feature */
+  if (!Object.keys(config['proxy-providers'] || {}).length) {
+    delete config['proxy-providers']
+  }
+
+  if (!Object.keys(config['rule-providers'] || {}).length) {
+    delete config['rule-providers']
+  }
+  /* #endregion */
+
+  /* #region final rules */
   if (!config.rules?.at(-1)?.startsWith('MATCH,')) {
+    // 未匹配使用 DIRECT
     config.rules?.push('MATCH,DIRECT')
   }
+  /* #endregion */
 
   const configYaml = YAML.dump(config)
   const file = getConfigFile(name, clashMeta)
