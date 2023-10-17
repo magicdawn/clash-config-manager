@@ -90,6 +90,30 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
     })
   }
 
+  /* #region build proxies */
+  if (!Array.isArray(config.proxies)) config.proxies = []
+  if (!Array.isArray(config['proxy-groups'])) config['proxy-groups'] = []
+
+  // batch update subscribe
+  await pmap(
+    subscribeItems,
+    (item) =>
+      rootActions.librarySubscribe.update({
+        url: item.url,
+        silent: true,
+        forceUpdate,
+      }),
+    5
+  )
+
+  for (const item of subscribeItems) {
+    const { url } = item
+    const servers = rootState.librarySubscribe.detail[url] || []
+    config.proxies = config.proxies.concat(servers)
+  }
+  /* #endregion */
+
+  /* #region build rules */
   // 批量更新远程规则
   const remoteRuleItems = ruleItems.filter((item) => item.type === 'remote')
   await pmap(
@@ -115,28 +139,6 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
       updateConfig(partial)
       continue
     }
-  }
-
-  /* #region subscribe */
-  if (!Array.isArray(config.proxies)) config.proxies = []
-  if (!Array.isArray(config['proxy-groups'])) config['proxy-groups'] = []
-
-  // batch update subscribe
-  await pmap(
-    subscribeItems,
-    (item) =>
-      rootActions.librarySubscribe.update({
-        url: item.url,
-        silent: true,
-        forceUpdate,
-      }),
-    5
-  )
-
-  for (const item of subscribeItems) {
-    const { url } = item
-    const servers = rootState.librarySubscribe.detail[url] || []
-    config.proxies = config.proxies.concat(servers)
   }
   /* #endregion */
 
