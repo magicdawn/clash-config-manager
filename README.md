@@ -15,7 +15,6 @@
 
 - [x] 支持从订阅中摘取 proxies
 - [x] 支持远程规则
-- [x] 支持远程 rule-providers. 类似 rule-providers / RULE-SET 的配置会转换成基础的 clash 规则, 无需 Clash pro / ClashX Pro
 - [x] 支持快捷新建规则, 支持从 Chrome 当前 Tab 或 剪贴板 读取 url, 支持根据 url 解析成 DOMAIN-KEYWORD / DOMAIN-SUFFIX 规则
 - [x] 支持在 vscode/Atom 中编辑规则
 - [x] 支持导入导出数据, webdav 备份数据, 支持合并数据, 支持导出部分数据用于分享
@@ -110,23 +109,8 @@ proxy-groups:
 
 ### 配置类型
 
-- `本地存储`: 存储在本机中, 可以是 partial config
+- `本地 config`: 存储在本机中, 可以是 partial config
 - `远程 config`: url 返回一个配置, 可以是 partial config, 例如只包含 `rules: []`
-- `远程 rule-providers`
-
-#### 远程 rule-providers
-
-clash-config-manager 支持在 ClashX 非 Pro 中使用 rule-set.
-通过处理将 rule-set 变成普通规则.
-
-- 偏好设置, 导入应用内置的 rule-providers 设置
-- 到配置组装中启用这些配置.
-- 点击生成即可.
-
-上面的 json 是我添加好导出的, 你也可以自己添加 rule-set
-
-- rule-set transform 到普通规则后, 配置文件会变得很大, ClashX 可能会变得很慢.
-- 更推荐直接使用 ClashX Meta: 它支持 GEO-SITE 类型的规则
 
 ### 规则 TARGET
 
