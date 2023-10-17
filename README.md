@@ -1,6 +1,6 @@
 # clash-config-manager
 
-> 用于 MacOS clashX 的 GUI 配置合并工具
+> 适用于 macOS ClashX / ClashX.Meta 的 GUI 配置合并工具
 
 ## 下载
 
