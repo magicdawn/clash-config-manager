@@ -147,7 +147,7 @@ export default function LibraryRuleList() {
           <div className='header'>
             <div style={{ fontSize: '2em' }}>配置源管理</div>
             <span>
-              <Button type='ghost' onClick={addRuleConfig}>
+              <Button ghost onClick={addRuleConfig}>
                 <FileAddOutlined />
                 新建纯规则配置
               </Button>
