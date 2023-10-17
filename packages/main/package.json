@@ -12,16 +12,16 @@
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.8",
     "electron-unhandled": "^4.0.1",
-    "electron-updater": "^6.1.1",
+    "electron-updater": "^6.1.5",
     "electron-util": "^0.17.2",
     "env-paths": "^3.0.0",
     "fix-path": "^4.0.0",
     "ms": "^2.1.3"
   },
   "devDependencies": {
-    "@types/bytes": "^3.1.1",
-    "@types/debug": "^4.1.8",
-    "@types/ms": "^0.7.31",
-    "tsup": "^7.1.0"
+    "@types/bytes": "^3.1.2",
+    "@types/debug": "^4.1.9",
+    "@types/ms": "^0.7.32",
+    "tsup": "^7.2.0"
   }
 }
