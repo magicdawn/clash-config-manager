@@ -22,7 +22,6 @@ import {
   Form,
   Input,
   InputNumber,
-  List,
   Modal,
   Row,
   Select,
@@ -35,6 +34,7 @@ import fse from 'fs-extra'
 import Yaml from 'js-yaml'
 import path from 'path'
 import { KeyboardEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { ReactSortable } from 'react-sortablejs'
 import { proxy, useSnapshot } from 'valtio'
 import RuleAddModal from './AddRuleModal'
 import styles from './index.module.less'
@@ -136,126 +136,160 @@ export default function LibraryRuleList() {
   const isDark = useIsDarkMode()
   const iconFill = isDark ? '#eee' : '#333'
 
+  // const listForSortable = useMemo(() => {
+  //   return list.map((item) => {
+  //     return { id: item.id, name: item.name }
+  //   })
+  // }, [list])
+
+  type SortableListItem = { id: string; name?: string }
+
+  const [listForSortable, setListForSortable] = useState<SortableListItem[]>(() => [])
+  useEffect(() => {
+    console.log(
+      'call setListForSortable',
+      list.map((x) => x.id)
+    )
+    setListForSortable(
+      list.map((x) => {
+        return { id: x.id, name: x.name }
+      })
+    )
+  }, [list.map((x) => x.id).join(',')])
+
+  const onSortableSetList = useMemoizedFn((newSortableList: SortableListItem[]) => {
+    setListForSortable(newSortableList)
+
+    const newIdList = newSortableList.map((x) => x.id)
+    if (list.map((x) => x.id).join('') !== newIdList.join('')) {
+      const newList = list.slice().sort((a, b) => {
+        const aIndex = newIdList.indexOf(a.id)
+        const bIndex = newIdList.indexOf(b.id)
+        return aIndex < bIndex ? -1 : 1
+      })
+      state.list = newList
+    }
+  })
+
   return (
     <div className={styles.page}>
       <ModalAddOrEdit />
 
-      <List
-        size='default'
-        header={
-          <div className='header'>
-            <div style={{ fontSize: '2em' }}>配置源管理</div>
-            <span>
-              <Button ghost onClick={addRuleConfig}>
-                <FileAddOutlined />
-                新建纯规则配置
-              </Button>
-              <Button type='primary' onClick={add} style={{ marginLeft: 5 }}>
-                <FileAddOutlined />
-                新建配置
-              </Button>
-            </span>
-          </div>
-        }
-        className={styles.listComponent}
-        bordered
-        dataSource={list}
-        rowKey='id'
-        renderItem={(item, index) => {
-          const { type, name, id } = item
-          return (
-            <List.Item style={{ display: 'flex' }}>
-              <div className='list-item'>
-                <div className='name' style={{ display: 'flex', height: 24, alignItems: 'center' }}>
-                  <span>名称: {name}</span>
-                  <span style={{ marginLeft: 5, marginTop: 4 }}>
+      <div className='header'>
+        <div style={{ fontSize: '2em' }}>配置源管理</div>
+        <span>
+          <Button ghost onClick={addRuleConfig}>
+            <FileAddOutlined />
+            新建纯规则配置
+          </Button>
+          <Button type='primary' onClick={add} style={{ marginLeft: 5 }}>
+            <FileAddOutlined />
+            新建配置
+          </Button>
+        </span>
+      </div>
+
+      <div className='list-items-container'>
+        <ReactSortable list={listForSortable} setList={onSortableSetList}>
+          {list.map((item, index) => {
+            const { type, name, id } = item
+            return (
+              <div style={{ display: 'flex' }} key={id} className='list-item'>
+                <div className='list-item-info'>
+                  <div
+                    className='name'
+                    style={{ display: 'flex', height: 24, alignItems: 'center' }}
+                  >
+                    <span>名称: {name}</span>
+                    <span style={{ marginLeft: 5, marginTop: 4 }}>
+                      {type === 'local' ? (
+                        <SdCard theme='outline' size='18' fill={iconFill} title='本地规则' />
+                      ) : (
+                        <LinkTwo theme='outline' size='18' fill={iconFill} title='远程规则' />
+                      )}
+                    </span>
+                  </div>
+
+                  <div className='info'>
                     {type === 'local' ? (
-                      <SdCard theme='outline' size='18' fill={iconFill} title='本地规则' />
+                      <Tooltip
+                        title={
+                          <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
+                            {limitLines(item.content, 10)}
+                          </div>
+                        }
+                      >
+                        <div className='ellipsis'>内容: {firstLine(item.content)}</div>
+                      </Tooltip>
                     ) : (
-                      <LinkTwo theme='outline' size='18' fill={iconFill} title='远程规则' />
+                      <Tooltip
+                        title={
+                          <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
+                            {item.url}
+                            {/* debug use */}
+                            {/* <p style={{ maxWidth: 500 }}>{JSON.stringify(item)}</p> */}
+                          </div>
+                        }
+                      >
+                        <div className='ellipsis'>链接: {item.url}</div>
+                      </Tooltip>
                     )}
-                  </span>
+                  </div>
                 </div>
 
-                <div className='info'>
-                  {type === 'local' ? (
-                    <Tooltip
-                      title={
-                        <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-                          {limitLines(item.content, 10)}
-                        </div>
-                      }
-                    >
-                      <div className='ellipsis'>内容: {firstLine(item.content)}</div>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip
-                      title={
-                        <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-                          {item.url}
-                          {/* debug use */}
-                          {/* <p style={{ maxWidth: 500 }}>{JSON.stringify(item)}</p> */}
-                        </div>
-                      }
-                    >
-                      <div className='ellipsis'>链接: {item.url}</div>
-                    </Tooltip>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <Space style={{ display: 'flex', alignItems: 'center' }}>
-                  <Button
-                    type='primary'
-                    onClick={(e) => edit(item, index)}
-                    onKeyDown={disableEnterAsClick}
-                  >
-                    编辑
-                  </Button>
-
-                  <Button
-                    type='default'
-                    onClick={(e) => view(item, index)}
-                    onKeyDown={disableEnterAsClick}
-                  >
-                    查看
-                  </Button>
-
-                  <Button
-                    type='primary'
-                    danger
-                    onClick={() => del(index)}
-                    onKeyDown={disableEnterAsClick}
-                  >
-                    删除
-                  </Button>
-                </Space>
-
-                {type === 'remote' && (
-                  <Space style={{ display: 'flex', alignItems: 'center', marginTop: 5 }}>
+                <div className='list-item-actions'>
+                  <Space style={{ display: 'flex', alignItems: 'center' }}>
                     <Button
                       type='primary'
-                      onClick={(e) => updateRmote(index)}
+                      onClick={(e) => edit(item, index)}
                       onKeyDown={disableEnterAsClick}
                     >
-                      更新
+                      编辑
                     </Button>
 
                     <Button
                       type='default'
+                      onClick={(e) => view(item, index)}
                       onKeyDown={disableEnterAsClick}
-                      onClick={(e) => viewRmoteContents(index)}
                     >
-                      查看内容
+                      查看
+                    </Button>
+
+                    <Button
+                      type='primary'
+                      danger
+                      onClick={() => del(index)}
+                      onKeyDown={disableEnterAsClick}
+                    >
+                      删除
                     </Button>
                   </Space>
-                )}
+
+                  {type === 'remote' && (
+                    <Space style={{ display: 'flex', alignItems: 'center', marginTop: 5 }}>
+                      <Button
+                        type='primary'
+                        onClick={(e) => updateRmote(index)}
+                        onKeyDown={disableEnterAsClick}
+                      >
+                        更新
+                      </Button>
+
+                      <Button
+                        type='default'
+                        onKeyDown={disableEnterAsClick}
+                        onClick={(e) => viewRmoteContents(index)}
+                      >
+                        查看内容
+                      </Button>
+                    </Space>
+                  )}
+                </div>
               </div>
-            </List.Item>
-          )
-        }}
-      />
+            )
+          })}
+        </ReactSortable>
+      </div>
     </div>
   )
 }
