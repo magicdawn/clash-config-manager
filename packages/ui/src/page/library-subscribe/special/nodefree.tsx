@@ -32,7 +32,7 @@ export function nodefreeGetUrls(subscribe: NodefreeSubscribe): string[] {
     `https://nodefree.org/dy/${m.format('YYYY')}/${m.format('MM')}/${m.format('YYYYMMDD')}.yaml`
 
   const urls: string[] = []
-  for (let i = 1; i <= recentDays; i++) {
+  for (let i = 0; i < recentDays; i++) {
     // 从前一天开始, 当天的经常 404 报错
     const m = moment().subtract(i, 'days')
     urls.push(tpl(m))
