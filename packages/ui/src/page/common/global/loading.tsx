@@ -31,7 +31,7 @@ function Loading({ visible }: { visible: boolean }) {
       footer={null}
       centered
       closable={false}
-      bodyStyle={{ padding: 0, backgroundColor: 'transparent' }}
+      styles={{ body: { padding: 0, backgroundColor: 'transparent' } }}
     >
       <PacmanLoader color={color} size={100} />
     </Modal>
@@ -51,7 +51,7 @@ const hide = wrapAction(() => {
   proxyProps.visible = false
 })
 
-export { WrappedComponent, show, hide }
+export { WrappedComponent, hide, show }
 export default { WrappedComponent, show, hide }
 
 // setTimeout(() => {

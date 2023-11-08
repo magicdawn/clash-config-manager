@@ -71,7 +71,7 @@ export default function SelectExport({
       onCancel={onCancel}
       onOk={onOk}
       centered
-      bodyStyle={{ maxHeight: '60vh', overflow: 'scroll' }}
+      styles={{ body: { maxHeight: '60vh', overflow: 'scroll' } }}
     >
       <Tree
         checkable

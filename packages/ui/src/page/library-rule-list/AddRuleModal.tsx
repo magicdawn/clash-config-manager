@@ -154,7 +154,7 @@ export default function AddRuleModal(props: IProps) {
       maskClosable={false}
       title='添加规则'
       width={'95vw'}
-      bodyStyle={{ padding: '24px 12px' }}
+      styles={{ body: { padding: '24px 12px' } }}
       okButtonProps={okButtonProps}
       destroyOnClose
       okText={mode === 'from-global' ? '添加并重新生成' : '确定'}

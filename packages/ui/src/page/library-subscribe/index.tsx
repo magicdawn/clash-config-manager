@@ -380,7 +380,7 @@ function ModalAdd({
   return (
     <Modal
       className={styles.modal}
-      bodyStyle={{ paddingTop: 10 }}
+      styles={{ body: { paddingTop: 10 } }}
       title='添加'
       open={visible}
       onOk={handleOk}

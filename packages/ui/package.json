@@ -10,6 +10,10 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
+    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/modifiers": "^7.0.0",
+    "@dnd-kit/sortable": "^8.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@icon-park/react": "^1.4.2",
     "ahooks": "^3.7.8",
     "antd": "^5.11.0",
@@ -40,7 +44,6 @@
     "react-dom": "^18.2.0",
     "react-monaco-editor": "^0.54.0",
     "react-router-dom": "^6.18.0",
-    "react-sortablejs": "^6.1.4",
     "react-spinkit": "^3.0.0",
     "react-spinners": "^0.13.8",
     "reuse-promise": "^2.0.0",

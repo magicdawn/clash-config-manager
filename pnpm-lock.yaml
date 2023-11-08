@@ -184,6 +184,18 @@ importers:
       '@ant-design/icons':
         specifier: ^5.2.6
         version: 5.2.6(react-dom@18.2.0)(react@18.2.0)
+      '@dnd-kit/core':
+        specifier: ^6.1.0
+        version: 6.1.0(react-dom@18.2.0)(react@18.2.0)
+      '@dnd-kit/modifiers':
+        specifier: ^7.0.0
+        version: 7.0.0(@dnd-kit/core@6.1.0)(react@18.2.0)
+      '@dnd-kit/sortable':
+        specifier: ^8.0.0
+        version: 8.0.0(@dnd-kit/core@6.1.0)(react@18.2.0)
+      '@dnd-kit/utilities':
+        specifier: ^3.2.2
+        version: 3.2.2(react@18.2.0)
       '@icon-park/react':
         specifier: ^1.4.2
         version: 1.4.2(react-dom@18.2.0)(react@18.2.0)
@@ -274,9 +286,6 @@ importers:
       react-router-dom:
         specifier: ^6.18.0
         version: 6.18.0(react-dom@18.2.0)(react@18.2.0)
-      react-sortablejs:
-        specifier: ^6.1.4
-        version: 6.1.4(@types/sortablejs@1.15.4)(react-dom@18.2.0)(react@18.2.0)(sortablejs@1.15.0)
       react-spinkit:
         specifier: ^3.0.0
         version: 3.0.0
@@ -748,6 +757,61 @@ packages:
       ajv: 6.12.6
       ajv-keywords: 3.5.2(ajv@6.12.6)
     dev: true
+
+  /@dnd-kit/accessibility@3.1.0(react@18.2.0):
+    resolution: {integrity: sha512-ea7IkhKvlJUv9iSHJOnxinBcoOI3ppGnnL+VDJ75O45Nss6HtZd8IdN8touXPDtASfeI2T2LImb8VOZcL47wjQ==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
+      tslib: 2.5.0
+    dev: false
+
+  /@dnd-kit/core@6.1.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-J3cQBClB4TVxwGo3KEjssGEXNJqGVWx17aRTZ1ob0FliR5IjYgTxl5YJbKTzA6IzrtelotH19v6y7uoIRUZPSg==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      '@dnd-kit/accessibility': 3.1.0(react@18.2.0)
+      '@dnd-kit/utilities': 3.2.2(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      tslib: 2.5.0
+    dev: false
+
+  /@dnd-kit/modifiers@7.0.0(@dnd-kit/core@6.1.0)(react@18.2.0):
+    resolution: {integrity: sha512-BG/ETy3eBjFap7+zIti53f0PCLGDzNXyTmn6fSdrudORf+OH04MxrW4p5+mPu4mgMk9kM41iYONjc3DOUWTcfg==}
+    peerDependencies:
+      '@dnd-kit/core': ^6.1.0
+      react: '>=16.8.0'
+    dependencies:
+      '@dnd-kit/core': 6.1.0(react-dom@18.2.0)(react@18.2.0)
+      '@dnd-kit/utilities': 3.2.2(react@18.2.0)
+      react: 18.2.0
+      tslib: 2.5.0
+    dev: false
+
+  /@dnd-kit/sortable@8.0.0(@dnd-kit/core@6.1.0)(react@18.2.0):
+    resolution: {integrity: sha512-U3jk5ebVXe1Lr7c2wU7SBZjcWdQP+j7peHJfCspnA81enlu88Mgd7CC8Q+pub9ubP7eKVETzJW+IBAhsqbSu/g==}
+    peerDependencies:
+      '@dnd-kit/core': ^6.1.0
+      react: '>=16.8.0'
+    dependencies:
+      '@dnd-kit/core': 6.1.0(react-dom@18.2.0)(react@18.2.0)
+      '@dnd-kit/utilities': 3.2.2(react@18.2.0)
+      react: 18.2.0
+      tslib: 2.5.0
+    dev: false
+
+  /@dnd-kit/utilities@3.2.2(react@18.2.0):
+    resolution: {integrity: sha512-+MKAJEOfaBe5SmV6t34p80MMKhjvUz0vRrvVJbPT0WElzaOJ/1xs+D+KDv+tD/NE5ujfrChEcshd4fLn0wpiqg==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
+      tslib: 2.5.0
+    dev: false
 
   /@electron/asar@3.2.4:
     resolution: {integrity: sha512-lykfY3TJRRWFeTxccEKdf1I6BLl2Plw81H0bbp4Fc5iEc67foDCa5pjJQULVgo0wF+Dli75f3xVcdb/67FFZ/g==}
@@ -1751,10 +1815,6 @@ packages:
       '@types/glob': 7.2.0
       '@types/node': 20.8.6
     dev: true
-
-  /@types/sortablejs@1.15.4:
-    resolution: {integrity: sha512-7oL7CcPSfoyoNx3Ba1+79ykJzpEKVhHUyfAiN5eT/FoeDXOR3eBDLXf9ndDNuxaExmjpI+zVi2dMMuaoXUOzNA==}
-    dev: false
 
   /@types/tldjs@2.3.3:
     resolution: {integrity: sha512-50RS0HLnZekW0JoaVrWnPxvJzC4gAb3yYUp4JpRE15VgtkZFKgD84iKUNlght1lOxY6jbPJYvJKaGpNdK7GYPg==}
@@ -2934,10 +2994,6 @@ packages:
       isobject: 3.0.1
       static-extend: 0.1.2
     dev: true
-
-  /classnames@2.3.1:
-    resolution: {integrity: sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==}
-    dev: false
 
   /classnames@2.3.2:
     resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
@@ -8522,22 +8578,6 @@ packages:
       react: 18.2.0
     dev: false
 
-  /react-sortablejs@6.1.4(@types/sortablejs@1.15.4)(react-dom@18.2.0)(react@18.2.0)(sortablejs@1.15.0):
-    resolution: {integrity: sha512-fc7cBosfhnbh53Mbm6a45W+F735jwZ1UFIYSrIqcO/gRIFoDyZeMtgKlpV4DdyQfbCzdh5LoALLTDRxhMpTyXQ==}
-    peerDependencies:
-      '@types/sortablejs': '1'
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-      sortablejs: '1'
-    dependencies:
-      '@types/sortablejs': 1.15.4
-      classnames: 2.3.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      sortablejs: 1.15.0
-      tiny-invariant: 1.2.0
-    dev: false
-
   /react-spinkit@3.0.0:
     resolution: {integrity: sha512-RrfGRPjqxHQiy7quPqhjPynTu0zobgQaZu1QYBMpJJ6pCSRRRK16EZMaxdE6fLVYFRJWpX/eGATWLMoVFFT5uQ==}
     dependencies:
@@ -9231,10 +9271,6 @@ packages:
     dependencies:
       is-plain-obj: 1.1.0
     dev: true
-
-  /sortablejs@1.15.0:
-    resolution: {integrity: sha512-bv9qgVMjUMf89wAvM6AxVvS/4MX3sPeN0+agqShejLU5z5GX4C75ow1O2e5k4L6XItUyAK3gH6AxSbXrOM5e8w==}
-    dev: false
 
   /source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
