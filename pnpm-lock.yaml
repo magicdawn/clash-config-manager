@@ -127,8 +127,8 @@ importers:
   packages/clash-utils:
     devDependencies:
       typescript:
-        specifier: ^4.9.5
-        version: 4.9.5
+        specifier: ^5.2.2
+        version: 5.2.2
 
   packages/main:
     dependencies:

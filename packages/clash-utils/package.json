@@ -25,6 +25,6 @@
   },
   "homepage": "https://github.com/magicdawn/clash-config-manager",
   "devDependencies": {
-    "typescript": "^4.9.5"
+    "typescript": "^5.2.2"
   }
 }
