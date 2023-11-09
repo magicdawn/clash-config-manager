@@ -12,6 +12,7 @@
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "skipLibCheck": true,
     "plugins": [
       {

@@ -226,7 +226,9 @@ export default defineConfig({
       root: join(__dirname, '../../'),
     }),
 
-    react(),
+    react({
+      jsxImportSource: '@emotion/react',
+    }),
 
     /**
      * make vite + electron happy

@@ -31,34 +31,28 @@
       border-radius: 10px;
       border: 1px solid #ede;
       padding: 10px 10px;
-
-      .list-item-info {
-        flex: 1;
-        margin-right: 15px;
-      }
-
-      .list-item-actions {
-        flex-shrink: 0;
-      }
     }
 
     // https://css-tricks.com/a-complete-guide-to-dark-mode-on-the-web/
     .info {
       color: #0033cc;
+      width: 100%;
+
       :global(.dark-theme) & {
         color: #809fff;
       }
-    }
 
-    .ellipsis {
-      word-break: break-all;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      // width: max-content;
-      // max-width: 100%;
+      .ellipsis {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        display: inline-block;
+
+        // display: -webkit-box;
+        // -webkit-box-orient: vertical;
+        // -webkit-line-clamp: 1;
+      }
     }
   }
 }

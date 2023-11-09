@@ -12,23 +12,12 @@ import { useIsDarkMode } from '$ui/util/hooks/useIsDarkMode'
 import { getRuleItemContent } from '$ui/util/remote-rules'
 import { firstLine, limitLines } from '$ui/util/text-util'
 import { FileAddOutlined } from '@ant-design/icons'
-import {
-  DndContext,
-  DragEndEvent,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core'
+import { DndContext, DragEndEvent } from '@dnd-kit/core'
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
+import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import * as remote from '@electron/remote'
+import { css } from '@emotion/react'
 import { LinkTwo, SdCard } from '@icon-park/react'
 import { useMemoizedFn } from 'ahooks'
 import {
@@ -123,16 +112,16 @@ export default function LibraryRuleList() {
     state.list = state.list.toSpliced(oldIndex, 1).toSpliced(newIndex, 0, item)
   })
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 10,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  )
+  // const sensors = useSensors(
+  //   useSensor(PointerSensor, {
+  //     activationConstraint: {
+  //       distance: 10,
+  //     },
+  //   }),
+  //   useSensor(KeyboardSensor, {
+  //     coordinateGetter: sortableKeyboardCoordinates,
+  //   })
+  // )
 
   return (
     <div className={styles.page}>
@@ -155,7 +144,6 @@ export default function LibraryRuleList() {
       <div className='list-items-container'>
         <DndContext
           modifiers={[restrictToFirstScrollableAncestor, restrictToVerticalAxis]}
-          sensors={sensors}
           onDragEnd={onDragEnd}
         >
           <SortableContext items={contextIds} strategy={verticalListSortingStrategy}>
@@ -259,10 +247,13 @@ export function PartialConfigItem({ item, index }: { item: RuleItem; index: numb
       style={{ ...dragStyle, ...dragActiveStyle, display: 'flex' }}
       className='list-item'
       ref={setNodeRef}
-      {...attributes}
-      {...listeners}
     >
-      <div className='list-item-info'>
+      <div
+        css={css`
+          flex: 1;
+          overflow: hidden;
+        `}
+      >
         <div className='name' style={{ display: 'flex', height: 24, alignItems: 'center' }}>
           <span>名称: {name}</span>
           <span style={{ marginLeft: 5, marginTop: 4 }}>
@@ -288,11 +279,7 @@ export function PartialConfigItem({ item, index }: { item: RuleItem; index: numb
           ) : (
             <Tooltip
               title={
-                <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-                  {item.url}
-                  {/* debug use */}
-                  {/* <p style={{ maxWidth: 500 }}>{JSON.stringify(item)}</p> */}
-                </div>
+                <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{item.url}</div>
               }
             >
               <div className='ellipsis'>链接: {item.url}</div>
@@ -301,7 +288,54 @@ export function PartialConfigItem({ item, index }: { item: RuleItem; index: numb
         </div>
       </div>
 
-      <div className='list-item-actions'>
+      <div
+        className='drag-handle'
+        ref={setActivatorNodeRef}
+        {...attributes}
+        {...listeners}
+        css={css`
+          width: 30px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          margin-left: 25px;
+          margin-right: 15px;
+          border-radius: 5px;
+          flex-shrink: 0;
+
+          cursor: grab;
+          &:hover {
+            background-color: #eee;
+          }
+        `}
+      >
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='32'
+          height='32'
+          viewBox='0 0 15 15'
+          css={css`
+            width: 20px;
+            height: 20px;
+          `}
+        >
+          <path
+            fill='#888888'
+            fill-rule='evenodd'
+            d='M2.5 4.1a.4.4 0 1 0 0 .8h10a.4.4 0 0 0 0-.8h-10Zm0 2a.4.4 0 1 0 0 .8h10a.4.4 0 0 0 0-.8h-10Zm-.4 2.4c0-.22.18-.4.4-.4h10a.4.4 0 0 1 0 .8h-10a.4.4 0 0 1-.4-.4Zm.4 1.6a.4.4 0 0 0 0 .8h10a.4.4 0 0 0 0-.8h-10Z'
+            clip-rule='evenodd'
+          />
+        </svg>
+      </div>
+
+      <div
+        className='list-item-actions'
+        css={css`
+          flex-shrink: 0;
+        `}
+      >
         <Space style={{ display: 'flex', alignItems: 'center' }}>
           <Button
             type='primary'

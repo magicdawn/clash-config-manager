@@ -55,6 +55,8 @@ module.exports = {
         ],
 
         '@typescript-eslint/no-non-null-assertion': 'off',
+
+        'react/no-unknown-property': 'off',
       },
     },
   ],
