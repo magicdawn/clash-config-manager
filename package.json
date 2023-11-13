@@ -76,8 +76,8 @@
     "typescript-plugin-css-modules": "^5.0.2"
   },
   "lint-staged": {
-    "*.{js,jsx,less,css,ts,tsx,md}": [
-      "prettier --write"
+    "**/*": [
+      "prettier --write --ignore-unknown"
     ]
   }
 }
