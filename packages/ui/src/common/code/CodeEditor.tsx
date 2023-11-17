@@ -149,6 +149,8 @@ export function CodeEditor(props: IProps) {
       trimAutoWhitespace: true,
       contextmenu: true,
       occurrencesHighlight: false,
+      tabSize: 2,
+      useTabStops: true,
       find: {
         loop: false,
         seedSearchStringFromSelection: 'selection',
