@@ -11,8 +11,7 @@ const sh = (cmd) => {
 process.env.NODE_ENV = 'production'
 
 // multiarch 会调用多次 build
-const buildOnce = once(build)
-function build() {
+const buildOnce = once(function build() {
   if (process.env.SKIP_BUILD || process.argv.includes('--skip-build')) {
     return
   }
@@ -26,7 +25,7 @@ function build() {
     console.log('[build ui]')
     sh('pnpm build:ui')
   }
-}
+})
 
 /** @type {import('electron-builder').Configuration} */
 module.exports = {
