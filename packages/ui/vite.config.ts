@@ -2,10 +2,13 @@
 
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 import react from '@vitejs/plugin-react'
-import { set } from 'lodash'
+import esmUtils from 'esm-utils'
+import { set } from 'lodash-es'
 import path, { join } from 'path'
 import { defineConfig, Plugin } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
+
+const { require } = esmUtils(import.meta)
 
 // "vite-plugin-electron": "^0.4.4",
 // use "vite-plugin-electron/render", 基本就是 makeRendererHappyPlugin 的逻辑
@@ -260,7 +263,7 @@ export default defineConfig({
     alias: {
       'monaco-themes-json-dir': path.join(
         path.dirname(require.resolve('monaco-themes/package')),
-        'themes'
+        'themes',
       ),
     },
   },

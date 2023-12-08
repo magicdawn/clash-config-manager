@@ -99,8 +99,8 @@ const router = createHashRouter(
       {routes.map((r) => (
         <Route key={r.path} path={r.path} Component={r.component} />
       ))}
-    </Route>
-  )
+    </Route>,
+  ),
 )
 
 function App() {
@@ -123,7 +123,13 @@ function RootLayout() {
   setNavigateSingleton(nav)
 
   return (
-    <ConfigProvider locale={zhCN} theme={{ algorithm }}>
+    <ConfigProvider
+      locale={zhCN}
+      theme={{
+        cssVar: true,
+        algorithm,
+      }}
+    >
       <AntdApp message={messageConfig}>
         <SetupAntdStatic />
 
