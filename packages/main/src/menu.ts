@@ -51,7 +51,7 @@ if (!is.macos) {
     aboutMenuItem({
       icon: path.join(__dirname, 'static', 'icon.png'),
       text: 'Created by Your Name',
-    })
+    }),
   )
 }
 
@@ -97,7 +97,7 @@ const macosTemplate = (options: { updateMenuItem: any }) =>
             shell.showItemInFolder(storage.path)
           },
         },
-      ].filter(Boolean)
+      ].filter(Boolean),
     ),
 
     // 关闭窗口

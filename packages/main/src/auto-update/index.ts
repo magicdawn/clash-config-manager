@@ -46,7 +46,7 @@ const setDownloadingMenu = _.throttle((progressObj) => {
   const currentMenuItem = {
     ...menuItem.downloading,
     label: `更新下载中 速度 ${bytes(bytesPerSecond)}/s ${bytes(transferred)}/${bytes(
-      total
+      total,
     )} ${percent.toFixed(0)}%`,
   }
   updateMenuItem = currentMenuItem

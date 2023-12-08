@@ -27,7 +27,7 @@ export default function ConfigList() {
       // callback if failed to launch (optional)
       (fileName, errorMsg) => {
         message.error(errorMsg)
-      }
+      },
     )
   })
 

@@ -43,7 +43,7 @@ const { state, load, init } = valtioState(
       const list = getTidyList(val.list)
       storage.set(RULE_LIST_STORAGE_KEY, list)
     },
-  }
+  },
 )
 
 export { state }

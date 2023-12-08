@@ -23,14 +23,14 @@ type PayloadFn<T> = (draft: T) => T | void | undefined | null
 type Payload<T> = Partial<T> | PayloadFn<T>
 
 export default function useImmerState<T>(
-  initialState: T | (() => T)
+  initialState: T | (() => T),
 ): [T, (payload: Payload<T>) => void] {
   const [state, setState] = useState(initialState)
   const modifyState = useCallback(
     (payload) => {
       setState((state) => reducer(state, payload))
     },
-    [setState]
+    [setState],
   )
   return [state, modifyState]
 }

@@ -97,7 +97,7 @@ export function urlLineToClashSsrServer(str: string): ClashSsrProxyItem {
       result[key] = value
       return result
     },
-    {}
+    {},
   )
 
   if (remarks) remarks = B64.decode(remarks)

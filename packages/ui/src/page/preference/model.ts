@@ -33,7 +33,7 @@ const { state, init, load } = valtioState<IState>(
     persist(val) {
       storage.set(STORAGE_KEY, val)
     },
-  }
+  },
 )
 
 export { state }

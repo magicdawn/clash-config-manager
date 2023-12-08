@@ -36,7 +36,7 @@ const { state, load, init } = valtioState<IState>(
     persist(val) {
       storage.set(CURRENT_CONFIG_STORAGE_KEY, _.pick(val, allowedKeys))
     },
-  }
+  },
 )
 
 const actions = { currentConfigUsingAndEnabled }

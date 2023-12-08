@@ -9,7 +9,7 @@ const makeClient = memo((davServerUrl: string, username: string, password: strin
   createClient(davServerUrl, {
     username,
     password,
-  })
+  }),
 )
 
 function getClient() {

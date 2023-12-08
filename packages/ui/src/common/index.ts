@@ -25,5 +25,5 @@ export const getAssetsDir = reusePromise(
   async () => {
     return await ipcRenderer.invoke('getAssetsDir')
   },
-  { memorize: true }
+  { memorize: true },
 )

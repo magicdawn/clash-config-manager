@@ -288,7 +288,7 @@ function ModalAdd({
   const [autoUpdateIntervalMin, autoUpdateIntervalMax] = [1, 240]
   const autoUpdateIntervalDefault = 12
   const [autoUpdateInterval, setAutoUpdateInterval] = useState(
-    () => editItem?.autoUpdateInterval || autoUpdateIntervalDefault
+    () => editItem?.autoUpdateInterval || autoUpdateIntervalDefault,
   ) // 小时
 
   useUpdateEffect(() => {

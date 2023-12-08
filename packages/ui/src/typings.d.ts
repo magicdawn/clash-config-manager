@@ -6,6 +6,6 @@ declare module 'launch-editor' {
   export default function launch(
     file: string,
     editor?: string,
-    cb?: (fileName: string, errorMsg: string) => void
+    cb?: (fileName: string, errorMsg: string) => void,
   ): void
 }

@@ -68,7 +68,7 @@ export default function Preference() {
       'importAction: %O, select result: cancel = %s, selectedData = %O',
       importData,
       cancel,
-      selectedData
+      selectedData,
     )
     if (cancel || !selectedData) return
 
@@ -115,7 +115,7 @@ export default function Preference() {
       editor,
       (fileName, errorMsg) => {
         message.error(errorMsg)
-      }
+      },
     )
   })
 

@@ -42,7 +42,7 @@ const { state, load, init } = valtioState<IState>(
       // 只保留当前 list 存在的订阅
       const detail = pick(
         storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY) || ({} as IState['detail']),
-        list.map((item) => item.url).filter(Boolean)
+        list.map((item) => item.url).filter(Boolean),
       )
       for (const [url, servers] of Object.entries(detail)) {
         servers?.forEach((s) => ref(s)) // do not observe server object
@@ -50,7 +50,7 @@ const { state, load, init } = valtioState<IState>(
 
       return { list, detail, status }
     },
-  }
+  },
 )
 export { state }
 
@@ -140,7 +140,7 @@ export async function update({
             console.error('nodefree %s failed', url, err)
           }
           return currentServers
-        })
+        }),
       )
     ).flat()
 

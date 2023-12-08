@@ -103,7 +103,7 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
         silent: true,
         forceUpdate,
       }),
-    5
+    5,
   )
 
   for (const item of subscribeItems) {
@@ -121,7 +121,7 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
     async (item) => {
       await rootActions.libraryRuleList.updateRemote({ item, forceUpdate })
     },
-    5
+    5,
   )
 
   for (const item of ruleItems) {
@@ -185,14 +185,14 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
     ...(generateAllProxyGroup
       ? genGroupsForSubscribe(
           '所有节点',
-          config.proxies.map((p) => p.name)
+          config.proxies.map((p) => p.name),
         )
       : []),
     ...subscribeTragets
       .map((subscribeName, index) => {
         const url = subscribeItems[index].url
         const subscribeProxies = (rootState.librarySubscribe.detail[url] || []).map(
-          (server) => server.name
+          (server) => server.name,
         )
         return genGroupsForSubscribe(subscribeName, subscribeProxies)
       })
@@ -227,7 +227,7 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
   // 去除 prepend proxy-groups
   const prependProxyGroupsNames = prependProxyGroups.map((pg) => pg.name)
   proxyGroups = proxyGroups.filter(
-    (proxyGroup) => !proxyGroup.filter && !prependProxyGroupsNames.includes(proxyGroup.name)
+    (proxyGroup) => !proxyGroup.filter && !prependProxyGroupsNames.includes(proxyGroup.name),
   )
 
   // yaml 中写的 proxy-groups
