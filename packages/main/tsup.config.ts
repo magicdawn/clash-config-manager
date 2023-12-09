@@ -8,6 +8,7 @@ export default defineConfig({
   entry: ['./src/index.ts'],
   format: 'cjs',
   outDir: path.join(REPO_ROOT, `bundle/${env}/main/`),
+  clean: true,
 
   platform: 'node',
   // TODO: get node version based on electron version
