@@ -32,7 +32,7 @@ export async function main() {
   loadDevExt()
 
   mainWindow = await createMainWindow()
-  global.mainWindow = mainWindow
+  globalThis.mainWindow = mainWindow
 
   // enable @electron/remote
   remoteMain.initialize()

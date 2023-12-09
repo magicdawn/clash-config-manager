@@ -6,8 +6,12 @@ const REPO_ROOT = path.join(__dirname, '../../')
 
 export default defineConfig({
   entry: ['./src/index.ts'],
-  format: 'cjs',
+  format: 'esm',
+  // outExtension({ format }) {
+  //   return { js: '.mjs' }
+  // },
   outDir: path.join(REPO_ROOT, `bundle/${env}/main/`),
+  clean: true,
 
   platform: 'node',
   // TODO: get node version based on electron version
@@ -16,6 +20,21 @@ export default defineConfig({
 
   env: {
     NODE_ENV: env,
+  },
+
+  shims: true,
+
+  // https://github.com/evanw/esbuild/issues/1921
+  banner(ctx) {
+    return {
+      js: `
+      // BANNER START
+      const require = (await import("node:module")).createRequire(import.meta.url);
+      // const __filename = (await import("node:url")).fileURLToPath(import.meta.url);
+      // const __dirname = (await import("node:path")).dirname(__filename);
+      // BANNER END
+      `,
+    }
   },
 
   // NOTE: 此处 external & noExternal 只是输入给 esbuild.options({ plugins: [externalPlugin] })
