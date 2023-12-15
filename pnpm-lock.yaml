@@ -8,8 +8,8 @@ importers:
   .:
     dependencies:
       '@electron/remote':
-        specifier: ^2.1.0
-        version: 2.1.0(electron@28.0.0)
+        specifier: ^2.1.1
+        version: 2.1.1(electron@28.0.0)
       electron-store:
         specifier: ^8.1.0
         version: 8.1.0
@@ -63,8 +63,8 @@ importers:
         specifier: ^28.0.0
         version: 28.0.0
       electron-builder:
-        specifier: ^24.9.4
-        version: 24.9.4
+        specifier: ^24.10.0
+        version: 24.10.0
       eslint:
         specifier: ^8.55.0
         version: 8.55.0
@@ -111,8 +111,8 @@ importers:
         specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.3.100)(@types/node@20.10.4)(typescript@5.3.3)
       turbo:
-        specifier: ^1.11.1
-        version: 1.11.1
+        specifier: ^1.11.2
+        version: 1.11.2
       type-fest:
         specifier: ^4.8.3
         version: 4.8.3
@@ -197,7 +197,7 @@ importers:
         version: 3.2.2(react@18.2.0)
       '@emotion/react':
         specifier: ^11.11.1
-        version: 11.11.1(@types/react@18.2.43)(react@18.2.0)
+        version: 11.11.1(@types/react@18.2.45)(react@18.2.0)
       '@icon-park/react':
         specifier: ^1.4.2
         version: 1.4.2(react-dom@18.2.0)(react@18.2.0)
@@ -284,10 +284,10 @@ importers:
         version: 18.2.0(react@18.2.0)
       react-monaco-editor:
         specifier: ^0.55.0
-        version: 0.55.0(@types/react@18.2.43)(monaco-editor@0.45.0)(react@18.2.0)
+        version: 0.55.0(@types/react@18.2.45)(monaco-editor@0.45.0)(react@18.2.0)
       react-router-dom:
-        specifier: ^6.20.1
-        version: 6.20.1(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^6.21.0
+        version: 6.21.0(react-dom@18.2.0)(react@18.2.0)
       react-spinkit:
         specifier: ^3.0.0
         version: 3.0.0
@@ -311,7 +311,7 @@ importers:
         version: 1.19.11
       valtio:
         specifier: ^1.12.1
-        version: 1.12.1(@types/react@18.2.43)(react@18.2.0)
+        version: 1.12.1(@types/react@18.2.45)(react@18.2.0)
       webdav:
         specifier: ^5.3.1
         version: 5.3.1
@@ -353,8 +353,8 @@ importers:
         specifier: ^0.7.34
         version: 0.7.34
       '@types/react':
-        specifier: ^18.2.43
-        version: 18.2.43
+        specifier: ^18.2.45
+        version: 18.2.45
       '@types/react-beautiful-dnd':
         specifier: ^13.1.7
         version: 13.1.7
@@ -378,10 +378,10 @@ importers:
         version: 1.19.25
       '@vitejs/plugin-react':
         specifier: ^4.2.1
-        version: 4.2.1(vite@5.0.8)
+        version: 4.2.1(vite@5.0.9)
       '@vitejs/plugin-react-swc':
         specifier: ^3.5.0
-        version: 3.5.0(@swc/helpers@0.5.3)(vite@5.0.8)
+        version: 3.5.0(@swc/helpers@0.5.3)(vite@5.0.9)
       builtin-modules:
         specifier: ^3.3.0
         version: 3.3.0
@@ -404,11 +404,11 @@ importers:
         specifier: ^0.8.5
         version: 0.8.5
       vite:
-        specifier: ^5.0.8
-        version: 5.0.8(@types/node@20.10.4)(less@4.2.0)
+        specifier: ^5.0.9
+        version: 5.0.9(@types/node@20.10.4)(less@4.2.0)
       vite-plugin-electron:
-        specifier: ^0.15.4
-        version: 0.15.4(vite-plugin-electron-renderer@0.14.5)
+        specifier: ^0.15.5
+        version: 0.15.5(vite-plugin-electron-renderer@0.14.5)
       vite-plugin-electron-renderer:
         specifier: ^0.14.5
         version: 0.14.5
@@ -417,7 +417,7 @@ importers:
         version: 1.1.0(monaco-editor@0.45.0)
       vite-tsconfig-paths:
         specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.8)
+        version: 4.2.2(typescript@5.3.3)(vite@5.0.9)
 
 packages:
   /7zip-bin@5.2.0:
@@ -1223,10 +1223,10 @@ packages:
       - supports-color
     dev: true
 
-  /@electron/remote@2.1.0(electron@28.0.0):
+  /@electron/remote@2.1.1(electron@28.0.0):
     resolution:
       {
-        integrity: sha512-38jzz2beoYTo0DNS+aoaGyLS/fHeNTAc1Aom6HlYsxKnvVWjcg4xriC7J2IUkYSEDHGKX/D7jUst+mH4dHR6QA==,
+        integrity: sha512-Lfxul2yBxL+FBVaKszNAkuUqSIDbUQ1I7BC394iRXyqA2XGz7im2bAxroNIM51jhySSPKUaOLHaFLxfV6pC9VQ==,
       }
     peerDependencies:
       electron: '>= 13.0.0'
@@ -1305,7 +1305,7 @@ packages:
       }
     dev: false
 
-  /@emotion/react@11.11.1(@types/react@18.2.43)(react@18.2.0):
+  /@emotion/react@11.11.1(@types/react@18.2.45)(react@18.2.0):
     resolution:
       {
         integrity: sha512-5mlW1DquU5HaxjLkfkGN1GA/fvVGdyHURRiX/0FHl2cfIfRxSOfmxEH5YS43edp0OldZrZ+dkBKbngxcNCdZvA==,
@@ -1324,7 +1324,7 @@ packages:
       '@emotion/use-insertion-effect-with-fallbacks': 1.0.1(react@18.2.0)
       '@emotion/utils': 1.2.1
       '@emotion/weak-memoize': 0.3.1
-      '@types/react': 18.2.43
+      '@types/react': 18.2.45
       hoist-non-react-statics: 3.3.2
       react: 18.2.0
     dev: false
@@ -2016,10 +2016,10 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@remix-run/router@1.13.1:
+  /@remix-run/router@1.14.0:
     resolution:
       {
-        integrity: sha512-so+DHzZKsoOcoXrILB4rqDkMDy7NLMErRdOxvzvOKb507YINKUP4Di+shbTZDhSE/pBZ+vr7XGIpcOO0VLSA+Q==,
+        integrity: sha512-WOHih+ClN7N8oHk9N4JUiMxQJmRVaOxcg8w7F/oHUXzJt920ekASLI/7cYX8XkntDWRhLZtsk6LbGrkgOAvi5A==,
       }
     engines: { node: '>=14.0.0' }
     dev: false
@@ -2700,7 +2700,7 @@ packages:
         integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==,
       }
     dependencies:
-      '@types/react': 18.2.43
+      '@types/react': 18.2.45
       hoist-non-react-statics: 3.3.2
     dev: false
 
@@ -2880,7 +2880,7 @@ packages:
         integrity: sha512-jQZLov9OkD0xRQkqz8/lx66bHYAYv+g4+POBqnH5Jtt/xo4MygzM879Q9sxAiosPBdNj1JYTdbPxDn3dNRYgow==,
       }
     dependencies:
-      '@types/react': 18.2.43
+      '@types/react': 18.2.45
     dev: true
 
   /@types/react-dom@18.2.17:
@@ -2889,7 +2889,7 @@ packages:
         integrity: sha512-rvrT/M7Df5eykWFxn6MYt5Pem/Dbyc1N8Y0S9Mrkw2WFCRiqUgw9P7ul2NpwsXCSM1DVdENzdG9J5SreqfAIWg==,
       }
     dependencies:
-      '@types/react': 18.2.43
+      '@types/react': 18.2.45
     dev: true
 
   /@types/react-redux@7.1.23:
@@ -2899,7 +2899,7 @@ packages:
       }
     dependencies:
       '@types/hoist-non-react-statics': 3.3.1
-      '@types/react': 18.2.43
+      '@types/react': 18.2.45
       hoist-non-react-statics: 3.3.2
       redux: 4.2.0
     dev: false
@@ -2910,13 +2910,13 @@ packages:
         integrity: sha512-grNfPdesm/xVJPyohfW752bM8N9kuJUx2yFo0I41mZwF3BuXt4+IV4TwaCPcBtA1V3C5r2NUPyqfEUpNTtWbvA==,
       }
     dependencies:
-      '@types/react': 18.2.43
+      '@types/react': 18.2.45
     dev: true
 
-  /@types/react@18.2.43:
+  /@types/react@18.2.45:
     resolution:
       {
-        integrity: sha512-nvOV01ZdBdd/KW6FahSbcNplt2jCJfyWdTos61RYHV+FVv5L/g9AOX1bmbVcWcLFL8+KHQfh1zVIQrud6ihyQA==,
+        integrity: sha512-TtAxCNrlrBp8GoeEp1npd5g+d/OejJHFxS3OWmrPBMFaVQMSN0OFySozJio5BHxTuTeug00AVXVAjfDSfk+lUg==,
       }
     dependencies:
       '@types/prop-types': 15.7.5
@@ -3195,7 +3195,7 @@ packages:
       }
     dev: true
 
-  /@vitejs/plugin-react-swc@3.5.0(@swc/helpers@0.5.3)(vite@5.0.8):
+  /@vitejs/plugin-react-swc@3.5.0(@swc/helpers@0.5.3)(vite@5.0.9):
     resolution:
       {
         integrity: sha512-1PrOvAaDpqlCV+Up8RkAh9qaiUjoDUcjtttyhXDKw53XA6Ve16SOp6cCOpRs8Dj8DqUQs6eTW5YkLcLJjrXAig==,
@@ -3204,12 +3204,12 @@ packages:
       vite: ^4 || ^5
     dependencies:
       '@swc/core': 1.3.96(@swc/helpers@0.5.3)
-      vite: 5.0.8(@types/node@20.10.4)(less@4.2.0)
+      vite: 5.0.9(@types/node@20.10.4)(less@4.2.0)
     transitivePeerDependencies:
       - '@swc/helpers'
     dev: true
 
-  /@vitejs/plugin-react@4.2.1(vite@5.0.8):
+  /@vitejs/plugin-react@4.2.1(vite@5.0.9):
     resolution:
       {
         integrity: sha512-oojO9IDc4nCUUi8qIR11KoQm0XFFLIwsRBwHRR4d/88IWghn1y6ckz/bJ8GHDCsYEJee8mDzqtJxh15/cisJNQ==,
@@ -3223,7 +3223,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.23.3(@babel/core@7.23.5)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.0
-      vite: 5.0.8(@types/node@20.10.4)(less@4.2.0)
+      vite: 5.0.9(@types/node@20.10.4)(less@4.2.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3561,10 +3561,10 @@ packages:
       }
     dev: true
 
-  /app-builder-lib@24.9.4:
+  /app-builder-lib@24.10.0:
     resolution:
       {
-        integrity: sha512-V52ikQoqkWbuL6k9tWHJgJpQiD0407XgjkNnGeAux+rKygXgOSRn0vmK2FdzMd4wtdKHhhTIcIA0JrIdqcthAg==,
+        integrity: sha512-kYxIANSdp/Un8xWcsjj4Vu+Qy5Ebhyu+CkI5cKr25mPR/NfBSKPMG8UbwcaEnsW0mp5QaaWP7bZvK6Lg5OIkJA==,
       }
     engines: { node: '>=14.0.0' }
     dependencies:
@@ -5491,7 +5491,7 @@ packages:
     peerDependencies:
       valtio: '*'
     dependencies:
-      valtio: 1.12.1(@types/react@18.2.43)(react@18.2.0)
+      valtio: 1.12.1(@types/react@18.2.45)(react@18.2.0)
     dev: false
 
   /detect-file@1.0.0:
@@ -5563,13 +5563,13 @@ packages:
       - supports-color
     dev: false
 
-  /dmg-builder@24.9.4:
+  /dmg-builder@24.10.0:
     resolution:
       {
-        integrity: sha512-fifxbQeOMkPgRrKqjkRdRYHt8ssWJh3J4DkYsA163nOMt/waUs5AgPsS4d1sX4dTPRD7Jfo4vb4wmmHjhgs8nA==,
+        integrity: sha512-aW3n+AoCIxX6Dm6TbH/nhduhTj8a/jEhiPUw8q8hQ2QTf5stZYPnokAE7Y9oCBN8782Bms2A8sD2mBIvX3grxw==,
       }
     dependencies:
-      app-builder-lib: 24.9.4
+      app-builder-lib: 24.10.0
       builder-util: 24.9.4
       builder-util-runtime: 9.2.3
       fs-extra: 10.1.0
@@ -5732,19 +5732,19 @@ packages:
       jake: 10.8.7
     dev: true
 
-  /electron-builder@24.9.4:
+  /electron-builder@24.10.0:
     resolution:
       {
-        integrity: sha512-jN07OQixVt0wxvRZB4lKAsDUwPIyChhwf3CEExhCDnrIYWciw92yhIHbZkNwebuNcLxScVzH5xsCUVNrYY/LZg==,
+        integrity: sha512-vJ+OdEXvI7Ur+dv+3k3hgddncKcAlO9wUoOJWK+dCLcOS5eL1EAFeDHpQj6aDUQ1o+a8PsMEd4odzCxVnEUS2g==,
       }
     engines: { node: '>=14.0.0' }
     hasBin: true
     dependencies:
-      app-builder-lib: 24.9.4
+      app-builder-lib: 24.10.0
       builder-util: 24.9.4
       builder-util-runtime: 9.2.3
       chalk: 4.1.2
-      dmg-builder: 24.9.4
+      dmg-builder: 24.10.0
       fs-extra: 10.1.0
       is-ci: 3.0.1
       lazy-val: 1.0.5
@@ -10211,15 +10211,6 @@ packages:
     dev: true
     optional: true
 
-  /nanoid@3.3.6:
-    resolution:
-      {
-        integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==,
-      }
-    engines: { node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1 }
-    hasBin: true
-    dev: true
-
   /nanoid@3.3.7:
     resolution:
       {
@@ -11372,7 +11363,7 @@ packages:
       }
     engines: { node: ^10 || ^12 || >=14 }
     dependencies:
-      nanoid: 3.3.6
+      nanoid: 3.3.7
       picocolors: 1.0.0
       source-map-js: 1.0.2
     dev: true
@@ -12419,7 +12410,7 @@ packages:
       warning: 4.0.3
     dev: false
 
-  /react-monaco-editor@0.55.0(@types/react@18.2.43)(monaco-editor@0.45.0)(react@18.2.0):
+  /react-monaco-editor@0.55.0(@types/react@18.2.45)(monaco-editor@0.45.0)(react@18.2.0):
     resolution:
       {
         integrity: sha512-GdEP0Q3Rn1dczfKEEyY08Nes5plWwIYU4sWRBQO0+jsQWQsKMHKCC6+hPRwR7G/4aA3V/iU9jSmWPzVJYMVFSQ==,
@@ -12429,7 +12420,7 @@ packages:
       monaco-editor: ^0.44.0
       react: '>=16 <= 18'
     dependencies:
-      '@types/react': 18.2.43
+      '@types/react': 18.2.45
       monaco-editor: 0.45.0
       prop-types: 15.8.1
       react: 18.2.0
@@ -12468,32 +12459,32 @@ packages:
     engines: { node: '>=0.10.0' }
     dev: true
 
-  /react-router-dom@6.20.1(react-dom@18.2.0)(react@18.2.0):
+  /react-router-dom@6.21.0(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
-        integrity: sha512-npzfPWcxfQN35psS7rJgi/EW0Gx6EsNjfdJSAk73U/HqMEJZ2k/8puxfwHFgDQhBGmS3+sjnGbMdMSV45axPQw==,
+        integrity: sha512-1dUdVj3cwc1npzJaf23gulB562ESNvxf7E4x8upNJycqyUm5BRRZ6dd3LrlzhtLaMrwOCO8R0zoiYxdaJx4LlQ==,
       }
     engines: { node: '>=14.0.0' }
     peerDependencies:
       react: '>=16.8'
       react-dom: '>=16.8'
     dependencies:
-      '@remix-run/router': 1.13.1
+      '@remix-run/router': 1.14.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      react-router: 6.20.1(react@18.2.0)
+      react-router: 6.21.0(react@18.2.0)
     dev: false
 
-  /react-router@6.20.1(react@18.2.0):
+  /react-router@6.21.0(react@18.2.0):
     resolution:
       {
-        integrity: sha512-ccvLrB4QeT5DlaxSFFYi/KR8UMQ4fcD8zBcR71Zp1kaYTC5oJKYAp1cbavzGrogwxca+ubjkd7XjFZKBW8CxPA==,
+        integrity: sha512-hGZ0HXbwz3zw52pLZV3j3+ec+m/PQ9cTpBvqjFQmy2XVUWGn5MD+31oXHb6dVTxYzmAeaiUBYjkoNz66n3RGCg==,
       }
     engines: { node: '>=14.0.0' }
     peerDependencies:
       react: '>=16.8'
     dependencies:
-      '@remix-run/router': 1.13.1
+      '@remix-run/router': 1.14.0
       react: 18.2.0
     dev: false
 
@@ -14500,10 +14491,10 @@ packages:
       safe-buffer: 5.2.1
     dev: true
 
-  /turbo-darwin-64@1.11.1:
+  /turbo-darwin-64@1.11.2:
     resolution:
       {
-        integrity: sha512-JmwL8kcfxncDf2SZFioSa6dUvpMq/HbMcurh9mGm6BxWLQoB0d3fP/q3HizgCSbOE4ihScXoQ+c/C2xhl6Ngjg==,
+        integrity: sha512-toFmRG/adriZY3hOps7nYCfqHAS+Ci6xqgX3fbo82kkLpC6OBzcXnleSwuPqjHVAaRNhVoB83L5njcE9Qwi2og==,
       }
     cpu: [x64]
     os: [darwin]
@@ -14511,10 +14502,10 @@ packages:
     dev: true
     optional: true
 
-  /turbo-darwin-arm64@1.11.1:
+  /turbo-darwin-arm64@1.11.2:
     resolution:
       {
-        integrity: sha512-lIpT7nPkU0xmpkI8VOGQcgoQKmUATRMpRhTDclz6j/Px7Qtxjc+2PitKHKfR3aCnseoRMGkgMzPEJTPUwCpnlQ==,
+        integrity: sha512-FCsEDZ8BUSFYEOSC3rrARQrj7x2VOrmVcfrMUIhexTxproRh4QyMxLfr6LALk4ymx6jbDCxWa6Szal8ckldFbA==,
       }
     cpu: [arm64]
     os: [darwin]
@@ -14522,10 +14513,10 @@ packages:
     dev: true
     optional: true
 
-  /turbo-linux-64@1.11.1:
+  /turbo-linux-64@1.11.2:
     resolution:
       {
-        integrity: sha512-mHFSqMkgy3h/M8Ocj2oiOr6CqlCqB6coCPWVIAmraBk+SQywwsszgJ69GWBfm7lwwJvb3B1YN1wkZNe9ZZnBfg==,
+        integrity: sha512-Vzda/o/QyEske5CxLf0wcu7UUS+7zB90GgHZV4tyN+WZtoouTvbwuvZ3V6b5Wgd3OJ/JwWR0CXDK7Sf4VEMr7A==,
       }
     cpu: [x64]
     os: [linux]
@@ -14533,10 +14524,10 @@ packages:
     dev: true
     optional: true
 
-  /turbo-linux-arm64@1.11.1:
+  /turbo-linux-arm64@1.11.2:
     resolution:
       {
-        integrity: sha512-6ybojTkAkymo1Ig7kU3s2YQUUSRf3l2qatPZgw3v4OmFTSU2feCU1sHjAEqhHwEjV1KciDo1wRl1gjjyby4foQ==,
+        integrity: sha512-bRLwovQRz0yxDZrM4tQEAYV0fBHEaTzUF0JZ8RG1UmZt/CqtpnUrJpYb1VK8hj1z46z9YehARpYCwQ2K0qU4yw==,
       }
     cpu: [arm64]
     os: [linux]
@@ -14544,10 +14535,10 @@ packages:
     dev: true
     optional: true
 
-  /turbo-windows-64@1.11.1:
+  /turbo-windows-64@1.11.2:
     resolution:
       {
-        integrity: sha512-ytWy6+yEtBfv6nbgCKW6HsolgUFAC1PZGMPzbqRGnCm2eLVWhDuwO1Yk7uq4cvdrpXcXgOMcPEoJZxUCDbeJaQ==,
+        integrity: sha512-LgTWqkHAKgyVuLYcEPxZVGPInTjjeCnN5KQMdJ4uQZ+xMDROvMFS2rM93iQl4ieDJgidwHCxxCxaU9u8c3d/Kg==,
       }
     cpu: [x64]
     os: [win32]
@@ -14555,10 +14546,10 @@ packages:
     dev: true
     optional: true
 
-  /turbo-windows-arm64@1.11.1:
+  /turbo-windows-arm64@1.11.2:
     resolution:
       {
-        integrity: sha512-O04DdJoRavOh/v9/MM5wWCEtOekO4aiLljNZc/fOh853sOhid61ZRSEYUmS9ecjmZ/OjKqedIfbkitaQ77c4xA==,
+        integrity: sha512-829aVBU7IX0c/B4G7g1VI8KniAGutHhIupkYMgF6xPkYVev2G3MYe6DMS/vsLt9GGM9ulDtdWxWrH5P2ngK8IQ==,
       }
     cpu: [arm64]
     os: [win32]
@@ -14566,19 +14557,19 @@ packages:
     dev: true
     optional: true
 
-  /turbo@1.11.1:
+  /turbo@1.11.2:
     resolution:
       {
-        integrity: sha512-pmIsyTcyBJ5iJIaTjJyCxAq7YquDqyRai6FW2q0mFAkwK3k0p36wJ5yH85U2Ue6esrTKzeSEKskP4/fa7dv4+A==,
+        integrity: sha512-jPC7LVQJzebs5gWf8FmEvsvXGNyKbN+O9qpvv98xpNaM59aS0/Irhd0H0KbcqnXfsz7ETlzOC3R+xFWthC4Z8A==,
       }
     hasBin: true
     optionalDependencies:
-      turbo-darwin-64: 1.11.1
-      turbo-darwin-arm64: 1.11.1
-      turbo-linux-64: 1.11.1
-      turbo-linux-arm64: 1.11.1
-      turbo-windows-64: 1.11.1
-      turbo-windows-arm64: 1.11.1
+      turbo-darwin-64: 1.11.2
+      turbo-darwin-arm64: 1.11.2
+      turbo-linux-64: 1.11.2
+      turbo-linux-arm64: 1.11.2
+      turbo-windows-64: 1.11.2
+      turbo-windows-arm64: 1.11.2
     dev: true
 
   /type-check@0.4.0:
@@ -15075,7 +15066,7 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /valtio@1.12.1(@types/react@18.2.43)(react@18.2.0):
+  /valtio@1.12.1(@types/react@18.2.45)(react@18.2.0):
     resolution:
       {
         integrity: sha512-R0V4H86Xi2Pp7pmxN/EtV4Q6jr6PMN3t1IwxEvKUp6160r8FimvPh941oWyeK1iec/DTsh9Jb3Q+GputMS8SYg==,
@@ -15090,7 +15081,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@types/react': 18.2.43
+      '@types/react': 18.2.45
       derive-valtio: 0.1.0(valtio@1.12.1)
       proxy-compare: 2.5.1
       react: 18.2.0
@@ -15183,10 +15174,10 @@ packages:
       }
     dev: true
 
-  /vite-plugin-electron@0.15.4(vite-plugin-electron-renderer@0.14.5):
+  /vite-plugin-electron@0.15.5(vite-plugin-electron-renderer@0.14.5):
     resolution:
       {
-        integrity: sha512-aXGDjTXebJxNX+cf+KSZEsa9BcMrTbNhjZJaUhU5999/ATYZq4PlZpebfyeslyuYpjk6OdyA/pNC+fTeDYK5Kw==,
+        integrity: sha512-GD2JkJJSsP3kyJlyCH4ep3spelkyzOVSWHswv5nwYhS8GfsojPxUjhs9U4tuDb5mZ2XDYyTN+nBSB/abRnTmYQ==,
       }
     peerDependencies:
       tree-kill: '*'
@@ -15211,7 +15202,7 @@ packages:
       monaco-editor: 0.45.0
     dev: true
 
-  /vite-tsconfig-paths@4.2.2(typescript@5.3.3)(vite@5.0.8):
+  /vite-tsconfig-paths@4.2.2(typescript@5.3.3)(vite@5.0.9):
     resolution:
       {
         integrity: sha512-dq0FjyxHHDnp0uS3P12WEOX2W7NeuLzX9AWP38D7Zw2CTbFErapwQVlCiT5DMJcVWKQ1MMdTe92PZl/rBQ7qcw==,
@@ -15225,16 +15216,16 @@ packages:
       debug: 4.3.4(supports-color@5.5.0)
       globrex: 0.1.2
       tsconfck: 2.1.1(typescript@5.3.3)
-      vite: 5.0.8(@types/node@20.10.4)(less@4.2.0)
+      vite: 5.0.9(@types/node@20.10.4)(less@4.2.0)
     transitivePeerDependencies:
       - supports-color
       - typescript
     dev: true
 
-  /vite@5.0.8(@types/node@20.10.4)(less@4.2.0):
+  /vite@5.0.9(@types/node@20.10.4)(less@4.2.0):
     resolution:
       {
-        integrity: sha512-jYMALd8aeqR3yS9xlHd0OzQJndS9fH5ylVgWdB+pxTwxLKdO1pgC5Dlb398BUxpfaBxa4M9oT7j1g503Gaj5IQ==,
+        integrity: sha512-wVqMd5kp28QWGgfYPDfrj771VyHTJ4UDlCteLH7bJDGDEamaz5hV8IX6h1brSGgnnyf9lI2RnzXq/JmD0c2wwg==,
       }
     engines: { node: ^18.0.0 || >=20.0.0 }
     hasBin: true
