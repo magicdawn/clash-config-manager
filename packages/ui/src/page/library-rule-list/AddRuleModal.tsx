@@ -1,4 +1,5 @@
 import { message } from '$ui/store'
+import { css } from '@emotion/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space } from 'antd'
 import AppleScript from 'applescript'
@@ -180,7 +181,7 @@ export default function AddRuleModal(props: IProps) {
         <Col {...layout[2]}>Target</Col>
       </Row>
 
-      <Row gutter={8}>
+      <Row gutter={8} style={{ marginTop: 4 }}>
         <Col {...layout[0]}>
           <Select value={type} onChange={(val) => setType(val)} style={{ width: '100%' }}>
             {TYPES.map((t) => (
@@ -227,15 +228,89 @@ export default function AddRuleModal(props: IProps) {
           <Row gutter={8} style={{ marginTop: 24 }}>
             <Col {...layout[0]}>添加至</Col>
           </Row>
-          <Row gutter={8}>
-            <Col {...layout[0]}>
-              <Select style={{ width: '100%' }} value={ruleId} onChange={(val) => setRuleId(val)}>
+          <Row gutter={8} style={{ marginTop: 4 }}>
+            <Col span={24}>
+              {/* <Select style={{ width: '100%' }} value={ruleId} onChange={(val) => setRuleId(val)}>
                 {ruleList.map((t) => (
                   <Option key={t.id} value={t.id}>
                     {t.name}
                   </Option>
                 ))}
-              </Select>
+              </Select> */}
+
+              <div
+                css={css`
+                  display: flex;
+                  flex-wrap: wrap;
+                  gap: 8px 8px;
+                `}
+              >
+                {ruleList.map((t) => {
+                  const active = t.id === ruleId
+
+                  const ribbonTop = 15
+
+                  return (
+                    <div
+                      className='option'
+                      key={t.id}
+                      data-value={t.id}
+                      css={[
+                        css`
+                          position: relative;
+
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+
+                          padding: 15px 15px;
+                          border: 1px solid #ddd;
+                          border-radius: 8px;
+                          min-width: 100px;
+                          cursor: pointer;
+                          overflow: hidden;
+
+                          .dark-theme & {
+                            border-color: #333;
+                          }
+                        `,
+                        active &&
+                          css`
+                            /* background-color: var(--ant-color-primary); */
+                            /* color: #fff; */
+
+                            background-color: antiquewhite;
+                            .dark-theme & {
+                              background-color: antiquewhite;
+                              color: #000;
+                            }
+                          `,
+                      ]}
+                      onClick={(e) => setRuleId(t.id)}
+                    >
+                      {active && (
+                        <div
+                          className='ribbon'
+                          css={css`
+                            position: absolute;
+                            top: ${ribbonTop}px;
+                            left: -${ribbonTop}px;
+
+                            width: 100px;
+                            height: 10px;
+                            background-color: var(--ant-color-primary);
+
+                            transform-origin: ${ribbonTop}px top;
+                            transform: rotate(-45deg);
+                          `}
+                        />
+                      )}
+
+                      {t.name}
+                    </div>
+                  )
+                })}
+              </div>
             </Col>
           </Row>
         </>
