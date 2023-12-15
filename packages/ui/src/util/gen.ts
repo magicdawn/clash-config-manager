@@ -50,14 +50,12 @@ export function getUsingItems() {
   return { subscribeItems, ruleItems }
 }
 
-export default async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean } = {}) {
+export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean } = {}) {
   const { name, clashMeta, generateAllProxyGroup, generateSubNameProxyGroup } =
     rootState.currentConfig
   const { subscribeItems, ruleItems } = getUsingItems()
 
-  /**
-   * config merge
-   */
+  // the config
   let config: Partial<ClashConfig> = {}
 
   // 值为 array 的 key 集合
@@ -301,6 +299,15 @@ export default async function genConfig({ forceUpdate = false }: { forceUpdate?:
   }
   /* #endregion */
 
+  return config
+}
+
+export default async function genConfigThenWrite({
+  forceUpdate = false,
+}: { forceUpdate?: boolean } = {}) {
+  const config = await genConfig({ forceUpdate })
+
+  const { name, clashMeta } = rootState.currentConfig
   const configYaml = YAML.dump(config)
   const file = getConfigFile(name, clashMeta)
 

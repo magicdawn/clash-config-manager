@@ -1,6 +1,5 @@
 import { ConfigItem } from '$ui/define'
 import { cx } from '$ui/libs'
-import { rootState } from '$ui/store'
 import { limitLines } from '$ui/util/text-util'
 import { InfoCircleOutlined, QuestionCircleFilled } from '@ant-design/icons'
 import { useMemoizedFn } from 'ahooks'
@@ -9,6 +8,8 @@ import debugFactory from 'debug'
 import { useEffect, useMemo, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useSnapshot } from 'valtio'
+import { state as libraryRuleListState } from '../library-rule-list/model'
+import { state as librarySubscribeState } from '../library-subscribe/model'
 import styles from './ConfigDND.module.less'
 import { state } from './model'
 
@@ -16,9 +17,7 @@ const dndDebug = debugFactory('app:page:current-config:ConfigDND')
 
 export function ConfigDND() {
   // subscribe
-  const rootStateSnap = useSnapshot(rootState)
-
-  const subscribeList = rootStateSnap.librarySubscribe.list
+  const subscribeList = useSnapshot(librarySubscribeState.list)
   const subscribeSourceList = useMemo(() => {
     return subscribeList.map((item) => {
       return {
@@ -31,7 +30,7 @@ export function ConfigDND() {
   }, [subscribeList])
 
   // rule
-  const ruleList = rootStateSnap.libraryRuleList.list
+  const ruleList = useSnapshot(libraryRuleListState.list)
   const ruleSourceList = useMemo(() => {
     return ruleList.map((item) => {
       return {

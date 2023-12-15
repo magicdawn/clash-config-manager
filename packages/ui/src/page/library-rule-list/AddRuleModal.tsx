@@ -1,10 +1,12 @@
 import { message } from '$ui/store'
+import { genConfig } from '$ui/util/gen'
 import { css } from '@emotion/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space } from 'antd'
 import AppleScript from 'applescript'
 import { clipboard } from 'electron'
 import Yaml from 'js-yaml'
+import { uniq } from 'lodash'
 import pify from 'promise.ify'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { tldExists } from 'tldjs'
@@ -18,10 +20,10 @@ const { Option } = Select
 // from-global: 从主页中直接打开
 export type Mode = 'from-rule' | 'from-global'
 
-type ClashRuleType = 'DOMAIN-SUFFIX' | 'DOMAIN-KEYWORD'
-const TYPES: ClashRuleType[] = ['DOMAIN-SUFFIX', 'DOMAIN-KEYWORD']
+type ClashRuleType = 'DOMAIN-SUFFIX' | 'DOMAIN-KEYWORD' | 'DOMAIN'
+const TYPES: ClashRuleType[] = ['DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN']
 
-const TARGETS = ['Proxy', 'DIRECT', 'REJECT']
+const DEFAULT_TARGETS = ['Proxy', 'DIRECT', 'REJECT']
 
 interface IProps {
   visible: boolean
@@ -71,6 +73,22 @@ export default function AddRuleModal(props: IProps) {
   })
 
   /**
+   * rule detail
+   */
+
+  const [type, setType] = useState<ClashRuleType>(TYPES[0])
+  const [url, setUrl] = useState('')
+  const [target, setTarget] = useState(DEFAULT_TARGETS[0])
+
+  const [extraTargets, setExtraTargets] = useState<string[]>([])
+  const [targetAutoCompleteList, setTargetAutoCompleteList] = useState<string[]>([])
+
+  const allTargets = useMemo(
+    () => uniq([target, ...DEFAULT_TARGETS, ...extraTargets].filter(Boolean)),
+    [target, extraTargets],
+  )
+
+  /**
    * source url
    */
 
@@ -78,6 +96,7 @@ export default function AddRuleModal(props: IProps) {
   const [autoCompletes, setAutoCompletes] = useState<Record<ClashRuleType, string[]>>(() => ({
     'DOMAIN-KEYWORD': [],
     'DOMAIN-SUFFIX': [],
+    'DOMAIN': [],
   }))
 
   const changeProcessUrl = useMemoizedFn((url: string) => {
@@ -93,14 +112,14 @@ export default function AddRuleModal(props: IProps) {
     setAutoCompletes(data)
   })
 
-  const readClipboardUrl = useCallback(() => {
+  const useClipboardUrl = useCallback(() => {
     const url = clipboard.readText()
     if (url) {
       changeProcessUrl(url)
     }
   }, [])
 
-  const readChromeUrl = useCallback(async () => {
+  const useChromeUrl = useCallback(async () => {
     const url = await getChromeUrl()
     if (url) {
       message.success('获取 chrome url 成功')
@@ -108,20 +127,50 @@ export default function AddRuleModal(props: IProps) {
     }
   }, [])
 
+  const updateExtraTargets = useMemoizedFn(async () => {
+    const config = await genConfig()
+    const proxyGroupNames = (config['proxy-groups'] || []).map((x) => x.name)
+    setExtraTargets(proxyGroupNames)
+    await new Promise<void>((resolve) => setTimeout(resolve))
+    resetTargetAutoCompleteList()
+  })
+
+  const resetTargetAutoCompleteList = useMemoizedFn(() => {
+    setTargetAutoCompleteList(allTargets)
+  })
+
   // default use chrome url
   useUpdateEffect(() => {
     if (visible) {
-      readChromeUrl()
+      useChromeUrl()
+      updateExtraTargets()
     }
   }, [visible])
 
-  /**
-   * rule detail
-   */
+  const onSearchTargets = useMemoizedFn((text: string) => {
+    // TODO: add fuzzy search
 
-  const [type, setType] = useState<ClashRuleType>(TYPES[0])
-  const [url, setUrl] = useState('')
-  const [target, setTarget] = useState(TARGETS[0])
+    if (!text) {
+      setTargetAutoCompleteList([])
+      return
+    }
+
+    const _text = text
+    text = text.toLowerCase()
+    const searchFrom = uniq(extraTargets)
+    const filtered = uniq([
+      _text,
+      ...DEFAULT_TARGETS,
+      ...searchFrom.filter((name) => {
+        return name.toLowerCase().startsWith(text)
+      }),
+      ...searchFrom.filter((name) => {
+        return name.toLowerCase().includes(text)
+      }),
+    ])
+
+    setTargetAutoCompleteList(filtered)
+  })
 
   const curAutoCompletes = useMemo(() => {
     return autoCompletes[type] || []
@@ -137,7 +186,7 @@ export default function AddRuleModal(props: IProps) {
    * ui style
    */
 
-  const layout = [{ span: 7 }, { flex: 1 }, { span: 4 }]
+  const layout = [{ span: 6 }, { flex: 1 }, { span: 6 }]
 
   const okButtonProps = useMemo(() => {
     const disabled = !(type && target && url)
@@ -168,8 +217,8 @@ export default function AddRuleModal(props: IProps) {
       />
       <div style={{ marginTop: 10 }}>
         <Space direction='horizontal'>
-          <Button onClick={readClipboardUrl}>从剪贴板读取</Button>
-          <Button type='primary' onClick={readChromeUrl}>
+          <Button onClick={useClipboardUrl}>从剪贴板读取</Button>
+          <Button type='primary' onClick={useChromeUrl}>
             从 Google Chrome 读取
           </Button>
         </Space>
@@ -193,33 +242,24 @@ export default function AddRuleModal(props: IProps) {
         </Col>
 
         <Col {...layout[1]}>
-          <AutoComplete value={url} onChange={setUrl} style={{ width: '100%' }}>
-            {url && !curAutoCompletes.includes(url) && (
-              <Option key={`${type}-custom`} value={url}>
-                {url}
-              </Option>
-            )}
-            {curAutoCompletes.map((t) => (
-              <Option key={`${type}-${t}`} value={t}>
-                {t}
-              </Option>
-            ))}
-          </AutoComplete>
+          <AutoComplete
+            value={url}
+            onChange={setUrl}
+            style={{ width: '100%' }}
+            options={curAutoCompletes.map((value) => ({ value }))}
+          />
         </Col>
 
         <Col {...layout[2]}>
-          <AutoComplete value={target} onChange={setTarget} style={{ width: '100%' }}>
-            {!TARGETS.includes(target) && (
-              <Option key='custom' value={target}>
-                {target}
-              </Option>
-            )}
-            {TARGETS.map((t) => (
-              <Option key={t} value={t}>
-                {t}
-              </Option>
-            ))}
-          </AutoComplete>
+          <AutoComplete
+            value={target}
+            onChange={setTarget}
+            style={{ width: '100%' }}
+            options={(!target ? allTargets : targetAutoCompleteList).map((value) => ({ value }))}
+            onSearch={onSearchTargets}
+            onSelect={resetTargetAutoCompleteList}
+            allowClear
+          />
         </Col>
       </Row>
 
@@ -330,12 +370,9 @@ async function getChromeUrl() {
   return url
 }
 
-// FIXME
-// global.URI = URI
-
 function getAutoCompletes(url: string) {
   const u = new URI(url)
-  // const fullDomain = u.domain() // full domain, e.g www.githug.com
+  // const fullDomain = u.domain() // full domain, e.g www.github.com
   // const shortDomain = u.domain(true) // without subdomain, e.g github.com
   // const keyword = shortDomain.split('.')[0] // e.g github
 
@@ -360,5 +397,6 @@ function getAutoCompletes(url: string) {
   return {
     'DOMAIN-KEYWORD': keywords,
     'DOMAIN-SUFFIX': suffixes,
+    'DOMAIN': [hostname],
   }
 }
