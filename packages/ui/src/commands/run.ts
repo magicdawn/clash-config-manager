@@ -24,15 +24,23 @@ const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {
   // let loading show
   await delay(100)
 
-  let result: Awaited<ReturnType<typeof gen>>
+  let result: Awaited<ReturnType<typeof gen>> | undefined
+  let error: any
   try {
     result = await gen({ forceUpdate })
   } catch (e) {
-    message.error('生成失败: ', e.message)
-    throw e
+    setTimeout(() => {
+      message.error('生成失败: ', e.message)
+    })
+    error = e
   } finally {
     clearTimeout(delayShowTimer)
     Loading.hide()
+  }
+
+  if (error) {
+    console.error(error.stack || error)
+    return
   }
 
   const { success, msg, filename, writed } = result || {}

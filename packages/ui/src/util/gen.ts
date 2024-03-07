@@ -59,11 +59,10 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
   let config: Partial<ClashConfig> = {}
 
   // 值为 array 的 key 集合
-  type ClashConfigKeysWithArrayValue = Exclude<
+  type ClashConfigKeysWithArrayValue = NonNullable<
     {
       [k in keyof ClashConfig]: ClashConfig[k] extends any[] ? k : never
-    }[keyof ClashConfig],
-    undefined
+    }[keyof ClashConfig]
   >
 
   const updateConfig = (partial: Partial<ClashConfig>) => {
