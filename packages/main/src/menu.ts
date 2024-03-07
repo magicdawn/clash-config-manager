@@ -1,14 +1,8 @@
 import storage from '$ui/storage/index'
 import debugFactory from 'debug'
 import { BrowserWindow, Menu, MenuItemConstructorOptions, app, dialog, shell } from 'electron'
-import {
-  aboutMenuItem,
-  appMenu,
-  debugInfo,
-  is,
-  openNewGitHubIssue,
-  openUrlMenuItem,
-} from 'electron-util'
+import { is, openNewGitHubIssue, openUrlMenuItem } from 'electron-util'
+import { aboutMenuItem, appMenu, debugInfo } from 'electron-util/main'
 import fse from 'fs-extra'
 import path from 'path'
 import { updateMenuItem } from './auto-update/index'
