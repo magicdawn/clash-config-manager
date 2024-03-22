@@ -634,7 +634,7 @@ function ModalAddOrEdit() {
 
             <div style={{ flex: 1 }}></div>
 
-            <div className='btn-wrapper'>
+            <Space className='btn-wrapper'>
               <Button disabled={editInEditorMaskVisible} onClick={handleCancel}>
                 取消
               </Button>
@@ -650,7 +650,7 @@ function ModalAddOrEdit() {
               <Button disabled={editInEditorMaskVisible} type='primary' onClick={handleOk}>
                 确定
               </Button>
-            </div>
+            </Space>
           </div>
         )
       }
