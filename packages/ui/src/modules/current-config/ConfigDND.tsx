@@ -1,6 +1,6 @@
 import { ConfigItem } from '$ui/define'
 import { cx } from '$ui/libs'
-import { limitLines } from '$ui/util/text-util'
+import { limitLines } from '$ui/utility/text-util'
 import { InfoCircleOutlined, QuestionCircleFilled } from '@ant-design/icons'
 import { useMemoizedFn } from 'ahooks'
 import { Switch, Tooltip } from 'antd'

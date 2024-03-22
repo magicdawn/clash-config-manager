@@ -1,4 +1,4 @@
-import { runGenerate, runGenerateForceUpdate } from '$ui/commands/run'
+import { runGenerate, runGenerateForceUpdate } from '$ui/modules/commands/run'
 import { Button } from 'antd'
 import { useCallback } from 'react'
 import styles from './index.module.less'

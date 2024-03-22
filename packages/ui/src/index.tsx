@@ -6,7 +6,7 @@ import 'antd/dist/reset.css'
 import './index.less'
 
 // monaco setup
-import './common/monaco'
+import './modules/code-editor/monaco'
 
 // deps
 import {
@@ -32,21 +32,21 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom'
-import Commands from './commands'
-import { showCodeModal } from './common/code/ModalCodeViewer'
 import styles from './index.module.less'
 import './ipc'
-import './page/common'
-import CurrentConfig from './page/current-config'
-import { setNavigateSingleton } from './page/global-model'
-import Home from './page/home'
-import { useAddRuleModalFromGlobal } from './page/home/useAddRuleModal'
-import LibraryRuleList from './page/library-rule-list'
-import LibrarySubscribe from './page/library-subscribe'
-import Preference from './page/preference'
+import { showCodeModal } from './modules/code-editor/ModalCodeViewer'
+import Commands from './modules/commands'
+import './modules/common'
+import CurrentConfig from './modules/current-config'
+import { setNavigateSingleton } from './modules/global-model'
+import Home from './modules/home'
+import { useAddRuleModalFromGlobal } from './modules/home/useAddRuleModal'
+import LibraryRuleList from './modules/library-rule-list'
+import LibrarySubscribe from './modules/library-subscribe'
+import Preference from './modules/preference'
 import { routeTitles } from './storage'
 import { SetupAntdStatic, messageConfig } from './store'
-import { useIsDarkMode } from './util/hooks/useIsDarkMode'
+import { useIsDarkMode } from './utility/hooks/useIsDarkMode'
 
 const routes = [
   {

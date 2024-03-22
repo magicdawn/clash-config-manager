@@ -1,16 +1,16 @@
-import { runGenerate } from '$ui/commands/run'
+import { LocalRuleItem, RuleItem } from '$ui/define'
 import {
   CodeEditor,
   CodeEditorHelp,
   CodeThemeSelect,
   EditorRefInner,
   showCode,
-} from '$ui/common/code'
-import { LocalRuleItem, RuleItem } from '$ui/define'
+} from '$ui/modules/code-editor'
+import { runGenerate } from '$ui/modules/commands/run'
 import { message } from '$ui/store'
-import { useIsDarkMode } from '$ui/util/hooks/useIsDarkMode'
-import { getRuleItemContent } from '$ui/util/remote-rules'
-import { firstLine, limitLines } from '$ui/util/text-util'
+import { useIsDarkMode } from '$ui/utility/hooks/useIsDarkMode'
+import { getRuleItemContent } from '$ui/utility/remote-rules'
+import { firstLine, limitLines } from '$ui/utility/text-util'
 import { FileAddOutlined } from '@ant-design/icons'
 import { DndContext, DragEndEvent } from '@dnd-kit/core'
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'

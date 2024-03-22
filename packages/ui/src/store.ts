@@ -8,17 +8,17 @@ import { devtools } from 'valtio/utils'
 import {
   state as currentConfig,
   actions as currentConfigActions,
-} from './page/current-config/model'
-import { actions as globalActions } from './page/global-model'
+} from './modules/current-config/model'
+import { actions as globalActions } from './modules/global-model'
 import {
   state as libraryRuleList,
   actions as libraryRuleListActions,
-} from './page/library-rule-list/model'
+} from './modules/library-rule-list/model'
 import {
   state as librarySubscribe,
   actions as librarySubscribeActions,
-} from './page/library-subscribe/model'
-import { state as preference } from './page/preference/model'
+} from './modules/library-subscribe/model'
+import { state as preference } from './modules/preference/model'
 
 export const rootState = proxy({
   currentConfig,
@@ -66,7 +66,7 @@ export function SetupAntdStatic() {
   return null
 }
 
-export { message, notification, modal }
+export { message, modal, notification }
 
 // fixme
 global.rootActions = rootActions

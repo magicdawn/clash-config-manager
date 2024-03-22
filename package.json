@@ -71,7 +71,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
     "ts-node": "^10.9.2",
-    "turbo": "^1.12.5",
+    "turbo": "^1.13.0",
     "type-fest": "^4.13.1",
     "typescript": "^5.4.3",
     "typescript-plugin-css-modules": "^5.1.0"

@@ -1,5 +1,5 @@
 import { message } from '$ui/store'
-import { genConfig } from '$ui/util/gen'
+import { genConfig } from '$ui/utility/gen'
 import { css } from '@emotion/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space } from 'antd'

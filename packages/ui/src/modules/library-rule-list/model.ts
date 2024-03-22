@@ -1,9 +1,9 @@
-import { valtioState } from '$ui/common/model/valtio-helper'
 import { RuleItem } from '$ui/define'
-import { onInit, onReload } from '$ui/page/global-model'
+import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
 import { message } from '$ui/store'
-import { updateRemoteConfig } from '$ui/util/remote-rules'
+import { updateRemoteConfig } from '$ui/utility/remote-rules'
+import { valtioState } from '$ui/utility/valtio-helper'
 import _ from 'lodash'
 import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './model.auto-update'
 

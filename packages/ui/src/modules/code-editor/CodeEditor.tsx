@@ -1,4 +1,4 @@
-import { state as preferenceState } from '$ui/page/preference/model'
+import { state as preferenceState } from '$ui/modules/preference/model'
 import { QuestionCircleFilled } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Spin, Tag, Tooltip } from 'antd'
@@ -148,7 +148,7 @@ export function CodeEditor(props: IProps) {
       ...readOnlyOptions(readonly),
       trimAutoWhitespace: true,
       contextmenu: true,
-      occurrencesHighlight: false,
+      occurrencesHighlight: 'off',
       tabSize: 2,
       useTabStops: true,
       find: {

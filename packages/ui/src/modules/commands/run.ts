@@ -1,6 +1,6 @@
-import Loading from '$ui/page/common/global/loading'
+import Loading from '$ui/modules/common/global/loading'
 import { message, rootActions } from '$ui/store'
-import gen from '$ui/util/gen'
+import gen from '$ui/utility/gen'
 import { shell } from 'electron'
 import { createRef } from 'react'
 import { setTimeout as delay } from 'timers/promises'

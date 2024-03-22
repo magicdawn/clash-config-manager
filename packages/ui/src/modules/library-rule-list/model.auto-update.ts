@@ -2,8 +2,8 @@
  * auto update
  */
 
-import { runGenerate } from '$ui/commands/run'
 import { RuleItem } from '$ui/define'
+import { runGenerate } from '$ui/modules/commands/run'
 import { debounce, DebouncedFunc, once } from 'lodash'
 import ms from 'ms'
 import { currentConfigUsingAndEnabled } from '../current-config/model'

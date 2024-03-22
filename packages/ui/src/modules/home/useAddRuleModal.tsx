@@ -1,4 +1,4 @@
-import { runGenerate } from '$ui/commands/run'
+import { runGenerate } from '$ui/modules/commands/run'
 import { message, rootActions, rootState } from '$ui/store'
 import { ipcRenderer } from 'electron'
 import { proxy, useSnapshot } from 'valtio'

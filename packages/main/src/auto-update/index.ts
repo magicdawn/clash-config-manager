@@ -2,7 +2,7 @@ import bytes from 'bytes'
 import debugFactory from 'debug'
 import electronLog from 'electron-log'
 import { autoUpdater } from 'electron-updater'
-import { is } from 'electron-util'
+import { isDev } from 'electron-util/main'
 import _ from 'lodash'
 import ms from 'ms'
 import setMenu from '../menu'
@@ -65,7 +65,7 @@ autoUpdater.on('update-downloaded', (info) => {
 
 export async function check() {
   try {
-    if (is.development) {
+    if (isDev) {
       return await autoUpdater.checkForUpdates()
     } else {
       return await autoUpdater.checkForUpdatesAndNotify()
@@ -76,7 +76,7 @@ export async function check() {
   }
 }
 
-if (!is.development) {
+if (!isDev) {
   autoUpdater.logger = electronLog
   // @ts-ignore
   autoUpdater.logger.transports.file.level = 'debug'

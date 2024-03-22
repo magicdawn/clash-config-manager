@@ -1,6 +1,6 @@
-import { valtioState } from '$ui/common/model/valtio-helper'
-import { onInit, onReload } from '$ui/page/global-model'
+import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
+import { valtioState } from '$ui/utility/valtio-helper'
 
 const STORAGE_KEY = 'preference'
 

@@ -1,6 +1,6 @@
 import { ConfigItem } from '$ui/define'
 import { ExportData, storageDataDisplayNames } from '$ui/storage'
-import { truthy } from '$ui/util/ts-filter'
+import { truthy } from '$ui/utility/ts-filter'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Modal, Tree } from 'antd'
 import _ from 'lodash'

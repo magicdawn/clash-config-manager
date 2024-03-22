@@ -1,6 +1,6 @@
-import { runGenerate } from '$ui/commands/run'
+import { runGenerate } from '$ui/modules/commands/run'
 import { message } from '$ui/store'
-import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/util/gen'
+import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/utility/gen'
 import { useMemoizedFn } from 'ahooks'
 import { Button, Checkbox, Col, Divider, Input, Row, Space, Tag, Tooltip } from 'antd'
 import { shell } from 'electron'
