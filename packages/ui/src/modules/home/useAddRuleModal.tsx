@@ -79,18 +79,38 @@ export function useAddRuleModalFromGlobal() {
       }
 
       const content = ruleItem.content || ''
-      if (content.split('\n').find((x: string) => x.includes(rule) && !x.trim().startsWith('#'))) {
-        return message.error(`rule ${rule} 已存在`)
+      const contentLines = content.split('\n')
+      function checkInclude(s: string) {
+        return !!contentLines.find((x) => !x.trim().startsWith('#') && x.includes(s))
       }
 
+      const check = rule.split(',').slice(0, 2).join(',')
+      const exists = checkInclude(check)
+
       // construct new content
-      const newContent = content.trimEnd() + '\n' + `  - ${rule}` + '\n'
+      let newContent: string
+      let msg: string
+      if (exists) {
+        // add same as existing
+        if (checkInclude(rule)) {
+          return message.error(`rule ${rule} 已存在`)
+        }
+
+        // target 不同
+        const idx = contentLines.findIndex((x) => !x.trim().startsWith('#') && x.includes(check))
+        newContent = contentLines.with(idx, `  - ${rule}`).join('\n')
+        msg = `已替换规则 ${rule} 至 ${ruleItem.name}`
+      } else {
+        newContent = content.trimEnd() + '\n' + `  - ${rule}` + '\n'
+        msg = `已添加规则 ${rule} 至 ${ruleItem.name}`
+      }
+
       // save new content
       rootActions.libraryRuleList.edit({
         editItemIndex: index,
         item: { ...ruleItem, content: newContent },
       })
-      message.success(`已添加规则 ${rule} 至 ${ruleItem.name}`)
+      message.success(msg)
 
       // 生成
       runGenerate()

@@ -8,6 +8,7 @@ import { clipboard } from 'electron'
 import Yaml from 'js-yaml'
 import { uniq } from 'lodash'
 import pify from 'promise.ify'
+import { tryit } from 'radash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { tldExists } from 'tldjs'
 import URI from 'urijs'
@@ -50,7 +51,11 @@ export default function AddRuleModal(props: IProps) {
         return false
       }
 
-      const obj = Yaml.load(item.content) as object
+      const [err, obj] = tryit(Yaml.load)(item.content)
+      if (!obj) {
+        return false
+      }
+
       if (Object.keys(obj).length === 1 && Object.keys(obj).includes('rules')) {
         return true
       } else {
