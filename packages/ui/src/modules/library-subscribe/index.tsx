@@ -11,6 +11,7 @@ import {
   InputNumber,
   List,
   Modal,
+  Popconfirm,
   Popover,
   Select,
   Space,
@@ -130,18 +131,6 @@ function SubscribeItem({
     }
   }, [])
 
-  const del = useMemoizedFn((index) => {
-    Modal.confirm({
-      title: '确认删除?',
-      onOk() {
-        actions.del(index)
-      },
-      onCancel() {
-        console.log('Cancel')
-      },
-    })
-  })
-
   let urlHided = ''
   if (url) {
     const u = new URL(url)
@@ -225,9 +214,11 @@ function SubscribeItem({
             <Button type='primary' onClick={() => update(item)} onKeyDown={disableEnterAsClick}>
               更新
             </Button>
-            <Button danger onClick={() => del(index)} onKeyDown={disableEnterAsClick}>
-              删除
-            </Button>
+            <Popconfirm title={'确认删除?'} onConfirm={() => actions.del(index)}>
+              <Button danger onKeyDown={disableEnterAsClick}>
+                删除
+              </Button>
+            </Popconfirm>
             <Popover
               placement='top'
               title={`节点列表(${servers?.length})`}
