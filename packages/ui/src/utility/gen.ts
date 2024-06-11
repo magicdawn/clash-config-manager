@@ -154,7 +154,7 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
     if (proxies.length <= 1) {
       return [
         {
-          name: `${generatedGroupNameEmoji ? generatedGroupNameEmoji + ' ' : ''}${label}`,
+          name: `${generatedGroupNameEmoji ? ProxyGroupTypeConfig[ProxyGroupType.Select].emoji + ' ' : ''}${label}`,
           type: ProxyGroupType.Select,
           proxies,
         },

@@ -73,12 +73,12 @@ export const ProxyGroupTypeConfig: Record<
     nameEn: 'Fastest',
   },
   [ProxyGroupType.Fallback]: {
-    emoji: '✅',
+    emoji: '🔍',
     nameZh: '可用',
     nameEn: 'Available',
   },
   [ProxyGroupType.Select]: {
-    emoji: '✋',
+    emoji: '✅', // ✅ ✔
     nameZh: '手选',
     nameEn: 'Select',
   },
