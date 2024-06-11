@@ -150,7 +150,18 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
   const subscribeTragets = subscribeItems.map((sub) => sub.name)
 
   const genGroupsForSubscribe = (label: string, proxies: string[]) => {
-    const getName = (label: string, type: ProxyGroupType) => {
+    // 只有单个服务器时, 不用多个 group
+    if (proxies.length <= 1) {
+      return [
+        {
+          name: `${generatedGroupNameEmoji ? generatedGroupNameEmoji + ' ' : ''}${label}`,
+          type: ProxyGroupType.Select,
+          proxies,
+        },
+      ]
+    }
+
+    function getName(label: string, type: ProxyGroupType) {
       const emoji = generatedGroupNameEmoji ? ProxyGroupTypeConfig[type].emoji + ' ' : ''
 
       type AllowedLang = 'zh' | 'en'
