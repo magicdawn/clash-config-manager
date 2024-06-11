@@ -1,5 +1,5 @@
 import { ClashConfig, RuleItem, Subscribe } from '$ui/define'
-import { ProxyGroupType } from '$ui/define/ClashConfig'
+import { ProxyGroupType, ProxyGroupTypeConfig } from '$ui/define/ClashConfig'
 import { YAML, pmap } from '$ui/libs'
 import { rootActions, rootState } from '$ui/store'
 import fse from 'fs-extra'
@@ -51,8 +51,14 @@ export function getUsingItems() {
 }
 
 export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean } = {}) {
-  const { name, clashMeta, generateAllProxyGroup, generateSubNameProxyGroup } =
-    rootState.currentConfig
+  const {
+    name,
+    clashMeta,
+    generateAllProxyGroup,
+    generateSubNameProxyGroup,
+    generatedGroupNameEmoji,
+    generatedGroupNameLang,
+  } = rootState.currentConfig
   const { subscribeItems, ruleItems } = getUsingItems()
 
   // the config
@@ -144,23 +150,41 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
   const subscribeTragets = subscribeItems.map((sub) => sub.name)
 
   const genGroupsForSubscribe = (label: string, proxies: string[]) => {
+    const getName = (label: string, type: ProxyGroupType) => {
+      const emoji = generatedGroupNameEmoji ? ProxyGroupTypeConfig[type].emoji + ' ' : ''
+
+      type AllowedLang = 'zh' | 'en'
+      const lang: AllowedLang = (() => {
+        const _default = 'zh'
+        const allowed: AllowedLang[] = ['zh', 'en']
+        if (!generatedGroupNameLang) return _default
+        if (!allowed.includes(generatedGroupNameLang)) return _default
+        return generatedGroupNameLang as AllowedLang
+      })()
+
+      const typeText =
+        lang === 'zh' ? ProxyGroupTypeConfig[type].nameZh : ProxyGroupTypeConfig[type].nameEn
+
+      return `${emoji}${label} ${typeText}`
+    }
+
     const withSuffix = [
       {
-        name: `${label}-最快`,
-        type: ProxyGroupType.URLTest,
+        name: getName(label, ProxyGroupType.UrlTest),
+        type: ProxyGroupType.UrlTest,
         proxies,
         url: 'http://www.gstatic.com/generate_204',
         interval: 150,
       },
       {
-        name: `${label}-可用`,
+        name: getName(label, ProxyGroupType.Fallback),
         type: ProxyGroupType.Fallback,
         proxies,
         url: 'http://www.gstatic.com/generate_204',
         interval: 150,
       },
       {
-        name: `${label}-手选`,
+        name: getName(label, ProxyGroupType.Select),
         type: ProxyGroupType.Select,
         proxies,
       },

@@ -1,3 +1,4 @@
+import { ProxyGroupTypeConfig } from '$ui/define/ClashConfig'
 import { runGenerate } from '$ui/modules/commands/run'
 import { message } from '$ui/store'
 import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/utility/gen'
@@ -11,7 +12,14 @@ import styles from './index.module.less'
 import { state } from './model'
 
 export default function ConfigList() {
-  const { name, clashMeta, generateAllProxyGroup, generateSubNameProxyGroup } = useSnapshot(state)
+  const {
+    name,
+    clashMeta,
+    generateAllProxyGroup,
+    generateSubNameProxyGroup,
+    generatedGroupNameEmoji,
+    generatedGroupNameLang,
+  } = useSnapshot(state)
 
   const onGenConfigClick = useMemoizedFn(async () => {
     return runGenerate()
@@ -127,6 +135,39 @@ export default function ConfigList() {
             }}
           >
             生成 <Tag style={{ marginRight: 0 }}>订阅名同名</Tag> 组
+          </Checkbox>
+
+          <Checkbox
+            checked={generatedGroupNameEmoji}
+            onChange={(e) => {
+              state.generatedGroupNameEmoji = e.target.checked
+            }}
+          >
+            <Tag style={{ marginRight: 0 }}>订阅组</Tag> emoji
+          </Checkbox>
+
+          <Checkbox
+            checked={generatedGroupNameLang === 'zh'}
+            onChange={(e) => {
+              const lang = e.target.checked ? 'zh' : 'en'
+              state.generatedGroupNameLang = lang
+            }}
+          >
+            <Tooltip
+              overlayInnerStyle={{ width: 'max-content' }}
+              title={
+                <>
+                  ✅ 使用中文: {ProxyGroupTypeConfig['url-test'].nameZh} /{' '}
+                  {ProxyGroupTypeConfig['fallback'].nameZh} /{' '}
+                  {ProxyGroupTypeConfig['select'].nameZh}
+                  <br />❎ 使用英文: {ProxyGroupTypeConfig['url-test'].nameEn} /{' '}
+                  {ProxyGroupTypeConfig['fallback'].nameEn} /{' '}
+                  {ProxyGroupTypeConfig['select'].nameEn}
+                </>
+              }
+            >
+              <Tag style={{ marginRight: 0 }}>订阅组</Tag> 中文
+            </Tooltip>
           </Checkbox>
         </Space>
       </Row>

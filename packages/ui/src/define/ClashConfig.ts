@@ -50,9 +50,38 @@ export interface ProxyGroup {
 }
 
 export enum ProxyGroupType {
+  UrlTest = 'url-test',
   Fallback = 'fallback',
   Select = 'select',
-  URLTest = 'url-test',
+}
+
+/**
+  // 最快 / 可用 / 手选
+  // Fastest / Available / Select
+  generatedGroupNameLocale: 'zh-CN', // possible: zh-CN | en-US
+
+  // 🚀 ✅ ✋🏻
+  generatedGroupNameEmoji: true,
+ */
+export const ProxyGroupTypeConfig: Record<
+  ProxyGroupType,
+  { emoji: string; nameZh: string; nameEn: string }
+> = {
+  [ProxyGroupType.UrlTest]: {
+    emoji: '🚀',
+    nameZh: '最快',
+    nameEn: 'Fastest',
+  },
+  [ProxyGroupType.Fallback]: {
+    emoji: '✅',
+    nameZh: '可用',
+    nameEn: 'Available',
+  },
+  [ProxyGroupType.Select]: {
+    emoji: '✋',
+    nameZh: '手选',
+    nameEn: 'Select',
+  },
 }
 
 export interface ProxyProviders {

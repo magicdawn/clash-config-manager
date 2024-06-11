@@ -24,6 +24,13 @@ const storage = new Store({
       name: 'clash-config-manager',
       generateAllProxyGroup: false,
       generateSubNameProxyGroup: false,
+
+      // 最快 / 可用 / ✋🏻手选
+      // Fastest / Available / Select
+      generatedGroupNameLang: 'zh', // possible: zh | en
+
+      // 🚀 ✅ ✋🏻
+      generatedGroupNameEmoji: true,
     },
 
     preference: {

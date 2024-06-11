@@ -1,3 +1,4 @@
+import { __DEV__ } from '$ui/common'
 import { ConfigItem, RuleItem, Subscribe } from '$ui/define'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
@@ -12,6 +13,8 @@ interface IState {
   clashMeta: boolean
   generateAllProxyGroup: boolean
   generateSubNameProxyGroup: boolean
+  generatedGroupNameLang: string
+  generatedGroupNameEmoji: boolean
 }
 
 const defaultState: IState = {
@@ -20,6 +23,8 @@ const defaultState: IState = {
   generateAllProxyGroup: false,
   generateSubNameProxyGroup: false,
   clashMeta: false,
+  generatedGroupNameLang: 'zh',
+  generatedGroupNameEmoji: true,
 }
 
 const allowedKeys = Object.keys(defaultState)
@@ -34,6 +39,13 @@ const { state, load, init } = valtioState<IState>(
       }
     },
     persist(val) {
+      if (__DEV__) {
+        // hot-reload 之后都消失了
+        if (!val.list.length) {
+          return
+        }
+      }
+
       storage.set(CURRENT_CONFIG_STORAGE_KEY, _.pick(val, allowedKeys))
     },
   },
