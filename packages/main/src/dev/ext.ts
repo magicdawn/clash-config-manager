@@ -18,7 +18,7 @@ const loadExt = (id: string) => {
 }
 
 export function load() {
-  // react
+  // react-devtools
   loadExt('fmkadmapgofadopljbjfkapdkoienihi')
 
   // redux

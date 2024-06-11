@@ -3,7 +3,6 @@ import { app, BrowserWindow, Menu, session, shell, Tray } from 'electron'
 import { is } from 'electron-util'
 import _ from 'lodash'
 import path from 'path'
-
 import { load as loadDevExt } from './dev/ext'
 import './init/meta'
 import { loadWindowState, saveWindowState } from './initWindowState'
