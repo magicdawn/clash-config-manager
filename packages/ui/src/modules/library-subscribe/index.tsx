@@ -167,7 +167,7 @@ function SubscribeItem({
           ) : null}
         </Descriptions.Item>
 
-        {excludeKeywords?.length && (
+        {!!excludeKeywords?.length && (
           <Descriptions.Item label='排除关键词'>
             {excludeKeywords.map((s) => (
               <Tag key={s} color='warning'>
