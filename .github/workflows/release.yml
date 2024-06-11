@@ -33,9 +33,6 @@ jobs:
           path: node_modules/.cache/turbo
           key: turbo-cache-${{ runner.os }}
 
-      # generate current release changelog
-      - run: pnpm jake release:changelog
-
       # electron build
       - run: pnpm dist:mac
 
@@ -50,11 +47,19 @@ jobs:
       # use
       # - run: echo "${{steps.github-script.outputs.id}}"
 
+      # generate current release changelog
+      # - run: pnpm jake release:changelog
+
+      # release with changelog
+      - run: pnpx changelogithub@0
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
       # create release & upload to release
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          body_path: CHANGELOG.temp.md
+          # body_path: CHANGELOG.temp.md
           fail_on_unmatched_files: true
           files: |
             ./dist/latest-mac.yml

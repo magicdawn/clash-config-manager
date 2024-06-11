@@ -9,6 +9,12 @@
  *
  *
  * 使用本地 build 并上传, jake release 即可.
+ *
+ * 2024-06-11
+ * 使用 github actions 自动 build / changelog / release
+ * 步骤:
+ * 1. npm version patch or minor
+ * 2. git push origin --all && git push origin --tags
  */
 
 import log from 'fancy-log'
