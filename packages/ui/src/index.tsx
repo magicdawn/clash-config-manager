@@ -9,75 +9,63 @@ import './index.less'
 import './modules/code-editor/monaco'
 
 // deps
-import {
-  AppstoreAddOutlined,
-  HeartOutlined,
-  PayCircleOutlined,
-  SettingOutlined,
-  UserOutlined,
-} from '@ant-design/icons'
 import '@total-typescript/ts-reset'
-import { App as AntdApp, ConfigProvider, Menu, MenuProps, theme } from 'antd'
-import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
+import { MenuProps } from 'antd'
 import _ from 'lodash'
-import { useMemo } from 'react'
+import { size } from 'polished'
 import { createRoot } from 'react-dom/client'
 import {
   Link,
-  Outlet,
   Route,
   RouterProvider,
   createHashRouter,
   createRoutesFromElements,
-  useLocation,
-  useNavigate,
 } from 'react-router-dom'
-import styles from './index.module.less'
+import MaterialSymbolsSettingsSuggestRounded from '~icons/material-symbols/settings-suggest-rounded'
+import MingcuteComponentsFill from '~icons/mingcute/components-fill'
+import MingcuteHome4Line from '~icons/mingcute/home-4-line'
+import TablerCloudUp from '~icons/tabler/cloud-up'
+import ZondiconsServers from '~icons/zondicons/servers'
 import './ipc'
-import { showCodeModal } from './modules/code-editor/ModalCodeViewer'
-import Commands from './modules/commands'
 import './modules/common'
-import { setNavigateSingleton } from './modules/global-model'
+import { RootLayout } from './pages/_layout/RootLayout'
 import CurrentConfig from './pages/current-config'
 import Home from './pages/home'
-import { useAddRuleModalFromGlobal } from './pages/home/useAddRuleModal'
 import LibraryRuleList from './pages/partial-config-list'
 import Preference from './pages/preference'
 import LibrarySubscribe from './pages/subscribe-list'
 import { routeTitles } from './storage'
-import { SetupAntdStatic, messageConfig } from './store'
-import { useIsDarkMode } from './utility/hooks/useIsDarkMode'
 
 const routes = [
   {
     path: '/',
     component: Home,
     title: '主页',
-    icon: <HeartOutlined />,
+    icon: <MingcuteHome4Line {...size(18)} />,
   },
   {
-    path: '/library-subscribe',
+    path: '/subscribe-list',
     component: LibrarySubscribe,
     title: '',
-    icon: <PayCircleOutlined />,
+    icon: <ZondiconsServers {...size(14)} />,
   },
   {
-    path: '/library-rule-list',
+    path: '/partial-config-list',
     component: LibraryRuleList,
     title: '',
-    icon: <AppstoreAddOutlined />,
+    icon: <MingcuteComponentsFill {...size(18)} />,
   },
   {
     path: '/current-config',
     component: CurrentConfig,
     title: '',
-    icon: <SettingOutlined />,
+    icon: <MaterialSymbolsSettingsSuggestRounded {...size(18)} />,
   },
   {
     path: '/preference',
     component: Preference,
     title: '',
-    icon: <UserOutlined />,
+    icon: <TablerCloudUp {...size(18)} />,
   },
 ]
 routes.forEach((r) => {
@@ -95,7 +83,7 @@ const menuItems: MenuProps['items'] = routes.map(({ title, path, icon }) => {
 
 const router = createHashRouter(
   createRoutesFromElements(
-    <Route path='/' Component={RootLayout}>
+    <Route path='/' element={<RootLayout {...{ menuItems, getKey }} />}>
       {routes.map((r) => (
         <Route key={r.path} path={r.path} Component={r.component} />
       ))}
@@ -107,57 +95,5 @@ function App() {
   return <RouterProvider router={router} />
 }
 
-function RootLayout() {
-  const isDark = useIsDarkMode()
-  const algorithm = isDark ? theme.darkAlgorithm : theme.defaultAlgorithm
-
-  // nav tab
-  const { pathname } = useLocation()
-  const menuKey = useMemo(() => [getKey(pathname)], [pathname])
-
-  // add rule
-  const { modal: addRuleModal } = useAddRuleModalFromGlobal()
-
-  // navigate
-  const nav = useNavigate()
-  setNavigateSingleton(nav)
-
-  return (
-    <ConfigProvider
-      locale={zhCN}
-      theme={{
-        cssVar: true,
-        algorithm,
-      }}
-    >
-      <AntdApp message={messageConfig}>
-        <SetupAntdStatic />
-
-        <Menu
-          selectedKeys={menuKey}
-          mode='horizontal'
-          items={menuItems}
-          className={styles.navMenu}
-        />
-
-        <Commands />
-
-        {addRuleModal}
-        {showCodeModal}
-
-        {/* render routes */}
-        <Outlet />
-      </AntdApp>
-    </ConfigProvider>
-  )
-}
-
-declare global {
-  interface Window {
-    // #app
-    app: HTMLDivElement
-  }
-}
-
-const root = createRoot(window.app)
+const root = createRoot(document.getElementById('app')!)
 root.render(<App />)

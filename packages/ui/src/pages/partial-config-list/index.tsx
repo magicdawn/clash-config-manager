@@ -605,8 +605,13 @@ function ModalAddOrEdit() {
       open={visible}
       onOk={handleOk}
       onCancel={handleCancel}
-      width={'90vw'}
+      width={'95vw'}
       centered
+      css={css`
+        .ant-form-item {
+          margin-bottom: 10px;
+        }
+      `}
       maskClosable={false}
       keyboard={false}
       footer={

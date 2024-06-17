@@ -10,7 +10,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 0 15px;
+      margin-block: 0;
+      margin-inline: 15px 30px;
     }
 
     .list-items-container {
@@ -21,15 +22,15 @@
 
     .list-item {
       flex: 1;
-      margin-right: 5px;
+      margin-block: 15px;
+      margin-inline: 15px 30px;
 
       display: flex;
       justify-content: space-between;
       align-items: center;
 
-      margin: 15px 15px;
       border-radius: 10px;
-      border: 1px solid #ede;
+      border: 1px solid var(--border-c);
       padding: 10px 10px;
     }
 
@@ -38,7 +39,7 @@
       color: #0033cc;
       width: 100%;
 
-      :global(.dark-theme) & {
+      :global(.dark) & {
         color: #809fff;
       }
 

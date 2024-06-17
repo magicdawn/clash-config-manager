@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react'
 import esmUtils from 'esm-utils'
 import { set } from 'lodash-es'
 import path, { join } from 'path'
+import Icons from 'unplugin-icons/vite'
 import { defineConfig, Plugin } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
@@ -228,6 +229,8 @@ export default defineConfig({
     tsconfigPaths({
       root: join(__dirname, '../../'),
     }),
+
+    Icons({ compiler: 'jsx', jsx: 'react' }),
 
     react({
       jsxImportSource: '@emotion/react',

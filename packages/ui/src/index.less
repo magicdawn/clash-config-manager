@@ -1,8 +1,22 @@
-/* Dark Mode styles */
-body.dark-theme {
-  color: #eee;
-  background: #121212;
+:root {
+  --bg: #fff;
+  --c: #000;
+  --border-c: #eee;
+
+  scrollbar-width: thin;
 }
-body.dark-theme a {
-  color: #809fff;
+
+:root.dark {
+  --c: #eee;
+  --bg: #121212;
+  --border-c: #333;
+
+  a {
+    color: #809fff;
+  }
+}
+
+body {
+  color: var(--c);
+  background-color: var(--bg);
 }

@@ -1,6 +1,7 @@
 import { Subscribe, SubscribeSpecialType } from '$ui/define'
 import { message } from '$ui/store'
 import { EyeFilled, EyeInvisibleFilled, UnorderedListOutlined } from '@ant-design/icons'
+import { css } from '@emotion/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import {
   Button,
@@ -18,11 +19,27 @@ import {
   Tag,
   Tooltip,
 } from 'antd'
+import { clipboard } from 'electron'
+import { size } from 'polished'
 import { ChangeEventHandler, KeyboardEventHandler, useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
-import styles from './index.module.less'
+import IconParkOutlineCopy from '~icons/icon-park-outline/copy'
+import { sharedPageCss } from '../_layout/_shared'
 import { actions, state } from './model'
 import { NodefreeData, defaultNodefreeSubscribe, nodefreeGetUrls } from './special/nodefree'
+
+const S = {
+  modal: css`
+    .label {
+      width: 68px;
+      text-align: right;
+      padding-right: 6px;
+    }
+    .input-row {
+      margin-bottom: 10px;
+    }
+  `,
+}
 
 export default function LibrarySubscribe() {
   const { list } = useSnapshot(state)
@@ -50,46 +67,75 @@ export default function LibrarySubscribe() {
   })
 
   return (
-    <div className={styles.page}>
-      <ModalAdd
-        visible={showModal}
-        setVisible={setShowModal}
-        editItem={editItem}
-        editItemIndex={editItemIndex}
-      />
+    <div css={sharedPageCss.page}>
+      <div
+        css={css`
+          margin-inline: 10px;
+          height: 100%;
+          .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+        `}
+      >
+        <ModalAdd
+          visible={showModal}
+          setVisible={setShowModal}
+          editItem={editItem}
+          editItemIndex={editItemIndex}
+        />
 
-      <List
-        size='small'
-        header={
-          <div className='header' style={{ display: 'flex', alignItems: 'center' }}>
-            <div style={{ fontSize: '2em' }}>订阅管理</div>
-            <span>
-              {shouldShowNodefreeAddBtn && (
-                <Button type='primary' onClick={addNodefree} style={{ marginRight: 5 }}>
-                  + nodefree
+        <List
+          css={css`
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+            .ant-list-header + div {
+              flex: 1;
+              overflow-y: overlay;
+              margin-right: 5px;
+              padding-right: 5px;
+            }
+
+            .ant-descriptions-item-label,
+            .ant-descriptions-item-content {
+              padding: 8px 16px !important;
+            }
+          `}
+          size='small'
+          header={
+            <div className='header' style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ fontSize: '2em' }}>订阅管理</div>
+              <span>
+                {shouldShowNodefreeAddBtn && (
+                  <Button type='primary' onClick={addNodefree} style={{ marginRight: 5 }}>
+                    + nodefree
+                  </Button>
+                )}
+                <Button type='primary' onClick={add}>
+                  +
                 </Button>
-              )}
-              <Button type='primary' onClick={add}>
-                +
-              </Button>
-            </span>
-          </div>
-        }
-        bordered
-        dataSource={list}
-        renderItem={(item: Subscribe, index) => (
-          <SubscribeItem
-            key={item.id}
-            {...{
-              item,
-              index,
-              setEditItem,
-              setEditItemIndex,
-              setShowModal,
-            }}
-          />
-        )}
-      />
+              </span>
+            </div>
+          }
+          bordered
+          dataSource={list}
+          renderItem={(item: Subscribe, index) => (
+            <SubscribeItem
+              key={item.id}
+              {...{
+                item,
+                index,
+                setEditItem,
+                setEditItemIndex,
+                setShowModal,
+              }}
+            />
+          )}
+        />
+      </div>
     </div>
   )
 }
@@ -178,23 +224,67 @@ function SubscribeItem({
         )}
 
         {!specialType && (
-          <Descriptions.Item
-            label={
-              <>
-                链接{' '}
+          <Descriptions.Item label='链接'>
+            <Space
+              css={css`
+                display: flex;
+                .ant-space-item {
+                  line-height: 0;
+                }
+              `}
+            >
+              <Tooltip title='复制链接'>
+                <IconParkOutlineCopy
+                  {...size(20)}
+                  css={css`
+                    cursor: pointer;
+                  `}
+                  onClick={() => {
+                    clipboard.writeText(url)
+                    message.success('url 已复制')
+                  }}
+                />
+              </Tooltip>
+
+              <Tooltip title='显示/隐藏 token'>
                 <span
-                  style={{ cursor: 'pointer' }}
+                  css={css`
+                    cursor: pointer;
+                    svg {
+                      width: 20px;
+                      height: 20px;
+                    }
+                  `}
                   onClick={() => {
                     actions.toggleUrlVisible(index)
                   }}
                 >
                   {urlVisible ? <EyeFilled /> : <EyeInvisibleFilled />}
                 </span>
-              </>
-            }
-            contentStyle={{ wordBreak: 'break-all' }}
-          >
-            {urlVisible ? url : urlHided}
+              </Tooltip>
+            </Space>
+
+            <Divider
+              css={css`
+                margin-block: 5px;
+              `}
+            />
+
+            <div
+              css={
+                !urlVisible &&
+                css`
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 2;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  word-break: break-all;
+                `
+              }
+            >
+              {urlVisible ? url : urlHided}
+            </div>
           </Descriptions.Item>
         )}
 
@@ -370,7 +460,7 @@ function ModalAdd({
 
   return (
     <Modal
-      className={styles.modal}
+      css={S.modal}
       styles={{ body: { paddingTop: 10 } }}
       title='添加'
       open={visible}

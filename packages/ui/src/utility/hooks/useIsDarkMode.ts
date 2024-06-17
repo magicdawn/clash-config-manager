@@ -26,9 +26,9 @@ export function useIsDarkMode() {
 
   useLayoutEffect(() => {
     if (isDark) {
-      document.body.classList.add('dark-theme')
+      document.documentElement.classList.add('dark')
     } else {
-      document.body.classList.remove('dark-theme')
+      document.documentElement.classList.remove('dark')
     }
   }, [isDark])
 

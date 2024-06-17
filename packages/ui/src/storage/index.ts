@@ -60,15 +60,15 @@ export type ExportData = ReturnType<typeof getExportData>
  * names
  */
 export const routeTitles = {
-  'library-subscribe': '订阅管理',
-  'library-rule-list': '配置源(Partial Config)',
+  'subscribe-list': '订阅管理',
+  'partial-config-list': '配置源(Partial Config)',
   'current-config': '配置组装(Config Builder)',
   'preference': '偏好设置',
 }
 
 export const storageDataDisplayNames: Record<string, string> = {
-  'subscribe_list': `${routeTitles['library-subscribe']} (有泄露风险, 谨慎导出分享)`,
-  'rule_list': `${routeTitles['library-rule-list']}`,
+  'subscribe_list': `${routeTitles['subscribe-list']} (有泄露风险, 谨慎导出分享)`,
+  'rule_list': `${routeTitles['partial-config-list']}`,
   'current_config_v2': `${routeTitles['current-config']}`,
   'current_config_v2.list': '使用中的列表',
   'current_config_v2.name': '配置文件名称',

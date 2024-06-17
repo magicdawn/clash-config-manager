@@ -1,5 +1,6 @@
 import { state as preferenceState } from '$ui/pages/preference/model'
 import { QuestionCircleFilled } from '@ant-design/icons'
+import { css } from '@emotion/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Spin, Tag, Tooltip } from 'antd'
 import { SpinProps } from 'antd/lib/spin'
@@ -7,7 +8,6 @@ import * as EditorApi from 'monaco-editor/esm/vs/editor/editor.api'
 import { CSSProperties, MutableRefObject, ReactNode, useMemo, useRef } from 'react'
 import MonacoEditor, { EditorDidMount, EditorWillMount, monaco } from 'react-monaco-editor'
 import { useSnapshot } from 'valtio'
-import style from './CodeEditor.module.less'
 
 export type EditorRefInner = monaco.editor.IStandaloneCodeEditor
 
@@ -181,7 +181,14 @@ export function CodeEditor(props: IProps) {
     <>
       <Spin spinning={false} {...spinProps}>
         {header}
-        <div style={{ width: '100%', height: '50vh', marginTop: 10 }} className={style.editor}>
+        <div
+          css={css`
+            border: 1px solid purple;
+            margin-top: 10px;
+            height: calc(96vh - 242px - 10px);
+            margin-left: -10%;
+          `}
+        >
           <MonacoEditor
             language='yaml'
             theme={theme}
