@@ -1,4 +1,4 @@
-import { state as preferenceState } from '$ui/modules/preference/model'
+import { state as preferenceState } from '$ui/pages/preference/model'
 import { useLayoutEffect } from 'react'
 import { proxy, useSnapshot } from 'valtio'
 

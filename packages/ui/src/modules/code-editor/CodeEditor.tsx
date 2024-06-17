@@ -1,4 +1,4 @@
-import { state as preferenceState } from '$ui/modules/preference/model'
+import { state as preferenceState } from '$ui/pages/preference/model'
 import { QuestionCircleFilled } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Spin, Tag, Tooltip } from 'antd'

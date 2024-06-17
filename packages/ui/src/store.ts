@@ -5,20 +5,20 @@ import type { NotificationInstance } from 'antd/es/notification/interface'
 import { proxy } from 'valtio'
 import { devtools } from 'valtio/utils'
 
+import { actions as globalActions } from './modules/global-model'
 import {
   state as currentConfig,
   actions as currentConfigActions,
-} from './modules/current-config/model'
-import { actions as globalActions } from './modules/global-model'
+} from './pages/current-config/model'
 import {
   state as libraryRuleList,
   actions as libraryRuleListActions,
-} from './modules/library-rule-list/model'
+} from './pages/partial-config-list/model'
+import { state as preference } from './pages/preference/model'
 import {
   state as librarySubscribe,
   actions as librarySubscribeActions,
-} from './modules/library-subscribe/model'
-import { state as preference } from './modules/preference/model'
+} from './pages/subscribe-list/model'
 
 export const rootState = proxy({
   currentConfig,
