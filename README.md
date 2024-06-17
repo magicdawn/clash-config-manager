@@ -41,7 +41,7 @@
 
 ## 概念解释
 
-- 订阅管理: 人民币图标, 购买的服务, 订阅 url 会返回服务器节点.
+- 订阅管理: 服务器图标, 管理订阅. 原理是从 clash config 摘取 `proxies` 字段,
 - 配置源(Partial Config): clash 完整配置的一部分. 配置分为本地和远程配置, 有一些订阅会返回 clash 完整的配置文件, 即是远程配置.
 - 配置组装(Config Builder): 通过拖拽订阅和配置源(Partial Config) 组成一份完整的 clash 配置. 其中订阅会填充最后配置的 Proxy 部分, 可多选.
 
