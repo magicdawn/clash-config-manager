@@ -237,9 +237,21 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
   // 包含 filter 的 proxy-group
   let filteredGroups = proxyGroups.filter((item) => item.filter)
   filteredGroups.forEach((proxyGroup) => {
+    const { filter } = proxyGroup
+    delete proxyGroup.filter // remove from final config `proxyGroup.filter`
+
+    let filterFn: ((serverName: string) => boolean) | undefined
+    if (filter) {
+      if (filter.startsWith('/') && filter.endsWith('/')) {
+        const regex = new RegExp(filter.slice(1, -1), 'i')
+        filterFn = (serverName: string) => regex.test(serverName)
+      } else {
+        filterFn = (serverName: string) => serverName.includes(filter)
+      }
+    }
     proxyGroup.proxies = (config.proxies || [])
-      .filter((server) => server.name.includes(proxyGroup.filter!))
       .map((server) => server.name)
+      .filter((serverName) => filterFn?.(serverName))
   })
   filteredGroups = filteredGroups.filter((pg) => pg.proxies.length) // filter 完, 若 proxies 为空, 则去除 proxy-group
 
