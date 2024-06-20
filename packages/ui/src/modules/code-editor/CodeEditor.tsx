@@ -136,8 +136,7 @@ export function CodeEditor(props: IProps) {
     const opts: EOptions = {
       minimap: { enabled: false },
       overviewRulerBorder: true,
-      // renderIndentGuides: true,
-      scrollBeyondLastLine: false,
+      scrollBeyondLastLine: true,
       scrollbar: {
         horizontal: 'hidden',
       },
