@@ -1,3 +1,4 @@
+import { colorHighlightValue } from '$ui/common'
 import { Subscribe, SubscribeSpecialType } from '$ui/define'
 import { message } from '$ui/store'
 import { EyeFilled, EyeInvisibleFilled, UnorderedListOutlined } from '@ant-design/icons'
@@ -19,6 +20,7 @@ import {
   Tag,
   Tooltip,
 } from 'antd'
+import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { clipboard } from 'electron'
 import { size } from 'polished'
 import { ChangeEventHandler, KeyboardEventHandler, useCallback, useState } from 'react'
@@ -38,6 +40,29 @@ const S = {
     .input-row {
       margin-bottom: 10px;
     }
+
+    .ant-modal-title {
+      font-size: 30px;
+    }
+  `,
+
+  modalTitle: css`
+    font-size: 24px;
+  `,
+
+  settingGroups: css`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  `,
+
+  settingGroup: css`
+    /* margin-top: 25px; */
+  `,
+
+  settingGroupTitle: css`
+    margin-bottom: 5px;
+    font-size: 17px;
   `,
 }
 
@@ -102,6 +127,10 @@ export default function LibrarySubscribe() {
             .ant-descriptions-item-label,
             .ant-descriptions-item-content {
               padding: 8px 16px !important;
+            }
+
+            .ant-list-items {
+              padding-bottom: 40px;
             }
           `}
           size='small'
@@ -195,7 +224,24 @@ function SubscribeItem({
   const servers = detail[url]
 
   return (
-    <List.Item style={{ display: 'flex', borderBottom: 'none' }}>
+    <List.Item
+      css={css`
+        .ant-list .ant-list-item& {
+          display: flex;
+          border-bottom: none;
+          margin-bottom: 10px;
+
+          .ant-descriptions-view {
+            border-width: 2px;
+          }
+          &:hover {
+            .ant-descriptions-view {
+              border-color: ${colorHighlightValue};
+            }
+          }
+        }
+      `}
+    >
       <Descriptions
         bordered
         column={1}
@@ -359,6 +405,7 @@ function ModalAdd({
   const [id, setId] = useState(editItem?.id || crypto.randomUUID())
   const [excludeKeywords, setExcludeKeywords] = useState(editItem?.excludeKeywords || [])
   const [autoUpdate, setAutoUpdate] = useState(true)
+  const [addPrefixToProxies, setAddPrefixToProxies] = useState<boolean | undefined>()
 
   const [special, setSpecial] = useState<boolean | undefined>(undefined)
   const [specialType, setSpecialType] = useState<SubscribeSpecialType | undefined>(undefined)
@@ -379,6 +426,7 @@ function ModalAdd({
     setExcludeKeywords(editItem?.excludeKeywords || [])
     setAutoUpdate(editItem?.autoUpdate ?? true)
     setAutoUpdateInterval(editItem?.autoUpdateInterval || autoUpdateIntervalDefault)
+    setAddPrefixToProxies(editItem?.addPrefixToProxies)
 
     if (editItem?.special && editItem.specialType === 'nodefree') {
       setSpecial(editItem.special)
@@ -439,6 +487,7 @@ function ModalAdd({
       excludeKeywords,
       autoUpdate,
       autoUpdateInterval,
+      addPrefixToProxies,
     }
     if (special && specialType && specialData) {
       subscribeItem = { ...subscribeItem, special, specialType, specialData }
@@ -447,7 +496,7 @@ function ModalAdd({
     if (mode === 'add') {
       actions.add(subscribeItem)
     } else {
-      actions.edit({ ...subscribeItem, editItemIndex: editItemIndex! })
+      actions.edit({ ...editItem, ...subscribeItem, editItemIndex: editItemIndex! })
     }
 
     setVisible(false)
@@ -458,95 +507,136 @@ function ModalAdd({
     setSpecialData((val: NodefreeData) => ({ ...val, recentDays }))
   })
 
+  const onAddPrefixToProxiesChange = useMemoizedFn((e: CheckboxChangeEvent) => {
+    setAddPrefixToProxies(e.target.checked)
+  })
+
   return (
     <Modal
       css={S.modal}
       styles={{ body: { paddingTop: 10 } }}
-      title='添加'
+      title={editItem?.name ? '编辑' : '添加'}
       open={visible}
       onOk={handleOk}
       onCancel={handleCancel}
       centered
     >
-      <Divider orientation='left' orientationMargin={0}>
-        基础设置
-      </Divider>
-      <Input
-        className='input-row'
-        value={name}
-        onChange={onNameChange}
-        onPressEnter={handleOk}
-        prefix={<label className='label'>名称:</label>}
-      />
-
-      <Input
-        hidden={specialType === 'nodefree'}
-        className='input-row'
-        value={url}
-        onChange={onUrlChange}
-        onPressEnter={handleOk}
-        prefix={<label className='label'>订阅链接:</label>}
-      />
-
-      {specialType === 'nodefree' && (
-        <InputNumber
-          style={{ display: 'flex', width: '100%', marginBottom: 10 }}
-          prefix={<label className='label'>抓取天数:</label>}
-          value={specialData?.recentDays}
-          onChange={onNodefreeRecentDaysChange}
-          onPressEnter={handleOk}
-          min={1}
-          max={10}
-        />
-      )}
-
-      <Checkbox
-        checked={autoUpdate}
-        onChange={(e) => setAutoUpdate(e.target.checked)}
-        style={{ marginLeft: 0 }}
-      >
-        自动更新节点
-      </Checkbox>
-
-      {autoUpdate && (
-        <div style={{ marginLeft: 0, marginTop: 5 }}>
-          <InputNumber
-            addonAfter={'小时'}
-            min={autoUpdateIntervalMin}
-            max={autoUpdateIntervalMax}
-            defaultValue={autoUpdateIntervalDefault}
-            value={autoUpdateInterval}
-            onChange={(val) => val && setAutoUpdateInterval(val)}
+      <div css={S.settingGroups}>
+        <div css={S.settingGroup}>
+          <div css={S.settingGroupTitle}>基础设置</div>
+          <Input
+            className='input-row'
+            value={name}
+            onChange={onNameChange}
+            onPressEnter={handleOk}
+            prefix={<label className='label'>名称:</label>}
           />
-        </div>
-      )}
 
-      <Divider orientation='left' orientationMargin={0}>
-        <Tooltip
-          title={
-            <p>
-              订阅中的服务器名称如果包含以下任意一个关键词, 则该服务器不会包含在订阅中
-              <br />
-              <br />
-              例如: 如果有高倍率(x3 / x4 / ...)节点, 不想使用, 设置关键词 <Tag>x3</Tag>{' '}
-              <Tag>x4</Tag> 即可忽略这些节点
-              <br />
-              <br />
-              例如: 如果机场提供了 HK 节点, 但你不想使用香港的节点, 设置关键词 <Tag>HK</Tag>{' '}
-              即可忽略这些节点
-            </p>
-          }
-        >
-          根据关键词排除服务器:
-        </Tooltip>
-      </Divider>
-      <Select
-        mode='tags'
-        style={{ width: '100%' }}
-        placeholder='关键词'
-        value={excludeKeywords}
-        onChange={onExcludeKeywordsChange}
-      ></Select>
+          <Input
+            hidden={specialType === 'nodefree'}
+            className='input-row'
+            value={url}
+            onChange={onUrlChange}
+            onPressEnter={handleOk}
+            prefix={<label className='label'>订阅链接:</label>}
+          />
+
+          {specialType === 'nodefree' && (
+            <InputNumber
+              style={{ display: 'flex', width: '100%', marginBottom: 10 }}
+              prefix={<label className='label'>抓取天数:</label>}
+              value={specialData?.recentDays}
+              onChange={onNodefreeRecentDaysChange}
+              onPressEnter={handleOk}
+              min={1}
+              max={10}
+            />
+          )}
+        </div>
+
+        <div css={S.settingGroup}>
+          <div
+            css={[
+              S.settingGroupTitle,
+              css`
+                display: flex;
+                align-items: center;
+              `,
+            ]}
+          >
+            <label
+              htmlFor='checkbox-auto-update'
+              css={css`
+                cursor: pointer;
+                margin-right: 5px;
+              `}
+            >
+              自动更新节点
+            </label>
+            <Checkbox
+              id='checkbox-auto-update'
+              checked={autoUpdate}
+              onChange={(e) => setAutoUpdate(e.target.checked)}
+              style={{ marginLeft: 0 }}
+            />
+          </div>
+
+          {autoUpdate && (
+            <div style={{ marginLeft: 0, marginTop: 5 }}>
+              <InputNumber
+                addonAfter={'小时'}
+                min={autoUpdateIntervalMin}
+                max={autoUpdateIntervalMax}
+                defaultValue={autoUpdateIntervalDefault}
+                value={autoUpdateInterval}
+                onChange={(val) => val && setAutoUpdateInterval(val)}
+              />
+            </div>
+          )}
+        </div>
+
+        <div css={S.settingGroup}>
+          <div css={S.settingGroupTitle}>
+            <Tooltip
+              overlayInnerStyle={{ width: 'max-content', maxWidth: '50vw' }}
+              title={
+                <p>
+                  订阅中的服务器名称如果包含以下任意一个关键词, 则该服务器不会包含在订阅中
+                  <br />
+                  <br />
+                  例如: 如果有高倍率(x3 / x4 / ...)节点, 不想使用, 设置关键词 <Tag>x3</Tag>{' '}
+                  <Tag>x4</Tag> 即可忽略这些节点
+                  <br />
+                  <br />
+                  例如: 如果机场提供了 HK 节点, 但你不想使用香港的节点, 设置关键词 <Tag>
+                    HK
+                  </Tag>{' '}
+                  即可忽略这些节点
+                </p>
+              }
+            >
+              <span>根据关键词排除服务器:</span>
+            </Tooltip>
+          </div>
+          <Select
+            mode='tags'
+            style={{ width: '100%' }}
+            placeholder='关键词'
+            value={excludeKeywords}
+            onChange={onExcludeKeywordsChange}
+          />
+
+          <Checkbox
+            checked={addPrefixToProxies}
+            onChange={onAddPrefixToProxiesChange}
+            css={css`
+              margin-top: 10px;
+            `}
+          >
+            将订阅名添加为节点前缀
+          </Checkbox>
+        </div>
+      </div>
     </Modal>
   )
 }

@@ -16,6 +16,9 @@ export interface Subscribe<ExtData = any> {
   // visible
   urlVisible?: boolean
 
+  // proxy 的名字是否加上 `subscribe.name` 作为前缀
+  addPrefixToProxies?: boolean
+
   // 扩展
   special?: boolean
   specialType?: SubscribeSpecialType

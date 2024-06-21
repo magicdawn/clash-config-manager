@@ -191,6 +191,22 @@ export async function update({
     }
   }
 
+  if (currentSubscribe.addPrefixToProxies) {
+    servers.forEach((s) => {
+      s.name = `${currentSubscribe.name} - ${s.name}`
+    })
+  }
+
+  /**
+   * hysteris2 特殊处理
+   */
+  servers.forEach((_s) => {
+    const s = _s as any
+    if (s.type === 'hysteria2' && s.obfs && s.obfs === 'none') {
+      s.obfs = ''
+    }
+  })
+
   if (!silent || successMsg) {
     const msg =
       successMsg ||

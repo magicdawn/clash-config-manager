@@ -30,3 +30,7 @@ export const getAssetsDir = reusePromise(
 
 export const __DEV__ = import.meta.env.DEV
 export const __PROD__ = import.meta.env.PROD
+
+export const colorHighlightIdentifier = '--hightlight-color'
+export const colorHighlightValue = `var(${colorHighlightIdentifier})`
+export const colorHighlightHex = `#01847F` // 马尔斯绿
