@@ -38,7 +38,7 @@ export async function main() {
   remoteMain.enable(mainWindow.webContents)
 
   if (process.env.NODE_ENV === 'production') {
-    await mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
+    await mainWindow.loadFile(path.join(import.meta.dirname, '../renderer/index.html'))
   } else {
     await mainWindow.loadURL('http://localhost:7749')
   }

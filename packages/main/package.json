@@ -1,6 +1,7 @@
 {
   "name": "main",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "tsup --watch",
     "build": "NODE_ENV=production tsup"
@@ -8,10 +9,10 @@
   "dependencies": {
     "bytes": "^3.1.2",
     "debug": "^4.3.5",
-    "electron-context-menu": "^3.6.1",
-    "electron-debug": "^3.2.0",
+    "electron-context-menu": "^4.0.0",
+    "electron-debug": "^4.0.0",
     "electron-log": "^5.1.5",
-    "electron-unhandled": "^4.0.1",
+    "electron-unhandled": "^5.0.0",
     "electron-updater": "^6.2.1",
     "electron-util": "^0.18.1",
     "env-paths": "^3.0.0",

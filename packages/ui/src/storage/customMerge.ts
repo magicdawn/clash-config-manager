@@ -48,7 +48,9 @@ export function customMerge(baseData: StorageData, importData: Partial<StorageDa
 }
 
 /* eslint camelcase: off */
-if (module === require.main) {
+const isMain = false
+// module === require.main
+if (isMain) {
   // console.log(
   //   customMerge(
   //     {

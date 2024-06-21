@@ -43,7 +43,7 @@ if (!is.macos) {
       type: 'separator',
     },
     aboutMenuItem({
-      icon: path.join(__dirname, 'static', 'icon.png'),
+      icon: path.join(import.meta.dirname, 'static', 'icon.png'),
       text: 'Created by Your Name',
     }),
   )
@@ -175,7 +175,7 @@ const otherTemplate = () =>
 
 async function installCli() {
   // contents/resources/app.asar/main/index.js
-  const appContents = path.join(__dirname, '../../../')
+  const appContents = path.join(import.meta.dirname, '../../../')
   const shFile = path.join(appContents, 'Resources/clash-config-manager.sh')
   const linkSources = [`/usr/local/bin/clash-config-mamager`, `/usr/local/bin/ccm`]
   for (const s of linkSources) {

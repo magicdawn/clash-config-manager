@@ -3,7 +3,7 @@ import path from 'path'
 
 export const assetsDir = app.isPackaged
   ? path.join(process.resourcesPath, 'assets/')
-  : path.join(__dirname, '../../../assets/') // from bundle/development/main/
+  : path.join(import.meta.dirname, '../../../assets/') // from bundle/development/main/
 
 ipcMain.handle('getAssetsDir', (event) => {
   return assetsDir
