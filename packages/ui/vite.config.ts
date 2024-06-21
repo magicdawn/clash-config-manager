@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 import react from '@vitejs/plugin-react'
 import esmUtils from 'esm-utils'
 import { set } from 'lodash-es'
@@ -248,12 +247,6 @@ export default defineConfig({
     //   },
     // }),
     makeRendererHappyPlugin(),
-
-    // polyfillExports(),
-    // https://github.com/vitejs/vite/issues/3409
-    viteCommonjs({
-      include: ['react-command-palette'],
-    }),
   ].filter(Boolean),
 
   css: {
