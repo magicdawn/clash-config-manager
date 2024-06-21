@@ -26,3 +26,5 @@ CHANGELOG.temp.md
 src-tauri/target
 
 .turbo
+
+lib-tests/

@@ -2,10 +2,9 @@
 
 import react from '@vitejs/plugin-react'
 import esmUtils from 'esm-utils'
-import { set } from 'lodash-es'
 import path, { join } from 'path'
 import Icons from 'unplugin-icons/vite'
-import { defineConfig, Plugin } from 'vite'
+import { defineConfig, mergeConfig, Plugin, type UserConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const { require } = esmUtils(import.meta)
@@ -18,6 +17,11 @@ const { require } = esmUtils(import.meta)
 
 import { builtinModules as __builtinModules } from 'module'
 const builtinModules = __builtinModules.filter((name) => !name.startsWith('_'))
+
+/**
+ * this plugin does nothing, 花里胡哨, 没用
+ * https://github.com/alex8088/electron-vite/blob/v2.2.0/src/plugins/electron.ts#L330
+ */
 
 /**
  * way 1
@@ -33,110 +37,106 @@ const builtinModules = __builtinModules.filter((name) => !name.startsWith('_'))
  * esbuild plugin 只有在 pre-bundle 中生效, 非 pre-bundle 还需要 bridge code
  */
 
-function makeRendererHappyPlugin(): Plugin {
+function makeRendererHappyPlugins(): Plugin[] {
   const happyModules = ['electron', ...builtinModules, ...builtinModules.map((x) => `node:${x}`)]
   const pluginName = 'make-electron-renderer-happy'
   const modulePrefix = `virtual:${pluginName}:`
   const esbuildModulePrefix = `${pluginName}__`
 
-  return {
-    name: pluginName,
+  return [
+    {
+      name: `${pluginName}:optimizeDeps`,
+      config(config, env) {
+        // init if empty
+        config.optimizeDeps ||= {}
+        config.optimizeDeps.include ||= []
+        config.optimizeDeps.exclude ||= []
+        config.optimizeDeps.esbuildOptions ||= {}
+        config.optimizeDeps.esbuildOptions.plugins ||= []
 
-    config(config, env) {
-      // const isDev = env.command === 'serve'
-      const isBuild = env.command === 'build'
+        // config.optimizeDeps.exclude.push(...happyModules)
 
-      // for embed deployment
-      set(config, 'base', config.base || './')
+        const filter = new RegExp(`^(${happyModules.join('|')})$`)
 
-      const filter = new RegExp(`^(${happyModules.join('|')})$`)
-      // const filterWithPrefix = new RegExp(`^${esbuildModulePrefix}(${happyModules.join('|')})$`)
+        config.optimizeDeps.esbuildOptions.plugins.push({
+          name: `${pluginName}:optimizeDeps:esbuild`,
+          setup(build) {
+            // without prefix
+            build.onResolve({ filter }, (args) => {
+              // console.log('esbuild onResolve %s', args.path)
+              return {
+                path: args.path,
+                namespace: pluginName,
+                external: true,
+              }
+            })
+            build.onLoad({ filter, namespace: pluginName }, (args) => {
+              // console.log('esbuild onLoad %s', args.path)
+              return {
+                contents: `module.exports = require("${args.path}")`,
+              }
+            })
 
-      // init if empty
-      config.optimizeDeps ||= {}
-      config.optimizeDeps.esbuildOptions ||= {}
-      config.optimizeDeps.include ||= []
-      config.optimizeDeps.esbuildOptions.plugins ||= []
+            // build.onResolve({ filter: filterWithPrefix }, (args) => {
+            //   return {
+            //     path: args.path,
+            //     namespace: pluginName,
+            //   }
+            // })
+            // build.onLoad({ filter: filterWithPrefix, namespace: pluginName }, (args) => {
+            //   const moduleRaw = args.path.slice(esbuildModulePrefix.length)
+            //   return {
+            //     contents: `module.exports = require("${moduleRaw}")`,
+            //   }
+            // })
+          },
+        })
+      },
+    },
 
-      config.optimizeDeps.include = [
-        ...config.optimizeDeps.include,
-        // ...happyModules.map((m) => esbuildModulePrefix + m),
-      ]
-      config.optimizeDeps.esbuildOptions.plugins.push({
-        name: pluginName + ':esbuild',
-        setup(build) {
-          // without prefix
-          build.onResolve({ filter }, (args) => {
-            // console.log('esbuild onResolve %s', args.path)
-            return {
-              path: args.path,
-              namespace: pluginName,
-              external: true,
-            }
-          })
-          build.onLoad({ filter, namespace: pluginName }, (args) => {
-            // console.log('esbuild onLoad %s', args.path)
-            return {
-              contents: `module.exports = require("${args.path}")`,
-            }
-          })
+    {
+      name: pluginName,
 
-          // build.onResolve({ filter: filterWithPrefix }, (args) => {
-          //   return {
-          //     path: args.path,
-          //     namespace: pluginName,
-          //   }
-          // })
-          // build.onLoad({ filter: filterWithPrefix, namespace: pluginName }, (args) => {
-          //   const moduleRaw = args.path.slice(esbuildModulePrefix.length)
-          //   return {
-          //     contents: `module.exports = require("${moduleRaw}")`,
-          //   }
-          // })
-        },
-      })
-
-      // set(config, 'optimizeDeps.exclude', [
-      //   ...(config.optimizeDeps?.exclude || []),
-      //   ...happyModules,
-      // ])
-
-      // 设置 alias, 提供 bridge virtual module
-      const alias: Record<string, string> = {}
-      for (const name of happyModules) {
-        alias[name] = modulePrefix + name
-      }
-      set(config, 'resolve.alias', { ...config.resolve?.alias, ...alias })
-
-      if (isBuild) {
-        /* #region rollup cjs ignore  */
-        const ignore = config.build?.commonjsOptions?.ignore
-        let newIgnore = ignore
-        if (ignore) {
-          if (typeof ignore === 'function') {
-            newIgnore = (id) => {
-              if (happyModules.includes(id)) return true
-              return ignore(id)
-            }
-          } else {
-            newIgnore = [...ignore, ...happyModules]
-          }
-        } else {
-          newIgnore = [...happyModules]
+      config(config, env) {
+        let ret: UserConfig = {}
+        const setConfig = (config: UserConfig) => {
+          ret = mergeConfig(ret, config)
         }
-        set(config, 'build.commonjsOptions.ignore', newIgnore)
-        /* #endregion */
-      }
-    },
 
-    resolveId(id) {
-      if (id.startsWith(modulePrefix)) return '\0' + id
-    },
+        const isBuild = env.command === 'build'
 
-    load(id) {
-      const getModuleCode = (m: string) => {
-        if (m === 'electron') {
-          return `
+        // for embed deployment
+        setConfig({ base: './' })
+
+        // 设置 alias, 提供 bridge virtual module
+        const alias: Record<string, string> = {}
+        for (const name of happyModules) {
+          alias[name] = modulePrefix + name
+        }
+        setConfig({ resolve: { alias } })
+
+        if (isBuild) {
+          // rollup cjs ignore
+          setConfig({
+            build: {
+              commonjsOptions: {
+                ignore: happyModules,
+              },
+            },
+          })
+        }
+
+        return ret
+      },
+
+      resolveId(id) {
+        if (id.startsWith(modulePrefix)) return '\0' + id
+      },
+
+      load(id) {
+        const getModuleCode = (m: string) => {
+          if (m === 'electron') {
+            return `
           const M = require("electron");
           const {
             clipboard,
@@ -163,17 +163,17 @@ function makeRendererHappyPlugin(): Plugin {
             deprecate,
           }
           `
-        }
+          }
 
-        if (m.startsWith('node:')) {
-          m = m.slice('node:'.length)
-        }
-        if (builtinModules.includes(m)) {
-          const M = require(`node:${m}`)
-          const namedExports = Object.keys(M).filter((name) => !name.startsWith('_'))
-          const namedExportsStr = namedExports.join(',\n  ')
+          if (m.startsWith('node:')) {
+            m = m.slice('node:'.length)
+          }
+          if (builtinModules.includes(m)) {
+            const M = require(`node:${m}`)
+            const namedExports = Object.keys(M).filter((name) => !name.startsWith('_'))
+            const namedExportsStr = namedExports.join(',\n  ')
 
-          const code = `
+            const code = `
             const M = require('${m}')
             const {
               ${namedExportsStr}
@@ -185,20 +185,21 @@ function makeRendererHappyPlugin(): Plugin {
             }
           `
 
-          return alignTrim(code)
+            return alignTrim(code)
+          }
         }
-      }
 
-      // make-electron-happy:crypto
-      if (id.startsWith('\0' + modulePrefix)) {
-        // console.log(id)
-        const m = id.slice(('\0' + modulePrefix).length)
-        return getModuleCode(m)
-        // return `module.exports = require('${m}')`
-        // return `export default require('${m}')`
-      }
+        // make-electron-happy:crypto
+        if (id.startsWith('\0' + modulePrefix)) {
+          // console.log(id)
+          const m = id.slice(('\0' + modulePrefix).length)
+          return getModuleCode(m)
+          // return `module.exports = require('${m}')`
+          // return `export default require('${m}')`
+        }
+      },
     },
-  }
+  ]
 }
 
 function alignTrim(s: string) {
@@ -246,7 +247,7 @@ export default defineConfig({
     //     ],
     //   },
     // }),
-    makeRendererHappyPlugin(),
+    ...makeRendererHappyPlugins(),
   ].filter(Boolean),
 
   css: {
