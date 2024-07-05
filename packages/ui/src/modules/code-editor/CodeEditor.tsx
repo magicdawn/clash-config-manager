@@ -151,7 +151,7 @@ export function CodeEditor(props: IProps) {
       tabSize: 2,
       useTabStops: true,
       find: {
-        loop: false,
+        loop: true,
         seedSearchStringFromSelection: 'selection',
       },
     }
