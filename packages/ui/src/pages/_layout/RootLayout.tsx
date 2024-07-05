@@ -38,6 +38,9 @@ export function RootLayout({
       theme={{
         cssVar: true,
         algorithm,
+        token: {
+          // colorPrimary: colorHighlightHex,
+        },
       }}
     >
       <AntdApp message={messageConfig}>

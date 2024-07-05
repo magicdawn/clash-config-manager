@@ -1,3 +1,4 @@
+import { colorHighlightValue } from '$ui/common'
 import { LocalRuleItem, RuleItem } from '$ui/define'
 import {
   CodeEditor,
@@ -244,9 +245,26 @@ export function PartialConfigItem({ item, index }: { item: RuleItem; index: numb
 
   return (
     <div
+      data-as='list-item'
       style={{ ...dragStyle, ...dragActiveStyle, display: 'flex' }}
-      className='list-item'
       ref={setNodeRef}
+      css={css`
+        flex: 1;
+        margin-block: 15px;
+        margin-inline: 15px 30px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        border-radius: 10px;
+        padding: 10px 10px;
+
+        border: 2px solid var(--border-c);
+        &:hover {
+          border-color: ${colorHighlightValue};
+        }
+      `}
     >
       <div
         css={css`
