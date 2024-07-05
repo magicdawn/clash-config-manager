@@ -208,17 +208,24 @@ function SubscribeItem({
 
   let urlHided = ''
   if (url) {
-    const u = new URL(url)
-    u.searchParams.forEach((val, key) => {
-      const keep = (n: number) =>
-        val.slice(0, n) + '*'.repeat(val.slice(n, -n).length) + val.slice(-n)
+    let u: URL | undefined
+    try {
+      const u = new URL(url)
+    } catch (e) {
+      console.error('invalid url: ', url)
+    }
+    if (u) {
+      u.searchParams.forEach((val, key) => {
+        const keep = (n: number) =>
+          val.slice(0, n) + '*'.repeat(val.slice(n, -n).length) + val.slice(-n)
 
-      // keep 1/3 visible
-      const n = Math.floor(val.length / 3 / 2)
-      const valHided = keep(n)
-      u.searchParams.set(key, valHided)
-    })
-    urlHided = u.toString()
+        // keep 1/3 visible
+        const n = Math.floor(val.length / 3 / 2)
+        const valHided = keep(n)
+        u.searchParams.set(key, valHided)
+      })
+      urlHided = u.toString()
+    }
   }
 
   const servers = detail[url]
