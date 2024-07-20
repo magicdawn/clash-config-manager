@@ -210,7 +210,7 @@ function SubscribeItem({
   if (url) {
     let u: URL | undefined
     try {
-      const u = new URL(url)
+      u = new URL(url)
     } catch (e) {
       console.error('invalid url: ', url)
     }
@@ -324,17 +324,19 @@ function SubscribeItem({
             />
 
             <div
-              css={
-                !urlVisible &&
+              css={[
                 css`
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
                   word-break: break-all;
-                `
-              }
+                `,
+                !urlVisible &&
+                  css`
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                  `,
+              ]}
             >
               {urlVisible ? url : urlHided}
             </div>

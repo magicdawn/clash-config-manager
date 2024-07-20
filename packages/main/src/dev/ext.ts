@@ -14,7 +14,7 @@ const loadExt = (id: string) => {
   const extVerDir = extDir + '/' + ver
 
   debug('add %s', extVerDir)
-  session.defaultSession.loadExtension(extVerDir)
+  session.defaultSession.loadExtension(extVerDir, { allowFileAccess: true })
 }
 
 export function load() {

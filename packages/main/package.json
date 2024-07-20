@@ -9,11 +9,11 @@
   "dependencies": {
     "bytes": "^3.1.2",
     "debug": "^4.3.5",
-    "electron-context-menu": "^4.0.0",
+    "electron-context-menu": "^4.0.1",
     "electron-debug": "^4.0.0",
-    "electron-log": "^5.1.5",
+    "electron-log": "^5.1.6",
     "electron-unhandled": "^5.0.0",
-    "electron-updater": "^6.2.1",
+    "electron-updater": "^6.3.0",
     "electron-util": "^0.18.1",
     "env-paths": "^3.0.0",
     "fix-path": "^4.0.0",
@@ -23,6 +23,6 @@
     "@types/bytes": "^3.1.4",
     "@types/debug": "^4.1.12",
     "@types/ms": "^0.7.34",
-    "tsup": "^8.1.0"
+    "tsup": "^8.2.0"
   }
 }
