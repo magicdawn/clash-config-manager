@@ -14,7 +14,7 @@
     "url": "https://magicdawn.fun"
   },
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky",
     "postinstall": "electron-builder install-app-deps",
     "dev": "conc -k npm:dev:main npm:dev:ui",
     "dev:main": "pnpm -F main dev",
