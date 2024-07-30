@@ -1,0 +1,13 @@
+diff --git a/dist/index.js b/dist/index.js
+index 52ea620603129a319ab0c312a9a07854367dac16..9c7e89d29b0bca6dc6b98a140b56d223d6c5ede0 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -76,7 +76,7 @@ function useValueHandle({ defaultValue, value, id, onFocus, onBlur }) {
+         }
+         initFlag.current = true;
+         return () => {
+-            initFlag.current = false;
++            // initFlag.current = false;
+         };
+     }, [value]);
+     useEffect(() => {

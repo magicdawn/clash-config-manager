@@ -41,7 +41,10 @@ export default function Preference() {
   const [exportSuccessFile, setExportSuccessFile] = useState('')
 
   const onExport = useMemoizedFn(async () => {
-    const file = path.join(appTempDir, `${moment().format('YYYY_MM_DD__HH_mm')}.json`)
+    const file = path.join(
+      appTempDir,
+      `clash-config-manager ${moment().format('YYYY-MM-DD HH.mm')}.json`,
+    )
     const data = getExportData()
     await fse.outputJson(file, data, { spaces: 2 })
     setExportSuccessModalVisible(true)

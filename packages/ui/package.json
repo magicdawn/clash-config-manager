@@ -18,6 +18,7 @@
     "@emotion/react": "^11.13.0",
     "@icon-park/react": "^1.4.2",
     "ahooks": "^3.8.0",
+    "ant-float-label": "^1.1.0",
     "antd": "^5.19.4",
     "applescript": "^1.0.0",
     "bytes": "^3.1.2",

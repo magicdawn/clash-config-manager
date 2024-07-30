@@ -19,6 +19,9 @@ export interface Subscribe<ExtData = any> {
   // proxy 的名字是否加上 `subscribe.name` 作为前缀
   addPrefixToProxies?: boolean
 
+  // 备注, 支持 markdown
+  remark?: string
+
   // 扩展
   special?: boolean
   specialType?: SubscribeSpecialType

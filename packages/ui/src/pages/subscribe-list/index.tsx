@@ -4,11 +4,13 @@ import { message } from '$ui/store'
 import { EyeFilled, EyeInvisibleFilled, UnorderedListOutlined } from '@ant-design/icons'
 import { css } from '@emotion/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
+import { FloatFormItem, FloatInput, FloatInputNumber, FloattingLabelBox } from 'ant-float-label'
 import {
   Button,
   Checkbox,
   Descriptions,
   Divider,
+  Flex,
   Input,
   InputNumber,
   List,
@@ -26,6 +28,7 @@ import { size } from 'polished'
 import { ChangeEventHandler, KeyboardEventHandler, useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import IconParkOutlineCopy from '~icons/icon-park-outline/copy'
+import IconParkOutlineTips from '~icons/icon-park-outline/tips'
 import { sharedPageCss } from '../_layout/_shared'
 import { actions, state } from './model'
 import { NodefreeData, defaultNodefreeSubscribe, nodefreeGetUrls } from './special/nodefree'
@@ -104,7 +107,7 @@ export default function LibrarySubscribe() {
           }
         `}
       >
-        <ModalAdd
+        <ModalAddOrEdit
           visible={showModal}
           setVisible={setShowModal}
           editItem={editItem}
@@ -184,7 +187,7 @@ function SubscribeItem({
 }) {
   const { status, detail } = useSnapshot(state)
 
-  const { url, name, excludeKeywords, special, specialType, specialData } = item
+  const { url, name, excludeKeywords, special, specialType, specialData, remark } = item
   let { urlVisible } = item
   if (typeof urlVisible !== 'boolean') urlVisible = true
 
@@ -257,13 +260,29 @@ function SubscribeItem({
         labelStyle={{ width: '120px', textAlign: 'center' }}
       >
         <Descriptions.Item label='名称'>
-          {name}
-          {status[url] ? (
-            <>
-              <br />
-              {status[url]}
-            </>
-          ) : null}
+          <div
+            css={css`
+              display: flex;
+              align-items: center;
+            `}
+          >
+            {name}
+            {remark && (
+              <Tooltip
+                title={remark}
+                overlayStyle={{ maxWidth: '50vw', wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
+              >
+                <IconParkOutlineTips
+                  {...size(20)}
+                  css={css`
+                    margin-left: 5px;
+                    cursor: pointer;
+                  `}
+                />
+              </Tooltip>
+            )}
+          </div>
+          {status[url] ? status[url] : null}
         </Descriptions.Item>
 
         {!!excludeKeywords?.length && (
@@ -299,7 +318,7 @@ function SubscribeItem({
                 />
               </Tooltip>
 
-              <Tooltip title='显示/隐藏 token'>
+              <Tooltip title='「显示/隐藏」完整URL'>
                 <span
                   css={css`
                     cursor: pointer;
@@ -332,7 +351,7 @@ function SubscribeItem({
                   css`
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 2;
+                    -webkit-line-clamp: 1;
                     overflow: hidden;
                     text-overflow: ellipsis;
                   `,
@@ -398,7 +417,7 @@ function SubscribeItem({
   )
 }
 
-function ModalAdd({
+function ModalAddOrEdit({
   visible,
   setVisible,
   editItem,
@@ -415,6 +434,7 @@ function ModalAdd({
   const [excludeKeywords, setExcludeKeywords] = useState(editItem?.excludeKeywords || [])
   const [autoUpdate, setAutoUpdate] = useState(true)
   const [addPrefixToProxies, setAddPrefixToProxies] = useState<boolean | undefined>()
+  const [remark, setRemark] = useState(editItem?.remark)
 
   const [special, setSpecial] = useState<boolean | undefined>(undefined)
   const [specialType, setSpecialType] = useState<SubscribeSpecialType | undefined>(undefined)
@@ -436,6 +456,7 @@ function ModalAdd({
     setAutoUpdate(editItem?.autoUpdate ?? true)
     setAutoUpdateInterval(editItem?.autoUpdateInterval || autoUpdateIntervalDefault)
     setAddPrefixToProxies(editItem?.addPrefixToProxies)
+    setRemark(editItem?.remark || '')
 
     if (editItem?.special && editItem.specialType === 'nodefree') {
       setSpecial(editItem.special)
@@ -454,6 +475,7 @@ function ModalAdd({
     setSpecial(undefined)
     setSpecialType(undefined)
     setSpecialData(undefined)
+    setRemark(undefined)
   }
 
   type OnChange = ChangeEventHandler<HTMLInputElement>
@@ -463,12 +485,24 @@ function ModalAdd({
   const onNameChange: OnChange = useCallback((e) => {
     setName(e.target.value)
   }, [])
+  const onRemarkChange: ChangeEventHandler<HTMLTextAreaElement> = useCallback((e) => {
+    setRemark(e.target.value)
+  }, [])
 
   const onExcludeKeywordsChange = useCallback((value: string[] = []) => {
     console.log('onExcludeKeywordsChange', value)
     setExcludeKeywords(value)
   }, [])
 
+  const onNodefreeRecentDaysChange = useMemoizedFn((recentDays: number) => {
+    setSpecialData((val: NodefreeData) => ({ ...val, recentDays }))
+  })
+
+  const onAddPrefixToProxiesChange = useMemoizedFn((e: CheckboxChangeEvent) => {
+    setAddPrefixToProxies(e.target.checked)
+  })
+
+  /* #region form complete */
   const handleCancel = useCallback(() => {
     setVisible(false)
     clean()
@@ -497,6 +531,7 @@ function ModalAdd({
       autoUpdate,
       autoUpdateInterval,
       addPrefixToProxies,
+      remark,
     }
     if (special && specialType && specialData) {
       subscribeItem = { ...subscribeItem, special, specialType, specialData }
@@ -511,14 +546,7 @@ function ModalAdd({
     setVisible(false)
     clean()
   })
-
-  const onNodefreeRecentDaysChange = useMemoizedFn((recentDays: number) => {
-    setSpecialData((val: NodefreeData) => ({ ...val, recentDays }))
-  })
-
-  const onAddPrefixToProxiesChange = useMemoizedFn((e: CheckboxChangeEvent) => {
-    setAddPrefixToProxies(e.target.checked)
-  })
+  /* #endregion */
 
   return (
     <Modal
@@ -529,104 +557,80 @@ function ModalAdd({
       onOk={handleOk}
       onCancel={handleCancel}
       centered
+      width={600}
     >
-      <div css={S.settingGroups}>
-        <div css={S.settingGroup}>
-          <div css={S.settingGroupTitle}>基础设置</div>
-          <Input
-            className='input-row'
+      <Space direction='vertical' size={15} style={{ width: '100%' }}>
+        <Flex vertical gap={15}>
+          <FloatInput
+            // rootClassName='input-row'
+            // className='input-row'
+            size='large'
+            placeholder='名称'
             value={name}
             onChange={onNameChange}
             onPressEnter={handleOk}
-            prefix={<label className='label'>名称:</label>}
           />
 
-          <Input
-            hidden={specialType === 'nodefree'}
-            className='input-row'
-            value={url}
-            onChange={onUrlChange}
-            onPressEnter={handleOk}
-            prefix={<label className='label'>订阅链接:</label>}
-          />
-
-          {specialType === 'nodefree' && (
-            <InputNumber
-              style={{ display: 'flex', width: '100%', marginBottom: 10 }}
-              prefix={<label className='label'>抓取天数:</label>}
+          {specialType === 'nodefree' ? (
+            <FloatInputNumber
+              // style={{ display: 'flex', width: '100%', marginBottom: 10 }}
+              // prefix={<label className='label'>抓取天数:</label>}
+              size='large'
+              placeholder='抓取天数'
               value={specialData?.recentDays}
               onChange={onNodefreeRecentDaysChange}
               onPressEnter={handleOk}
               min={1}
               max={10}
             />
+          ) : (
+            <FloatInput
+              // rootClassName='input-row'
+              // className='input-row'
+              size='large'
+              hidden={specialType === 'nodefree'}
+              placeholder='订阅链接'
+              value={url}
+              onChange={onUrlChange}
+              onPressEnter={handleOk}
+              // prefix={<label className='label'>订阅链接:</label>}
+            />
           )}
-        </div>
+        </Flex>
 
-        <div css={S.settingGroup}>
-          <div
-            css={[
-              S.settingGroupTitle,
-              css`
-                display: flex;
-                align-items: center;
-              `,
-            ]}
-          >
-            <label
-              htmlFor='checkbox-auto-update'
-              css={css`
-                cursor: pointer;
-                margin-right: 5px;
-              `}
-            >
-              自动更新节点
-            </label>
+        {/* 所有的勾选项, 间距要小一点 */}
+        <Flex vertical gap={5}>
+          <Flex align='center' gap={5}>
             <Checkbox
               id='checkbox-auto-update'
               checked={autoUpdate}
               onChange={(e) => setAutoUpdate(e.target.checked)}
               style={{ marginLeft: 0 }}
-            />
-          </div>
-
-          {autoUpdate && (
-            <div style={{ marginLeft: 0, marginTop: 5 }}>
-              <InputNumber
-                addonAfter={'小时'}
-                min={autoUpdateIntervalMin}
-                max={autoUpdateIntervalMax}
-                defaultValue={autoUpdateIntervalDefault}
-                value={autoUpdateInterval}
-                onChange={(val) => val && setAutoUpdateInterval(val)}
-              />
-            </div>
-          )}
-        </div>
-
-        <div css={S.settingGroup}>
-          <div css={S.settingGroupTitle}>
-            <Tooltip
-              overlayInnerStyle={{ width: 'max-content', maxWidth: '50vw' }}
-              title={
-                <p>
-                  订阅中的服务器名称如果包含以下任意一个关键词, 则该服务器不会包含在订阅中
-                  <br />
-                  <br />
-                  例如: 如果有高倍率(x3 / x4 / ...)节点, 不想使用, 设置关键词 <Tag>x3</Tag>{' '}
-                  <Tag>x4</Tag> 即可忽略这些节点
-                  <br />
-                  <br />
-                  例如: 如果机场提供了 HK 节点, 但你不想使用香港的节点, 设置关键词 <Tag>
-                    HK
-                  </Tag>{' '}
-                  即可忽略这些节点
-                </p>
-              }
             >
-              <span>根据关键词排除服务器:</span>
-            </Tooltip>
-          </div>
+              自动更新节点
+            </Checkbox>
+
+            <InputNumber
+              css={css`
+                width: 130px;
+              `}
+              disabled={!autoUpdate}
+              addonAfter={'小时'}
+              min={autoUpdateIntervalMin}
+              max={autoUpdateIntervalMax}
+              defaultValue={autoUpdateIntervalDefault}
+              value={autoUpdateInterval}
+              onChange={(val) => val && setAutoUpdateInterval(val)}
+            />
+          </Flex>
+
+          <Checkbox checked={addPrefixToProxies} onChange={onAddPrefixToProxiesChange}>
+            将订阅名添加为节点前缀
+          </Checkbox>
+        </Flex>
+
+        <div>
+          根据关键词排除服务器:
           <Select
             mode='tags'
             style={{ width: '100%' }}
@@ -634,18 +638,18 @@ function ModalAdd({
             value={excludeKeywords}
             onChange={onExcludeKeywordsChange}
           />
-
-          <Checkbox
-            checked={addPrefixToProxies}
-            onChange={onAddPrefixToProxiesChange}
-            css={css`
-              margin-top: 10px;
-            `}
-          >
-            将订阅名添加为节点前缀
-          </Checkbox>
         </div>
-      </div>
+
+        <div>
+          备注
+          <Input.TextArea
+            placeholder='备注'
+            autoSize={{ minRows: 2, maxRows: 8 }}
+            value={remark}
+            onChange={onRemarkChange}
+          />
+        </div>
+      </Space>
     </Modal>
   )
 }
