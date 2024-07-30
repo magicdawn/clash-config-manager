@@ -54,6 +54,14 @@ export default defineConfig({
     buildOnce()
   },
 
+  async afterSign() {
+    console.log('[after sign]')
+    // process.nextTick(() => {
+    //   const log = require('why-is-node-running').default
+    //   log()
+    // })
+  },
+
   artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
 
   mac: {
