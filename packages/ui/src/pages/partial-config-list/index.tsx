@@ -15,7 +15,12 @@ import { firstLine, limitLines } from '$ui/utility/text-util'
 import { FileAddOutlined } from '@ant-design/icons'
 import { DndContext, DragEndEvent } from '@dnd-kit/core'
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import * as remote from '@electron/remote'
 import { css } from '@emotion/react'
@@ -97,20 +102,12 @@ export default function LibraryRuleList() {
 
   const onDragEnd = useMemoizedFn((e: DragEndEvent) => {
     const { over, active } = e
-    // console.log(e, over, active)
-
-    // no change
-    if (!over?.id) return
-    if (over.id === active.id) return
-
+    // validate
+    if (!over?.id || !active.id || over.id === active.id) return
     // change
     const oldIndex = contextIds.indexOf(active.id.toString())
     const newIndex = contextIds.indexOf(over.id.toString())
-    // console.log('re-order:', oldIndex, newIndex)
-
-    // save
-    const item = state.list[oldIndex]
-    state.list = state.list.toSpliced(oldIndex, 1).toSpliced(newIndex, 0, item)
+    state.list = arrayMove(state.list.slice(), oldIndex, newIndex)
   })
 
   // const sensors = useSensors(

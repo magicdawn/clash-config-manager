@@ -1,8 +1,17 @@
 import { colorHighlightValue } from '$ui/common'
 import { Subscribe, SubscribeSpecialType } from '$ui/define'
-import { renderMarkdown } from '$ui/modules/markdown'
+import { MarkdownView } from '$ui/modules/markdown'
 import { message } from '$ui/store'
 import { EyeFilled, EyeInvisibleFilled, UnorderedListOutlined } from '@ant-design/icons'
+import { DndContext, type DragEndEvent } from '@dnd-kit/core'
+import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { css } from '@emotion/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { FloatInput, FloatInputNumber } from 'ant-float-label'
@@ -26,13 +35,20 @@ import {
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { clipboard } from 'electron'
 import { size } from 'polished'
-import { ChangeEventHandler, KeyboardEventHandler, useCallback, useState } from 'react'
+import {
+  ChangeEventHandler,
+  KeyboardEventHandler,
+  useCallback,
+  useMemo,
+  useState,
+  type CSSProperties,
+} from 'react'
 import { useSnapshot } from 'valtio'
 import IconParkOutlineCopy from '~icons/icon-park-outline/copy'
 import IconParkOutlineTips from '~icons/icon-park-outline/tips'
 import { sharedPageCss } from '../_layout/_shared'
 import { actions, state } from './model'
-import { NodefreeData, defaultNodefreeSubscribe, nodefreeGetUrls } from './special/nodefree'
+import { defaultNodefreeSubscribe, NodefreeData, nodefreeGetUrls } from './special/nodefree'
 
 const S = {
   modal: css`
@@ -95,6 +111,17 @@ export default function LibrarySubscribe() {
     setShowModal(true)
   })
 
+  const contextIds = useMemo(() => list.map((item) => item.id), [list])
+  const onDragEnd = useMemoizedFn((e: DragEndEvent) => {
+    const { over, active } = e
+    // validate
+    if (!over?.id || !active.id || over.id === active.id) return
+    // change
+    const oldIndex = contextIds.indexOf(active.id.toString())
+    const newIndex = contextIds.indexOf(over.id.toString())
+    state.list = arrayMove(state.list.slice(), oldIndex, newIndex)
+  })
+
   return (
     <div css={sharedPageCss.page}>
       <div
@@ -115,59 +142,66 @@ export default function LibrarySubscribe() {
           editItemIndex={editItemIndex}
         />
 
-        <List
-          css={css`
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+        <DndContext
+          modifiers={[restrictToFirstScrollableAncestor, restrictToVerticalAxis]}
+          onDragEnd={onDragEnd}
+        >
+          <SortableContext items={contextIds} strategy={verticalListSortingStrategy}>
+            <List
+              css={css`
+                height: 100%;
+                display: flex;
+                flex-direction: column;
 
-            .ant-list-header + div {
-              flex: 1;
-              overflow-y: overlay;
-              margin-right: 5px;
-              padding-right: 5px;
-            }
+                .ant-list-header + div {
+                  flex: 1;
+                  overflow-y: overlay;
+                  margin-right: 5px;
+                  padding-right: 5px;
+                }
 
-            .ant-descriptions-item-label,
-            .ant-descriptions-item-content {
-              padding: 8px 16px !important;
-            }
+                .ant-descriptions-item-label,
+                .ant-descriptions-item-content {
+                  padding: 8px 16px !important;
+                }
 
-            .ant-list-items {
-              padding-bottom: 40px;
-            }
-          `}
-          size='small'
-          header={
-            <div className='header' style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{ fontSize: '2em' }}>订阅管理</div>
-              <span>
-                {shouldShowNodefreeAddBtn && (
-                  <Button type='primary' onClick={addNodefree} style={{ marginRight: 5 }}>
-                    + nodefree
-                  </Button>
-                )}
-                <Button type='primary' onClick={add}>
-                  +
-                </Button>
-              </span>
-            </div>
-          }
-          bordered
-          dataSource={list}
-          renderItem={(item: Subscribe, index) => (
-            <SubscribeItem
-              key={item.id}
-              {...{
-                item,
-                index,
-                setEditItem,
-                setEditItemIndex,
-                setShowModal,
-              }}
+                .ant-list-items {
+                  padding-bottom: 40px;
+                }
+              `}
+              size='small'
+              header={
+                <div className='header' style={{ display: 'flex', alignItems: 'center' }}>
+                  <div style={{ fontSize: '2em' }}>订阅管理</div>
+                  <span>
+                    {shouldShowNodefreeAddBtn && (
+                      <Button type='primary' onClick={addNodefree} style={{ marginRight: 5 }}>
+                        + nodefree
+                      </Button>
+                    )}
+                    <Button type='primary' onClick={add}>
+                      +
+                    </Button>
+                  </span>
+                </div>
+              }
+              bordered
+              dataSource={list}
+              renderItem={(item: Subscribe, index) => (
+                <SubscribeItem
+                  key={item.id}
+                  {...{
+                    item,
+                    index,
+                    setEditItem,
+                    setEditItemIndex,
+                    setShowModal,
+                  }}
+                />
+              )}
             />
-          )}
-        />
+          </SortableContext>
+        </DndContext>
       </div>
     </div>
   )
@@ -192,6 +226,36 @@ function SubscribeItem({
   let { urlVisible } = item
   if (typeof urlVisible !== 'boolean') urlVisible = true
 
+  const {
+    //
+    setNodeRef,
+    setActivatorNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    active,
+    isDragging,
+    isSorting,
+  } = useSortable({ id: item.id })
+
+  const dragStyle: CSSProperties = {
+    transform: CSS.Transform.toString(
+      transform
+        ? {
+            ...transform,
+            scaleX: 1,
+            scaleY: 1,
+          }
+        : transform,
+    ),
+    transition,
+  }
+
+  const dragActiveStyle: CSSProperties | undefined = isDragging
+    ? { backgroundColor: '#eea' }
+    : undefined
+
   const edit = useMemoizedFn((item: Subscribe, index: number) => {
     setEditItem(item)
     setEditItemIndex(index)
@@ -205,7 +269,7 @@ function SubscribeItem({
 
   const disableEnterAsClick: KeyboardEventHandler = useCallback((e) => {
     // disable enter
-    if (e.keyCode === 13) {
+    if (e.which === 13) {
       e.preventDefault()
     }
   }, [])
@@ -236,14 +300,19 @@ function SubscribeItem({
 
   return (
     <List.Item
+      ref={setNodeRef}
+      style={{ ...dragStyle, ...dragActiveStyle }}
       css={css`
         .ant-list .ant-list-item& {
           display: flex;
           border-bottom: none;
-          margin-bottom: 10px;
+          padding: 0;
+          margin: var(--ant-list-item-padding-sm);
+          margin-block: 20px;
 
           .ant-descriptions-view {
             border-width: 2px;
+            position: relative;
           }
           &:hover {
             .ant-descriptions-view {
@@ -270,8 +339,26 @@ function SubscribeItem({
             {name}
             {remark && (
               <Tooltip
-                overlayStyle={{ maxWidth: '50vw', wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
-                title={renderMarkdown(remark)}
+                // open
+                overlayStyle={{ maxWidth: '50vw' }}
+                title={
+                  <MarkdownView
+                    css={css`
+                      line-height: 1.4;
+                      white-space: pre-line;
+                      word-wrap: break-word;
+
+                      p {
+                        margin-bottom: 5px;
+                      }
+                      p:last-child {
+                        margin-bottom: 0;
+                      }
+                    `}
+                  >
+                    {remark}
+                  </MarkdownView>
+                }
               >
                 <IconParkOutlineTips
                   {...size(16)}
@@ -284,6 +371,23 @@ function SubscribeItem({
             )}
           </div>
           {status[url] ? status[url] : null}
+
+          <span
+            css={css`
+              position: absolute;
+              color: #fff;
+              background-color: ${colorHighlightValue};
+              left: 5px;
+              top: 5px;
+              border-radius: 50%;
+              width: 20px;
+              height: 20px;
+              line-height: 20px;
+              text-align: center;
+            `}
+          >
+            {index + 1}
+          </span>
         </Descriptions.Item>
 
         {!!excludeKeywords?.length && (
@@ -306,7 +410,7 @@ function SubscribeItem({
                 }
               `}
             >
-              <Tooltip title='复制链接'>
+              <Tooltip title='复制链接' arrow={false}>
                 <IconParkOutlineCopy
                   {...size(20)}
                   css={css`
@@ -319,7 +423,7 @@ function SubscribeItem({
                 />
               </Tooltip>
 
-              <Tooltip title='「显示/隐藏」完整URL'>
+              <Tooltip title='「显示/隐藏」完整URL' arrow={false} align={{ offset: [0, -10] }}>
                 <span
                   css={css`
                     cursor: pointer;
@@ -368,7 +472,7 @@ function SubscribeItem({
         )}
 
         <Descriptions.Item label='操作'>
-          <Space style={{ alignSelf: 'flex-end' }}>
+          <Space style={{ alignSelf: 'flex-end' }} wrap>
             <Button
               type='primary'
               onClick={(e) => edit(item, index)}
@@ -411,6 +515,49 @@ function SubscribeItem({
                 <Button icon={<UnorderedListOutlined />}>查看链接列表</Button>
               </Popover>
             )}
+
+            {/* the drag handle */}
+            <div
+              className='drag-handle'
+              ref={setActivatorNodeRef}
+              {...attributes}
+              {...listeners}
+              css={css`
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                margin-left: 25px;
+                margin-right: 15px;
+                border-radius: 5px;
+                flex-shrink: 0;
+
+                cursor: grab;
+                &:hover {
+                  background-color: #eee;
+                }
+              `}
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                width='32'
+                height='32'
+                viewBox='0 0 15 15'
+                css={css`
+                  width: 20px;
+                  height: 20px;
+                `}
+              >
+                <path
+                  fill='#888888'
+                  fillRule='evenodd'
+                  d='M2.5 4.1a.4.4 0 1 0 0 .8h10a.4.4 0 0 0 0-.8h-10Zm0 2a.4.4 0 1 0 0 .8h10a.4.4 0 0 0 0-.8h-10Zm-.4 2.4c0-.22.18-.4.4-.4h10a.4.4 0 0 1 0 .8h-10a.4.4 0 0 1-.4-.4Zm.4 1.6a.4.4 0 0 0 0 .8h10a.4.4 0 0 0 0-.8h-10Z'
+                  clipRule='evenodd'
+                />
+              </svg>
+            </div>
           </Space>
         </Descriptions.Item>
       </Descriptions>
