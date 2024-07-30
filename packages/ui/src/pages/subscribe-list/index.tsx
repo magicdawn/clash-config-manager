@@ -1,10 +1,11 @@
 import { colorHighlightValue } from '$ui/common'
 import { Subscribe, SubscribeSpecialType } from '$ui/define'
+import { renderMarkdown } from '$ui/modules/markdown'
 import { message } from '$ui/store'
 import { EyeFilled, EyeInvisibleFilled, UnorderedListOutlined } from '@ant-design/icons'
 import { css } from '@emotion/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { FloatFormItem, FloatInput, FloatInputNumber, FloattingLabelBox } from 'ant-float-label'
+import { FloatInput, FloatInputNumber } from 'ant-float-label'
 import {
   Button,
   Checkbox,
@@ -269,11 +270,11 @@ function SubscribeItem({
             {name}
             {remark && (
               <Tooltip
-                title={remark}
                 overlayStyle={{ maxWidth: '50vw', wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
+                title={renderMarkdown(remark)}
               >
                 <IconParkOutlineTips
-                  {...size(20)}
+                  {...size(16)}
                   css={css`
                     margin-left: 5px;
                     cursor: pointer;
