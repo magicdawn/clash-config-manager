@@ -7,6 +7,7 @@ export default function Commands() {
   return (
     <CommandPalette
       ref={commandPaletteRef}
+      // @ts-ignore inaccurate definition
       commands={commands}
       trigger={<span></span>}
       resetInputOnClose

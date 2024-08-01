@@ -13,7 +13,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { css } from '@emotion/react'
-import { useMemoizedFn, useUpdateEffect } from 'ahooks'
+import { useMemoizedFn, useRequest, useUpdateEffect } from 'ahooks'
 import { FloatInput, FloatInputNumber } from 'ant-float-label'
 import {
   Button,
@@ -256,16 +256,18 @@ function SubscribeItem({
     ? { backgroundColor: '#eea' }
     : undefined
 
-  const edit = useMemoizedFn((item: Subscribe, index: number) => {
+  const handleEdit = useMemoizedFn(() => {
     setEditItem(item)
     setEditItemIndex(index)
     setShowModal(true)
   })
 
   // 手动点: 强制更新; 其他场景: 不强制更新
-  const update = useMemoizedFn((item) => {
-    actions.update({ url: item.url, forceUpdate: true })
-  })
+  const {
+    loading: updateLoading,
+    runAsync: handleUpdate,
+    error: updateError,
+  } = useRequest(() => actions.update({ url: item.url, forceUpdate: true }), { manual: true })
 
   const disableEnterAsClick: KeyboardEventHandler = useCallback((e) => {
     // disable enter
@@ -473,21 +475,42 @@ function SubscribeItem({
 
         <Descriptions.Item label='操作'>
           <Space style={{ alignSelf: 'flex-end' }} wrap>
-            <Button
-              type='primary'
-              onClick={(e) => edit(item, index)}
-              onKeyDown={disableEnterAsClick}
-            >
+            <Button type='primary' onClick={handleEdit} onKeyDown={disableEnterAsClick}>
               编辑
             </Button>
-            <Button type='primary' onClick={() => update(item)} onKeyDown={disableEnterAsClick}>
-              更新
-            </Button>
+
+            {!!updateError ? (
+              <Popover
+                placement='top'
+                title={<>update error: {updateError?.stack || updateError?.message}</>}
+              >
+                <Button
+                  type='primary'
+                  danger
+                  onClick={handleUpdate}
+                  loading={updateLoading}
+                  onKeyDown={disableEnterAsClick}
+                >
+                  更新
+                </Button>
+              </Popover>
+            ) : (
+              <Button
+                type='primary'
+                onClick={handleUpdate}
+                loading={updateLoading}
+                onKeyDown={disableEnterAsClick}
+              >
+                更新
+              </Button>
+            )}
+
             <Popconfirm title={'确认删除?'} onConfirm={() => actions.del(index)}>
               <Button danger onKeyDown={disableEnterAsClick}>
                 删除
               </Button>
             </Popconfirm>
+
             <Popover
               placement='top'
               title={`节点列表(${servers?.length})`}

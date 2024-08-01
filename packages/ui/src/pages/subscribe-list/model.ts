@@ -179,7 +179,7 @@ export async function update({
     try {
       ;({ servers, status } = await subscribeToClash({ url, forceUpdate }))
     } catch (e) {
-      message.error('更新订阅出错: \n' + e.stack || e)
+      message.error('更新订阅出错: \n' + e.stack || e, 10)
       throw e
     }
   }

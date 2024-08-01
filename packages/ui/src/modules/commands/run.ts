@@ -25,21 +25,19 @@ const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {
   await delay(100)
 
   let result: Awaited<ReturnType<typeof gen>> | undefined
-  let error: any
+  let err: any
   try {
     result = await gen({ forceUpdate })
   } catch (e) {
-    setTimeout(() => {
-      message.error('生成失败: ', e.message)
-    })
-    error = e
+    err = e
   } finally {
     clearTimeout(delayShowTimer)
     Loading.hide()
   }
 
-  if (error) {
-    console.error(error.stack || error)
+  if (err) {
+    console.error(err.stack || err)
+    message.error('生成失败: ' + err.message, 10)
     return
   }
 
@@ -60,6 +58,7 @@ const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {
 export const commands = [
   {
     key: 'generate',
+    color: 'green',
     category: '配置管理',
     name: '生成配置 (generate)',
     async command() {
@@ -69,6 +68,7 @@ export const commands = [
   },
   {
     key: 'generate-force-update',
+    color: 'green',
     category: '配置管理',
     name: '生成配置-强制更新 (generate forceUpdate)',
     async command() {
