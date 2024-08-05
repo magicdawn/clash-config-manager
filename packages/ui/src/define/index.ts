@@ -1,4 +1,10 @@
-export { ClashConfig } from './ClashConfig'
+export { type ClashConfig } from './ClashConfig'
+
+export enum EUaType {
+  Default = 'default',
+  Clash = 'clash',
+  ClashMeta = 'clash.meta',
+}
 
 export interface Subscribe<ExtData = any> {
   id: string
@@ -21,6 +27,9 @@ export interface Subscribe<ExtData = any> {
 
   // 备注, 支持 markdown
   remark?: string
+
+  // ua
+  ua?: EUaType
 
   // 扩展
   special?: boolean

@@ -1,5 +1,5 @@
 import { colorHighlightValue } from '$ui/common'
-import { Subscribe, SubscribeSpecialType } from '$ui/define'
+import { EUaType, Subscribe, SubscribeSpecialType } from '$ui/define'
 import { MarkdownView } from '$ui/modules/markdown'
 import { message } from '$ui/store'
 import { EyeFilled, EyeInvisibleFilled, UnorderedListOutlined } from '@ant-design/icons'
@@ -13,7 +13,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { css } from '@emotion/react'
-import { useMemoizedFn, useRequest, useUpdateEffect } from 'ahooks'
+import { useMemoizedFn, useRequest } from 'ahooks'
 import { FloatInput, FloatInputNumber } from 'ant-float-label'
 import {
   Button,
@@ -89,26 +89,38 @@ const S = {
 export default function LibrarySubscribe() {
   const { list } = useSnapshot(state)
 
-  const [showModal, setShowModal] = useState(false)
-  const [editItem, setEditItem] = useState<Subscribe | null>(null)
-  const [editItemIndex, setEditItemIndex] = useState<number | null>(null)
+  const [modalState, setModalState] = useState<ModalState>(() => ({ ...defaultModalState }))
 
-  const add = useMemoizedFn(() => {
-    setEditItem(null)
-    setEditItemIndex(null)
-    setShowModal(true)
-  })
+  const handleAdd = useCallback(() => {
+    setModalState({ ...defaultModalState, visible: true, id: modalSeq++, mode: 'add' })
+  }, [setModalState])
+
+  const handleEdit = useCallback(
+    (item: Subscribe, index: number) => {
+      setModalState({
+        visible: true,
+        id: modalSeq++,
+        mode: 'edit',
+        item,
+        index,
+      })
+    },
+    [setModalState],
+  )
 
   const shouldShowNodefreeAddBtn = !list.find((item) => item.specialType === 'nodefree')
 
-  const addNodefree = useMemoizedFn(() => {
+  const handleAddNodefree = useMemoizedFn(() => {
     if (!shouldShowNodefreeAddBtn) {
       throw new Error('unexpected case')
     }
-
-    setEditItem({ ...defaultNodefreeSubscribe })
-    setEditItemIndex(null)
-    setShowModal(true)
+    setModalState({
+      ...defaultModalState,
+      visible: true,
+      id: modalSeq++,
+      mode: 'add',
+      item: { ...defaultNodefreeSubscribe },
+    })
   })
 
   const contextIds = useMemo(() => list.map((item) => item.id), [list])
@@ -136,10 +148,15 @@ export default function LibrarySubscribe() {
         `}
       >
         <ModalAddOrEdit
-          visible={showModal}
-          setVisible={setShowModal}
-          editItem={editItem}
-          editItemIndex={editItemIndex}
+          key={'ModalAddOrEdit' + modalState.id} // re-create: by increase id; when item change;
+          visible={modalState.visible}
+          onClose={() =>
+            setModalState((cur) => {
+              // reset everything except id
+              return { ...defaultModalState, id: cur.id }
+            })
+          }
+          modalState={modalState}
         />
 
         <DndContext
@@ -175,11 +192,11 @@ export default function LibrarySubscribe() {
                   <div style={{ fontSize: '2em' }}>订阅管理</div>
                   <span>
                     {shouldShowNodefreeAddBtn && (
-                      <Button type='primary' onClick={addNodefree} style={{ marginRight: 5 }}>
+                      <Button type='primary' onClick={handleAddNodefree} style={{ marginRight: 5 }}>
                         + nodefree
                       </Button>
                     )}
-                    <Button type='primary' onClick={add}>
+                    <Button type='primary' onClick={handleAdd}>
                       +
                     </Button>
                   </span>
@@ -190,13 +207,9 @@ export default function LibrarySubscribe() {
               renderItem={(item: Subscribe, index) => (
                 <SubscribeItem
                   key={item.id}
-                  {...{
-                    item,
-                    index,
-                    setEditItem,
-                    setEditItemIndex,
-                    setShowModal,
-                  }}
+                  item={item}
+                  index={index}
+                  onEdit={() => handleEdit(item, index)}
                 />
               )}
             />
@@ -210,15 +223,11 @@ export default function LibrarySubscribe() {
 function SubscribeItem({
   item,
   index,
-  setEditItem,
-  setEditItemIndex,
-  setShowModal,
+  onEdit,
 }: {
   item: Subscribe
   index: number
-  setEditItem: (item: Subscribe | null) => void
-  setEditItemIndex: (index: number | null) => void
-  setShowModal: (val: boolean) => void
+  onEdit?: (item: Subscribe, index: number) => void
 }) {
   const { status, detail } = useSnapshot(state)
 
@@ -255,12 +264,6 @@ function SubscribeItem({
   const dragActiveStyle: CSSProperties | undefined = isDragging
     ? { backgroundColor: '#eea' }
     : undefined
-
-  const handleEdit = useMemoizedFn(() => {
-    setEditItem(item)
-    setEditItemIndex(index)
-    setShowModal(true)
-  })
 
   // 手动点: 强制更新; 其他场景: 不强制更新
   const {
@@ -475,7 +478,11 @@ function SubscribeItem({
 
         <Descriptions.Item label='操作'>
           <Space style={{ alignSelf: 'flex-end' }} wrap>
-            <Button type='primary' onClick={handleEdit} onKeyDown={disableEnterAsClick}>
+            <Button
+              type='primary'
+              onClick={() => onEdit?.(item, index)}
+              onKeyDown={disableEnterAsClick}
+            >
               编辑
             </Button>
 
@@ -588,17 +595,36 @@ function SubscribeItem({
   )
 }
 
+type ModalState = {
+  id: number
+  visible: boolean
+  mode: 'add' | 'edit'
+  item: Subscribe | null
+  index: number | null
+}
+
+let modalSeq = 0
+const defaultModalState: ModalState = {
+  id: modalSeq++,
+  visible: false,
+  mode: 'add',
+  item: null,
+  index: null,
+}
+
 function ModalAddOrEdit({
   visible,
-  setVisible,
-  editItem,
-  editItemIndex,
+  onClose,
+  modalState,
 }: {
   visible: boolean
-  setVisible: (visible: boolean) => void
-  editItem?: Subscribe | null
-  editItemIndex?: number | null
+  onClose: () => void
+  modalState: ModalState
 }) {
+  const editItem = modalState.item
+  const editItemIndex = modalState.index
+  const mode = modalState.mode
+
   const [url, setUrl] = useState(editItem?.url || '')
   const [name, setName] = useState(editItem?.name || '')
   const [id, setId] = useState(editItem?.id || crypto.randomUUID())
@@ -606,6 +632,7 @@ function ModalAddOrEdit({
   const [autoUpdate, setAutoUpdate] = useState(true)
   const [addPrefixToProxies, setAddPrefixToProxies] = useState<boolean | undefined>()
   const [remark, setRemark] = useState(editItem?.remark)
+  const [ua, setUa] = useState<EUaType | undefined>(editItem?.ua)
 
   const [special, setSpecial] = useState<boolean | undefined>(undefined)
   const [specialType, setSpecialType] = useState<SubscribeSpecialType | undefined>(undefined)
@@ -618,36 +645,6 @@ function ModalAddOrEdit({
   const [autoUpdateInterval, setAutoUpdateInterval] = useState(
     () => editItem?.autoUpdateInterval || autoUpdateIntervalDefault,
   ) // 小时
-
-  useUpdateEffect(() => {
-    setUrl(editItem?.url || '')
-    setName(editItem?.name || '')
-    setId(editItem?.id || crypto.randomUUID())
-    setExcludeKeywords(editItem?.excludeKeywords || [])
-    setAutoUpdate(editItem?.autoUpdate ?? true)
-    setAutoUpdateInterval(editItem?.autoUpdateInterval || autoUpdateIntervalDefault)
-    setAddPrefixToProxies(editItem?.addPrefixToProxies)
-    setRemark(editItem?.remark || '')
-
-    if (editItem?.special && editItem.specialType === 'nodefree') {
-      setSpecial(editItem.special)
-      setSpecialType(editItem.specialType)
-      setSpecialData(editItem.specialData)
-    }
-  }, [editItem, visible])
-
-  const clean = () => {
-    setUrl('')
-    setName('')
-    setId('')
-    setExcludeKeywords([])
-    setAutoUpdate(true)
-    setAutoUpdateInterval(autoUpdateIntervalDefault)
-    setSpecial(undefined)
-    setSpecialType(undefined)
-    setSpecialData(undefined)
-    setRemark(undefined)
-  }
 
   type OnChange = ChangeEventHandler<HTMLInputElement>
   const onUrlChange: OnChange = useCallback((e) => {
@@ -675,8 +672,7 @@ function ModalAddOrEdit({
 
   /* #region form complete */
   const handleCancel = useCallback(() => {
-    setVisible(false)
-    clean()
+    onClose()
   }, [])
 
   const handleOk = useMemoizedFn((e) => {
@@ -692,8 +688,6 @@ function ModalAddOrEdit({
       return message.error(err)
     }
 
-    const mode = typeof editItemIndex === 'number' ? 'edit' : 'add'
-
     let subscribeItem: Subscribe = {
       url,
       name,
@@ -703,6 +697,7 @@ function ModalAddOrEdit({
       autoUpdateInterval,
       addPrefixToProxies,
       remark,
+      ua,
     }
     if (special && specialType && specialData) {
       subscribeItem = { ...subscribeItem, special, specialType, specialData }
@@ -714,8 +709,7 @@ function ModalAddOrEdit({
       actions.edit({ ...editItem, ...subscribeItem, editItemIndex: editItemIndex! })
     }
 
-    setVisible(false)
-    clean()
+    onClose()
   })
   /* #endregion */
 
@@ -723,7 +717,7 @@ function ModalAddOrEdit({
     <Modal
       css={S.modal}
       styles={{ body: { paddingTop: 10 } }}
-      title={editItem?.name ? '编辑' : '添加'}
+      title={mode === 'edit' ? '编辑' : '添加'}
       open={visible}
       onOk={handleOk}
       onCancel={handleCancel}
@@ -736,10 +730,11 @@ function ModalAddOrEdit({
             // rootClassName='input-row'
             // className='input-row'
             size='large'
-            placeholder='名称'
+            placeholder='名称 * '
             value={name}
             onChange={onNameChange}
             onPressEnter={handleOk}
+            // required
           />
 
           {specialType === 'nodefree' ? (
@@ -760,16 +755,17 @@ function ModalAddOrEdit({
               // className='input-row'
               size='large'
               hidden={specialType === 'nodefree'}
-              placeholder='订阅链接'
+              placeholder='订阅链接 * '
               value={url}
               onChange={onUrlChange}
               onPressEnter={handleOk}
+              // required
               // prefix={<label className='label'>订阅链接:</label>}
             />
           )}
         </Flex>
 
-        {/* 所有的勾选项, 间距要小一点 */}
+        {/* ALL checkbox & select , 间距要小一点 */}
         <Flex vertical gap={5}>
           <Flex align='center' gap={5}>
             <Checkbox
@@ -798,6 +794,22 @@ function ModalAddOrEdit({
           <Checkbox checked={addPrefixToProxies} onChange={onAddPrefixToProxiesChange}>
             将订阅名添加为节点前缀
           </Checkbox>
+
+          <Flex align='center' gap={15}>
+            User-Agent
+            <Select<EUaType>
+              css={css`
+                min-width: 120px;
+              `}
+              allowClear
+              placeholder='User-Agent'
+              value={ua}
+              onChange={(val) => setUa(val)}
+              options={Object.values(EUaType).map((v) => {
+                return { label: v, value: v }
+              })}
+            />
+          </Flex>
         </Flex>
 
         <div>
@@ -818,6 +830,9 @@ function ModalAddOrEdit({
             autoSize={{ minRows: 2, maxRows: 8 }}
             value={remark}
             onChange={onRemarkChange}
+            css={css`
+              word-break: break-all;
+            `}
           />
         </div>
       </Space>

@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { md5 } from '$clash-utils'
-import { ClashConfig } from '$ui/define'
+import { ClashConfig, EUaType } from '$ui/define'
 import bytes from 'bytes'
 import envPaths from 'env-paths'
 import fse from 'fs-extra'
@@ -14,14 +14,24 @@ const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 export async function subscribeToClash({
   url,
   forceUpdate,
+  ua,
 }: {
   url: string
   forceUpdate: boolean
+  ua?: EUaType
 }) {
-  return urlToSubscribe({ url, forceUpdate })
+  return urlToSubscribe({ url, forceUpdate, ua })
 }
 
-async function urlToSubscribe({ url, forceUpdate: force }: { url: string; forceUpdate: boolean }) {
+async function urlToSubscribe({
+  url,
+  forceUpdate: force,
+  ua,
+}: {
+  url: string
+  forceUpdate: boolean
+  ua?: EUaType
+}) {
   const file = path.join(appCacheDir, 'readUrl', md5(url))
 
   let shouldReuse = false
@@ -46,7 +56,7 @@ async function urlToSubscribe({ url, forceUpdate: force }: { url: string; forceU
   if (shouldReuse) {
     text = await fse.readFile(file, 'utf8')
   } else {
-    ;({ text, valuableHeaders } = await readUrl({ url, file }))
+    ;({ text, valuableHeaders } = await readUrl({ url, file, ua }))
     if (valuableHeaders?.['subscription-userinfo']) {
       const val = valuableHeaders['subscription-userinfo']
       status = subscriptionUserinfoToStatus(val)
@@ -64,15 +74,25 @@ async function urlToSubscribe({ url, forceUpdate: force }: { url: string; forceU
   return { servers, status }
 }
 
-const readUrl = async ({ url, file }: { url: string; file: string }) => {
+const readUrl = async ({ url, file, ua }: { url: string; file: string; ua?: EUaType }) => {
+  /**
+   * user-agent matters
+   * @see https://github.com/tindy2013/subconverter/blob/d47b8868e5a235ee99f07a0dece8f237d90109c8/src/handler/interfaces.cpp#L64
+   */
+
+  // 'user-agent': 'electron',
+  // 'user-agent': 'Shadowrocket',
+  // 'user-agent': 'Quantumult',
+
+  let userAgent = 'ClashX'
+  if (ua && ua !== EUaType.Default) {
+    userAgent = ua
+  }
+
   const res = await ky.get(url, {
     headers: {
-      // https://github.com/tindy2013/subconverter/blob/d47b8868e5a235ee99f07a0dece8f237d90109c8/src/handler/interfaces.cpp#L64
       'x-extra-headers': JSON.stringify({
-        // 'user-agent': 'electron',
-        // 'user-agent': 'Shadowrocket',
-        // 'user-agent': 'Quantumult',
-        'user-agent': 'ClashX',
+        'user-agent': userAgent,
       }),
     },
   })

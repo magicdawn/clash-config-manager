@@ -132,7 +132,11 @@ export async function update({
           let currentServers: ClashProxyItem[] = []
           let err: Error | undefined
           try {
-            ;({ servers: currentServers } = await subscribeToClash({ url, forceUpdate }))
+            ;({ servers: currentServers } = await subscribeToClash({
+              url,
+              forceUpdate,
+              ua: currentSubscribe.ua,
+            }))
           } catch (e) {
             err = e
           }
@@ -177,7 +181,7 @@ export async function update({
   // normal
   else {
     try {
-      ;({ servers, status } = await subscribeToClash({ url, forceUpdate }))
+      ;({ servers, status } = await subscribeToClash({ url, forceUpdate, ua: currentSubscribe.ua }))
     } catch (e) {
       message.error('更新订阅出错: \n' + e.stack || e, 10)
       throw e
