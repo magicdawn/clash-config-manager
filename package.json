@@ -42,27 +42,27 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@magicdawn/prettier-config": "^0.0.4",
-    "@swc/core": "^1.7.14",
-    "@swc/helpers": "^0.5.12",
-    "@total-typescript/ts-reset": "^0.5.1",
+    "@swc/core": "^1.7.26",
+    "@swc/helpers": "^0.5.13",
+    "@total-typescript/ts-reset": "^0.6.1",
     "@types/fancy-log": "^2.0.2",
     "@types/fs-extra": "^11.0.4",
     "@types/jake": "^0.0.36",
     "@types/lodash": "^4.17.7",
-    "@types/node": "^20.16.1",
+    "@types/node": "^20.16.5",
     "@types/prettier": "2.7.3",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "concurrently": "^8.2.2",
-    "electron": "31.4",
+    "electron": "31.6",
     "electron-builder": "^24.13.3",
-    "eslint": "^9.9.0",
+    "eslint": "^9.10.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react": "^7.36.1",
     "fancy-log": "^2.0.0",
     "fast-glob": "^3.3.2",
     "fs-extra": "^11.2.0",
-    "husky": "^9.1.5",
+    "husky": "^9.1.6",
     "jake": "^10.9.2",
     "lint-staged": "^15",
     "minimist": "^1.2.8",
@@ -71,22 +71,20 @@
     "prettier": "^3.3.3",
     "prettier-plugin-organize-imports": "^3.2.4",
     "ts-node": "^10.9.2",
-    "tsx": "^4.17.0",
-    "turbo": "^2.0.14",
-    "type-fest": "^4.25.0",
-    "typescript": "^5.5.4",
+    "tsx": "^4.19.1",
+    "turbo": "^2.1.2",
+    "type-fest": "^4.26.1",
+    "typescript": "^5.6.2",
     "typescript-plugin-css-modules": "^5.1.0",
-    "unplugin-icons": "^0.19.2"
+    "unplugin-icons": "^0.19.3"
   },
   "lint-staged": {
     "**/*": [
       "prettier --write --ignore-unknown"
     ]
   },
-  "packageManager": "pnpm@9.7.1+sha512.faf344af2d6ca65c4c5c8c2224ea77a81a5e8859cbc4e06b1511ddce2f0151512431dd19e6aff31f2c6a8f5f2aced9bd2273e1fed7dd4de1868984059d2c4247",
+  "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c",
   "pnpm": {
-    "patchedDependencies": {
-      "ant-float-label@1.1.0": "patches/ant-float-label@1.1.0.patch"
-    }
+    "patchedDependencies": {}
   }
 }

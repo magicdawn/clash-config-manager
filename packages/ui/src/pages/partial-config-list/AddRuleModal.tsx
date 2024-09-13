@@ -7,12 +7,14 @@ import AppleScript from 'applescript'
 import { clipboard } from 'electron'
 import Yaml from 'js-yaml'
 import { uniq } from 'lodash'
+import { size } from 'polished'
 import pify from 'promise.ify'
 import { tryit } from 'radash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { tldExists } from 'tldjs'
 import URI from 'urijs'
 import { useSnapshot } from 'valtio'
+import LineMdConfirm from '~icons/line-md/confirm'
 import { state } from './model'
 
 const { Option } = Select
@@ -293,13 +295,12 @@ export default function AddRuleModal(props: IProps) {
                 {ruleList.map((t) => {
                   const active = t.id === ruleId
 
-                  const ribbonTop = 15
-
                   return (
                     <div
                       className='option'
                       key={t.id}
                       data-value={t.id}
+                      onClick={(e) => setRuleId(t.id)}
                       css={[
                         css`
                           position: relative;
@@ -321,36 +322,23 @@ export default function AddRuleModal(props: IProps) {
                         `,
                         active &&
                           css`
-                            /* background-color: var(--ant-color-primary); */
-                            /* color: #fff; */
+                            transition-property: background-color, color;
+                            transition-duration: 0.3s;
+                            transition-timing-function: ease-in-out;
 
-                            background-color: antiquewhite;
-                            .dark-theme & {
-                              background-color: antiquewhite;
-                              color: #000;
-                            }
+                            background-color: var(--ant-color-primary);
+                            color: #fff;
                           `,
                       ]}
-                      onClick={(e) => setRuleId(t.id)}
                     >
                       {active && (
-                        <div
-                          className='ribbon'
+                        <LineMdConfirm
+                          {...size(20)}
                           css={css`
-                            position: absolute;
-                            top: ${ribbonTop}px;
-                            left: -${ribbonTop}px;
-
-                            width: 100px;
-                            height: 10px;
-                            background-color: var(--ant-color-primary);
-
-                            transform-origin: ${ribbonTop}px top;
-                            transform: rotate(-45deg);
+                            margin-right: 5px;
                           `}
                         />
                       )}
-
                       {t.name}
                     </div>
                   )
