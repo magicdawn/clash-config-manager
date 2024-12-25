@@ -9,5 +9,11 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "**/node_modules": false
+  },
+  "typescript.preferences.organizeImports": {
+    "typeOrder": "last"
+  },
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
   }
 }
