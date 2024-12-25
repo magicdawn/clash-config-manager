@@ -627,10 +627,9 @@ function ModalAddOrEdit({
 
   const [url, setUrl] = useState(editItem?.url || '')
   const [name, setName] = useState(editItem?.name || '')
-  const [id, setId] = useState(editItem?.id || crypto.randomUUID())
   const [excludeKeywords, setExcludeKeywords] = useState(editItem?.excludeKeywords || [])
-  const [autoUpdate, setAutoUpdate] = useState(true)
-  const [addPrefixToProxies, setAddPrefixToProxies] = useState<boolean | undefined>()
+  const [autoUpdate, setAutoUpdate] = useState(editItem?.autoUpdate)
+  const [addPrefixToProxies, setAddPrefixToProxies] = useState(editItem?.addPrefixToProxies)
   const [remark, setRemark] = useState(editItem?.remark)
   const [ua, setUa] = useState<EUaType | undefined>(editItem?.ua)
 
@@ -670,7 +669,7 @@ function ModalAddOrEdit({
     setAddPrefixToProxies(e.target.checked)
   })
 
-  /* #region form complete */
+  /* #region submit or cancel */
   const handleCancel = useCallback(() => {
     onClose()
   }, [])
@@ -691,7 +690,7 @@ function ModalAddOrEdit({
     let subscribeItem: Subscribe = {
       url,
       name,
-      id,
+      id: editItem?.id ?? crypto.randomUUID(),
       excludeKeywords,
       autoUpdate,
       autoUpdateInterval,
