@@ -1,20 +1,20 @@
-import { ComponentType } from 'react'
+import { type ComponentType } from 'react'
 import { createRoot } from 'react-dom/client'
 import { proxy, useSnapshot } from 'valtio'
 
 export function wrapComponent<IProps extends object>({
-  component,
+  C,
   defaultProps,
 }: {
-  component: ComponentType<IProps>
+  C: ComponentType<IProps>
   defaultProps: IProps
 }) {
   const proxyProps = proxy<IProps>(defaultProps)
 
-  const C = component
-
   function WrappedComponent() {
     const props = useSnapshot(proxyProps)
+    // https://github.com/emotion-js/emotion/issues/3245
+    // @ts-ignore
     return <C {...props} />
   }
 

@@ -1,5 +1,5 @@
-import _ from 'lodash'
-import { proxy, subscribe } from 'valtio'
+import { cloneDeep } from 'es-toolkit'
+import { proxy, snapshot, subscribe } from 'valtio'
 
 export type Options<State> = {
   persist?: (state: State) => void
@@ -14,7 +14,7 @@ export function valtioState<State extends object>(initial: State, options?: Opti
   }
 
   function persist() {
-    const data = _.cloneDeep(state) // prevent modification in `persist` cause `persist` again, infinite loop
+    const data = cloneDeep(snapshot(state)) as State // prevent modification in `persist` cause `persist` again, infinite loop
     options?.persist?.(data)
   }
 

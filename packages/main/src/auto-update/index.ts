@@ -3,7 +3,7 @@ import debugFactory from 'debug'
 import electronLog from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 import { isDev } from 'electron-util/main'
-import _ from 'lodash'
+import { throttle } from 'es-toolkit'
 import ms from 'ms'
 import setMenu from '../menu'
 
@@ -40,7 +40,7 @@ const menuItem = {
 
 export let updateMenuItem = menuItem.check
 
-const setDownloadingMenu = _.throttle((progressObj) => {
+const setDownloadingMenu = throttle((progressObj) => {
   const { bytesPerSecond, percent, total, transferred } = progressObj
 
   const currentMenuItem = {

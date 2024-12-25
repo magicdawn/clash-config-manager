@@ -6,7 +6,7 @@ import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space } from 'ant
 import AppleScript from 'applescript'
 import { clipboard } from 'electron'
 import Yaml from 'js-yaml'
-import { uniq } from 'lodash'
+import { uniq } from 'es-toolkit'
 import { size } from 'polished'
 import pify from 'promise.ify'
 import { tryit } from 'radash'

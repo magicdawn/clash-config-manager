@@ -1,5 +1,6 @@
 import { type StorageData } from '$ui/storage'
-import _, { cloneDeep, omit } from 'lodash'
+import { cloneDeep, merge, omit } from 'es-toolkit'
+import { pick } from 'es-toolkit/compat'
 import { keysToOmit } from './config'
 
 export function customMerge(baseData: StorageData, importData: Partial<StorageData>) {
@@ -10,7 +11,8 @@ export function customMerge(baseData: StorageData, importData: Partial<StorageDa
 
   // 'current_config_v2.name',
   // 'preference',
-  _.merge(baseData, _.pick(importData, ['current_config_v2.name', 'preference']))
+  // TODO: check migration from lodash -> es-toolkit works
+  merge(baseData, pick(importData, ['current_config_v2.name', 'preference']))
 
   // subscribe_list & rule_list
   // if id match, assign & overwrite

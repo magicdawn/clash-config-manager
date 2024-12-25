@@ -3,12 +3,13 @@ import { ProxyGroupType, ProxyGroupTypeConfig } from '$ui/define/ClashConfig'
 import { YAML, pmap } from '$ui/libs'
 import { rootActions, rootState } from '$ui/store'
 import fse from 'fs-extra'
-import _ from 'lodash'
+
 import moment from 'moment'
 import { homedir } from 'os'
 import { join as pathjoin } from 'path'
 import { getRuleItemContent } from './remote-rules'
 import { truthy } from './ts-filter'
+import { omit } from 'es-toolkit'
 
 export function getUsingItems() {
   // subscribe
@@ -75,7 +76,7 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
     const arrayValuedKeys: ClashConfigKeysWithArrayValue[] = ['rules', 'proxies', 'proxy-groups']
 
     config = {
-      ..._.omit(partial, arrayValuedKeys),
+      ...omit(partial, arrayValuedKeys),
       ...config, // GUI最前面的优先
     }
 

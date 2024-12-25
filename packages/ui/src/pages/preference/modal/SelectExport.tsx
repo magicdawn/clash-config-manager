@@ -3,7 +3,8 @@ import { ExportData, storageDataDisplayNames } from '$ui/storage'
 import { truthy } from '$ui/utility/ts-filter'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Modal, Tree } from 'antd'
-import _ from 'lodash'
+import { cloneDeep, pick } from 'es-toolkit'
+
 import { useCallback, useState } from 'react'
 import { Merge } from 'type-fest'
 import { proxy, useSnapshot } from 'valtio'
@@ -207,7 +208,7 @@ type PickupDataExtended = Merge<
 >
 
 export async function pickDataFrom(dataFrom: any) {
-  const treeSource = _.cloneDeep(dataFrom) as Partial<PickupDataExtended>
+  const treeSource = cloneDeep(dataFrom) as Partial<PickupDataExtended>
 
   // current_config_v2 添加 name 字段
   if (treeSource?.current_config_v2?.list) {
@@ -234,7 +235,7 @@ export async function pickDataFrom(dataFrom: any) {
   }
 
   // sleect
-  const data = _.pick(dataFrom, keys)
+  const data = pick(dataFrom, keys)
 
   // clean
   clean(data)

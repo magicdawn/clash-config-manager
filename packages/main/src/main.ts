@@ -1,7 +1,6 @@
 import * as remoteMain from '@electron/remote/main'
 import { app, BrowserWindow, Menu, session, shell, Tray } from 'electron'
 import { is } from 'electron-util'
-import _ from 'lodash'
 import path from 'path'
 import { load as loadDevExt } from './dev/ext'
 import './init/meta'
@@ -9,6 +8,7 @@ import { loadWindowState, saveWindowState } from './initWindowState'
 import { assetsDir } from './ipc/common'
 import './ipc/index'
 import setMenu from './menu'
+import { throttle } from 'es-toolkit'
 
 // Prevent window from being garbage collected
 export let mainWindow: BrowserWindow
@@ -97,7 +97,7 @@ const createMainWindow = async () => {
   ;(win as any).stopPreventClose = stopPreventClose
   app.on('before-quit', stopPreventClose)
 
-  const saveWindowStateHandler = _.throttle(() => {
+  const saveWindowStateHandler = throttle(() => {
     const bounds = mainWindow?.getBounds()
     if (!bounds) return
     saveWindowState({ bounds })

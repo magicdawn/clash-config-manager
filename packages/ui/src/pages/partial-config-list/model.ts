@@ -4,7 +4,6 @@ import storage from '$ui/storage'
 import { message } from '$ui/store'
 import { updateRemoteConfig } from '$ui/utility/remote-rules'
 import { valtioState } from '$ui/utility/valtio-helper'
-import _ from 'lodash'
 import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './model.auto-update'
 
 const RULE_LIST_STORAGE_KEY = 'rule_list'
@@ -75,15 +74,15 @@ function check({
 }) {
   let { list } = state
   if (editItemIndex || editItemIndex === 0) {
-    list = _.filter(list, (i, index) => index !== editItemIndex)
+    list = list.filter((i, index) => index !== editItemIndex)
   }
 
   const { type, name } = item
-  if (_.find(list, { name })) {
+  if (list.find((x) => x.name === name)) {
     return 'name已存在'
   }
   if (type === 'remote') {
-    if (_.find(list, { url: item.url })) {
+    if (list.find((x) => 'url' in x && x.url === item.url)) {
       return 'url已存在'
     }
   }

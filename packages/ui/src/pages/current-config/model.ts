@@ -1,9 +1,9 @@
 import { __DEV__ } from '$ui/common'
 import { ConfigItem, RuleItem, Subscribe } from '$ui/define'
 import { onInit, onReload } from '$ui/modules/global-model'
-import storage from '$ui/storage'
+import storage, { type StorageData } from '$ui/storage'
 import { valtioState } from '$ui/utility/valtio-helper'
-import _ from 'lodash'
+import { pick } from 'es-toolkit'
 
 const CURRENT_CONFIG_STORAGE_KEY = 'current_config_v2'
 
@@ -27,7 +27,7 @@ const defaultState: IState = {
   generatedGroupNameEmoji: true,
 }
 
-const allowedKeys = Object.keys(defaultState)
+const allowedKeys = Object.keys(defaultState) as (keyof IState)[]
 
 const { state, load, init } = valtioState<IState>(
   { ...defaultState },
@@ -35,7 +35,10 @@ const { state, load, init } = valtioState<IState>(
     load() {
       return {
         ...defaultState,
-        ..._.pick(storage.get(CURRENT_CONFIG_STORAGE_KEY), allowedKeys),
+        ...pick(
+          storage.get(CURRENT_CONFIG_STORAGE_KEY),
+          allowedKeys as (keyof StorageData['current_config_v2'])[],
+        ),
       }
     },
     persist(val) {
@@ -46,7 +49,7 @@ const { state, load, init } = valtioState<IState>(
         }
       }
 
-      storage.set(CURRENT_CONFIG_STORAGE_KEY, _.pick(val, allowedKeys))
+      storage.set(CURRENT_CONFIG_STORAGE_KEY, pick(val, allowedKeys))
     },
   },
 )

@@ -11,7 +11,6 @@ import './modules/code-editor/monaco'
 // deps
 import '@total-typescript/ts-reset'
 import { MenuProps } from 'antd'
-import _ from 'lodash'
 import { size } from 'polished'
 import { createRoot } from 'react-dom/client'
 import {
@@ -35,6 +34,7 @@ import LibraryRuleList from './pages/partial-config-list'
 import Preference from './pages/preference'
 import LibrarySubscribe from './pages/subscribe-list'
 import { routeTitles } from './storage'
+import { trimStart } from 'es-toolkit'
 
 const routes = [
   {
@@ -72,7 +72,7 @@ routes.forEach((r) => {
   r.title ||= routeTitles[r.path.slice(1)]
 })
 
-const getKey = (s: string) => _.trimStart(s, '/') || 'home'
+const getKey = (s: string) => trimStart(s, '/') || 'home'
 const menuItems: MenuProps['items'] = routes.map(({ title, path, icon }) => {
   return {
     key: getKey(path),

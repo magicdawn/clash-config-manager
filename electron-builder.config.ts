@@ -1,6 +1,6 @@
 import { execSync } from 'child_process'
 import { type Configuration } from 'electron-builder'
-import { once } from 'lodash'
+import { once } from 'es-toolkit'
 import pkg from './package.json'
 
 function defineConfig(config: Configuration) {

@@ -5,7 +5,7 @@ import storage from '$ui/storage'
 import { message } from '$ui/store'
 import { subscribeToClash } from '$ui/utility/subscribe'
 import { valtioState } from '$ui/utility/valtio-helper'
-import { find, isEqual, pick, uniqWith } from 'lodash'
+import { isEqual, pick, uniqWith } from 'es-toolkit'
 import { ref } from 'valtio'
 import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './model.auto-update'
 import { nodefreeGetUrls } from './special/nodefree'
@@ -72,10 +72,10 @@ function check(payload: { url: string; name: string; editItemIndex?: number | nu
   if (editItemIndex || editItemIndex === 0) {
     list = state.list.filter((i, index) => index !== editItemIndex)
   }
-  if (find(list, { url })) {
+  if (list.find((x) => x.url === url)) {
     return 'url已存在'
   }
-  if (find(list, { name })) {
+  if (list.find((x) => x.name === name)) {
     return 'name已存在'
   }
 }

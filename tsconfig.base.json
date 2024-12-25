@@ -8,6 +8,11 @@
     "lib": ["ESNext", "DOM"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
+
+    // TODO:
+    // make strict
+    // "verbatimModuleSyntax": true,
+
     "strict": false,
     "strictNullChecks": true,
     "experimentalDecorators": true,

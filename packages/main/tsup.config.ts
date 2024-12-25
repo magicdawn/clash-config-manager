@@ -1,10 +1,9 @@
 import { randomUUID } from 'crypto'
-import _ from 'lodash'
+import { camelCase } from 'es-toolkit'
 import { builtinModules } from 'module'
 import path from 'path'
 import { defineConfig } from 'tsup'
 
-const { camelCase } = _
 const env = process.env.NODE_ENV || 'development'
 const REPO_ROOT = path.join(import.meta.dirname, '../../')
 

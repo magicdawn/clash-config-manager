@@ -4,7 +4,7 @@
 
 import { RuleItem } from '$ui/define'
 import { runGenerate } from '$ui/modules/commands/run'
-import { debounce, DebouncedFunc, once } from 'lodash'
+import { debounce, once, type DebouncedFunction } from 'es-toolkit'
 import ms from 'ms'
 import { currentConfigUsingAndEnabled } from '../current-config/model'
 import { state, updateRemote } from './model'
@@ -33,7 +33,7 @@ export async function stopAutoUpdate(item: RuleItem) {
 }
 
 // 循环引用, runGenerate 不能立刻引用
-let fn: DebouncedFunc<typeof runGenerate>
+let fn: DebouncedFunction<typeof runGenerate>
 function runGenerateDebounced() {
   if (!fn) fn = debounce(runGenerate, ms('30s'))
   fn()

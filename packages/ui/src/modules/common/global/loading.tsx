@@ -1,10 +1,10 @@
 import { Modal } from 'antd'
-import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import PacmanLoader from 'react-spinners/PacmanLoader'
 import { type IterableElement } from 'type-fest'
 import styles from './loading.module.less'
 import { wrapComponent } from './wrapComponent'
+import { randomInt } from 'es-toolkit'
 
 const colors = [
   'orange',
@@ -18,7 +18,7 @@ function Loading({ visible }: { visible: boolean }) {
 
   useEffect(() => {
     if (visible) {
-      const newColor = colors[_.random(0, colors.length - 1)]
+      const newColor = colors[randomInt(colors.length)]
       setColor(newColor)
     }
   }, [visible])
@@ -39,7 +39,7 @@ function Loading({ visible }: { visible: boolean }) {
 }
 
 const { WrappedComponent, proxyProps, wrapAction } = wrapComponent({
-  component: Loading,
+  C: Loading,
   defaultProps: { visible: false },
 })
 
