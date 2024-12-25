@@ -4,9 +4,8 @@ import { truthy } from '$ui/utility/ts-filter'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Modal, Tree, type TreeProps } from 'antd'
 import { cloneDeep, pick } from 'es-toolkit'
-
 import { useCallback, useState, type Key } from 'react'
-import { type Merge } from 'type-fest'
+import type { Merge } from 'type-fest'
 import { proxy, useSnapshot } from 'valtio'
 
 type SelectExportProps = {

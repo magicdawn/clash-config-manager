@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import { useEffect, useState } from 'react'
 import PacmanLoader from 'react-spinners/PacmanLoader'
-import { type IterableElement } from 'type-fest'
+import type { IterableElement } from 'type-fest'
 import styles from './loading.module.less'
 import { wrapComponent } from './wrapComponent'
 import { randomInt } from 'es-toolkit'
