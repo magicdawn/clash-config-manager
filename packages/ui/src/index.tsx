@@ -4,6 +4,7 @@
 import '@icon-park/react/styles/index.css'
 import 'antd/dist/reset.css'
 import './index.less'
+import 'virtual:uno.css'
 
 // monaco setup
 import './modules/code-editor/monaco'

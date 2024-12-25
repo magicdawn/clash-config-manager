@@ -247,3 +247,35 @@ function toggleUrlVisible(index: number) {
   const cur = state.list[index]?.urlVisible ?? true
   state.list[index].urlVisible = !cur
 }
+
+export const SubConverterServiceUrls = ['https://api.ytools.cc/sub']
+
+export function getConvertedUrl(sub: string, converter: string) {
+  const subUrlJoined = sub
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line && !(line.startsWith('#') || line.startsWith(';')))
+    .join('|')
+  const params = new URLSearchParams({
+    // TODO: figure out these fields means
+    target: 'clash',
+    insert: 'false',
+    config:
+      'https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Full_NoAuto.ini',
+    append_type: 'true',
+    emoji: 'true',
+    list: 'true',
+    xudp: 'false',
+    udp: 'true',
+    tfo: 'false',
+    expand: 'true',
+    scv: 'false',
+    fdn: 'false',
+    new_name: 'true',
+    url: subUrlJoined,
+  })
+
+  const u = new URL(converter)
+  u.search = params.toString()
+  return u.href
+}

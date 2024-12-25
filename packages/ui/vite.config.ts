@@ -6,6 +6,7 @@ import path, { join } from 'path'
 import Icons from 'unplugin-icons/vite'
 import { defineConfig, mergeConfig, type Plugin, type UserConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import UnoCSS from 'unocss/vite'
 
 const { require } = esmUtils(import.meta)
 
@@ -235,6 +236,7 @@ export default defineConfig({
     react({
       jsxImportSource: '@emotion/react',
     }),
+    UnoCSS(),
 
     /**
      * make vite + electron happy

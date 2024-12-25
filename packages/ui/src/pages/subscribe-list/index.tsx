@@ -29,6 +29,7 @@ import {
   Popover,
   Select,
   Space,
+  Switch,
   Tag,
   Tooltip,
 } from 'antd'
@@ -47,8 +48,9 @@ import { useSnapshot } from 'valtio'
 import IconParkOutlineCopy from '~icons/icon-park-outline/copy'
 import IconParkOutlineTips from '~icons/icon-park-outline/tips'
 import { sharedPageCss } from '../_layout/_shared'
-import { actions, state } from './model'
+import { actions, getConvertedUrl, state, SubConverterServiceUrls, update } from './model'
 import { defaultNodefreeSubscribe, type NodefreeData, nodefreeGetUrls } from './special/nodefree'
+import { min } from 'moment'
 
 const S = {
   modal: css`
@@ -625,13 +627,27 @@ function ModalAddOrEdit({
   const editItemIndex = modalState.index
   const mode = modalState.mode
 
-  const [url, setUrl] = useState(editItem?.url || '')
   const [name, setName] = useState(editItem?.name || '')
-  const [excludeKeywords, setExcludeKeywords] = useState(editItem?.excludeKeywords || [])
-  const [autoUpdate, setAutoUpdate] = useState(editItem?.autoUpdate)
+
+  const [url, setUrl] = useState(editItem?.url || '')
+  const [useSubConverter, setUseSubConverter] = useState(editItem?.useSubConverter)
+  const [proxyUrls, setProxyUrls] = useState(editItem?.proxyUrls)
+  const [subConverterUrl, setSubConverterUrl] = useState(editItem?.subConverterUrl)
+  const convertedUrl = useMemo(() => {
+    if (!useSubConverter) return
+    if (!proxyUrls) return
+    const serviceUrl = subConverterUrl || SubConverterServiceUrls[0]
+    return getConvertedUrl(proxyUrls || '', serviceUrl)
+  }, [useSubConverter, proxyUrls, subConverterUrl])
+
+  const updateConvertedUrl = useMemoizedFn(() => {})
+
   const [addPrefixToProxies, setAddPrefixToProxies] = useState(editItem?.addPrefixToProxies)
-  const [remark, setRemark] = useState(editItem?.remark)
+  const [autoUpdate, setAutoUpdate] = useState(editItem?.autoUpdate)
   const [ua, setUa] = useState<EUaType | undefined>(editItem?.ua)
+
+  const [excludeKeywords, setExcludeKeywords] = useState(editItem?.excludeKeywords || [])
+  const [remark, setRemark] = useState(editItem?.remark)
 
   const [special, setSpecial] = useState<boolean | undefined>(undefined)
   const [specialType, setSpecialType] = useState<SubscribeSpecialType | undefined>(undefined)
@@ -688,11 +704,17 @@ function ModalAddOrEdit({
     }
 
     let subscribeItem: Subscribe = {
-      url,
-      name,
       id: editItem?.id ?? crypto.randomUUID(),
+      name,
+
+      // url
+      url: (useSubConverter ? convertedUrl : url) || '',
+      useSubConverter,
+      proxyUrls,
+      subConverterUrl,
+
       excludeKeywords,
-      autoUpdate,
+      autoUpdate: useSubConverter ? false : autoUpdate,
       autoUpdateInterval,
       addPrefixToProxies,
       remark,
@@ -726,14 +748,11 @@ function ModalAddOrEdit({
       <Space direction='vertical' size={15} style={{ width: '100%' }}>
         <Flex vertical gap={15}>
           <FloatInput
-            // rootClassName='input-row'
-            // className='input-row'
             size='large'
             placeholder='名称 * '
             value={name}
             onChange={onNameChange}
             onPressEnter={handleOk}
-            // required
           />
 
           {specialType === 'nodefree' ? (
@@ -750,18 +769,71 @@ function ModalAddOrEdit({
               max={10}
             />
           ) : (
-            <FloatInput
-              // rootClassName='input-row'
-              // className='input-row'
-              size='large'
-              hidden={specialType === 'nodefree'}
-              placeholder='订阅链接 * '
-              value={url}
-              onChange={onUrlChange}
-              onPressEnter={handleOk}
-              // required
-              // prefix={<label className='label'>订阅链接:</label>}
-            />
+            <>
+              <FloatInput
+                // rootClassName='input-row'
+                // className='input-row'
+                // required
+                // prefix={<label className='label'>订阅链接:</label>}
+                size='large'
+                hidden={specialType === 'nodefree'}
+                placeholder='订阅链接 * '
+                onPressEnter={handleOk}
+                readOnly={useSubConverter}
+                disabled={useSubConverter}
+                value={useSubConverter ? convertedUrl : url}
+                onChange={onUrlChange}
+              />
+
+              <div className='flex flex-col gap-y-6px'>
+                <div className='flex items-center'>
+                  <Switch
+                    value={useSubConverter}
+                    onChange={(value) => {
+                      setUseSubConverter(value)
+                      if (value && !subConverterUrl) {
+                        setSubConverterUrl(SubConverterServiceUrls[0])
+                      }
+                    }}
+                    className='mr-4'
+                  />
+                  SubConverter
+                </div>
+                {useSubConverter && (
+                  <>
+                    <div>
+                      proxyUrls:
+                      <Input.TextArea
+                        value={proxyUrls}
+                        onChange={(e) => {
+                          setProxyUrls(e.target.value)
+                          updateConvertedUrl()
+                        }}
+                        // autoSize={{ minRows: 1, maxRows: 5 }}
+                      />
+                    </div>
+
+                    <div>
+                      subConverterUrl:
+                      <Select
+                        className='block'
+                        options={SubConverterServiceUrls.map((url) => ({
+                          key: url,
+                          label: url,
+                          value: url,
+                        }))}
+                        value={subConverterUrl}
+                        onChange={(v) => {
+                          setSubConverterUrl(v)
+                          updateConvertedUrl()
+                        }}
+                        allowClear
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+            </>
           )}
         </Flex>
 
@@ -770,7 +842,8 @@ function ModalAddOrEdit({
           <Flex align='center' gap={5}>
             <Checkbox
               id='checkbox-auto-update'
-              checked={autoUpdate}
+              disabled={useSubConverter}
+              checked={useSubConverter ? false : autoUpdate}
               onChange={(e) => setAutoUpdate(e.target.checked)}
               style={{ marginLeft: 0 }}
             >
@@ -781,7 +854,7 @@ function ModalAddOrEdit({
               css={css`
                 width: 130px;
               `}
-              disabled={!autoUpdate}
+              disabled={useSubConverter || !autoUpdate}
               addonAfter={'小时'}
               min={autoUpdateIntervalMin}
               max={autoUpdateIntervalMax}
