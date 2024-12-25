@@ -1,4 +1,4 @@
-import { ConfigItem } from '$ui/define'
+import { type ConfigItem } from '$ui/define'
 import { cx } from '$ui/libs'
 import { limitLines } from '$ui/utility/text-util'
 import { InfoCircleOutlined, QuestionCircleFilled } from '@ant-design/icons'
@@ -234,7 +234,7 @@ export function ConfigDND() {
 }
 
 interface SourceProps {
-  item
+  item: any // TODO: rm any
   type: 'source' | 'result'
   isDragDisabled?: boolean
   index: number

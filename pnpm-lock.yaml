@@ -273,6 +273,9 @@ importers:
       ms:
         specifier: ^2.1.3
         version: 2.1.3
+      p-memoize:
+        specifier: ^7.1.1
+        version: 7.1.1
       polished:
         specifier: ^4.3.1
         version: 4.3.1
@@ -7619,6 +7622,13 @@ packages:
       }
     engines: { node: '>=10' }
 
+  p-memoize@7.1.1:
+    resolution:
+      {
+        integrity: sha512-DZ/bONJILHkQ721hSr/E9wMz5Am/OTJ9P6LhLFo2Tu+jL8044tgc9LwHO8g4PiaYePnlVVRAJcKmgy8J9MVFrA==,
+      }
+    engines: { node: '>=14.16' }
+
   p-timeout@1.2.1:
     resolution:
       {
@@ -10033,6 +10043,13 @@ packages:
         integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==,
       }
     engines: { node: '>=12.20' }
+
+  type-fest@3.13.1:
+    resolution:
+      {
+        integrity: sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==,
+      }
+    engines: { node: '>=14.16' }
 
   type-fest@4.30.2:
     resolution:
@@ -15539,6 +15556,11 @@ snapshots:
     dependencies:
       aggregate-error: 3.1.0
 
+  p-memoize@7.1.1:
+    dependencies:
+      mimic-fn: 4.0.0
+      type-fest: 3.13.1
+
   p-timeout@1.2.1:
     dependencies:
       p-finally: 1.0.0
@@ -17163,6 +17185,8 @@ snapshots:
   type-fest@1.4.0: {}
 
   type-fest@2.19.0: {}
+
+  type-fest@3.13.1: {}
 
   type-fest@4.30.2: {}
 

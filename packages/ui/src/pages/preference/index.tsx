@@ -16,7 +16,7 @@ import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import styles from './index.module.less'
 import { SelectExportForStaticMethod, pickDataFrom } from './modal/SelectExport'
-import { Theme, state } from './model'
+import { type Theme, state } from './model'
 
 const debug = debugFactory('app:page:preference')
 
@@ -286,8 +286,8 @@ export default function Preference() {
 interface ModalSyncConfigProps {
   visible: boolean
   setVisible: (visible: boolean) => void
-  editItem?
-  editItemIndex?
+  editItem?: any
+  editItemIndex?: number
 }
 
 function ModalSyncConfig(props: ModalSyncConfigProps) {

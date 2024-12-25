@@ -1,5 +1,5 @@
-import { ClashProxyItem } from '$clash-utils'
-import { Subscribe } from '$ui/define'
+import { type ClashProxyItem } from '$clash-utils'
+import { type Subscribe } from '$ui/define'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
 import { message } from '$ui/store'

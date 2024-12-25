@@ -1,6 +1,7 @@
 import * as remoteMain from '@electron/remote/main'
-import { app, BrowserWindow, Menu, session, shell, Tray } from 'electron'
+import { app, BrowserWindow, Menu, session, shell, Tray, type Event } from 'electron'
 import { is } from 'electron-util'
+import { throttle } from 'es-toolkit'
 import path from 'path'
 import { load as loadDevExt } from './dev/ext'
 import './init/meta'
@@ -8,18 +9,9 @@ import { loadWindowState, saveWindowState } from './initWindowState'
 import { assetsDir } from './ipc/common'
 import './ipc/index'
 import setMenu from './menu'
-import { throttle } from 'es-toolkit'
 
 // Prevent window from being garbage collected
 export let mainWindow: BrowserWindow
-
-declare global {
-  namespace NodeJS {
-    interface Global {
-      mainWindow?: BrowserWindow
-    }
-  }
-}
 
 export async function main() {
   initAppEvents()
@@ -31,7 +23,7 @@ export async function main() {
   loadDevExt()
 
   mainWindow = await createMainWindow()
-  global.mainWindow = mainWindow
+  globalThis.mainWindow = mainWindow
 
   // enable @electron/remote
   remoteMain.initialize()
@@ -76,7 +68,7 @@ const createMainWindow = async () => {
     return { action: 'deny' }
   })
 
-  const preventClose = (e) => {
+  const preventClose = (e: Event) => {
     e.preventDefault()
 
     const hideAction = () => {

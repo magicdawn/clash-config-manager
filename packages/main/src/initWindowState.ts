@@ -1,4 +1,4 @@
-import { app, Rectangle, screen } from 'electron'
+import { app, type Rectangle, screen } from 'electron'
 import fs from 'fs-extra'
 import { throttle } from 'es-toolkit'
 import path from 'path'

@@ -1,4 +1,4 @@
-import { ClashConfig, RuleItem, Subscribe } from '$ui/define'
+import { type ClashConfig, type RuleItem, type Subscribe } from '$ui/define'
 import { ProxyGroupType, ProxyGroupTypeConfig } from '$ui/define/ClashConfig'
 import { YAML, pmap } from '$ui/libs'
 import { rootActions, rootState } from '$ui/store'

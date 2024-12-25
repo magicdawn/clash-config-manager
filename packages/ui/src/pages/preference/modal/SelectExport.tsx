@@ -1,12 +1,12 @@
-import { ConfigItem } from '$ui/define'
-import { ExportData, storageDataDisplayNames } from '$ui/storage'
+import { type ConfigItem } from '$ui/define'
+import { type ExportData, storageDataDisplayNames } from '$ui/storage'
 import { truthy } from '$ui/utility/ts-filter'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { Modal, Tree } from 'antd'
+import { Modal, Tree, type TreeProps } from 'antd'
 import { cloneDeep, pick } from 'es-toolkit'
 
-import { useCallback, useState } from 'react'
-import { Merge } from 'type-fest'
+import { useCallback, useState, type Key } from 'react'
+import { type Merge } from 'type-fest'
 import { proxy, useSnapshot } from 'valtio'
 
 type SelectExportProps = {
@@ -18,7 +18,7 @@ type SelectExportProps = {
 
 type SelectResult = {
   cancel: boolean
-  keys?: string[]
+  keys?: Key[]
 }
 
 type Resolve = (result: SelectResult) => void
@@ -38,16 +38,16 @@ export default function SelectExport({
     resolve?.({ cancel: false, keys: checkedKeys })
   })
 
-  const [expandedKeys, setExpandedKeys] = useState(() => getAllKeys(treeData))
-  const [checkedKeys, setCheckedKeys] = useState<string[]>([])
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  const [expandedKeys, setExpandedKeys] = useState<Key[]>(() => getAllKeys(treeData))
+  const [checkedKeys, setCheckedKeys] = useState<Key[]>([])
+  const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
   const [autoExpandParent, setAutoExpandParent] = useState(true)
 
   useUpdateEffect(() => {
     setExpandedKeys(getAllKeys(treeData))
   }, [treeData])
 
-  const onExpand = (expandedKeys: string[]) => {
+  const onExpand = (expandedKeys: Key[]) => {
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
     console.log('onExpand', expandedKeys)
@@ -55,12 +55,14 @@ export default function SelectExport({
     setAutoExpandParent(false)
   }
 
-  const onCheck = (checkedKeys: string[]) => {
+  const onCheck: TreeProps['onCheck'] = (checkedKeys) => {
     console.log('onCheck', checkedKeys)
-    setCheckedKeys(checkedKeys)
+    if (Array.isArray(checkedKeys)) {
+      setCheckedKeys(checkedKeys)
+    }
   }
 
-  const onSelect = (selectedKeys: string[], info) => {
+  const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
     console.log('onSelect', info)
     setSelectedKeys(selectedKeys)
   }
@@ -135,7 +137,7 @@ function generateTreeData(obj: object, keyPrefix = '') {
     treeData.push({
       key,
       title,
-      children: generateTreeData(obj[currentKey], key + '.'),
+      children: generateTreeData(obj[currentKey as keyof typeof obj], key + '.'),
     })
   }
 
@@ -152,13 +154,13 @@ function getAllKeys(tree?: TreeData[] | null) {
   return ret
 }
 
-function clean(obj: object) {
+function clean<T extends object>(obj: T) {
   if (!obj || typeof obj !== 'object') return
-  for (const i of Object.keys(obj)) {
-    const val = obj[i]
+  for (const i of Object.keys(obj) as (keyof T)[]) {
+    const val: any = obj[i]
 
     if (Array.isArray(val)) {
-      obj[i] = obj[i].filter(truthy)
+      ;(obj as any)[i] = val.filter(truthy)
       continue
     }
 
@@ -235,7 +237,10 @@ export async function pickDataFrom(dataFrom: any) {
   }
 
   // sleect
-  const data = pick(dataFrom, keys)
+  const data = pick(
+    dataFrom,
+    keys.map((x) => x.toString()),
+  )
 
   // clean
   clean(data)

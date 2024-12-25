@@ -67,7 +67,5 @@ export function SetupAntdStatic() {
 }
 
 export { message, modal, notification }
-
-// fixme
-global.rootActions = rootActions
-global.rootState = rootState
+;(globalThis as any).rootActions = rootActions
+;(globalThis as any).rootState = rootState

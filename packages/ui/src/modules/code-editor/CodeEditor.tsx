@@ -3,10 +3,14 @@ import { QuestionCircleFilled } from '@ant-design/icons'
 import { css } from '@emotion/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Spin, Tag, Tooltip } from 'antd'
-import { SpinProps } from 'antd/lib/spin'
+import { type SpinProps } from 'antd/lib/spin'
 import * as EditorApi from 'monaco-editor/esm/vs/editor/editor.api'
-import { CSSProperties, MutableRefObject, ReactNode, useMemo, useRef } from 'react'
-import MonacoEditor, { EditorDidMount, EditorWillMount, monaco } from 'react-monaco-editor'
+import { type CSSProperties, type MutableRefObject, type ReactNode, useMemo, useRef } from 'react'
+import MonacoEditor, {
+  type EditorDidMount,
+  type EditorWillMount,
+  monaco,
+} from 'react-monaco-editor'
 import { useSnapshot } from 'valtio'
 
 export type EditorRefInner = monaco.editor.IStandaloneCodeEditor

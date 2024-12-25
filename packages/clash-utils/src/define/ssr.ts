@@ -91,14 +91,7 @@ export function urlLineToClashSsrServer(str: string): ClashSsrProxyItem {
   let [server, port, protocol, cipher, obfs, password] = prev.split(':')
   const params = new URLSearchParams(rest)
 
-  // @ts-ignore
-  let { obfsparam, protoparam, remarks, group } = Array.from(params).reduce(
-    (result, [key, value]) => {
-      result[key] = value
-      return result
-    },
-    {},
-  )
+  let { obfsparam, protoparam, remarks, group } = Object.fromEntries(params.entries())
 
   if (remarks) remarks = B64.decode(remarks)
   if (group) group = B64.decode(group)

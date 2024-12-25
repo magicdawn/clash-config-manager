@@ -1,5 +1,5 @@
 import { __DEV__ } from '$ui/common'
-import { ConfigItem, RuleItem, Subscribe } from '$ui/define'
+import { type ConfigItem, type RuleItem, type Subscribe } from '$ui/define'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage, { type StorageData } from '$ui/storage'
 import { valtioState } from '$ui/utility/valtio-helper'

@@ -1,7 +1,7 @@
 import * as remote from '@electron/remote'
 import { ipcRenderer } from 'electron'
 import envPaths from 'env-paths'
-import reusePromise from 'reuse-promise'
+import pMemoize from 'p-memoize'
 
 export const APP_NAME = 'clash-config-manager'
 
@@ -21,12 +21,9 @@ export const appCacheDir = appEnvPaths.cache
 export const appTempDir = appEnvPaths.temp
 
 // bundled assets
-export const getAssetsDir = reusePromise(
-  async () => {
-    return await ipcRenderer.invoke('getAssetsDir')
-  },
-  { memorize: true },
-)
+export const getAssetsDir = pMemoize(async () => {
+  return await ipcRenderer.invoke('getAssetsDir')
+})
 
 export const __DEV__ = import.meta.env.DEV
 export const __PROD__ = import.meta.env.PROD

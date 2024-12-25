@@ -1,4 +1,4 @@
-import { RuleItem } from '$ui/define'
+import { type RuleItem } from '$ui/define'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
 import { message } from '$ui/store'

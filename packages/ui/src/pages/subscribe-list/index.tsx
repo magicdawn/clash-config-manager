@@ -1,5 +1,5 @@
 import { colorHighlightValue } from '$ui/common'
-import { EUaType, Subscribe, SubscribeSpecialType } from '$ui/define'
+import { EUaType, type Subscribe, type SubscribeSpecialType } from '$ui/define'
 import { MarkdownView } from '$ui/modules/markdown'
 import { message } from '$ui/store'
 import { EyeFilled, EyeInvisibleFilled, UnorderedListOutlined } from '@ant-design/icons'
@@ -36,8 +36,8 @@ import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { clipboard } from 'electron'
 import { size } from 'polished'
 import {
-  ChangeEventHandler,
-  KeyboardEventHandler,
+  type ChangeEventHandler,
+  type KeyboardEventHandler,
   useCallback,
   useMemo,
   useState,
@@ -48,7 +48,7 @@ import IconParkOutlineCopy from '~icons/icon-park-outline/copy'
 import IconParkOutlineTips from '~icons/icon-park-outline/tips'
 import { sharedPageCss } from '../_layout/_shared'
 import { actions, state } from './model'
-import { defaultNodefreeSubscribe, NodefreeData, nodefreeGetUrls } from './special/nodefree'
+import { defaultNodefreeSubscribe, type NodefreeData, nodefreeGetUrls } from './special/nodefree'
 
 const S = {
   modal: css`
@@ -662,7 +662,7 @@ function ModalAddOrEdit({
     setExcludeKeywords(value)
   }, [])
 
-  const onNodefreeRecentDaysChange = useMemoizedFn((recentDays: number) => {
+  const onNodefreeRecentDaysChange = useMemoizedFn((recentDays: number | null) => {
     setSpecialData((val: NodefreeData) => ({ ...val, recentDays }))
   })
 
@@ -744,6 +744,7 @@ function ModalAddOrEdit({
               size='large'
               placeholder='抓取天数'
               value={specialData?.recentDays}
+              // @ts-ignore
               onChange={onNodefreeRecentDaysChange}
               onPressEnter={handleOk}
               min={1}

@@ -31,7 +31,7 @@ const DEFAULT_TARGETS = ['Proxy', 'DIRECT', 'REJECT']
 interface IProps {
   visible: boolean
   setVisible: (val: boolean) => void
-  onOk?: (rule: string, targetRuleId?: string) => void
+  onOk?: (rule: string, targetRuleId: string) => void
   mode?: Mode
 }
 

@@ -1,5 +1,5 @@
 import { appCacheDir } from '$ui/common'
-import { RemoteRuleItem } from '$ui/define'
+import { type RemoteRuleItem } from '$ui/define'
 import fse from 'fs-extra'
 import path from 'path'
 import { readUrlWithCache } from './remote'

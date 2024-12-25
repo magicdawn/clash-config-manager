@@ -27,7 +27,7 @@ export default function useImmerState<T>(
 ): [T, (payload: Payload<T>) => void] {
   const [state, setState] = useState(initialState)
   const modifyState = useCallback(
-    (payload) => {
+    (payload: Payload<T>) => {
       setState((state) => reducer(state, payload))
     },
     [setState],

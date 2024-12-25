@@ -1,24 +1,23 @@
 {
   "compilerOptions": {
     "allowJs": true,
+
+    "target": "ES2024",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2024", "DOM"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "target": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
 
-    // TODO:
-    // make strict
-    // "verbatimModuleSyntax": true,
+    "strict": true,
+    "useUnknownInCatchVariables": false,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
 
-    "strict": false,
-    "strictNullChecks": true,
     "experimentalDecorators": true,
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react",
-    "skipLibCheck": true,
     "types": ["node", "electron", "unplugin-icons/types/react"],
     "plugins": [
       {

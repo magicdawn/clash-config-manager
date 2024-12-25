@@ -10,7 +10,7 @@ import './modules/code-editor/monaco'
 
 // deps
 import '@total-typescript/ts-reset'
-import { MenuProps } from 'antd'
+import { type MenuProps } from 'antd'
 import { size } from 'polished'
 import { createRoot } from 'react-dom/client'
 import {
@@ -69,7 +69,7 @@ const routes = [
   },
 ]
 routes.forEach((r) => {
-  r.title ||= routeTitles[r.path.slice(1)]
+  r.title ||= routeTitles[r.path.slice(1) as keyof typeof routeTitles]
 })
 
 const getKey = (s: string) => trimStart(s, '/') || 'home'

@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 import esmUtils from 'esm-utils'
 import path, { join } from 'path'
 import Icons from 'unplugin-icons/vite'
-import { defineConfig, mergeConfig, Plugin, type UserConfig } from 'vite'
+import { defineConfig, mergeConfig, type Plugin, type UserConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const { require } = esmUtils(import.meta)

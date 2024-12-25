@@ -2,7 +2,7 @@ import { runGenerate } from '$ui/modules/commands/run'
 import { message, rootActions, rootState } from '$ui/store'
 import { ipcRenderer } from 'electron'
 import { proxy, useSnapshot } from 'valtio'
-import AddRuleModal, { Mode } from '../partial-config-list/AddRuleModal'
+import AddRuleModal, { type Mode } from '../partial-config-list/AddRuleModal'
 
 type HandleAdd = (rule: string, ruleId: string) => void
 
@@ -31,7 +31,7 @@ const store = proxy({
 export { store as addRuleStore }
 
 export function useAddRuleModal(options: { handleAdd: HandleAdd; mode: Mode }) {
-  const handleAdd = (rule: string, ruleId: string) => {
+  const handleAdd: HandleAdd = (rule, ruleId) => {
     options.handleAdd(rule, ruleId)
   }
 

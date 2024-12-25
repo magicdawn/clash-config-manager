@@ -1,6 +1,6 @@
 import storage from '$ui/storage/index'
 import debugFactory from 'debug'
-import { BrowserWindow, Menu, MenuItemConstructorOptions, app, dialog, shell } from 'electron'
+import { BrowserWindow, Menu, type MenuItemConstructorOptions, app, dialog, shell } from 'electron'
 import { is, openNewGitHubIssue, openUrlMenuItem } from 'electron-util'
 import { aboutMenuItem, appMenu, debugInfo } from 'electron-util/main'
 import fse from 'fs-extra'

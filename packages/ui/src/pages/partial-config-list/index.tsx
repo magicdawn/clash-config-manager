@@ -1,10 +1,10 @@
 import { colorHighlightValue } from '$ui/common'
-import { LocalRuleItem, RuleItem } from '$ui/define'
+import { type LocalRuleItem, type RuleItem } from '$ui/define'
 import {
   CodeEditor,
   CodeEditorHelp,
   CodeThemeSelect,
-  EditorRefInner,
+  type EditorRefInner,
   showCode,
 } from '$ui/modules/code-editor'
 import { runGenerate } from '$ui/modules/commands/run'
@@ -13,7 +13,7 @@ import { useIsDarkMode } from '$ui/utility/hooks/useIsDarkMode'
 import { getRuleItemContent } from '$ui/utility/remote-rules'
 import { firstLine, limitLines } from '$ui/utility/text-util'
 import { FileAddOutlined } from '@ant-design/icons'
-import { DndContext, DragEndEvent } from '@dnd-kit/core'
+import { DndContext, type DragEndEvent } from '@dnd-kit/core'
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import {
   arrayMove,
@@ -45,8 +45,8 @@ import fse from 'fs-extra'
 import Yaml from 'js-yaml'
 import path from 'path'
 import {
-  CSSProperties,
-  KeyboardEventHandler,
+  type CSSProperties,
+  type KeyboardEventHandler,
   useCallback,
   useEffect,
   useMemo,
@@ -544,10 +544,11 @@ function ModalAddOrEdit() {
     clean()
   })
 
-  const onFinish = (values) => {
+  // TODO: rm any
+  const onFinish = (values: any) => {
     handleSubmit(values)
   }
-  const onFinishFailed = (errorInfo) => {
+  const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo)
   }
 

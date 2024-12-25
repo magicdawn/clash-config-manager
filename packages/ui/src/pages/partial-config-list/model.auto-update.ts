@@ -2,7 +2,7 @@
  * auto update
  */
 
-import { RuleItem } from '$ui/define'
+import { type RuleItem } from '$ui/define'
 import { runGenerate } from '$ui/modules/commands/run'
 import { debounce, once, type DebouncedFunction } from 'es-toolkit'
 import ms from 'ms'

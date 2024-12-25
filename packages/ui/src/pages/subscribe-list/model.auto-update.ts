@@ -2,7 +2,7 @@
  * auto update
  */
 
-import { Subscribe } from '$ui/define'
+import { type Subscribe } from '$ui/define'
 import { runGenerate } from '$ui/modules/commands/run'
 import { once } from 'es-toolkit'
 import ms from 'ms'

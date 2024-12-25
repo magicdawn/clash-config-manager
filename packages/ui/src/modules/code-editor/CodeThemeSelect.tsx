@@ -1,5 +1,5 @@
 import { Select } from 'antd'
-import { ComponentProps, CSSProperties } from 'react'
+import { type ComponentProps, type CSSProperties } from 'react'
 import { useSnapshot } from 'valtio'
 import { state as preferenceState } from '../../pages/preference/model'
 import { builtinThemes, userDefinedThemes } from './monaco/theme'
