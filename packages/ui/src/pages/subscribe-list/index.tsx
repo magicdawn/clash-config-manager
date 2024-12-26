@@ -829,6 +829,7 @@ function ModalAddOrEdit({
                 value={proxyUrls}
                 onChange={(e) => setProxyUrls(e.target.value)}
                 autoSize={{ minRows: 2, maxRows: 8 }}
+                placeholder='节点链接, 每行一个, 支持空行, `#` 或者 `;` 开头的注释行'
               />
             </div>
           </div>
