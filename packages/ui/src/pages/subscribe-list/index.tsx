@@ -38,6 +38,7 @@ import { clipboard } from 'electron'
 import { size } from 'polished'
 import {
   useCallback,
+  useId,
   useMemo,
   useState,
   type ChangeEventHandler,
@@ -639,8 +640,6 @@ function ModalAddOrEdit({
     return getConvertedUrl(proxyUrls || '', serviceUrl)
   }, [useSubConverter, proxyUrls, subConverterUrl])
 
-  const updateConvertedUrl = useMemoizedFn(() => {})
-
   const [addPrefixToProxies, setAddPrefixToProxies] = useState(editItem?.addPrefixToProxies)
   const [autoUpdate, setAutoUpdate] = useState(editItem?.autoUpdate)
   const [ua, setUa] = useState<EUaType | undefined>(editItem?.ua)
@@ -733,167 +732,172 @@ function ModalAddOrEdit({
   })
   /* #endregion */
 
+  const isNodefree = specialType === 'nodefree'
+
+  const useSubConverterSwitchId = useId()
+  const useSubConverterSwitch = !isNodefree && (
+    <div className='inline-flex items-center ml-7xl'>
+      <Switch
+        id={useSubConverterSwitchId}
+        value={useSubConverter}
+        onChange={(value) => {
+          setUseSubConverter(value)
+          if (value && !subConverterUrl) {
+            setSubConverterUrl(SubConverterServiceUrls[0])
+          }
+        }}
+        className='mr-1'
+      />
+      <label htmlFor={useSubConverterSwitchId} className='cursor-pointer'>
+        使用 SubConverter
+      </label>
+    </div>
+  )
+
   return (
     <Modal
       css={S.modal}
-      styles={{ body: { paddingTop: 10 } }}
-      title={mode === 'edit' ? '编辑' : '添加'}
+      title={
+        <>
+          {mode === 'edit' ? '编辑' : '添加'}
+          {useSubConverterSwitch}
+        </>
+      }
       open={visible}
       onOk={handleOk}
       onCancel={handleCancel}
       centered
       width={600}
     >
-      <Space direction='vertical' size={15} style={{ width: '100%' }}>
-        <Flex vertical gap={15}>
-          <FloatInput
+      <div className='flex flex-col gap-y-15px'>
+        <FloatInput
+          size='large'
+          placeholder='名称 * '
+          value={name}
+          onChange={onNameChange}
+          onPressEnter={handleOk}
+        />
+        {isNodefree ? (
+          <FloatInputNumber
+            // style={{ display: 'flex', width: '100%', marginBottom: 10 }}
+            // prefix={<label className='label'>抓取天数:</label>}
             size='large'
-            placeholder='名称 * '
-            value={name}
-            onChange={onNameChange}
+            placeholder='抓取天数'
+            value={specialData?.recentDays}
+            // @ts-ignore
+            onChange={onNodefreeRecentDaysChange}
             onPressEnter={handleOk}
+            min={1}
+            max={10}
           />
+        ) : (
+          <FloatInput
+            // rootClassName='input-row'
+            // className='input-row'
+            // required
+            // prefix={<label className='label'>订阅链接:</label>}
+            size='large'
+            hidden={isNodefree}
+            placeholder='订阅链接 * '
+            onPressEnter={handleOk}
+            readOnly={useSubConverter}
+            disabled={useSubConverter}
+            value={useSubConverter ? convertedUrl : url}
+            onChange={onUrlChange}
+          />
+        )}
 
-          {specialType === 'nodefree' ? (
-            <FloatInputNumber
-              // style={{ display: 'flex', width: '100%', marginBottom: 10 }}
-              // prefix={<label className='label'>抓取天数:</label>}
-              size='large'
-              placeholder='抓取天数'
-              value={specialData?.recentDays}
-              // @ts-ignore
-              onChange={onNodefreeRecentDaysChange}
-              onPressEnter={handleOk}
-              min={1}
-              max={10}
-            />
-          ) : (
-            <>
-              <FloatInput
-                // rootClassName='input-row'
-                // className='input-row'
-                // required
-                // prefix={<label className='label'>订阅链接:</label>}
-                size='large'
-                hidden={specialType === 'nodefree'}
-                placeholder='订阅链接 * '
-                onPressEnter={handleOk}
-                readOnly={useSubConverter}
-                disabled={useSubConverter}
-                value={useSubConverter ? convertedUrl : url}
-                onChange={onUrlChange}
+        {useSubConverter && (
+          <div className='flex flex-col gap-y-2px'>
+            <div className='flex items-center'>
+              SubConverter 后端
+              <Select
+                className='flex-1 ml-2'
+                options={SubConverterServiceUrls.map((url) => ({
+                  key: url,
+                  label: url,
+                  value: url,
+                }))}
+                value={subConverterUrl}
+                onChange={setSubConverterUrl}
+                allowClear
               />
+            </div>
+            <div>
+              proxyUrls:
+              <Input.TextArea
+                value={proxyUrls}
+                onChange={(e) => setProxyUrls(e.target.value)}
+                autoSize={{ minRows: 2, maxRows: 8 }}
+              />
+            </div>
+          </div>
+        )}
 
-              <div className='flex flex-col gap-y-6px'>
-                <div className='flex items-center'>
-                  <Switch
-                    value={useSubConverter}
-                    onChange={(value) => {
-                      setUseSubConverter(value)
-                      if (value && !subConverterUrl) {
-                        setSubConverterUrl(SubConverterServiceUrls[0])
-                      }
-                    }}
-                    className='mr-4'
-                  />
-                  SubConverter
-                </div>
-                {useSubConverter && (
-                  <>
-                    <div>
-                      proxyUrls:
-                      <Input.TextArea
-                        value={proxyUrls}
-                        onChange={(e) => {
-                          setProxyUrls(e.target.value)
-                          updateConvertedUrl()
-                        }}
-                        // autoSize={{ minRows: 1, maxRows: 5 }}
-                      />
-                    </div>
-
-                    <div>
-                      subConverterUrl:
-                      <Select
-                        className='block'
-                        options={SubConverterServiceUrls.map((url) => ({
-                          key: url,
-                          label: url,
-                          value: url,
-                        }))}
-                        value={subConverterUrl}
-                        onChange={(v) => {
-                          setSubConverterUrl(v)
-                          updateConvertedUrl()
-                        }}
-                        allowClear
-                      />
-                    </div>
-                  </>
-                )}
-              </div>
-            </>
-          )}
-        </Flex>
-
-        {/* ALL checkbox & select , 间距要小一点 */}
         <Flex vertical gap={5}>
-          <Flex align='center' gap={5}>
-            <Checkbox
-              id='checkbox-auto-update'
-              disabled={useSubConverter}
-              checked={useSubConverter ? false : autoUpdate}
-              onChange={(e) => setAutoUpdate(e.target.checked)}
-              style={{ marginLeft: 0 }}
-            >
-              自动更新节点
-            </Checkbox>
-
-            <InputNumber
-              css={css`
-                width: 130px;
-              `}
-              disabled={useSubConverter || !autoUpdate}
-              addonAfter={'小时'}
-              min={autoUpdateIntervalMin}
-              max={autoUpdateIntervalMax}
-              defaultValue={autoUpdateIntervalDefault}
-              value={autoUpdateInterval}
-              onChange={(val) => val && setAutoUpdateInterval(val)}
-            />
-          </Flex>
-
           <Checkbox checked={addPrefixToProxies} onChange={onAddPrefixToProxiesChange}>
             将订阅名添加为节点前缀
           </Checkbox>
 
-          <Flex align='center' gap={15}>
-            User-Agent
-            <Select<EUaType>
-              css={css`
-                min-width: 120px;
-              `}
-              allowClear
-              placeholder='User-Agent'
-              value={ua}
-              onChange={(val) => setUa(val)}
-              options={Object.values(EUaType).map((v) => {
-                return { label: v, value: v }
-              })}
-            />
-          </Flex>
-        </Flex>
+          {!useSubConverter && (
+            <>
+              {/* 自动更新节点 */}
+              <Flex align='center' gap={5}>
+                <Checkbox
+                  id='checkbox-auto-update'
+                  disabled={useSubConverter}
+                  checked={useSubConverter ? false : autoUpdate}
+                  onChange={(e) => setAutoUpdate(e.target.checked)}
+                  style={{ marginLeft: 0 }}
+                >
+                  自动更新节点
+                </Checkbox>
 
-        <div>
-          根据关键词排除服务器:
-          <Select
-            mode='tags'
-            style={{ width: '100%' }}
-            placeholder='关键词'
-            value={excludeKeywords}
-            onChange={onExcludeKeywordsChange}
-          />
-        </div>
+                <InputNumber
+                  css={css`
+                    width: 130px;
+                  `}
+                  disabled={useSubConverter || !autoUpdate}
+                  addonAfter={'小时'}
+                  min={autoUpdateIntervalMin}
+                  max={autoUpdateIntervalMax}
+                  defaultValue={autoUpdateIntervalDefault}
+                  value={autoUpdateInterval}
+                  onChange={(val) => val && setAutoUpdateInterval(val)}
+                />
+              </Flex>
+
+              {/* User-Agent */}
+              <Flex align='center' gap={15}>
+                User-Agent
+                <Select<EUaType>
+                  css={css`
+                    min-width: 120px;
+                  `}
+                  allowClear
+                  placeholder='User-Agent'
+                  value={ua}
+                  onChange={(val) => setUa(val)}
+                  options={Object.values(EUaType).map((v) => {
+                    return { label: v, value: v }
+                  })}
+                />
+              </Flex>
+
+              {/* 根据关键词排除服务器 */}
+              <div>
+                根据关键词排除服务器:
+                <Select
+                  mode='tags'
+                  style={{ width: '100%' }}
+                  placeholder='关键词'
+                  value={excludeKeywords}
+                  onChange={onExcludeKeywordsChange}
+                />
+              </div>
+            </>
+          )}
+        </Flex>
 
         <div>
           备注
@@ -907,7 +911,7 @@ function ModalAddOrEdit({
             `}
           />
         </div>
-      </Space>
+      </div>
     </Modal>
   )
 }

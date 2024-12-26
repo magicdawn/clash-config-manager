@@ -3,8 +3,8 @@
 // styles
 import '@icon-park/react/styles/index.css'
 import 'antd/dist/reset.css'
-import './index.less'
 import 'virtual:uno.css'
+import './index.less'
 
 // monaco setup
 import './modules/code-editor/monaco'
@@ -12,6 +12,7 @@ import './modules/code-editor/monaco'
 // deps
 import '@total-typescript/ts-reset'
 import { type MenuProps } from 'antd'
+import { trimStart } from 'es-toolkit'
 import { size } from 'polished'
 import { createRoot } from 'react-dom/client'
 import {
@@ -35,7 +36,6 @@ import LibraryRuleList from './pages/partial-config-list'
 import Preference from './pages/preference'
 import LibrarySubscribe from './pages/subscribe-list'
 import { routeTitles } from './storage'
-import { trimStart } from 'es-toolkit'
 
 const routes = [
   {
