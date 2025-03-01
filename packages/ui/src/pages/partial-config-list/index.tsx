@@ -4,8 +4,8 @@ import {
   CodeEditor,
   CodeEditorHelp,
   CodeThemeSelect,
-  type EditorRefInner,
   showCode,
+  type EditorRefInner,
 } from '$ui/modules/code-editor'
 import { runGenerate } from '$ui/modules/commands/run'
 import { message } from '$ui/store'
@@ -39,19 +39,19 @@ import {
   Space,
   Tooltip,
 } from 'antd'
+import { execSync } from 'child_process'
 import debugFactory from 'debug'
-import { execaCommand } from 'execa'
 import fse from 'fs-extra'
 import Yaml from 'js-yaml'
 import path from 'path'
 import {
-  type CSSProperties,
-  type KeyboardEventHandler,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
+  type KeyboardEventHandler,
 } from 'react'
 import { proxy, useSnapshot } from 'valtio'
 import RuleAddModal from './AddRuleModal'
@@ -577,10 +577,14 @@ function ModalAddOrEdit() {
 
     // wait edit
     setEditInEditorMaskVisible(true)
-    let execResults
+
+    // execa can be be bundled:
+    // https://github.com/sindresorhus/execa/pull/1156
+
+    let stdout: string
     const cmd = `${editor} --wait '${TEMP_EDITING_FILE}'`
     try {
-      execResults = await execaCommand(cmd, { shell: true })
+      stdout = execSync(cmd, { encoding: 'utf8' })
     } catch (e) {
       message.error('执行命令出错: ' + e.message)
       return
@@ -588,12 +592,7 @@ function ModalAddOrEdit() {
       setEditInEditorMaskVisible(false)
     }
 
-    debug('exec: %o', { cmd, execResults })
-    const { exitCode } = execResults || {}
-    if (exitCode !== 0) {
-      message.error(`执行命令出错: exitCode = ${exitCode}`)
-      return
-    }
+    debug('exec: %o', { cmd, stdout })
 
     // read & set
     const newContent = await fse.readFile(TEMP_EDITING_FILE, 'utf8')
