@@ -1,2 +1,8 @@
 packages:
-  - 'packages/**'
+  - packages/**
+onlyBuiltDependencies:
+  - '@swc/core'
+  - core-js
+  - electron
+  - esbuild
+  - tldjs
