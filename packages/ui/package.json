@@ -19,7 +19,7 @@
     "@icon-park/react": "^1.4.2",
     "ahooks": "^3.8.4",
     "ant-float-label": "^1.1.1",
-    "antd": "^5.24.2",
+    "antd": "^5.24.3",
     "applescript": "^1.0.0",
     "bytes": "^3.1.2",
     "classnames": "^2.5.1",
@@ -47,7 +47,7 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-command-palette": "^0.22.1",
     "react-dom": "^18.3.1",
-    "react-markdown": "^10.0.0",
+    "react-markdown": "^10.0.1",
     "react-monaco-editor": "^0.58.0",
     "react-router-dom": "^7.2.0",
     "react-spinkit": "^3.0.0",
@@ -64,7 +64,7 @@
     "webdav-fs": "^4.0.1"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.311",
+    "@iconify/json": "^2.2.313",
     "@qiniu/typed-less-modules": "^0.1.2",
     "@svgr/core": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",
