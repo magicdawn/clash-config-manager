@@ -154,7 +154,7 @@ export default function ConfigList() {
             }}
           >
             <Tooltip
-              overlayInnerStyle={{ width: 'max-content' }}
+              styles={{ body: { width: 'max-content' } }}
               title={
                 <>
                   ✅ 使用中文: {ProxyGroupTypeConfig['url-test'].nameZh} /{' '}

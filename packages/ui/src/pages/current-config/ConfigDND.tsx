@@ -275,13 +275,13 @@ const Source = ({ item, type, isDragDisabled, index }: SourceProps) => {
           <div className='text' style={{ textAlign: 'center' }}>
             {text}
             <Tooltip
-              overlayClassName={styles.tooltipDetailOverlay}
+              classNames={{ root: styles.tooltipDetailOverlay }}
+              placement={type === 'result' ? 'right' : 'left'}
               title={
                 <div className={cx(styles.tooltipDetail, { [styles.yaml]: item.tooltipIsYaml })}>
                   {item.tooltip}
                 </div>
               }
-              placement={type === 'result' ? 'right' : 'left'}
             >
               <InfoCircleOutlined className='help-icon' />
             </Tooltip>

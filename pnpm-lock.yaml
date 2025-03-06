@@ -9,7 +9,7 @@ importers:
     dependencies:
       '@electron/remote':
         specifier: ^2.1.2
-        version: 2.1.2(electron@34.3.0)
+        version: 2.1.2(electron@35.0.0)
       electron-store:
         specifier: ^8.2.0
         version: 8.2.0
@@ -54,8 +54,8 @@ importers:
         specifier: ^9.1.2
         version: 9.1.2
       electron:
-        specifier: '34.3'
-        version: 34.3.0
+        specifier: '35.0'
+        version: 35.0.0
       electron-builder:
         specifier: ^25.1.8
         version: 25.1.8(electron-builder-squirrel-windows@24.13.3)
@@ -2109,12 +2109,6 @@ packages:
     resolution:
       {
         integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==,
-      }
-
-  '@types/node@20.16.5':
-    resolution:
-      {
-        integrity: sha512-VwYCweNo3ERajwy0IUlqqcyZ8/A7Zwa9ZP3MnENWcB11AejO+tLy3pu850goUW2FC/IJMdZUfKpX/yxL1gymCA==,
       }
 
   '@types/node@22.13.9':
@@ -4270,10 +4264,10 @@ packages:
       }
     engines: { node: '>=18' }
 
-  electron@34.3.0:
+  electron@35.0.0:
     resolution:
       {
-        integrity: sha512-I238qRnYTAsuwJ/rS7HGaFNY4NNKAcjX8nlj7mnNmj1TK3z4HvNoD1r7Zud81DYDFx8AITuLd76EPrEnnfF9Bg==,
+        integrity: sha512-mwNQNktYLPnUWZVR8iNkfWCBjmM5e2/CmB1rhACwE9ASDbVU7CYPgp/jLUB3bj/LyQsfSuubD82OUite6SN8Uw==,
       }
     engines: { node: '>= 12.20.55' }
     hasBin: true
@@ -10019,12 +10013,6 @@ packages:
         integrity: sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==,
       }
 
-  undici-types@6.19.8:
-    resolution:
-      {
-        integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==,
-      }
-
   undici-types@6.20.0:
     resolution:
       {
@@ -10953,9 +10941,9 @@ snapshots:
       - bluebird
       - supports-color
 
-  '@electron/remote@2.1.2(electron@34.3.0)':
+  '@electron/remote@2.1.2(electron@35.0.0)':
     dependencies:
-      electron: 34.3.0
+      electron: 35.0.0
 
   '@electron/universal@1.5.1':
     dependencies:
@@ -11686,10 +11674,6 @@ snapshots:
   '@types/minimist@1.2.5': {}
 
   '@types/ms@2.1.0': {}
-
-  '@types/node@20.16.5':
-    dependencies:
-      undici-types: 6.19.8
 
   '@types/node@22.13.9':
     dependencies:
@@ -13355,10 +13339,10 @@ snapshots:
       electron-is-dev: 3.0.1
       new-github-issue-url: 1.0.0
 
-  electron@34.3.0:
+  electron@35.0.0:
     dependencies:
       '@electron/get': 2.0.2
-      '@types/node': 20.16.5
+      '@types/node': 22.13.9
       extract-zip: 2.0.1
     transitivePeerDependencies:
       - supports-color
@@ -17249,8 +17233,6 @@ snapshots:
       jiti: 2.4.2
 
   undefsafe@2.0.5: {}
-
-  undici-types@6.19.8: {}
 
   undici-types@6.20.0: {}
 
