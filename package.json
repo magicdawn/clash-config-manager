@@ -37,25 +37,25 @@
   "dependencies": {
     "@electron/remote": "^2.1.2",
     "electron-store": "^8.2.0",
-    "es-toolkit": "^1.32.0"
+    "es-toolkit": "^1.33.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.9",
     "@magicdawn/prettier-config": "^0.0.4",
-    "@swc/core": "^1.11.7",
+    "@swc/core": "^1.11.8",
     "@swc/helpers": "^0.5.15",
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/fancy-log": "^2.0.2",
     "@types/fs-extra": "^11.0.4",
     "@types/jake": "^0.0.38",
-    "@types/node": "^22.13.9",
+    "@types/node": "^22.13.10",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
     "@typescript-eslint/parser": "^8.26.0",
     "concurrently": "^9.1.2",
     "electron": "35.0",
     "electron-builder": "^25.1.8",
-    "eslint": "^9.21.0",
-    "eslint-config-prettier": "^10.0.2",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-react": "^7.37.4",
     "fancy-log": "^2.0.0",
     "fast-glob": "^3.3.3",
@@ -81,7 +81,7 @@
       "prettier --write --ignore-unknown"
     ]
   },
-  "packageManager": "pnpm@10.5.2+sha512.da9dc28cd3ff40d0592188235ab25d3202add8a207afbedc682220e4a0029ffbff4562102b9e6e46b4e3f9e8bd53e6d05de48544b0c57d4b0179e22c76d1199b",
+  "packageManager": "pnpm@10.6.1+sha512.40ee09af407fa9fbb5fbfb8e1cb40fbb74c0af0c3e10e9224d7b53c7658528615b2c92450e74cfad91e3a2dcafe3ce4050d80bda71d757756d2ce2b66213e9a3",
   "pnpm": {
     "patchedDependencies": {}
   }

@@ -3,7 +3,7 @@ import { css as _css, css, Global } from '@emotion/react'
 import { App as AntdApp, ConfigProvider, Menu, theme, type MenuProps } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
 import { useMemo } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router'
 import { showCodeModal } from '../../modules/code-editor/ModalCodeViewer'
 import Commands from '../../modules/commands'
 import { setNavigateSingleton } from '../../modules/global-model'

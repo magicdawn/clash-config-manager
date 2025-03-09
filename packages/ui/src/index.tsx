@@ -15,13 +15,8 @@ import { type MenuProps } from 'antd'
 import { trimStart } from 'es-toolkit'
 import { size } from 'polished'
 import { createRoot } from 'react-dom/client'
-import {
-  Link,
-  Route,
-  RouterProvider,
-  createHashRouter,
-  createRoutesFromElements,
-} from 'react-router-dom'
+import { Link, Route, createHashRouter, createRoutesFromElements } from 'react-router'
+import { RouterProvider } from 'react-router/dom'
 import MaterialSymbolsSettingsSuggestRounded from '~icons/material-symbols/settings-suggest-rounded'
 import MingcuteComponentsFill from '~icons/mingcute/components-fill'
 import MingcuteHome4Line from '~icons/mingcute/home-4-line'
