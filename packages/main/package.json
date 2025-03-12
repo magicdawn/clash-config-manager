@@ -13,7 +13,7 @@
     "electron-debug": "^4.1.0",
     "electron-log": "^5.3.2",
     "electron-unhandled": "^5.0.0",
-    "electron-updater": "^6.6.1",
+    "electron-updater": "^6.6.2",
     "electron-util": "^0.18.1",
     "env-paths": "^3.0.0",
     "fix-path": "^4.0.0",
