@@ -1,7 +1,8 @@
 import { css } from '@emotion/react'
+import { useUpdateEffect } from 'ahooks'
 import { Modal } from 'antd'
 import { randomInt } from 'es-toolkit'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { ClimbingBoxLoader, GridLoader, HashLoader, PacmanLoader } from 'react-spinners'
 import { wrapComponent } from './wrapComponent'
 
@@ -34,7 +35,7 @@ function Loading({ visible }: { visible: boolean }) {
   const [color, setColor] = useState<Color>(possibleColors[0])
   const [spiner, setSpiner] = useState<SpinerFactory>(() => possibleSpiners[0])
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (!visible) return
     setColor(possibleColors[randomInt(possibleColors.length)])
     setSpiner(() => possibleSpiners[randomInt(possibleSpiners.length)])
