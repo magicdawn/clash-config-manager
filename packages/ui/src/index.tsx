@@ -4,7 +4,7 @@
 import '@icon-park/react/styles/index.css'
 import 'antd/dist/reset.css'
 import 'virtual:uno.css'
-import './index.less'
+import './common/global.less'
 
 // monaco setup
 import './modules/code-editor/monaco'
@@ -23,7 +23,6 @@ import MingcuteHome4Line from '~icons/mingcute/home-4-line'
 import TablerCloudUp from '~icons/tabler/cloud-up'
 import ZondiconsServers from '~icons/zondicons/servers'
 import './ipc'
-import './modules/common'
 import { RootLayout } from './pages/_layout/RootLayout'
 import CurrentConfig from './pages/current-config'
 import Home from './pages/home'

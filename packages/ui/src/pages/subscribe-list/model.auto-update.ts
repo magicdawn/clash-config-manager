@@ -52,7 +52,7 @@ export async function restartAutoUpdate(item: Subscribe, runImmediate = false) {
     await runGenerate()
   }
 
-  const interval = ms(autoUpdateInterval + 'h')
+  const interval = ms(`${autoUpdateInterval}h`)
 
   // 启动时更新
   // 使用场景: 定时12小时更新, 退出了, 第二天打开自动更新, 但当天重启不会更新

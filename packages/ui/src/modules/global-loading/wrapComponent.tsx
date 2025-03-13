@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client'
 import { proxy, useSnapshot } from 'valtio'
 
 export function wrapComponent<IProps extends object>({
-  C,
+  Component,
   defaultProps,
 }: {
-  C: ComponentType<IProps>
+  Component: ComponentType<IProps>
   defaultProps: IProps
 }) {
   const proxyProps = proxy<IProps>(defaultProps)
@@ -15,7 +15,7 @@ export function wrapComponent<IProps extends object>({
     const props = useSnapshot(proxyProps)
     // https://github.com/emotion-js/emotion/issues/3245
     // @ts-ignore
-    return <C {...props} />
+    return <Component {...props} />
   }
 
   let mounted = false

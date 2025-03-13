@@ -3,14 +3,20 @@ import Markdown from 'react-markdown'
 import rehypeExternalLinks from 'rehype-external-links'
 import remarkGfm from 'remark-gfm'
 
-export function MarkdownView({ children, ...otherProps }: ComponentProps<typeof Markdown>) {
+export function MarkdownView({
+  className,
+  children,
+  ...restProps
+}: ComponentProps<typeof Markdown> & { className?: string }) {
   return (
-    <Markdown
-      {...otherProps}
-      remarkPlugins={[remarkGfm]}
-      rehypePlugins={[[rehypeExternalLinks, { target: '_blank' }]]}
-    >
-      {children}
-    </Markdown>
+    <div className={className}>
+      <Markdown
+        {...restProps}
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[[rehypeExternalLinks, { target: '_blank' }]]}
+      >
+        {children}
+      </Markdown>
+    </div>
   )
 }

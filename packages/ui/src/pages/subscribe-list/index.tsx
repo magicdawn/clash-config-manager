@@ -347,7 +347,7 @@ function SubscribeItem({
             {remark && (
               <Tooltip
                 // open
-                overlayStyle={{ maxWidth: '50vw' }}
+                styles={{ root: { maxWidth: '50vw' } }}
                 title={
                   <MarkdownView
                     css={css`
