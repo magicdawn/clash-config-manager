@@ -3,7 +3,6 @@ import storage, { customMerge, getExportData } from '$ui/storage'
 import { message, rootActions, rootState } from '$ui/store'
 import useImmerState from '$ui/utility/hooks/useImmerState'
 import helper, { STORAGE_FILE } from '$ui/utility/sync/webdav/helper'
-import { CloudDownloadOutlined, CloudUploadOutlined, SettingFilled } from '@ant-design/icons'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Alert, Button, Card, Col, Input, Modal, Radio, Row, Space, Tag } from 'antd'
 import debugFactory from 'debug'
@@ -16,7 +15,7 @@ import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import styles from './index.module.less'
 import { SelectExportForStaticMethod, pickDataFrom } from './modal/SelectExport'
-import { type Theme, state } from './model'
+import { state, type Theme } from './model'
 
 const debug = debugFactory('app:page:preference')
 
@@ -184,7 +183,7 @@ export default function Preference() {
             setShowModal(true)
           }}
         >
-          <SettingFilled />
+          <IconAntDesignSettingFilled />
           配置同步参数
         </Button>
       </Row>
@@ -194,19 +193,19 @@ export default function Preference() {
         <Col span={12}>
           <Card
             title={
-              <>
-                <CloudUploadOutlined /> 上传
-              </>
+              <span className='flex items-center gap-x-1'>
+                <IconAntDesignCloudUploadOutlined /> 上传
+              </span>
             }
           >
             <Space direction='vertical' size={20} style={{ width: '100%' }}>
               <Button type='primary' size='large' block onClick={onUpload}>
-                <CloudUploadOutlined />
+                <IconAntDesignCloudUploadOutlined />
                 上传
               </Button>
 
               <Button type='primary' danger block onClick={onForceUpload}>
-                <CloudUploadOutlined />
+                <IconAntDesignCloudUploadOutlined />
                 上传 (覆盖远程版本)
               </Button>
             </Space>
@@ -217,18 +216,18 @@ export default function Preference() {
         <Col span={12}>
           <Card
             title={
-              <>
-                <CloudDownloadOutlined /> 下载
-              </>
+              <span className='flex items-center gap-x-1'>
+                <IconAntDesignCloudDownloadOutlined /> 下载
+              </span>
             }
           >
             <Space direction='vertical' size={20} style={{ width: '100%' }}>
               <Button type='primary' size='large' block onClick={onDownload}>
-                <CloudDownloadOutlined />
+                <IconAntDesignCloudDownloadOutlined />
                 下载
               </Button>
               <Button type='primary' danger block onClick={onForceDownload}>
-                <CloudDownloadOutlined />
+                <IconAntDesignCloudDownloadOutlined />
                 下载(覆盖本地版本)
               </Button>
             </Space>
@@ -241,18 +240,18 @@ export default function Preference() {
         <Col span={12}>
           <Card
             title={
-              <>
-                <CloudUploadOutlined /> 导出
-              </>
+              <span className='flex items-center gap-x-1'>
+                <IconAntDesignCloudUploadOutlined /> 导出
+              </span>
             }
           >
             <SelectExportForStaticMethod />
             <Space direction='vertical' size={20} style={{ width: '100%' }}>
               <Button block type='primary' onClick={onExport}>
-                <CloudUploadOutlined /> 导出全部数据到 JSON
+                <IconAntDesignCloudUploadOutlined /> 导出全部数据到 JSON
               </Button>
               <Button block onClick={onSelectExport}>
-                <CloudUploadOutlined /> 选择导出数据到 JSON
+                <IconAntDesignCloudUploadOutlined /> 选择导出数据到 JSON
               </Button>
             </Space>
           </Card>
@@ -262,18 +261,19 @@ export default function Preference() {
         <Col span={12}>
           <Card
             title={
-              <>
-                <CloudUploadOutlined /> 导入
-              </>
+              <span className='flex items-center gap-x-1'>
+                <IconAntDesignCloudUploadOutlined />
+                导入
+              </span>
             }
           >
             <Space direction='vertical' size={20} style={{ width: '100%' }}>
               <Button type='primary' block onClick={onSelectFileAndImport}>
-                <CloudUploadOutlined /> 从 JSON 导入
+                <IconAntDesignCloudUploadOutlined /> 从 JSON 导入
               </Button>
 
               <Button block onClick={onImportBundledPreset}>
-                <CloudUploadOutlined /> 导入应用内置的基本设置
+                <IconAntDesignCloudUploadOutlined /> 导入应用内置的基本设置
               </Button>
             </Space>
           </Card>

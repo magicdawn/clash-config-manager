@@ -1,7 +1,6 @@
 import { type ConfigItem } from '$ui/define'
 import { cx } from '$ui/libs'
 import { limitLines } from '$ui/utility/text-util'
-import { InfoCircleOutlined, QuestionCircleFilled } from '@ant-design/icons'
 import { useMemoizedFn } from 'ahooks'
 import { Switch, Tooltip } from 'antd'
 import debugFactory from 'debug'
@@ -143,7 +142,7 @@ export function ConfigDND() {
                 </ul>
               }
             >
-              <QuestionCircleFilled style={{ marginLeft: 5, fontSize: '80%' }} />
+              <IconAntDesignQuestionCircleFilled style={{ marginLeft: 5, fontSize: '80%' }} />
             </Tooltip>
           </div>
           <Droppable droppableId={'result-list'} direction='vertical'>
@@ -283,7 +282,7 @@ const Source = ({ item, type, isDragDisabled, index }: SourceProps) => {
                 </div>
               }
             >
-              <InfoCircleOutlined className='help-icon' />
+              <IconAntDesignInfoCircleOutlined className='help-icon' />
             </Tooltip>
           </div>
         </div>

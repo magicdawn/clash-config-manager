@@ -2,7 +2,6 @@ import { colorHighlightValue } from '$ui/common'
 import { EUaType, type Subscribe, type SubscribeSpecialType } from '$ui/define'
 import { MarkdownView } from '$ui/modules/markdown'
 import { message } from '$ui/store'
-import { EyeFilled, EyeInvisibleFilled, UnorderedListOutlined } from '@ant-design/icons'
 import { DndContext, type DragEndEvent } from '@dnd-kit/core'
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import {
@@ -443,7 +442,7 @@ function SubscribeItem({
                     actions.toggleUrlVisible(index)
                   }}
                 >
-                  {urlVisible ? <EyeFilled /> : <EyeInvisibleFilled />}
+                  {urlVisible ? <IconAntDesignEyeFilled /> : <IconAntDesignEyeInvisibleFilled />}
                 </span>
               </Tooltip>
             </Space>
@@ -530,7 +529,7 @@ function SubscribeItem({
               }
               trigger='click'
             >
-              <Button icon={<UnorderedListOutlined />}>查看节点</Button>
+              <Button icon={<IconAntDesignUnorderedListOutlined />}>查看节点</Button>
             </Popover>
 
             {specialType === 'nodefree' && (
@@ -544,7 +543,7 @@ function SubscribeItem({
                 }
                 trigger='click'
               >
-                <Button icon={<UnorderedListOutlined />}>查看链接列表</Button>
+                <Button icon={<IconAntDesignUnorderedListOutlined />}>查看链接列表</Button>
               </Popover>
             )}
 

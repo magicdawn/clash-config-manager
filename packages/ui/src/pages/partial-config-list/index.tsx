@@ -12,7 +12,6 @@ import { message } from '$ui/store'
 import { useIsDarkMode } from '$ui/utility/hooks/useIsDarkMode'
 import { getRuleItemContent } from '$ui/utility/remote-rules'
 import { firstLine, limitLines } from '$ui/utility/text-util'
-import { FileAddOutlined } from '@ant-design/icons'
 import { DndContext, type DragEndEvent } from '@dnd-kit/core'
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import {
@@ -129,11 +128,11 @@ export default function LibraryRuleList() {
         <div style={{ fontSize: '2em' }}>配置源管理</div>
         <span>
           <Button onClick={addRuleConfig}>
-            <FileAddOutlined />
+            <IconAntDesignFileAddOutlined />
             新建纯规则配置
           </Button>
           <Button type='primary' onClick={add} style={{ marginLeft: 5 }}>
-            <FileAddOutlined />
+            <IconAntDesignFileAddOutlined />
             新建配置
           </Button>
         </span>

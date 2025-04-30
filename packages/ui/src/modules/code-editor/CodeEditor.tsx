@@ -1,15 +1,14 @@
 import { state as preferenceState } from '$ui/pages/preference/model'
-import { QuestionCircleFilled } from '@ant-design/icons'
 import { css } from '@emotion/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Spin, Tag, Tooltip } from 'antd'
 import { type SpinProps } from 'antd/lib/spin'
 import * as EditorApi from 'monaco-editor/esm/vs/editor/editor.api'
-import { type CSSProperties, type MutableRefObject, type ReactNode, useMemo, useRef } from 'react'
+import { useMemo, useRef, type CSSProperties, type MutableRefObject, type ReactNode } from 'react'
 import MonacoEditor, {
+  monaco,
   type EditorDidMount,
   type EditorWillMount,
-  monaco,
 } from 'react-monaco-editor'
 import { useSnapshot } from 'valtio'
 
@@ -52,7 +51,7 @@ export function CodeEditorHelp({
         </ul>
       }
     >
-      <QuestionCircleFilled style={{ ...style }} className={className} />
+      <IconAntDesignQuestionCircleFilled style={{ ...style }} className={className} />
     </Tooltip>
   )
 }

@@ -3,10 +3,12 @@
 import react from '@vitejs/plugin-react'
 import esmUtils from 'esm-utils'
 import path, { join } from 'path'
+import UnoCSS from 'unocss/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
 import { defineConfig, mergeConfig, type Plugin, type UserConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
-import UnoCSS from 'unocss/vite'
 
 const { require } = esmUtils(import.meta)
 
@@ -229,6 +231,26 @@ export default defineConfig({
   plugins: [
     tsconfigPaths({
       root: join(__dirname, '../../'),
+    }),
+
+    AutoImport({
+      dts: 'src/auto-imports.d.ts',
+      // targets to transform
+      include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+      ],
+      resolvers: [
+        IconsResolver({
+          prefix: 'Icon',
+          extension: 'jsx',
+          alias: {
+            // prevent `IconIconPark` double `Icon`
+            'park-outline': 'icon-park-outline',
+            'park-solid': 'icon-park-solid',
+            'park-twotone': 'icon-park-twotone',
+          },
+        }),
+      ],
     }),
 
     Icons({ compiler: 'jsx', jsx: 'react' }),
