@@ -51,6 +51,7 @@ const createMainWindow = async () => {
       nodeIntegration: true,
       webSecurity: false,
       spellcheck: false,
+      enableDeprecatedPaste: true, // monaco-editor 需要
     },
   })
 
@@ -73,7 +74,7 @@ const createMainWindow = async () => {
 
     const hideAction = () => {
       win.hide()
-      app.dock.hide()
+      app.dock?.hide()
     }
 
     if (win.isFullScreen()) {
@@ -217,5 +218,5 @@ function setTray() {
 
 function restoreWindow() {
   mainWindow?.show()
-  app.dock.show()
+  app.dock?.show()
 }

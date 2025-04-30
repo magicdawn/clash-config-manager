@@ -333,7 +333,7 @@ function SubscribeItem({
         column={1}
         size='middle'
         style={{ width: '100%' }}
-        labelStyle={{ width: '120px', textAlign: 'center' }}
+        styles={{ label: { width: '120px', textAlign: 'center' } }}
       >
         <Descriptions.Item label='名称'>
           <div
