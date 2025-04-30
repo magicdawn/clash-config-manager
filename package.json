@@ -37,26 +37,26 @@
   "dependencies": {
     "@electron/remote": "^2.1.2",
     "electron-store": "^8.2.0",
-    "es-toolkit": "^1.33.0"
+    "es-toolkit": "^1.36.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",
     "@magicdawn/prettier-config": "^0.0.4",
-    "@swc/core": "^1.11.9",
-    "@swc/helpers": "^0.5.15",
+    "@swc/core": "^1.11.24",
+    "@swc/helpers": "^0.5.17",
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/fancy-log": "^2.0.2",
     "@types/fs-extra": "^11.0.4",
     "@types/jake": "^0.0.38",
-    "@types/node": "^22.13.10",
-    "@typescript-eslint/eslint-plugin": "^8.26.1",
-    "@typescript-eslint/parser": "^8.26.1",
+    "@types/node": "^22.15.3",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
     "concurrently": "^9.1.2",
-    "electron": "35.0",
-    "electron-builder": "^25.1.8",
-    "eslint": "^9.22.0",
-    "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-react": "^7.37.4",
+    "electron": "36.0",
+    "electron-builder": "^26.0.12",
+    "eslint": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-react": "^7.37.5",
     "fancy-log": "^2.0.0",
     "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.0",
@@ -65,14 +65,14 @@
     "lint-staged": "^15",
     "minimist": "^1.2.8",
     "napa": "^3.0.0",
-    "nodemon": "^3.1.9",
+    "nodemon": "^3.1.10",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "ts-node": "^10.9.2",
-    "tsx": "^4.19.3",
-    "turbo": "^2.4.4",
-    "type-fest": "^4.37.0",
-    "typescript": "^5.8.2",
+    "tsx": "^4.19.4",
+    "turbo": "^2.5.2",
+    "type-fest": "^4.40.1",
+    "typescript": "^5.8.3",
     "typescript-plugin-css-modules": "^5.1.0",
     "unplugin-icons": "^22.1.0"
   },
@@ -81,7 +81,7 @@
       "prettier --write --ignore-unknown"
     ]
   },
-  "packageManager": "pnpm@10.6.2+sha512.47870716bea1572b53df34ad8647b42962bc790ce2bf4562ba0f643237d7302a3d6a8ecef9e4bdfc01d23af1969aa90485d4cebb0b9638fa5ef1daef656f6c1b",
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
   "pnpm": {
     "patchedDependencies": {}
   }
