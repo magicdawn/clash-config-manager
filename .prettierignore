@@ -1,4 +1,4 @@
 node_modules
 /bundle
 /dist
-auto-import.d.ts
+**/auto-import.d.ts
