@@ -41,10 +41,8 @@ export default defineConfig({
   },
 
   files: [
-    {
-      from: 'bundle/${env.NODE_ENV}',
-      to: '.',
-    },
+    //
+    { from: 'bundle/${env.NODE_ENV}', to: '.' },
     './package.json',
   ],
 
