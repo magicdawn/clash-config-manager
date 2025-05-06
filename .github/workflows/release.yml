@@ -59,6 +59,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+      # delay, for action-gh-release cann't detect existing release
+      # https://github.com/softprops/action-gh-release/issues/616
+      - run: sleep 3
+
       # create release & upload to release
       - name: Release
         uses: softprops/action-gh-release@v2
