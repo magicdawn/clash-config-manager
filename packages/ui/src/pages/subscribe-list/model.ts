@@ -212,9 +212,7 @@ export async function update({
   })
 
   if (!silent || successMsg) {
-    const msg =
-      successMsg ||
-      (currentSubscribe?.name ? `订阅(${currentSubscribe.name}) 更新成功` : `订阅更新成功`)
+    const msg = successMsg || (currentSubscribe?.name ? `订阅(${currentSubscribe.name}) 更新成功` : `订阅更新成功`)
     message.success(msg)
   }
 
@@ -260,8 +258,7 @@ export function getConvertedUrl(sub: string, converter: string) {
     // TODO: figure out these fields means
     target: 'clash',
     insert: 'false',
-    config:
-      'https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Full_NoAuto.ini',
+    config: 'https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Full_NoAuto.ini',
     append_type: 'true',
     emoji: 'true',
     list: 'true',
@@ -269,7 +266,7 @@ export function getConvertedUrl(sub: string, converter: string) {
     udp: 'true',
     tfo: 'false',
     expand: 'true',
-    scv: 'false',
+    scv: 'true', // skip-cert-verify
     fdn: 'false',
     new_name: 'true',
     url: subUrlJoined,

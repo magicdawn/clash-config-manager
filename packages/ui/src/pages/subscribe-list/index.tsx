@@ -4,12 +4,7 @@ import { MarkdownView } from '$ui/modules/markdown'
 import { message } from '$ui/store'
 import { DndContext, type DragEndEvent } from '@dnd-kit/core'
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
+import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { css } from '@emotion/react'
 import { useMemoizedFn, useRequest } from 'ahooks'
@@ -160,10 +155,7 @@ export default function LibrarySubscribe() {
           modalState={modalState}
         />
 
-        <DndContext
-          modifiers={[restrictToFirstScrollableAncestor, restrictToVerticalAxis]}
-          onDragEnd={onDragEnd}
-        >
+        <DndContext modifiers={[restrictToFirstScrollableAncestor, restrictToVerticalAxis]} onDragEnd={onDragEnd}>
           <SortableContext items={contextIds} strategy={verticalListSortingStrategy}>
             <List
               css={css`
@@ -206,12 +198,7 @@ export default function LibrarySubscribe() {
               bordered
               dataSource={list}
               renderItem={(item: Subscribe, index) => (
-                <SubscribeItem
-                  key={item.id}
-                  item={item}
-                  index={index}
-                  onEdit={() => handleEdit(item, index)}
-                />
+                <SubscribeItem key={item.id} item={item} index={index} onEdit={() => handleEdit(item, index)} />
               )}
             />
           </SortableContext>
@@ -262,9 +249,7 @@ function SubscribeItem({
     transition,
   }
 
-  const dragActiveStyle: CSSProperties | undefined = isDragging
-    ? { backgroundColor: '#eea' }
-    : undefined
+  const dragActiveStyle: CSSProperties | undefined = isDragging ? { backgroundColor: '#eea' } : undefined
 
   // 手动点: 强制更新; 其他场景: 不强制更新
   const {
@@ -290,8 +275,7 @@ function SubscribeItem({
     }
     if (u) {
       u.searchParams.forEach((val, key) => {
-        const keep = (n: number) =>
-          val.slice(0, n) + '*'.repeat(val.slice(n, -n).length) + val.slice(-n)
+        const keep = (n: number) => val.slice(0, n) + '*'.repeat(val.slice(n, -n).length) + val.slice(-n)
 
         // keep 1/3 visible
         const n = Math.floor(val.length / 3 / 2)
@@ -479,19 +463,12 @@ function SubscribeItem({
 
         <Descriptions.Item label='操作'>
           <Space style={{ alignSelf: 'flex-end' }} wrap>
-            <Button
-              type='primary'
-              onClick={() => onEdit?.(item, index)}
-              onKeyDown={disableEnterAsClick}
-            >
+            <Button type='primary' onClick={() => onEdit?.(item, index)} onKeyDown={disableEnterAsClick}>
               编辑
             </Button>
 
             {!!updateError ? (
-              <Popover
-                placement='top'
-                title={<>update error: {updateError?.stack || updateError?.message}</>}
-              >
+              <Popover placement='top' title={<>update error: {updateError?.stack || updateError?.message}</>}>
                 <Button
                   type='primary'
                   danger
@@ -503,12 +480,7 @@ function SubscribeItem({
                 </Button>
               </Popover>
             ) : (
-              <Button
-                type='primary'
-                onClick={handleUpdate}
-                loading={updateLoading}
-                onKeyDown={disableEnterAsClick}
-              >
+              <Button type='primary' onClick={handleUpdate} loading={updateLoading} onKeyDown={disableEnterAsClick}>
                 更新
               </Button>
             )}
@@ -769,13 +741,7 @@ function ModalAddOrEdit({
       width={600}
     >
       <div className='flex flex-col gap-y-15px'>
-        <FloatInput
-          size='large'
-          placeholder='名称 * '
-          value={name}
-          onChange={onNameChange}
-          onPressEnter={handleOk}
-        />
+        <FloatInput size='large' placeholder='名称 * ' value={name} onChange={onNameChange} onPressEnter={handleOk} />
         {isNodefree ? (
           <FloatInputNumber
             // style={{ display: 'flex', width: '100%', marginBottom: 10 }}
@@ -828,6 +794,7 @@ function ModalAddOrEdit({
                 value={proxyUrls}
                 onChange={(e) => setProxyUrls(e.target.value)}
                 autoSize={{ minRows: 2, maxRows: 8 }}
+                style={{ wordBreak: 'break-all' }}
                 placeholder='节点链接, 每行一个, 支持空行, `#` 或者 `;` 开头的注释行'
               />
             </div>
