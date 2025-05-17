@@ -9,7 +9,6 @@ import { assetsDir } from './ipc/common'
 import setMenu from './menu'
 import './init/meta'
 import './ipc/index'
-import './global'
 
 // Prevent window from being garbage collected
 export let mainWindow: BrowserWindow
