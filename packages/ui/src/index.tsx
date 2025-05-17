@@ -1,28 +1,17 @@
 /// <reference types="vite/client" />
 
-// styles
-import '@icon-park/react/styles/index.css'
-import 'antd/dist/reset.css'
-import 'virtual:uno.css'
-import './common/global.less'
-
-// monaco setup
-import './modules/code-editor/monaco'
-
-// deps
-import '@total-typescript/ts-reset'
-import { type MenuProps } from 'antd'
-import { trimStart } from 'es-toolkit'
-import { size } from 'polished'
-import { createRoot } from 'react-dom/client'
-import { Link, Route, createHashRouter, createRoutesFromElements } from 'react-router'
-import { RouterProvider } from 'react-router/dom'
 import MaterialSymbolsSettingsSuggestRounded from '~icons/material-symbols/settings-suggest-rounded'
 import MingcuteComponentsFill from '~icons/mingcute/components-fill'
 import MingcuteHome4Line from '~icons/mingcute/home-4-line'
 import TablerCloudUp from '~icons/tabler/cloud-up'
+
 import ZondiconsServers from '~icons/zondicons/servers'
-import './ipc'
+
+import { trimStart } from 'es-toolkit'
+import { size } from 'polished'
+import { createRoot } from 'react-dom/client'
+import { createHashRouter, createRoutesFromElements, Link, Route } from 'react-router'
+import { RouterProvider } from 'react-router/dom'
 import { RootLayout } from './pages/_layout/RootLayout'
 import CurrentConfig from './pages/current-config'
 import Home from './pages/home'
@@ -30,6 +19,17 @@ import LibraryRuleList from './pages/partial-config-list'
 import Preference from './pages/preference'
 import LibrarySubscribe from './pages/subscribe-list'
 import { routeTitles } from './storage'
+import type { MenuProps } from 'antd'
+// monaco setup
+import './modules/code-editor/monaco'
+// deps
+import '@total-typescript/ts-reset'
+import './ipc'
+// styles
+import '@icon-park/react/styles/index.css'
+import 'antd/dist/reset.css'
+import 'virtual:uno.css'
+import './common/global.less'
 
 const routes = [
   {

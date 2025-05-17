@@ -1,61 +1,30 @@
+import { execSync } from 'node:child_process'
+import path from 'node:path'
+import { DndContext, type DragEndEvent } from '@dnd-kit/core'
+import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import * as remote from '@electron/remote'
+import { css } from '@emotion/react'
+import { LinkTwo, SdCard } from '@icon-park/react'
 import { colorHighlightValue } from '$ui/common'
-import { type LocalRuleItem, type RuleItem } from '$ui/define'
-import {
-  CodeEditor,
-  CodeEditorHelp,
-  CodeThemeSelect,
-  showCode,
-  type EditorRefInner,
-} from '$ui/modules/code-editor'
+import { CodeEditor, CodeEditorHelp, CodeThemeSelect, showCode, type EditorRefInner } from '$ui/modules/code-editor'
 import { runGenerate } from '$ui/modules/commands/run'
 import { message } from '$ui/store'
 import { useIsDarkMode } from '$ui/utility/hooks/useIsDarkMode'
 import { getRuleItemContent } from '$ui/utility/remote-rules'
 import { firstLine, limitLines } from '$ui/utility/text-util'
-import { DndContext, type DragEndEvent } from '@dnd-kit/core'
-import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import * as remote from '@electron/remote'
-import { css } from '@emotion/react'
-import { LinkTwo, SdCard } from '@icon-park/react'
 import { useMemoizedFn } from 'ahooks'
-import {
-  Button,
-  Checkbox,
-  Col,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Row,
-  Select,
-  Space,
-  Tooltip,
-} from 'antd'
-import { execSync } from 'child_process'
+import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Select, Space, Tooltip } from 'antd'
 import debugFactory from 'debug'
 import fse from 'fs-extra'
 import Yaml from 'js-yaml'
-import path from 'path'
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-  type KeyboardEventHandler,
-} from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEventHandler } from 'react'
 import { proxy, useSnapshot } from 'valtio'
 import RuleAddModal from './AddRuleModal'
 import styles from './index.module.less'
 import { actions, state } from './model'
+import type { LocalRuleItem, RuleItem } from '$ui/define'
 
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
@@ -139,10 +108,7 @@ export default function LibraryRuleList() {
       </div>
 
       <div className='list-items-container'>
-        <DndContext
-          modifiers={[restrictToFirstScrollableAncestor, restrictToVerticalAxis]}
-          onDragEnd={onDragEnd}
-        >
+        <DndContext modifiers={[restrictToFirstScrollableAncestor, restrictToVerticalAxis]} onDragEnd={onDragEnd}>
           <SortableContext items={contextIds} strategy={verticalListSortingStrategy}>
             {list.map((item, index) => (
               <PartialConfigItem key={item.id} item={item} index={index} />
@@ -175,9 +141,7 @@ export function PartialConfigItem({ item, index }: { item: RuleItem; index: numb
     transition,
   }
 
-  const dragActiveStyle: CSSProperties | undefined = isDragging
-    ? { backgroundColor: '#eea' }
-    : undefined
+  const dragActiveStyle: CSSProperties | undefined = isDragging ? { backgroundColor: '#eea' } : undefined
 
   /**
    * Actions
@@ -210,7 +174,7 @@ export function PartialConfigItem({ item, index }: { item: RuleItem; index: numb
     })
   })
 
-  const updateRmote = useMemoizedFn(async (index: number) => {
+  const updateRmote = useMemoizedFn((index: number) => {
     const item = state.list[index]
     return actions.updateRemote({ item, forceUpdate: true })
   })
@@ -283,19 +247,13 @@ export function PartialConfigItem({ item, index }: { item: RuleItem; index: numb
           {type === 'local' ? (
             <Tooltip
               title={
-                <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-                  {limitLines(item.content, 10)}
-                </div>
+                <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{limitLines(item.content, 10)}</div>
               }
             >
               <div className='ellipsis'>内容: {firstLine(item.content)}</div>
             </Tooltip>
           ) : (
-            <Tooltip
-              title={
-                <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{item.url}</div>
-              }
-            >
+            <Tooltip title={<div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{item.url}</div>}>
               <div className='ellipsis'>链接: {item.url}</div>
             </Tooltip>
           )}
@@ -374,19 +332,11 @@ export function PartialConfigItem({ item, index }: { item: RuleItem; index: numb
 
         {type === 'remote' && (
           <Space style={{ display: 'flex', alignItems: 'center', marginTop: 5 }}>
-            <Button
-              type='primary'
-              onClick={(e) => updateRmote(index)}
-              onKeyDown={disableEnterAsClick}
-            >
+            <Button type='primary' onClick={(e) => updateRmote(index)} onKeyDown={disableEnterAsClick}>
               更新
             </Button>
 
-            <Button
-              type='default'
-              onKeyDown={disableEnterAsClick}
-              onClick={(e) => viewRmoteContents(index)}
-            >
+            <Button type='default' onKeyDown={disableEnterAsClick} onClick={(e) => viewRmoteContents(index)}>
               查看内容
             </Button>
           </Space>
@@ -402,7 +352,7 @@ const getDefaultEditItem = () =>
     type: 'local',
     name: '',
     content: '',
-  }) as LocalRuleItem
+  }) satisfies LocalRuleItem
 
 const debugModal = debugFactory('app:page:library-rule-list:ModalAddOrEdit')
 
@@ -518,7 +468,7 @@ function ModalAddOrEdit() {
           err = e
         }
         if (err) {
-          return message.error('yaml load fail: ' + err.stack || err.message)
+          return message.error(`yaml load fail: ${err.stack || err.message}`)
         }
       }
 
@@ -564,7 +514,7 @@ function ModalAddOrEdit() {
       return message.error(`rule ${rule} 已存在`)
     }
 
-    content = content.trimEnd() + '\n' + `  - ${rule}` + '\n'
+    content = `${content.trimEnd()}\n` + `  - ${rule}` + `\n`
     form.setFieldsValue({ content })
     message.success(`已添加规则 ${rule}`)
   })
@@ -585,7 +535,7 @@ function ModalAddOrEdit() {
     try {
       stdout = execSync(cmd, { encoding: 'utf8' })
     } catch (e) {
-      message.error('执行命令出错: ' + e.message)
+      message.error(`执行命令出错: ${e.message}`)
       return
     } finally {
       setEditInEditorMaskVisible(false)
@@ -634,11 +584,7 @@ function ModalAddOrEdit() {
             {type === 'local' && (
               <>
                 {addRuleModalVisible && (
-                  <RuleAddModal
-                    visible={addRuleModalVisible}
-                    setVisible={setAddRuleModalVisible}
-                    onOk={onAddRule}
-                  />
+                  <RuleAddModal visible={addRuleModalVisible} setVisible={setAddRuleModalVisible} onOk={onAddRule} />
                 )}
 
                 <Space direction='horizontal'>
@@ -658,11 +604,7 @@ function ModalAddOrEdit() {
                 取消
               </Button>
 
-              <Button
-                disabled={editInEditorMaskVisible}
-                type='default'
-                onClick={handleOkAndGenerate}
-              >
+              <Button disabled={editInEditorMaskVisible} type='default' onClick={handleOkAndGenerate}>
                 确定 (并重新生成)
               </Button>
 
@@ -707,11 +649,7 @@ function ModalAddOrEdit() {
         </Form.Item>
 
         {type === 'local' && (
-          <Form.Item
-            label='content'
-            name='content'
-            rules={[{ required: true, message: '内容不能为空' }]}
-          >
+          <Form.Item label='content' name='content' rules={[{ required: true, message: '内容不能为空' }]}>
             <CodeEditor
               open={visible}
               editorRef={monacoEditorRef}
@@ -719,16 +657,10 @@ function ModalAddOrEdit() {
               header={
                 <Row style={{ alignItems: 'center' }}>
                   <Space direction='horizontal'>
-                    <Button
-                      disabled={readonly || editInEditorMaskVisible}
-                      onClick={() => editInEditor('code')}
-                    >
+                    <Button disabled={readonly || editInEditorMaskVisible} onClick={() => editInEditor('code')}>
                       使用 vscode 编辑
                     </Button>
-                    <Button
-                      disabled={readonly || editInEditorMaskVisible}
-                      onClick={() => editInEditor('atom')}
-                    >
+                    <Button disabled={readonly || editInEditorMaskVisible} onClick={() => editInEditor('atom')}>
                       使用 Atom 编辑
                     </Button>
                   </Space>
@@ -757,12 +689,7 @@ function ModalAddOrEdit() {
 
         {type === 'remote' && (
           <>
-            <Form.Item
-              label='URL'
-              name='url'
-              rules={[{ required: true, message: 'url不能为空' }]}
-              className='url'
-            >
+            <Form.Item label='URL' name='url' rules={[{ required: true, message: 'url不能为空' }]} className='url'>
               <Input.TextArea
                 className='input-row'
                 onPressEnter={onInputPressEnter}
@@ -782,16 +709,8 @@ function ModalAddOrEdit() {
             </Form.Item>
 
             {autoUpdate && (
-              <Form.Item
-                name='autoUpdateInterval'
-                label='更新间隔'
-                className='auto-update-interval'
-              >
-                <InputNumber
-                  addonAfter={'小时'}
-                  min={autoUpdateIntervalMin}
-                  max={autoUpdateIntervalMax}
-                />
+              <Form.Item name='autoUpdateInterval' label='更新间隔' className='auto-update-interval'>
+                <InputNumber addonAfter={'小时'} min={autoUpdateIntervalMin} max={autoUpdateIntervalMax} />
               </Form.Item>
             )}
           </>

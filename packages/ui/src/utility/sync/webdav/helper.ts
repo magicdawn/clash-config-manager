@@ -1,8 +1,8 @@
+import { dirname } from 'node:path'
 import storage, { customMerge } from '$ui/storage'
 import { message, rootActions, rootState } from '$ui/store'
 import { Modal } from 'antd'
 import memo from 'memoize-one'
-import { dirname } from 'path'
 import { createClient } from 'webdav'
 
 const makeClient = memo((davServerUrl: string, username: string, password: string) =>
@@ -18,7 +18,7 @@ function getClient() {
 }
 
 export const APP_DATA_DIR = '/AppData/clash-config-manager'
-export const STORAGE_FILE = APP_DATA_DIR + '/data.txt'
+export const STORAGE_FILE = `${APP_DATA_DIR}/data.txt`
 
 class DavHelper {
   get client() {
@@ -76,7 +76,7 @@ class DavHelper {
     // 如果 dir 不存在, 会报错 status code 409
     try {
       return await this.client.exists(path)
-    } catch (e) {
+    } catch {
       return false
     }
   }

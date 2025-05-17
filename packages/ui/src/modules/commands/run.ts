@@ -1,8 +1,8 @@
+import { setTimeout as delay } from 'node:timers/promises'
 import { message, rootActions } from '$ui/store'
 import gen from '$ui/utility/gen'
 import { shell } from 'electron'
 import { createRef } from 'react'
-import { setTimeout as delay } from 'timers/promises'
 import GlobalLoading from '../global-loading'
 
 export const commandPaletteRef = createRef<any>()
@@ -37,7 +37,7 @@ const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {
 
   if (err) {
     console.error(err.stack || err)
-    message.error('生成失败: ' + err.message, 10)
+    message.error(`生成失败: ${err.message}`, 10)
     return
   }
 

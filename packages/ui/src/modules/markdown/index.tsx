@@ -1,7 +1,7 @@
-import type { ComponentProps } from 'react'
 import Markdown from 'react-markdown'
 import rehypeExternalLinks from 'rehype-external-links'
 import remarkGfm from 'remark-gfm'
+import type { ComponentProps } from 'react'
 
 export function MarkdownView({
   className,

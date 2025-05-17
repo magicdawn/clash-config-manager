@@ -1,7 +1,0 @@
-node_modules
-
-/bundle
-/dist
-/bak
-
-rollup.config.js

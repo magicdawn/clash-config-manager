@@ -38,14 +38,7 @@ export function useAddRuleModal(options: { handleAdd: HandleAdd; mode: Mode }) {
   const { open, close, setVisible } = store
   const { modalVisible } = useSnapshot(store)
 
-  const modal = (
-    <AddRuleModal
-      visible={modalVisible}
-      setVisible={setVisible}
-      onOk={handleAdd}
-      mode={options.mode}
-    />
-  )
+  const modal = <AddRuleModal visible={modalVisible} setVisible={setVisible} onOk={handleAdd} mode={options.mode} />
 
   return {
     open,
@@ -101,7 +94,7 @@ export function useAddRuleModalFromGlobal() {
         newContent = contentLines.with(idx, `  - ${rule}`).join('\n')
         msg = `已替换规则 ${rule} 至 ${ruleItem.name}`
       } else {
-        newContent = content.trimEnd() + '\n' + `  - ${rule}` + '\n'
+        newContent = `${content.trimEnd()}\n` + `  - ${rule}` + `\n`
         msg = `已添加规则 ${rule} 至 ${ruleItem.name}`
       }
 

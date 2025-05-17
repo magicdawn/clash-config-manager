@@ -1,12 +1,14 @@
-import { colorHighlightValue } from '$ui/common'
-import { EUaType, type Subscribe, type SubscribeSpecialType } from '$ui/define'
-import { MarkdownView } from '$ui/modules/markdown'
-import { message } from '$ui/store'
 import { DndContext, type DragEndEvent } from '@dnd-kit/core'
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { css } from '@emotion/react'
+import IconParkOutlineCopy from '~icons/icon-park-outline/copy'
+import IconParkOutlineTips from '~icons/icon-park-outline/tips'
+import { colorHighlightValue } from '$ui/common'
+import { EUaType, type Subscribe, type SubscribeSpecialType } from '$ui/define'
+import { MarkdownView } from '$ui/modules/markdown'
+import { message } from '$ui/store'
 import { useMemoizedFn, useRequest } from 'ahooks'
 import { FloatInput, FloatInputNumber } from 'ant-float-label'
 import {
@@ -27,7 +29,6 @@ import {
   Tag,
   Tooltip,
 } from 'antd'
-import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { clipboard } from 'electron'
 import { size } from 'polished'
 import {
@@ -40,11 +41,10 @@ import {
   type KeyboardEventHandler,
 } from 'react'
 import { useSnapshot } from 'valtio'
-import IconParkOutlineCopy from '~icons/icon-park-outline/copy'
-import IconParkOutlineTips from '~icons/icon-park-outline/tips'
 import { sharedPageCss } from '../_layout/_shared'
 import { actions, getConvertedUrl, state, SubConverterServiceUrls } from './model'
 import { defaultNodefreeSubscribe, nodefreeGetUrls, type NodefreeData } from './special/nodefree'
+import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 
 const S = {
   modal: css`
@@ -144,7 +144,7 @@ export default function LibrarySubscribe() {
         `}
       >
         <ModalAddOrEdit
-          key={'ModalAddOrEdit' + modalState.id} // re-create: by increase id; when item change;
+          key={`ModalAddOrEdit${modalState.id}`} // re-create: by increase id; when item change;
           visible={modalState.visible}
           onClose={() =>
             setModalState((cur) => {
@@ -270,8 +270,8 @@ function SubscribeItem({
     let u: URL | undefined
     try {
       u = new URL(url)
-    } catch (e) {
-      console.error('invalid url: ', url)
+    } catch {
+      console.error('invalid url:', url)
     }
     if (u) {
       u.searchParams.forEach((val, key) => {
@@ -467,7 +467,7 @@ function SubscribeItem({
               编辑
             </Button>
 
-            {!!updateError ? (
+            {updateError ? (
               <Popover placement='top' title={<>update error: {updateError?.stack || updateError?.message}</>}>
                 <Button
                   type='primary'

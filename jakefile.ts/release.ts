@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 /**
  * 使用 GitHub Ations 发布步骤
  *  - npm version patch or minor
@@ -22,7 +20,7 @@ import { version } from '../package.json'
 import { PROJECT_ROOT, sh } from './util'
 
 function getChangelog() {
-  const fullChangeLog = fse.readFileSync(PROJECT_ROOT + '/CHANGELOG.md', 'utf8')
+  const fullChangeLog = fse.readFileSync(`${PROJECT_ROOT}/CHANGELOG.md`, 'utf8')
   const lines = fullChangeLog.split('\n')
   const usingLines: string[] = []
   let h2Count = 0
@@ -43,13 +41,13 @@ function getChangelog() {
   return curChangelog
 }
 
-const changelogTempFile = PROJECT_ROOT + '/CHANGELOG.temp.md'
+const changelogTempFile = `${PROJECT_ROOT}/CHANGELOG.temp.md`
 export function releaseChangelog() {
   fse.writeFileSync(changelogTempFile, getChangelog(), 'utf8')
   log('[changelog]: changelog.temp.md generated')
 }
 
-export async function release() {
+export function release() {
   // 1. add Changelog
   // 2. npm version patch or minor
 

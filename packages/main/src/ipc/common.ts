@@ -1,5 +1,5 @@
+import path from 'node:path'
 import { app, ipcMain } from 'electron'
-import path from 'path'
 
 export const assetsDir = app.isPackaged
   ? path.join(process.resourcesPath, 'assets/')

@@ -1,10 +1,10 @@
-import { type RuleItem } from '$ui/define'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
 import { message } from '$ui/store'
 import { updateRemoteConfig } from '$ui/utility/remote-rules'
 import { valtioState } from '$ui/utility/valtio-helper'
 import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './model.auto-update'
+import type { RuleItem } from '$ui/define'
 
 const RULE_LIST_STORAGE_KEY = 'rule_list'
 
@@ -65,13 +65,7 @@ onReload(load)
  * effects
  */
 
-function check({
-  item,
-  editItemIndex,
-}: {
-  item: RuleItem
-  editItemIndex: number | null | undefined
-}) {
+function check({ item, editItemIndex }: { item: RuleItem; editItemIndex: number | null | undefined }) {
   let { list } = state
   if (editItemIndex || editItemIndex === 0) {
     list = list.filter((i, index) => index !== editItemIndex)
@@ -81,10 +75,8 @@ function check({
   if (list.find((x) => x.name === name)) {
     return 'name已存在'
   }
-  if (type === 'remote') {
-    if (list.find((x) => 'url' in x && x.url === item.url)) {
-      return 'url已存在'
-    }
+  if (type === 'remote' && list.find((x) => 'url' in x && x.url === item.url)) {
+    return 'url已存在'
   }
 
   if (type === 'local') {

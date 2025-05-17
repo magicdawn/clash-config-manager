@@ -1,7 +1,7 @@
-import { randomUUID } from 'crypto'
+import { randomUUID } from 'node:crypto'
+import { builtinModules } from 'node:module'
+import path from 'node:path'
 import { camelCase } from 'es-toolkit'
-import { builtinModules } from 'module'
-import path from 'path'
 import { defineConfig } from 'tsup'
 
 const env = process.env.NODE_ENV || 'development'
@@ -45,9 +45,7 @@ export default defineConfig({
       name: 'custom-external-plugin',
       setup(build) {
         const filter = new RegExp(
-          ['electron', ...builtinModules.map((x) => [x, `node\\:${x}`]).flat()]
-            .map((id) => `(?:^${id}$)`)
-            .join('|'),
+          ['electron', ...builtinModules.map((x) => [x, `node\\:${x}`]).flat()].map((id) => `(?:^${id}$)`).join('|'),
         )
         // console.log(filter)
 
@@ -65,7 +63,7 @@ export default defineConfig({
         })
 
         build.onLoad({ filter: /.*/, namespace: nsp }, (args) => {
-          const m = camelCase(args.path).replace(/[:/]/g, '_')
+          const m = camelCase(args.path).replaceAll(/[:/]/g, '_')
           return {
             contents: `
               import ${m} from ${JSON.stringify(prefix + args.path)};

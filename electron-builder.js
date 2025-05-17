@@ -1,3 +1,3 @@
-require('tsx/cjs')
-module.exports = require('./electron-builder.config.ts').default
-// console.log(module.exports)
+import 'tsx'
+const config = (await import('./electron-builder.config.ts')).default
+export default config

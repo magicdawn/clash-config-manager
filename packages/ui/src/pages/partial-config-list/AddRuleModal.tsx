@@ -1,12 +1,13 @@
+import { css } from '@emotion/react'
+import LineMdConfirm from '~icons/line-md/confirm'
 import { message } from '$ui/store'
 import { genConfig } from '$ui/utility/gen'
-import { css } from '@emotion/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space } from 'antd'
 import AppleScript from 'applescript'
 import { clipboard } from 'electron'
-import Yaml from 'js-yaml'
 import { uniq } from 'es-toolkit'
+import Yaml from 'js-yaml'
 import { size } from 'polished'
 import pify from 'promise.ify'
 import { tryit } from 'radash'
@@ -14,7 +15,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { tldExists } from 'tldjs'
 import URI from 'urijs'
 import { useSnapshot } from 'valtio'
-import LineMdConfirm from '~icons/line-md/confirm'
 import { state } from './model'
 
 const { Option } = Select
@@ -111,7 +111,7 @@ export default function AddRuleModal(props: IProps) {
 
     // add silly `http://` if needed
     if (!url.includes(':')) {
-      url = 'http://' + url
+      url = `http://${url}`
     }
 
     setProcessUrl(url)
@@ -376,7 +376,7 @@ function getAutoCompletes(url: string) {
   let cur = hostname
   do {
     suffixes.push(cur)
-    cur = cur.replace(/^[\w_-]+?\./, '')
+    cur = cur.replace(/^[\w-]+\./, '')
   } while (cur && cur !== tld)
 
   const keywords = [

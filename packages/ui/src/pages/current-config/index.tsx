@@ -21,7 +21,7 @@ export default function ConfigList() {
     generatedGroupNameLang,
   } = useSnapshot(state)
 
-  const onGenConfigClick = useMemoizedFn(async () => {
+  const onGenConfigClick = useMemoizedFn(() => {
     return runGenerate()
   })
 
@@ -157,12 +157,10 @@ export default function ConfigList() {
               styles={{ body: { width: 'max-content' } }}
               title={
                 <>
-                  ✅ 使用中文: {ProxyGroupTypeConfig['url-test'].nameZh} /{' '}
-                  {ProxyGroupTypeConfig['fallback'].nameZh} /{' '}
-                  {ProxyGroupTypeConfig['select'].nameZh}
-                  <br />❎ 使用英文: {ProxyGroupTypeConfig['url-test'].nameEn} /{' '}
-                  {ProxyGroupTypeConfig['fallback'].nameEn} /{' '}
-                  {ProxyGroupTypeConfig['select'].nameEn}
+                  ✅ 使用中文: {ProxyGroupTypeConfig['url-test'].nameZh} / {ProxyGroupTypeConfig.fallback.nameZh} /{' '}
+                  {ProxyGroupTypeConfig.select.nameZh}
+                  <br />❎ 使用英文: {ProxyGroupTypeConfig['url-test'].nameEn} / {ProxyGroupTypeConfig.fallback.nameEn}{' '}
+                  / {ProxyGroupTypeConfig.select.nameEn}
                 </>
               }
             >
@@ -172,13 +170,7 @@ export default function ConfigList() {
         </Space>
       </Row>
 
-      <Button
-        type='primary'
-        block
-        shape='round'
-        style={{ marginTop: 8 }}
-        onClick={onGenConfigClick}
-      >
+      <Button type='primary' block shape='round' style={{ marginTop: 8 }} onClick={onGenConfigClick}>
         生成
       </Button>
       <div className={styles.openBtns}>

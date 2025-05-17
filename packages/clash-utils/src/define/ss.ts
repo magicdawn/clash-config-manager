@@ -1,5 +1,3 @@
-/* eslint-disable prefer-const */
-
 /**
 # Shadowsocks
 # The supported ciphers (encryption methods):

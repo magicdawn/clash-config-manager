@@ -1,11 +1,11 @@
-import { monaco } from './setup'
-
 import themelist from 'monaco-themes/themes/themelist.json'
+
+import { monaco } from './setup'
 const themeModules = import.meta.glob('monaco-themes-json-dir/**/*.json', { eager: true })
 const themeModuleKeys = Object.keys(themeModules)
 
 for (const [name, fileWithoutExt] of Object.entries(themelist)) {
-  const themeModuleKey = themeModuleKeys.find((k) => k.endsWith(fileWithoutExt + '.json'))
+  const themeModuleKey = themeModuleKeys.find((k) => k.endsWith(`${fileWithoutExt}.json`))
   if (!themeModuleKey) continue
 
   const themeData = themeModules[themeModuleKey] as monaco.editor.IStandaloneThemeData

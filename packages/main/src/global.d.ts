@@ -1,3 +1,4 @@
+import type { BrowserWindow } from 'electron'
 export {}
 
 declare global {

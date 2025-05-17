@@ -1,10 +1,10 @@
-import { app, type Rectangle, screen } from 'electron'
-import fs from 'fs-extra'
+import path from 'node:path'
+import { app, screen, type Rectangle } from 'electron'
 import { throttle } from 'es-toolkit'
-import path from 'path'
+import fs from 'fs-extra'
 
 function isValidNumber(n?: number): n is number {
-  return typeof n === 'number' && !isNaN(n)
+  return typeof n === 'number' && !Number.isNaN(n)
 }
 
 const getFile = () => {
@@ -38,7 +38,7 @@ export async function loadWindowState() {
   let windowState: IWinState
   try {
     windowState = await fs.readJson(file)
-  } catch (e) {
+  } catch {
     windowState = {}
   }
 

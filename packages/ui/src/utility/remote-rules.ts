@@ -1,8 +1,8 @@
+import path from 'node:path'
 import { appCacheDir } from '$ui/common'
-import { type RemoteRuleItem } from '$ui/define'
 import fse from 'fs-extra'
-import path from 'path'
 import { readUrlWithCache } from './remote'
+import type { RemoteRuleItem } from '$ui/define'
 
 // use cacheDir because this is cleanable
 // you can recover from url settings

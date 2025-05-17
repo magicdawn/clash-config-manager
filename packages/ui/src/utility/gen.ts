@@ -1,15 +1,15 @@
-import { type ClashConfig, type RuleItem, type Subscribe } from '$ui/define'
+import { homedir } from 'node:os'
+import { join as pathjoin } from 'node:path'
 import { ProxyGroupType, ProxyGroupTypeConfig } from '$ui/define/ClashConfig'
-import { YAML, pmap } from '$ui/libs'
+import { pmap, YAML } from '$ui/libs'
 import { rootActions, rootState } from '$ui/store'
-import fse from 'fs-extra'
 
+import { omit } from 'es-toolkit'
+import fse from 'fs-extra'
 import moment from 'moment'
-import { homedir } from 'os'
-import { join as pathjoin } from 'path'
 import { getRuleItemContent } from './remote-rules'
 import { truthy } from './ts-filter'
-import { omit } from 'es-toolkit'
+import type { ClashConfig, RuleItem, Subscribe } from '$ui/define'
 
 export function getUsingItems() {
   // subscribe
@@ -40,13 +40,9 @@ export function getUsingItems() {
     })
     .filter(Boolean)
 
-  const subscribeItems = resultItemList
-    .filter((x) => x?.type === 'subscribe')
-    .map((x) => x?.item) as Subscribe[]
+  const subscribeItems = resultItemList.filter((x) => x?.type === 'subscribe').map((x) => x?.item) as Subscribe[]
 
-  const ruleItems = resultItemList
-    .filter((x) => x?.type === 'rule')
-    .map((x) => x?.item) as RuleItem[]
+  const ruleItems = resultItemList.filter((x) => x?.type === 'rule').map((x) => x?.item) as RuleItem[]
 
   return { subscribeItems, ruleItems }
 }
@@ -155,7 +151,7 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
     if (proxies.length <= 1) {
       return [
         {
-          name: `${generatedGroupNameEmoji ? ProxyGroupTypeConfig[ProxyGroupType.Select].emoji + ' ' : ''}${label}`,
+          name: `${generatedGroupNameEmoji ? `${ProxyGroupTypeConfig[ProxyGroupType.Select].emoji} ` : ''}${label}`,
           type: ProxyGroupType.Select,
           proxies,
         },
@@ -163,7 +159,7 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
     }
 
     function getName(label: string, type: ProxyGroupType) {
-      const emoji = generatedGroupNameEmoji ? ProxyGroupTypeConfig[type].emoji + ' ' : ''
+      const emoji = generatedGroupNameEmoji ? `${ProxyGroupTypeConfig[type].emoji} ` : ''
 
       type AllowedLang = 'zh' | 'en'
       const lang: AllowedLang = (() => {
@@ -174,8 +170,7 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
         return generatedGroupNameLang as AllowedLang
       })()
 
-      const typeText =
-        lang === 'zh' ? ProxyGroupTypeConfig[type].nameZh : ProxyGroupTypeConfig[type].nameEn
+      const typeText = lang === 'zh' ? ProxyGroupTypeConfig[type].nameZh : ProxyGroupTypeConfig[type].nameEn
 
       return `${emoji}${label} ${typeText}`
     }
@@ -224,9 +219,7 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
     ...subscribeTragets
       .map((subscribeName, index) => {
         const url = subscribeItems[index].url
-        const subscribeProxies = (rootState.librarySubscribe.detail[url] || []).map(
-          (server) => server.name,
-        )
+        const subscribeProxies = (rootState.librarySubscribe.detail[url] || []).map((server) => server.name)
         return genGroupsForSubscribe(subscribeName, subscribeProxies)
       })
       .flat(),
@@ -298,7 +291,7 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
   const toAddGroups = new Set<string>()
 
   for (const line of config.rules || []) {
-    const use = line.split(',').slice(-1)[0]
+    const use = line.split(',').at(-1)
     if (!use) continue
     if (reservedTargets.includes(use)) continue
     if (existingProxyGroupNames.includes(use)) continue
@@ -349,9 +342,7 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
   return config
 }
 
-export default async function genConfigThenWrite({
-  forceUpdate = false,
-}: { forceUpdate?: boolean } = {}) {
+export default async function genConfigThenWrite({ forceUpdate = false }: { forceUpdate?: boolean } = {}) {
   const config = await genConfig({ forceUpdate })
 
   const { name, clashMeta } = rootState.currentConfig

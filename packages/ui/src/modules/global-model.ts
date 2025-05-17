@@ -1,5 +1,5 @@
 import Emitter from 'emittery'
-import { type NavigateFunction } from 'react-router'
+import type { NavigateFunction } from 'react-router'
 
 export const globalEmitter = new Emitter<{ init: undefined; reload: undefined }>()
 

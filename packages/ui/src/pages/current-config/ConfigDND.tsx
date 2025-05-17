@@ -1,4 +1,3 @@
-import { type ConfigItem } from '$ui/define'
 import { cx } from '$ui/libs'
 import { limitLines } from '$ui/utility/text-util'
 import { useMemoizedFn } from 'ahooks'
@@ -11,6 +10,7 @@ import { state as libraryRuleListState } from '../partial-config-list/model'
 import { state as librarySubscribeState } from '../subscribe-list/model'
 import styles from './ConfigDND.module.less'
 import { state } from './model'
+import type { ConfigItem } from '$ui/define'
 
 const dndDebug = debugFactory('app:page:current-config:ConfigDND')
 
@@ -116,7 +116,7 @@ export function ConfigDND() {
     }
 
     if (!addItem) {
-      console.log('no item, result = ', result)
+      console.log('no item, result =', result)
       return
     }
 
@@ -160,11 +160,7 @@ export function ConfigDND() {
         </div>
 
         <div className='col-right'>
-          <Droppable
-            droppableId={'trash'}
-            direction='horizontal'
-            isDropDisabled={disableDropOnTrash}
-          >
+          <Droppable droppableId={'trash'} direction='horizontal' isDropDisabled={disableDropOnTrash}>
             {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
@@ -180,11 +176,7 @@ export function ConfigDND() {
           </Droppable>
 
           <div className='section-title'>可用订阅</div>
-          <Droppable
-            droppableId={'subscribe-source-list'}
-            direction='horizontal'
-            isDropDisabled={true}
-          >
+          <Droppable droppableId={'subscribe-source-list'} direction='horizontal' isDropDisabled={true}>
             {(provided, snapshot) => (
               <div ref={provided.innerRef} {...provided.droppableProps} className='source-list'>
                 <div className='source-wrapper'>
@@ -277,9 +269,7 @@ const Source = ({ item, type, isDragDisabled, index }: SourceProps) => {
               classNames={{ root: styles.tooltipDetailOverlay }}
               placement={type === 'result' ? 'right' : 'left'}
               title={
-                <div className={cx(styles.tooltipDetail, { [styles.yaml]: item.tooltipIsYaml })}>
-                  {item.tooltip}
-                </div>
+                <div className={cx(styles.tooltipDetail, { [styles.yaml]: item.tooltipIsYaml })}>{item.tooltip}</div>
               }
             >
               <IconAntDesignInfoCircleOutlined className='help-icon' />

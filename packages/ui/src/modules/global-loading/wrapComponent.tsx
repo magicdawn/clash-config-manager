@@ -1,6 +1,6 @@
-import { type ComponentType } from 'react'
 import { createRoot } from 'react-dom/client'
 import { proxy, useSnapshot } from 'valtio'
+import type { ComponentType } from 'react'
 
 export function wrapComponent<IProps extends object>({
   Component,

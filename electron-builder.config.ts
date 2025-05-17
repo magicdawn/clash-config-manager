@@ -1,7 +1,7 @@
-import { execSync } from 'child_process'
-import { type Configuration } from 'electron-builder'
+import { execSync } from 'node:child_process'
 import { once } from 'es-toolkit'
 import pkg from './package.json'
+import type { Configuration } from 'electron-builder'
 
 function defineConfig(config: Configuration) {
   return config
@@ -48,11 +48,11 @@ export default defineConfig({
 
   extraResources: ['./assets/**'],
 
-  async beforeBuild() {
+  beforeBuild() {
     buildOnce()
   },
 
-  async afterSign() {
+  afterSign() {
     console.log('[after sign]')
     // process.nextTick(() => {
     //   const log = require('why-is-node-running').default

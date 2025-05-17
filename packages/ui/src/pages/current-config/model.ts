@@ -1,9 +1,9 @@
 import { __DEV__ } from '$ui/common'
-import { type ConfigItem, type RuleItem, type Subscribe } from '$ui/define'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage, { type StorageData } from '$ui/storage'
 import { valtioState } from '$ui/utility/valtio-helper'
 import { pick } from 'es-toolkit'
+import type { ConfigItem, RuleItem, Subscribe } from '$ui/define'
 
 const CURRENT_CONFIG_STORAGE_KEY = 'current_config_v2'
 
@@ -35,18 +35,15 @@ const { state, load, init } = valtioState<IState>(
     load() {
       return {
         ...defaultState,
-        ...pick(
-          storage.get(CURRENT_CONFIG_STORAGE_KEY),
-          allowedKeys as (keyof StorageData['current_config_v2'])[],
-        ),
+        ...pick(storage.get(CURRENT_CONFIG_STORAGE_KEY), allowedKeys as (keyof StorageData['current_config_v2'])[]),
       }
     },
     persist(val) {
-      if (__DEV__) {
-        // hot-reload 之后都消失了
-        if (!val.list.length) {
-          return
-        }
+      if (
+        __DEV__ && // hot-reload 之后都消失了
+        !val.list.length
+      ) {
+        return
       }
 
       storage.set(CURRENT_CONFIG_STORAGE_KEY, pick(val, allowedKeys))

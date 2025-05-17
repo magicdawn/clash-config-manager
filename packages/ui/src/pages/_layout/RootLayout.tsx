@@ -1,5 +1,5 @@
-import { colorHighlightHex, colorHighlightIdentifier } from '$ui/common'
 import { css as _css, css, Global } from '@emotion/react'
+import { colorHighlightHex, colorHighlightIdentifier } from '$ui/common'
 import { App as AntdApp, ConfigProvider, Menu, theme, type MenuProps } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN' // 由于 antd 组件的默认文案是英文，所以需要修改为中文
 import { useMemo } from 'react'
@@ -11,13 +11,7 @@ import { messageConfig, SetupAntdStatic } from '../../store'
 import { useIsDarkMode } from '../../utility/hooks/useIsDarkMode'
 import { useAddRuleModalFromGlobal } from '../home/useAddRuleModal'
 
-export function RootLayout({
-  menuItems,
-  getKey,
-}: {
-  menuItems: MenuProps['items']
-  getKey: (s: string) => string
-}) {
+export function RootLayout({ menuItems, getKey }: { menuItems: MenuProps['items']; getKey: (s: string) => string }) {
   const isDark = useIsDarkMode()
   const algorithm = isDark ? theme.darkAlgorithm : theme.defaultAlgorithm
 

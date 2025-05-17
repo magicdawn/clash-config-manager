@@ -1,9 +1,9 @@
 /* eslint camelcase: off */
 
-import { type ConfigItem, type RuleItem, type Subscribe } from '$ui/define'
 import Store from 'electron-store'
 import { omit } from 'es-toolkit'
 import { keysToOmit } from './config'
+import type { ConfigItem, RuleItem, Subscribe } from '$ui/define'
 
 export { customMerge } from './customMerge'
 

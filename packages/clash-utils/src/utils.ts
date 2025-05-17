@@ -1,4 +1,4 @@
-import { createHash } from 'crypto'
+import { createHash } from 'node:crypto'
 
 export const B64 = {
   encode: (s: string) => Buffer.from(s, 'utf-8').toString('base64'),

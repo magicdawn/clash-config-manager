@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { appTempDir, getAssetsDir } from '$ui/common'
 import storage, { customMerge, getExportData } from '$ui/storage'
 import { message, rootActions, rootState } from '$ui/store'
@@ -10,11 +11,10 @@ import { ipcRenderer, shell } from 'electron'
 import fse from 'fs-extra'
 import launch from 'launch-editor'
 import moment from 'moment'
-import path from 'path'
 import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import styles from './index.module.less'
-import { SelectExportForStaticMethod, pickDataFrom } from './modal/SelectExport'
+import { pickDataFrom, SelectExportForStaticMethod } from './modal/SelectExport'
 import { state, type Theme } from './model'
 
 const debug = debugFactory('app:page:preference')
@@ -40,10 +40,7 @@ export default function Preference() {
   const [exportSuccessFile, setExportSuccessFile] = useState('')
 
   const onExport = useMemoizedFn(async () => {
-    const file = path.join(
-      appTempDir,
-      `clash-config-manager ${moment().format('YYYY-MM-DD HH.mm')}.json`,
-    )
+    const file = path.join(appTempDir, `clash-config-manager ${moment().format('YYYY-MM-DD HH.mm')}.json`)
     const data = getExportData()
     await fse.outputJson(file, data, { spaces: 2 })
     setExportSuccessModalVisible(true)
@@ -66,12 +63,7 @@ export default function Preference() {
   const importAction = async (importData: any) => {
     // 选择数据
     const { cancel, data: selectedData } = await pickDataFrom(importData)
-    debug(
-      'importAction: %O, select result: cancel = %s, selectedData = %O',
-      importData,
-      cancel,
-      selectedData,
-    )
+    debug('importAction: %O, select result: cancel = %s, selectedData = %O', importData, cancel, selectedData)
     if (cancel || !selectedData) return
 
     const localData = { ...storage.store }
@@ -93,7 +85,7 @@ export default function Preference() {
       importData = await fse.readJson(file)
     } catch (e) {
       console.log(e.stack || e)
-      return message.error('readJson fail: ' + '\n' + e.stack || e)
+      return message.error(`readJson fail: ` + `\n${e.stack}` || e)
     }
     importAction(importData)
   }
@@ -165,11 +157,7 @@ export default function Preference() {
       </Modal>
 
       <Row>
-        <Radio.Group
-          buttonStyle='solid'
-          value={theme || 'light'}
-          onChange={(e) => (state.theme = e.target.value)}
-        >
+        <Radio.Group buttonStyle='solid' value={theme || 'light'} onChange={(e) => (state.theme = e.target.value)}>
           <Radio.Button value={'light' satisfies Theme}>浅色模式</Radio.Button>
           <Radio.Button value={'dark' satisfies Theme}>深色模式</Radio.Button>
           <Radio.Button value={'follow-system' satisfies Theme}>跟随系统</Radio.Button>

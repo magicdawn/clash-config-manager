@@ -87,7 +87,7 @@ export function urlLineToClashSsrServer(str: string): ClashSsrProxyItem {
   // e.g hinet1.puffvip.com:1063:auth_aes128_sha1:chacha20:plain:UGFvZnU/?obfsparam=ZmE3Nzc4NzYzMS5taWNyb3NvZnQuY29t&protoparam=ODc2MzE6eHlqdHlza2Z5ZGhxc3M&remarks=W1YxXSDlj7Dmub4x&group=5rOh6IqZ5LqR
 
   const [prev, rest] = str.split('/?')
-  // eslint-disable-next-line prefer-const
+
   let [server, port, protocol, cipher, obfs, password] = prev.split(':')
   const params = new URLSearchParams(rest)
 
@@ -100,7 +100,7 @@ export function urlLineToClashSsrServer(str: string): ClashSsrProxyItem {
   if (protoparam) protoparam = B64.decode(protoparam)
 
   const ret: ClashSsrProxyItem = {
-    'name': `${group || ''} - ${remarks}` || '',
+    'name': `${group || ''} - ${remarks}`,
     'type': 'ssr',
     server,
     'port': Number(port),

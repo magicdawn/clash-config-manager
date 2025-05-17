@@ -1,24 +1,20 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-
     "target": "ES2023",
+    "lib": ["ES2024", "DOM"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "lib": ["ES2024", "DOM"],
-    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true,
-
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "useUnknownInCatchVariables": false,
     "skipLibCheck": true,
-    // "verbatimModuleSyntax": true, // import {type X} from 'type-fest' 会得到保留, 不使用 verbatimModuleSyntax
-
-    "experimentalDecorators": true,
+    "types": ["node", "electron", "unplugin-icons/types/react"],
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react",
-    "types": ["node", "electron", "unplugin-icons/types/react"],
+    // "verbatimModuleSyntax": true, // import {type X} from 'type-fest' 会得到保留, 不使用 verbatimModuleSyntax
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "useUnknownInCatchVariables": false,
     "plugins": [
       {
         "name": "typescript-plugin-css-modules",

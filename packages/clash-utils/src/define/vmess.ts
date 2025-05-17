@@ -181,7 +181,7 @@ export interface VmessUrlLine {
 }
 
 function normalize(name: string) {
-  return name.replace(/（/g, '(').replace(/）/g, ')')
+  return name.replaceAll('（', '(').replaceAll('）', ')')
 }
 
 export function urlLineToClashVmessServer(line: VmessUrlLine) {

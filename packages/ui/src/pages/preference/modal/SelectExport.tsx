@@ -1,12 +1,12 @@
-import { type ConfigItem } from '$ui/define'
-import { type ExportData, storageDataDisplayNames } from '$ui/storage'
+import { storageDataDisplayNames, type ExportData } from '$ui/storage'
 import { truthy } from '$ui/utility/ts-filter'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Modal, Tree, type TreeProps } from 'antd'
 import { cloneDeep, pick } from 'es-toolkit'
 import { useCallback, useState, type Key } from 'react'
-import type { Merge } from 'type-fest'
 import { proxy, useSnapshot } from 'valtio'
+import type { ConfigItem } from '$ui/define'
+import type { Merge } from 'type-fest'
 
 type SelectExportProps = {
   visible: boolean
@@ -22,12 +22,7 @@ type SelectResult = {
 
 type Resolve = (result: SelectResult) => void
 
-export default function SelectExport({
-  visible,
-  setVisible,
-  treeData,
-  resolve,
-}: SelectExportProps) {
+export default function SelectExport({ visible, setVisible, treeData, resolve }: SelectExportProps) {
   const onCancel = useMemoizedFn(() => {
     setVisible(false)
     resolve?.({ cancel: true })
@@ -116,9 +111,7 @@ function generateTreeData(obj: object, keyPrefix = '') {
       }
 
       if (keyPrefix === 'current_config_v2.list.') {
-        title += ` -> ${(item as any).type === 'subscribe' ? '订阅' : '配置源'} (${
-          (item as any).name
-        })`
+        title += ` -> ${(item as any).type === 'subscribe' ? '订阅' : '配置源'} (${(item as any).name})`
       }
 
       treeData.push({
@@ -136,7 +129,7 @@ function generateTreeData(obj: object, keyPrefix = '') {
     treeData.push({
       key,
       title,
-      children: generateTreeData(obj[currentKey as keyof typeof obj], key + '.'),
+      children: generateTreeData(obj[currentKey as keyof typeof obj], `${key}.`),
     })
   }
 
@@ -188,9 +181,7 @@ export function SelectExportForStaticMethod() {
     return null
   }
 
-  return (
-    <SelectExport visible={visible} setVisible={setVisible} treeData={treeData} resolve={resolve} />
-  )
+  return <SelectExport visible={visible} setVisible={setVisible} treeData={treeData} resolve={resolve} />
 }
 
 type PickupData = Omit<ExportData, 'subscribe_detail' | 'subscribe_status'>
@@ -216,8 +207,7 @@ export async function pickDataFrom(dataFrom: any) {
     treeSource.current_config_v2.list.forEach((item, i) => {
       const { id } = item
       const target =
-        treeSource?.subscribe_list?.find((i) => i.id === id) ||
-        treeSource?.rule_list?.find((i) => i.id === id)
+        treeSource?.subscribe_list?.find((i) => i.id === id) || treeSource?.rule_list?.find((i) => i.id === id)
       item.name = target?.name
     })
     treeSource.current_config_v2.list = treeSource.current_config_v2.list.filter((item) => {

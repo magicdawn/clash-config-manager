@@ -2,12 +2,12 @@
  * auto update
  */
 
-import { type Subscribe } from '$ui/define'
 import { runGenerate } from '$ui/modules/commands/run'
 import { once } from 'es-toolkit'
 import ms from 'ms'
 import { currentConfigUsingAndEnabled } from '../current-config/model'
 import { state, update } from './model'
+import type { Subscribe } from '$ui/define'
 
 const timerRegistry: Record<string, NodeJS.Timeout | undefined> = {}
 const cleanupTimer = (timerKey: string) => {
@@ -22,7 +22,7 @@ const cleanupTimer = (timerKey: string) => {
 
 export const scheduleAutoUpdate = once(schedule)
 
-async function schedule() {
+function schedule() {
   for (const sub of state.list) {
     restartAutoUpdate(sub, true)
   }
@@ -56,10 +56,8 @@ export async function restartAutoUpdate(item: Subscribe, runImmediate = false) {
 
   // 启动时更新
   // 使用场景: 定时12小时更新, 退出了, 第二天打开自动更新, 但当天重启不会更新
-  if (runImmediate) {
-    if (!lastUpdated || Date.now() >= lastUpdated + interval) {
-      await run()
-    }
+  if (runImmediate && (!lastUpdated || Date.now() >= lastUpdated + interval)) {
+    await run()
   }
 
   cleanupTimer(timerKey)

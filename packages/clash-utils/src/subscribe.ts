@@ -1,9 +1,4 @@
-import {
-  type ClashProxyItem,
-  urlLineToClashSsrServer,
-  urlLineToClashVmessServer,
-  type VmessUrlLine,
-} from './define'
+import { urlLineToClashSsrServer, urlLineToClashVmessServer, type ClashProxyItem, type VmessUrlLine } from './define'
 import { urlLineToClashSsServer } from './define/ss'
 import { B64, truthy } from './utils'
 

@@ -1,50 +1,27 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import path from 'node:path'
 import { md5 } from '$clash-utils'
-import { type ClashConfig, EUaType } from '$ui/define'
+import { EUaType, type ClashConfig } from '$ui/define'
 import bytes from 'bytes'
 import envPaths from 'env-paths'
 import fse from 'fs-extra'
 import YAML from 'js-yaml'
 import ky from 'ky'
 import moment from 'moment'
-import path from 'path'
 
 const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 
-export async function subscribeToClash({
-  url,
-  forceUpdate,
-  ua,
-}: {
-  url: string
-  forceUpdate: boolean
-  ua?: EUaType
-}) {
+export function subscribeToClash({ url, forceUpdate, ua }: { url: string; forceUpdate: boolean; ua?: EUaType }) {
   return urlToSubscribe({ url, forceUpdate, ua })
 }
 
-async function urlToSubscribe({
-  url,
-  forceUpdate: force,
-  ua,
-}: {
-  url: string
-  forceUpdate: boolean
-  ua?: EUaType
-}) {
+async function urlToSubscribe({ url, forceUpdate: force, ua }: { url: string; forceUpdate: boolean; ua?: EUaType }) {
   const file = path.join(appCacheDir, 'readUrl', md5(url))
 
   let shouldReuse = false
   let stat: fse.Stats
   // 今天之内的更新不会再下载
-  const isRecent = (mtime: Date) =>
-    moment(mtime).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')
-  if (
-    !force &&
-    (await fse.pathExists(file)) &&
-    (stat = await fse.stat(file)) &&
-    isRecent(stat.mtime)
-  ) {
+  const isRecent = (mtime: Date) => moment(mtime).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')
+  if (!force && (await fse.pathExists(file)) && (stat = await fse.stat(file)) && isRecent(stat.mtime)) {
     shouldReuse = true
   }
 
@@ -116,7 +93,7 @@ const readUrl = async ({ url, file, ua }: { url: string; file: string; ua?: EUaT
 
 function extractProxiesFromClashYaml(text: string) {
   // type tag
-  text = text.replace(/!<str>/g, '!!str')
+  text = text.replaceAll('!<str>', '!!str')
 
   const config = YAML.load(text) as ClashConfig
   const { proxies } = config
@@ -145,10 +122,10 @@ function subscriptionUserinfoToStatus(text: string) {
     data[key] = Number(val)
   }
 
-  const upload = bytes(data['upload'] as number)
-  const download = bytes(data['download'] as number)
-  const total = bytes(data['total'] as number)
-  const expire = moment.unix(data['expire'] as number).format('YYYY-MM-DD')
+  const upload = bytes(data.upload as number)
+  const download = bytes(data.download as number)
+  const total = bytes(data.total as number)
+  const expire = moment.unix(data.expire as number).format('YYYY-MM-DD')
 
   return `🚀 ↑: ${upload},  ↓: ${download},  TOT: ${total} 💡Expires: ${expire}`
 }

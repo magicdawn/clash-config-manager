@@ -3,16 +3,18 @@
   "productName": "clash-config-manager",
   "bundleId": "fun.magicdawn.clash-config-manager",
   "version": "0.21.1",
+  "private": true,
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977",
   "description": "clash configuration manager",
+  "type": "module",
   "license": "MIT",
   "repository": "magicdawn/clash-config-manager",
-  "main": "main/index.mjs",
-  "private": true,
   "author": {
     "name": "magicdawn",
     "email": "magicdawn@qq.com",
     "url": "https://magicdawn.fun"
   },
+  "main": "main/index.mjs",
   "scripts": {
     "prepare": "husky",
     "postinstall": "electron-builder install-app-deps",
@@ -41,6 +43,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.27.1",
+    "@magicdawn/eslint-config": "^1.4.0",
     "@magicdawn/prettier-config": "^0.1.0",
     "@swc/core": "^1.11.24",
     "@swc/helpers": "^0.5.17",
@@ -48,13 +51,11 @@
     "@types/fancy-log": "^2.0.2",
     "@types/fs-extra": "^11.0.4",
     "@types/jake": "^0.0.38",
-    "@types/node": "^22.15.17",
-    "@typescript-eslint/eslint-plugin": "^8.32.1",
-    "@typescript-eslint/parser": "^8.32.1",
+    "@types/node": "^22.15.18",
     "concurrently": "^9.1.2",
     "electron": "36.2",
     "electron-builder": "^26.0.15",
-    "eslint": "^9.26.0",
+    "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-react": "^7.37.5",
     "fancy-log": "^2.0.0",
@@ -62,7 +63,7 @@
     "fs-extra": "^11.3.0",
     "husky": "^9.1.7",
     "jake": "^10.9.2",
-    "lint-staged": "^15",
+    "lint-staged": "^16",
     "minimist": "^1.2.8",
     "napa": "^3.0.0",
     "nodemon": "^3.1.10",
@@ -80,9 +81,5 @@
     "**/*": [
       "prettier --write --ignore-unknown"
     ]
-  },
-  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
-  "pnpm": {
-    "patchedDependencies": {}
   }
 }

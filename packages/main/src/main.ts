@@ -1,14 +1,15 @@
+import path from 'node:path'
 import * as remoteMain from '@electron/remote/main'
 import { app, BrowserWindow, Menu, session, shell, Tray, type Event } from 'electron'
 import { is } from 'electron-util'
 import { throttle } from 'es-toolkit'
-import path from 'path'
 import { load as loadDevExt } from './dev/ext'
-import './init/meta'
 import { loadWindowState, saveWindowState } from './initWindowState'
 import { assetsDir } from './ipc/common'
-import './ipc/index'
 import setMenu from './menu'
+import './init/meta'
+import './ipc/index'
+import './global'
 
 // Prevent window from being garbage collected
 export let mainWindow: BrowserWindow
@@ -133,7 +134,7 @@ function initAppEvents() {
   //  - launching the application for the first time,
   //  - attempting to re - launch the application when it's already running,
   //  - or clicking on the application's dock or taskbar icon.
-  app.on('activate', async (e, hasVisibleWindows) => {
+  app.on('activate', (e, hasVisibleWindows) => {
     console.log('app.activate, hasVisibleWindows = %s', hasVisibleWindows)
     if (!hasVisibleWindows) {
       restoreWindow()
@@ -146,7 +147,7 @@ function initAppEvents() {
         await saveWindowState({
           bounds: mainWindow?.getBounds?.(),
         })
-      } catch (e) {
+      } catch {
         // noop
       }
     }
@@ -161,7 +162,7 @@ function addRequestExtraHeadersSupport() {
     if (details.requestHeaders['x-extra-headers']) {
       try {
         extraHeaders = JSON.parse(details.requestHeaders['x-extra-headers']) as any
-      } catch (e) {
+      } catch {
         // noop
       }
     }

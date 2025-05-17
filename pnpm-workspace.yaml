@@ -6,3 +6,4 @@ onlyBuiltDependencies:
   - electron
   - esbuild
   - tldjs
+  - unrs-resolver

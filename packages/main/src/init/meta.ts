@@ -1,5 +1,5 @@
+import path from 'node:path'
 import { app } from 'electron'
-import path from 'path'
 import { bundleId, name } from '../../../../package.json'
 
 const prod = process.env.NODE_ENV === 'production'

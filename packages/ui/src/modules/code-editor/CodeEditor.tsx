@@ -1,26 +1,16 @@
-import { state as preferenceState } from '$ui/pages/preference/model'
 import { css } from '@emotion/react'
+import { state as preferenceState } from '$ui/pages/preference/model'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Spin, Tag, Tooltip } from 'antd'
-import { type SpinProps } from 'antd/lib/spin'
-import * as EditorApi from 'monaco-editor/esm/vs/editor/editor.api'
 import { useMemo, useRef, type CSSProperties, type MutableRefObject, type ReactNode } from 'react'
-import MonacoEditor, {
-  monaco,
-  type EditorDidMount,
-  type EditorWillMount,
-} from 'react-monaco-editor'
+import MonacoEditor, { type EditorDidMount, type EditorWillMount, type monaco } from 'react-monaco-editor'
 import { useSnapshot } from 'valtio'
+import type { SpinProps } from 'antd/lib/spin'
+import type * as EditorApi from 'monaco-editor/esm/vs/editor/editor.api'
 
 export type EditorRefInner = monaco.editor.IStandaloneCodeEditor
 
-export function CodeEditorHelp({
-  style,
-  className,
-}: {
-  style?: CSSProperties
-  className?: string
-}) {
+export function CodeEditorHelp({ style, className }: { style?: CSSProperties; className?: string }) {
   return (
     <Tooltip
       placement='left'

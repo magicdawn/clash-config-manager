@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
-import react from '@vitejs/plugin-react'
 import { createRequire } from 'node:module'
-import path, { join } from 'path'
+import path, { join } from 'node:path'
+import react from '@vitejs/plugin-react'
 import UnoCSS from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'

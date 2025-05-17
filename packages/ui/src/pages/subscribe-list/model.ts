@@ -1,5 +1,3 @@
-import { type ClashProxyItem } from '$clash-utils'
-import { type Subscribe } from '$ui/define'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
 import { message } from '$ui/store'
@@ -9,6 +7,8 @@ import { isEqual, pick, uniqWith } from 'es-toolkit'
 import { ref } from 'valtio'
 import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './model.auto-update'
 import { nodefreeGetUrls } from './special/nodefree'
+import type { ClashProxyItem } from '$clash-utils'
+import type { Subscribe } from '$ui/define'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
@@ -41,6 +41,7 @@ const { state, load, init } = valtioState<IState>(
 
       // 只保留当前 list 存在的订阅
       const detail = pick(
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY) || ({} as IState['detail']),
         list.map((item) => item.url).filter(Boolean),
       )
@@ -170,7 +171,7 @@ export async function update({
       }
 
       let i = 1
-      let newName = () => item.name + ` (DUP-${i})`
+      const newName = () => `${item.name} (DUP-${i})`
       while (names.has(newName())) i++
 
       item.name = newName()
@@ -183,7 +184,7 @@ export async function update({
     try {
       ;({ servers, status } = await subscribeToClash({ url, forceUpdate, ua: currentSubscribe.ua }))
     } catch (e) {
-      message.error('更新订阅出错: \n' + e.stack || e, 10)
+      message.error(`更新订阅出错: \n${e.stack || e}`, 10)
       throw e
     }
   }

@@ -1,8 +1,8 @@
+import path from 'node:path'
 import storage from '$ui/storage/index'
 import { app, Menu, shell, type MenuItemConstructorOptions } from 'electron'
 import { is, openNewGitHubIssue, openUrlMenuItem } from 'electron-util'
 import { aboutMenuItem, appMenu, debugInfo } from 'electron-util/main'
-import path from 'path'
 import { updateMenuItem } from './auto-update/index'
 
 const showPreferences = () => {
