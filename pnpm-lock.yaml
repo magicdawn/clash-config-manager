@@ -152,6 +152,9 @@ importers:
       electron-util:
         specifier: ^0.18.1
         version: 0.18.1
+      electron-window-state:
+        specifier: ^5.0.3
+        version: 5.0.3
       env-paths:
         specifier: ^3.0.0
         version: 3.0.0
@@ -3426,6 +3429,11 @@ packages:
     resolution:
       { integrity: sha512-Ew1h+lDYUlGUnOQNDRo87dJDPW4R7MK2PTLbzb4nHnbFEMytTlPjxFgTfZieq1pGIdhSrDWINtXNhvp6lUEH1Q== }
     engines: { node: '>=18' }
+
+  electron-window-state@5.0.3:
+    resolution:
+      { integrity: sha512-1mNTwCfkolXl3kMf50yW3vE2lZj0y92P/HYWFBrb+v2S/pCka5mdwN3cagKm458A7NjndSwijynXgcLWRodsVg== }
+    engines: { node: '>=8.0.0' }
 
   electron@36.2.0:
     resolution:
@@ -11333,6 +11341,11 @@ snapshots:
     dependencies:
       electron-is-dev: 3.0.1
       new-github-issue-url: 1.0.0
+
+  electron-window-state@5.0.3:
+    dependencies:
+      jsonfile: 4.0.0
+      mkdirp: 0.5.6
 
   electron@36.2.0:
     dependencies:

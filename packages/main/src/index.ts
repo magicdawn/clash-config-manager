@@ -1,17 +1,17 @@
-//
 import contextMenu from 'electron-context-menu'
 import debug from 'electron-debug'
-
 import unhandled from 'electron-unhandled'
 import fixPath from 'fix-path'
-import { main } from './main'
-// init
-import './init/meta'
-import './ipc/index'
+import { initMainWindow } from './main'
+import './init-meta'
+import './ipc'
 
-unhandled()
-debug()
-contextMenu()
-fixPath()
+function initCommon() {
+  unhandled()
+  debug()
+  contextMenu()
+  fixPath()
+}
 
-main()
+initCommon()
+initMainWindow()

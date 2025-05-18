@@ -2,18 +2,13 @@ import path from 'node:path'
 import * as remoteMain from '@electron/remote/main'
 import { app, BrowserWindow, Menu, session, shell, Tray, type Event } from 'electron'
 import { is } from 'electron-util'
-import { throttle } from 'es-toolkit'
-import { load as loadDevExt } from './dev/ext'
-import { loadWindowState, saveWindowState } from './initWindowState'
+import windowStateKeeper from 'electron-window-state'
+import { initLoadDevtoolExtensions as loadDevExt } from './devtool-extensions'
 import { assetsDir } from './ipc/common'
 import setMenu from './menu'
-import './init/meta'
-import './ipc/index'
 
-// Prevent window from being garbage collected
 export let mainWindow: BrowserWindow
-
-export async function main() {
+export async function initMainWindow() {
   initAppEvents()
   await app.whenReady()
 
@@ -22,7 +17,7 @@ export async function main() {
   setTray()
   loadDevExt()
 
-  mainWindow = await createMainWindow()
+  mainWindow = createMainWindow()
   globalThis.mainWindow = mainWindow
 
   // enable @electron/remote
@@ -36,16 +31,20 @@ export async function main() {
   }
 }
 
-const createMainWindow = async () => {
-  const { bounds } = await loadWindowState()
+const createMainWindow = () => {
+  // Load the previous state with fallback to defaults
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 800,
+    defaultHeight: 600,
+  })
 
   const win = new BrowserWindow({
     title: app.name,
     show: false,
-    x: bounds?.x,
-    y: bounds?.y,
-    width: bounds?.width,
-    height: bounds?.height,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true,
@@ -90,18 +89,7 @@ const createMainWindow = async () => {
   ;(win as any).stopPreventClose = stopPreventClose
   app.on('before-quit', stopPreventClose)
 
-  const saveWindowStateHandler = throttle(() => {
-    const bounds = mainWindow?.getBounds()
-    if (!bounds) return
-    saveWindowState({ bounds })
-  }, 1000)
-  win.on('resize', () => {
-    saveWindowStateHandler()
-  })
-  win.on('move', () => {
-    saveWindowStateHandler()
-  })
-
+  mainWindowState.manage(win)
   return win
 }
 
@@ -137,18 +125,6 @@ function initAppEvents() {
     console.log('app.activate, hasVisibleWindows = %s', hasVisibleWindows)
     if (!hasVisibleWindows) {
       restoreWindow()
-    }
-  })
-
-  app.on('before-quit', async () => {
-    if (mainWindow) {
-      try {
-        await saveWindowState({
-          bounds: mainWindow?.getBounds?.(),
-        })
-      } catch {
-        // noop
-      }
     }
   })
 }

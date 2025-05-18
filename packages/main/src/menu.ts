@@ -3,7 +3,7 @@ import storage from '$ui/storage/index'
 import { app, Menu, shell, type MenuItemConstructorOptions } from 'electron'
 import { is, openNewGitHubIssue, openUrlMenuItem } from 'electron-util'
 import { aboutMenuItem, appMenu, debugInfo } from 'electron-util/main'
-import { updateMenuItem } from './auto-update/index'
+import { updateMenuItem } from './auto-update'
 
 const showPreferences = () => {
   // Show the app's preferences here
