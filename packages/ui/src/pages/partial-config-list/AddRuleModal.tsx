@@ -1,7 +1,5 @@
 import { css } from '@emotion/react'
 import LineMdConfirm from '~icons/line-md/confirm'
-import { message } from '$ui/store'
-import { genConfig } from '$ui/utility/gen'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space } from 'antd'
 import AppleScript from 'applescript'
@@ -15,6 +13,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { tldExists } from 'tldjs'
 import URI from 'urijs'
 import { useSnapshot } from 'valtio'
+import { message } from '$ui/store'
+import { genConfig } from '$ui/utility/gen'
 import { state } from './model'
 
 const { Option } = Select

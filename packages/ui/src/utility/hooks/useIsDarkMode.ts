@@ -1,6 +1,6 @@
-import { state as preferenceState } from '$ui/pages/preference/model'
 import { useLayoutEffect } from 'react'
 import { proxy, useSnapshot } from 'valtio'
+import { state as preferenceState } from '$ui/pages/preference/model'
 
 const darkState = proxy({ value: false })
 

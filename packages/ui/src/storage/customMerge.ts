@@ -1,7 +1,7 @@
 import { cloneDeep, merge, omit } from 'es-toolkit'
 import { pick } from 'es-toolkit/compat'
-import { keysToOmit } from './config'
 import type { StorageData } from '$ui/storage'
+import { keysToOmit } from './config'
 
 export function customMerge(baseData: StorageData, importData: Partial<StorageData>) {
   // create a snapshot

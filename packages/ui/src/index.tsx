@@ -1,12 +1,22 @@
 /// <reference types="vite/client" />
 
+// styles
+import '@icon-park/react/styles/index.css'
+import 'antd/dist/reset.css'
+import 'virtual:uno.css'
+import './common/global.less'
+
+// monaco setup
+import './modules/code-editor/monaco'
+
+// deps
+import '@total-typescript/ts-reset'
+import './ipc'
 import MaterialSymbolsSettingsSuggestRounded from '~icons/material-symbols/settings-suggest-rounded'
 import MingcuteComponentsFill from '~icons/mingcute/components-fill'
 import MingcuteHome4Line from '~icons/mingcute/home-4-line'
 import TablerCloudUp from '~icons/tabler/cloud-up'
-
 import ZondiconsServers from '~icons/zondicons/servers'
-
 import { trimStart } from 'es-toolkit'
 import { size } from 'polished'
 import { createRoot } from 'react-dom/client'
@@ -20,16 +30,6 @@ import Preference from './pages/preference'
 import LibrarySubscribe from './pages/subscribe-list'
 import { routeTitles } from './storage'
 import type { MenuProps } from 'antd'
-// monaco setup
-import './modules/code-editor/monaco'
-// deps
-import '@total-typescript/ts-reset'
-import './ipc'
-// styles
-import '@icon-park/react/styles/index.css'
-import 'antd/dist/reset.css'
-import 'virtual:uno.css'
-import './common/global.less'
 
 const routes = [
   {

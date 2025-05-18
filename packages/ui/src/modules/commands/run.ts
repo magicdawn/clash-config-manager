@@ -1,8 +1,8 @@
 import { setTimeout as delay } from 'node:timers/promises'
-import { message, rootActions } from '$ui/store'
-import gen from '$ui/utility/gen'
 import { shell } from 'electron'
 import { createRef } from 'react'
+import { message, rootActions } from '$ui/store'
+import gen from '$ui/utility/gen'
 import GlobalLoading from '../global-loading'
 
 export const commandPaletteRef = createRef<any>()

@@ -1,15 +1,15 @@
 import { homedir } from 'node:os'
 import { join as pathjoin } from 'node:path'
-import { ProxyGroupType, ProxyGroupTypeConfig } from '$ui/define/ClashConfig'
-import { pmap, YAML } from '$ui/libs'
-import { rootActions, rootState } from '$ui/store'
-
 import { omit } from 'es-toolkit'
 import fse from 'fs-extra'
 import moment from 'moment'
+
+import { ProxyGroupType, ProxyGroupTypeConfig } from '$ui/define/ClashConfig'
+import { pmap, YAML } from '$ui/libs'
+import { rootActions, rootState } from '$ui/store'
+import type { ClashConfig, RuleItem, Subscribe } from '$ui/define'
 import { getRuleItemContent } from './remote-rules'
 import { truthy } from './ts-filter'
-import type { ClashConfig, RuleItem, Subscribe } from '$ui/define'
 
 export function getUsingItems() {
   // subscribe

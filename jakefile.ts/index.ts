@@ -1,7 +1,7 @@
-import { release, releaseChangelog } from './release'
-import { sh } from './util'
-
 import 'jake'
+import { release, releaseChangelog } from './release'
+
+import { sh } from './util'
 
 desc('同 `gulp -T`')
 task('default', () => {

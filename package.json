@@ -39,11 +39,11 @@
   "dependencies": {
     "@electron/remote": "^2.1.2",
     "electron-store": "^8.2.0",
-    "es-toolkit": "^1.37.2"
+    "es-toolkit": "^1.38.0"
   },
   "devDependencies": {
     "@babel/core": "^7.27.1",
-    "@magicdawn/eslint-config": "^1.4.0",
+    "@magicdawn/eslint-config": "^1.5.1",
     "@magicdawn/prettier-config": "^0.1.0",
     "@swc/core": "^1.11.24",
     "@swc/helpers": "^0.5.17",

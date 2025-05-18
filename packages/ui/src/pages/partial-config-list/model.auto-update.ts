@@ -2,12 +2,12 @@
  * auto update
  */
 
-import { runGenerate } from '$ui/modules/commands/run'
 import { debounce, once, type DebouncedFunction } from 'es-toolkit'
 import ms from 'ms'
+import { runGenerate } from '$ui/modules/commands/run'
+import type { RuleItem } from '$ui/define'
 import { currentConfigUsingAndEnabled } from '../current-config/model'
 import { state, updateRemote } from './model'
-import type { RuleItem } from '$ui/define'
 
 const timerRegistry: Record<string, NodeJS.Timeout | undefined> = {}
 const cleanupTimer = (timerKey: string) => {

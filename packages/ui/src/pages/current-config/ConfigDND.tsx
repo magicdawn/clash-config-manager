@@ -1,16 +1,16 @@
-import { cx } from '$ui/libs'
-import { limitLines } from '$ui/utility/text-util'
 import { useMemoizedFn } from 'ahooks'
 import { Switch, Tooltip } from 'antd'
 import debugFactory from 'debug'
 import { useEffect, useMemo, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useSnapshot } from 'valtio'
+import { cx } from '$ui/libs'
+import { limitLines } from '$ui/utility/text-util'
+import type { ConfigItem } from '$ui/define'
 import { state as libraryRuleListState } from '../partial-config-list/model'
 import { state as librarySubscribeState } from '../subscribe-list/model'
 import styles from './ConfigDND.module.less'
 import { state } from './model'
-import type { ConfigItem } from '$ui/define'
 
 const dndDebug = debugFactory('app:page:current-config:ConfigDND')
 

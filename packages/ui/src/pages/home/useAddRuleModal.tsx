@@ -1,7 +1,7 @@
-import { runGenerate } from '$ui/modules/commands/run'
-import { message, rootActions, rootState } from '$ui/store'
 import { ipcRenderer } from 'electron'
 import { proxy, useSnapshot } from 'valtio'
+import { runGenerate } from '$ui/modules/commands/run'
+import { message, rootActions, rootState } from '$ui/store'
 import AddRuleModal, { type Mode } from '../partial-config-list/AddRuleModal'
 
 type HandleAdd = (rule: string, ruleId: string) => void
