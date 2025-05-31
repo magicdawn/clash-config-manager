@@ -6,7 +6,7 @@ export default defineConfig({
   presets: [
     presetWind4({
       preflights: { reset: false, theme: { mode: 'on-demand' } },
-      dark: { dark: '.bilibili-gate-using-dark' },
+      dark: { dark: '.dark' },
     }),
   ],
 

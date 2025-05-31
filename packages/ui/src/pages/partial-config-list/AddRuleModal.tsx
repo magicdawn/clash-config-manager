@@ -315,7 +315,7 @@ export default function AddRuleModal(props: IProps) {
                           cursor: pointer;
                           overflow: hidden;
 
-                          .dark-theme & {
+                          .dark & {
                             border-color: #333;
                           }
                         `,
