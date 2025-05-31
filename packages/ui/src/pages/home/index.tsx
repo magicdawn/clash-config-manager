@@ -2,7 +2,7 @@ import { Button } from 'antd'
 import { useCallback } from 'react'
 import { runGenerate, runGenerateForceUpdate } from '$ui/modules/commands/run'
 import styles from './index.module.less'
-import { addRuleStore } from './useAddRuleModal'
+import { addRuleModalActions } from './useAddRuleModal'
 
 export default function Home() {
   const generate = useCallback(() => {
@@ -11,10 +11,6 @@ export default function Home() {
 
   const generateForceUpdate = useCallback(() => {
     runGenerateForceUpdate()
-  }, [])
-
-  const addRule = useCallback(() => {
-    addRuleStore.open()
   }, [])
 
   return (
@@ -29,7 +25,7 @@ export default function Home() {
           重新生成配置
         </Button>
 
-        <Button type='default' shape='round' className={styles.btnAddRule} onClick={addRule} block>
+        <Button type='default' shape='round' className={styles.btnAddRule} onClick={addRuleModalActions.open} block>
           快捷添加规则
         </Button>
       </div>

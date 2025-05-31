@@ -42,20 +42,20 @@
     "es-toolkit": "^1.38.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.27.1",
-    "@magicdawn/eslint-config": "^1.5.1",
+    "@babel/core": "^7.27.4",
+    "@magicdawn/eslint-config": "^1.5.3",
     "@magicdawn/prettier-config": "^0.1.0",
-    "@swc/core": "^1.11.24",
+    "@swc/core": "^1.11.29",
     "@swc/helpers": "^0.5.17",
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/fancy-log": "^2.0.2",
     "@types/fs-extra": "^11.0.4",
     "@types/jake": "^0.0.38",
-    "@types/node": "^22.15.18",
+    "@types/node": "^22.15.29",
     "concurrently": "^9.1.2",
-    "electron": "36.2",
+    "electron": "36.3",
     "electron-builder": "^26.0.15",
-    "eslint": "^9.27.0",
+    "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-react": "^7.37.5",
     "fancy-log": "^2.0.0",
@@ -65,11 +65,9 @@
     "jake": "^10.9.2",
     "lint-staged": "^16",
     "minimist": "^1.2.8",
-    "napa": "^3.0.0",
     "nodemon": "^3.1.10",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
-    "ts-node": "^10.9.2",
     "tsx": "^4.19.4",
     "turbo": "^2.5.3",
     "type-fest": "^4.41.0",
@@ -78,7 +76,11 @@
     "unplugin-icons": "^22.1.0"
   },
   "lint-staged": {
-    "**/*": [
+    "*.{?(c|m)(j|t)s?(x),json,y?(a)ml}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "!*.{?(c|m)(j|t)s?(x),json,y?(a)ml}": [
       "prettier --write --ignore-unknown"
     ]
   }

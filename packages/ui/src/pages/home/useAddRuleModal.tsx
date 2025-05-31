@@ -6,51 +6,43 @@ import AddRuleModal, { type Mode } from '../partial-config-list/AddRuleModal'
 
 type HandleAdd = (rule: string, ruleId: string) => void
 
-const store = proxy({
-  modalVisible: false,
+const state = proxy({ modalVisible: false })
+
+const _setVisible = (val: boolean) => {
+  state.modalVisible = val
+  ipcRenderer.invoke('set-top-most', val)
+  if (val) {
+    document.title += ` - 已置顶`
+  } else {
+    document.title = document.title.split(' - ')[0]
+  }
+}
+
+export const addRuleModalActions = {
+  setVisible: _setVisible,
   addRule: () => {
-    store.modalVisible = true
+    state.modalVisible = true
   },
-  setVisible: (val: boolean) => {
-    store.modalVisible = val
-
-    ipcRenderer.invoke('set-top-most', val)
-    if (val) {
-      document.title += ` - 已置顶`
-    } else {
-      document.title = document.title.split(' - ')[0]
-    }
+  open() {
+    _setVisible(true)
   },
-  open: () => {
-    store.setVisible(true)
+  close() {
+    _setVisible(false)
   },
-  close: () => {
-    store.setVisible(false)
-  },
-})
-export { store as addRuleStore }
+}
 
-export function useAddRuleModal(options: { handleAdd: HandleAdd; mode: Mode }) {
-  const handleAdd: HandleAdd = (rule, ruleId) => {
-    options.handleAdd(rule, ruleId)
-  }
-
-  const { open, close, setVisible } = store
-  const { modalVisible } = useSnapshot(store)
-
-  const modal = <AddRuleModal visible={modalVisible} setVisible={setVisible} onOk={handleAdd} mode={options.mode} />
-
-  return {
-    open,
-    close,
-    modal,
-  }
+export function useAddRuleModal({ handleAdd, mode }: { handleAdd: HandleAdd; mode: Mode }) {
+  const { modalVisible } = useSnapshot(state)
+  const modal = (
+    <AddRuleModal visible={modalVisible} setVisible={addRuleModalActions.setVisible} onOk={handleAdd} mode={mode} />
+  )
+  return { open, close, modal }
 }
 
 // 从 tray 添加规则
 ipcRenderer.on('add-rule', () => {
   rootActions.global.navigate('/')
-  store.open()
+  addRuleModalActions.open()
 })
 
 export function useAddRuleModalFromGlobal() {

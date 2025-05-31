@@ -4,11 +4,10 @@ import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space } from 'antd'
 import AppleScript from 'applescript'
 import { clipboard } from 'electron'
-import { uniq } from 'es-toolkit'
+import { attempt, uniq } from 'es-toolkit'
 import Yaml from 'js-yaml'
 import { size } from 'polished'
 import pify from 'promise.ify'
-import { tryit } from 'radash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { tldExists } from 'tldjs'
 import URI from 'urijs'
@@ -53,7 +52,7 @@ export default function AddRuleModal(props: IProps) {
         return false
       }
 
-      const [err, obj] = tryit(Yaml.load)(item.content)
+      const [err, obj] = attempt(() => Yaml.load(item.content))
       if (!obj) {
         return false
       }
