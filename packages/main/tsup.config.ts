@@ -19,8 +19,8 @@ export default defineConfig({
 
   platform: 'node',
   // TODO: get node version based on electron version
-  // Using: Node.js v18.15.0 and Electron.js v25.3.0
-  target: 'node18',
+  // output from `pnpm electron -i`: `Using: Node.js v22.15.1 and Electron.js v36.3.2`
+  target: 'node22',
 
   env: {
     NODE_ENV: env,

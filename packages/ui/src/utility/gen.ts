@@ -3,11 +3,11 @@ import { join as pathjoin } from 'node:path'
 import { omit } from 'es-toolkit'
 import fse from 'fs-extra'
 import moment from 'moment'
-
-import { ProxyGroupType, ProxyGroupTypeConfig } from '$ui/define/ClashConfig'
-import { pmap, YAML } from '$ui/libs'
+import pmap from 'promise.map'
+import { YAML } from '$ui/libs'
 import { rootActions, rootState } from '$ui/store'
-import type { ClashConfig, RuleItem, Subscribe } from '$ui/define'
+import { ProxyGroupType, ProxyGroupTypeConfig } from '$ui/types/ClashConfig'
+import type { ClashConfig, RuleItem, Subscribe } from '$ui/types'
 import { getRuleItemContent } from './remote-rules'
 import { truthy } from './ts-filter'
 
@@ -99,7 +99,7 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
     subscribeItems,
     (item) =>
       rootActions.librarySubscribe.update({
-        url: item.url,
+        idOrUrl: item.url,
         silent: true,
         forceUpdate,
       }),

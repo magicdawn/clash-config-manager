@@ -5,7 +5,7 @@
 import { debounce, once, type DebouncedFunction } from 'es-toolkit'
 import ms from 'ms'
 import { runGenerate } from '$ui/modules/commands/run'
-import type { RuleItem } from '$ui/define'
+import type { RuleItem } from '$ui/types'
 import { currentConfigUsingAndEnabled } from '../current-config/model'
 import { state, updateRemote } from './model'
 

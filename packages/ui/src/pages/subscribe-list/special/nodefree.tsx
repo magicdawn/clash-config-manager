@@ -1,5 +1,5 @@
 import moment from 'moment'
-import type { Subscribe } from '$ui/define'
+import type { Subscribe } from '$ui/types'
 
 export type NodefreeData = {
   recentDays: number

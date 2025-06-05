@@ -3,7 +3,7 @@ import { __DEV__ } from '$ui/common'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage, { type StorageData } from '$ui/storage'
 import { valtioState } from '$ui/utility/valtio-helper'
-import type { ConfigItem, RuleItem, Subscribe } from '$ui/define'
+import type { ConfigItem, RuleItem, Subscribe } from '$ui/types'
 
 const CURRENT_CONFIG_STORAGE_KEY = 'current_config_v2'
 

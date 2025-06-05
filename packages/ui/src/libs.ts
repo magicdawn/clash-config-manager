@@ -1,8 +1,2 @@
-import cx from 'classnames'
-
-import YAML from 'js-yaml'
-
-import pmap from 'promise.map'
-export { cx }
-export { YAML }
-export { pmap }
+export { default as YAML } from 'js-yaml'
+export { default as fse } from 'fs-extra'

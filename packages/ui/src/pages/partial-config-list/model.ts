@@ -3,7 +3,7 @@ import storage from '$ui/storage'
 import { message } from '$ui/store'
 import { updateRemoteConfig } from '$ui/utility/remote-rules'
 import { valtioState } from '$ui/utility/valtio-helper'
-import type { RuleItem } from '$ui/define'
+import type { RuleItem } from '$ui/types'
 import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './model.auto-update'
 
 const RULE_LIST_STORAGE_KEY = 'rule_list'

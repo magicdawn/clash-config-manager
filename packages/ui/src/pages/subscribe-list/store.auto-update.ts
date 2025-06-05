@@ -5,9 +5,9 @@
 import { once } from 'es-toolkit'
 import ms from 'ms'
 import { runGenerate } from '$ui/modules/commands/run'
-import type { Subscribe } from '$ui/define'
+import type { Subscribe } from '$ui/types'
 import { currentConfigUsingAndEnabled } from '../current-config/model'
-import { state, update } from './model'
+import { state, update } from './store'
 
 const timerRegistry: Record<string, NodeJS.Timeout | undefined> = {}
 const cleanupTimer = (timerKey: string) => {
@@ -44,7 +44,7 @@ export async function restartAutoUpdate(item: Subscribe, runImmediate = false) {
     if (!currentConfigUsingAndEnabled(item)) return
 
     await update({
-      url,
+      idOrUrl: url,
       forceUpdate: true,
       successMsg: `自动更新订阅: ${name} 更新成功`,
     })

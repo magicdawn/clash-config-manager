@@ -6,7 +6,7 @@ import YAML from 'js-yaml'
 import ky from 'ky'
 import moment from 'moment'
 import { md5 } from '$clash-utils'
-import { EUaType, type ClashConfig } from '$ui/define'
+import { EUaType, type ClashConfig } from '$ui/types'
 
 const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 

@@ -13,8 +13,9 @@ export interface Subscribe<ExtData = any> {
 
   // use subconverter?
   useSubConverter?: boolean
-  proxyUrls?: string
   subConverterUrl?: string
+  proxyUrls?: string
+  proxyUrlsFromExternalFile?: string
 
   // 用于从 subscribe 里移除某些 proxy
   excludeKeywords?: string[]

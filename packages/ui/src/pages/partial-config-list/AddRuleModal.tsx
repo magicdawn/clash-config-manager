@@ -212,8 +212,8 @@ export default function AddRuleModal(props: IProps) {
       width={'95vw'}
       styles={{ body: { padding: '24px 12px' } }}
       okButtonProps={okButtonProps}
-      destroyOnClose
       okText={mode === 'from-global' ? '添加并重新生成' : '确定'}
+      destroyOnHidden
     >
       <Input
         style={{ flex: 1 }}

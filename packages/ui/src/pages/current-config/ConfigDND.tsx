@@ -1,14 +1,14 @@
 import { useMemoizedFn } from 'ahooks'
 import { Switch, Tooltip } from 'antd'
+import clsx from 'clsx'
 import debugFactory from 'debug'
 import { useEffect, useMemo, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useSnapshot } from 'valtio'
-import { cx } from '$ui/libs'
 import { limitLines } from '$ui/utility/text-util'
-import type { ConfigItem } from '$ui/define'
+import type { ConfigItem } from '$ui/types'
 import { state as libraryRuleListState } from '../partial-config-list/model'
-import { state as librarySubscribeState } from '../subscribe-list/model'
+import { state as librarySubscribeState } from '../subscribe-list/store'
 import styles from './ConfigDND.module.less'
 import { state } from './model'
 
@@ -165,7 +165,7 @@ export function ConfigDND() {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className={cx('trash-wrapper', { 'dragging-over': snapshot.isDraggingOver })}
+                className={clsx('trash-wrapper', { 'dragging-over': snapshot.isDraggingOver })}
               >
                 <div className='text-wrapper'>
                   <div className='text'>垃圾桶</div>
@@ -245,7 +245,7 @@ const Source = ({ item, type, isDragDisabled, index }: SourceProps) => {
     <Draggable draggableId={`${type}-${id}`} index={index} isDragDisabled={isDragDisabled}>
       {(provided, snapshot) => (
         <div
-          className={cx('item', { disabled: isDragDisabled }, { 'toggle-off': !toggleEnabled })}
+          className={clsx('item', { disabled: isDragDisabled }, { 'toggle-off': !toggleEnabled })}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
@@ -269,7 +269,7 @@ const Source = ({ item, type, isDragDisabled, index }: SourceProps) => {
               classNames={{ root: styles.tooltipDetailOverlay }}
               placement={type === 'result' ? 'right' : 'left'}
               title={
-                <div className={cx(styles.tooltipDetail, { [styles.yaml]: item.tooltipIsYaml })}>{item.tooltip}</div>
+                <div className={clsx(styles.tooltipDetail, { [styles.yaml]: item.tooltipIsYaml })}>{item.tooltip}</div>
               }
             >
               <IconAntDesignInfoCircleOutlined className='help-icon' />

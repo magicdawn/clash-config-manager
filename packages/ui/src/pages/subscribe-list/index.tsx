@@ -25,7 +25,9 @@ import {
   Tag,
   Tooltip,
 } from 'antd'
+import clsx from 'clsx'
 import { clipboard } from 'electron'
+import { omit } from 'es-toolkit'
 import { size } from 'polished'
 import {
   useCallback,
@@ -38,12 +40,12 @@ import {
 } from 'react'
 import { useSnapshot } from 'valtio'
 import { colorHighlightValue } from '$ui/common'
-import { EUaType, type Subscribe, type SubscribeSpecialType } from '$ui/define'
 import { MarkdownView } from '$ui/modules/markdown'
 import { message } from '$ui/store'
+import { EUaType, type Subscribe, type SubscribeSpecialType } from '$ui/types'
 import { sharedPageCss } from '../_layout/_shared'
-import { actions, getConvertedUrl, state, SubConverterServiceUrls } from './model'
 import { defaultNodefreeSubscribe, nodefreeGetUrls, type NodefreeData } from './special/nodefree'
+import { actions, getConvertedUrl, state, SubConverterServiceUrls } from './store'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 
 const S = {
@@ -144,15 +146,15 @@ export default function LibrarySubscribe() {
         `}
       >
         <ModalAddOrEdit
-          key={`ModalAddOrEdit${modalState.id}`} // re-create: by increase id; when item change;
+          key={`ModalAddOrEdit-${modalState.id}`} // re-create: by increase id; when item change;
           visible={modalState.visible}
+          modalState={modalState}
           onClose={() =>
             setModalState((cur) => {
               // reset everything except id
               return { ...defaultModalState, id: cur.id }
             })
           }
-          modalState={modalState}
         />
 
         <DndContext modifiers={[restrictToFirstScrollableAncestor, restrictToVerticalAxis]} onDragEnd={onDragEnd}>
@@ -256,7 +258,7 @@ function SubscribeItem({
     loading: updateLoading,
     runAsync: handleUpdate,
     error: updateError,
-  } = useRequest(() => actions.update({ url: item.url, forceUpdate: true }), { manual: true })
+  } = useRequest(() => actions.update({ idOrUrl: item.url, forceUpdate: true }), { manual: true })
 
   const disableEnterAsClick: KeyboardEventHandler = useCallback((e) => {
     // disable enter
@@ -604,6 +606,7 @@ function ModalAddOrEdit({
   const [useSubConverter, setUseSubConverter] = useState(editItem?.useSubConverter)
   const [proxyUrls, setProxyUrls] = useState(editItem?.proxyUrls)
   const [subConverterUrl, setSubConverterUrl] = useState(editItem?.subConverterUrl)
+  const [proxyUrlsFromExternalFile, setProxyUrlsFromExternalFile] = useState(editItem?.proxyUrlsFromExternalFile)
   const convertedUrl = useMemo(() => {
     if (!useSubConverter) return
     if (!proxyUrls) return
@@ -679,8 +682,9 @@ function ModalAddOrEdit({
       // url
       url: (useSubConverter ? convertedUrl : url) || '',
       useSubConverter,
-      proxyUrls,
       subConverterUrl,
+      proxyUrls,
+      proxyUrlsFromExternalFile,
 
       excludeKeywords,
       autoUpdate: useSubConverter ? false : autoUpdate,
@@ -696,7 +700,12 @@ function ModalAddOrEdit({
     if (mode === 'add') {
       actions.add(subscribeItem)
     } else {
-      actions.edit({ ...editItem, ...subscribeItem, editItemIndex: editItemIndex! })
+      const editPayload = {
+        ...omit(editItem!, Object.keys(subscribeItem) as (keyof Subscribe)[]),
+        ...subscribeItem,
+        editItemIndex: editItemIndex!,
+      }
+      actions.edit(editPayload)
     }
 
     onClose()
@@ -773,7 +782,7 @@ function ModalAddOrEdit({
         )}
 
         {useSubConverter && (
-          <div className='flex flex-col gap-y-2px'>
+          <div className='flex flex-col gap-y-1'>
             <div className='flex items-center'>
               SubConverter 后端
               <Select
@@ -788,11 +797,29 @@ function ModalAddOrEdit({
                 allowClear
               />
             </div>
+            <div className='flex items-center gap-x-2'>
+              <span className='flex-none'>proxyUrls 使用外部文件</span>
+              <Switch
+                checked={typeof proxyUrlsFromExternalFile === 'string'}
+                onChange={(checked) => setProxyUrlsFromExternalFile(checked ? '' : undefined)}
+              />
+              {typeof proxyUrlsFromExternalFile === 'string' && (
+                <Input
+                  value={proxyUrlsFromExternalFile}
+                  onChange={(e) => setProxyUrlsFromExternalFile(e.target.value)}
+                />
+              )}
+            </div>
             <div>
               proxyUrls:
               <Input.TextArea
+                className={clsx(
+                  typeof proxyUrlsFromExternalFile === 'string' &&
+                    'cursor-alias bg-gray/70 focus:bg-gray/10 hover:bg-gray/10',
+                )}
                 value={proxyUrls}
                 onChange={(e) => setProxyUrls(e.target.value)}
+                readOnly={typeof proxyUrlsFromExternalFile === 'string'}
                 autoSize={{ minRows: 2, maxRows: 8 }}
                 style={{ wordBreak: 'break-all' }}
                 placeholder='节点链接, 每行一个, 支持空行, `#` 或者 `;` 开头的注释行'

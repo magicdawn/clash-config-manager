@@ -1,14 +1,15 @@
 import { isEqual, pick, uniqWith } from 'es-toolkit'
 import { ref } from 'valtio'
+import { fse } from '$ui/libs'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
 import { message } from '$ui/store'
 import { subscribeToClash } from '$ui/utility/subscribe'
 import { valtioState } from '$ui/utility/valtio-helper'
 import type { ClashProxyItem } from '$clash-utils'
-import type { Subscribe } from '$ui/define'
-import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './model.auto-update'
+import type { Subscribe } from '$ui/types'
 import { nodefreeGetUrls } from './special/nodefree'
+import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './store.auto-update'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
@@ -107,18 +108,36 @@ function del(index: number) {
 }
 
 export async function update({
-  url,
+  idOrUrl,
   silent = false,
   successMsg,
   forceUpdate = false,
 }: {
-  url: string
+  idOrUrl: string
   silent?: boolean
   successMsg?: string
   forceUpdate?: boolean
 }) {
-  const currentSubscribe = state.list.find((s) => s.url === url)
-  if (!currentSubscribe) return
+  const index = state.list.findIndex((s) => s.id === idOrUrl || s.url === idOrUrl)
+  if (index === -1) return
+  let currentSubscribe = state.list[index]
+
+  // update `proxyUrls`
+  {
+    const { useSubConverter, proxyUrlsFromExternalFile, subConverterUrl } = currentSubscribe
+    if (useSubConverter && proxyUrlsFromExternalFile) {
+      debugger
+      const serviceUrl = subConverterUrl || SubConverterServiceUrls[0]
+      if (!(await fse.exists(proxyUrlsFromExternalFile))) {
+        throw new Error(`proxyUrlsFromExternalFile ${proxyUrlsFromExternalFile} 不存在`)
+      }
+      const proxyUrls = await fse.readFile(proxyUrlsFromExternalFile, 'utf8')
+      const url = getConvertedUrl(proxyUrls, serviceUrl)
+      const newSubscribe = { ...currentSubscribe, proxyUrls, url }
+      state.list[index] = newSubscribe
+      currentSubscribe = newSubscribe
+    }
+  }
 
   let servers: ClashProxyItem[] = []
   let status: string | undefined
@@ -182,7 +201,11 @@ export async function update({
   // normal
   else {
     try {
-      ;({ servers, status } = await subscribeToClash({ url, forceUpdate, ua: currentSubscribe.ua }))
+      ;({ servers, status } = await subscribeToClash({
+        url: currentSubscribe.url,
+        forceUpdate,
+        ua: currentSubscribe.ua,
+      }))
     } catch (e) {
       message.error(`更新订阅出错: \n${e.stack || e}`, 10)
       throw e
@@ -220,12 +243,12 @@ export async function update({
   // save
   if (currentSubscribe) currentSubscribe.updatedAt = Date.now()
   servers.forEach((s) => ref(s)) // prevent observe server inner
-  state.detail[url] = servers
+  state.detail[idOrUrl] = servers
   restartAutoUpdate(currentSubscribe)
 
   // 经过网络更新, status 一定是 string, 可能是空 string
   if (typeof status !== 'undefined') {
-    state.status[url] = status || ''
+    state.status[idOrUrl] = status || ''
   }
 }
 

@@ -6,7 +6,7 @@ import { state as currentConfig, actions as currentConfigActions } from './pages
 import { state as libraryRuleList, actions as libraryRuleListActions } from './pages/partial-config-list/model'
 
 import { state as preference } from './pages/preference/model'
-import { state as librarySubscribe, actions as librarySubscribeActions } from './pages/subscribe-list/model'
+import { state as librarySubscribe, actions as librarySubscribeActions } from './pages/subscribe-list/store'
 import type { ConfigOptions, MessageInstance } from 'antd/es/message/interface'
 import type { ModalStaticFunctions } from 'antd/es/modal/confirm'
 import type { NotificationInstance } from 'antd/es/notification/interface'
