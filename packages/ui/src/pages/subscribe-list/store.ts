@@ -126,16 +126,17 @@ export async function update({
   {
     const { useSubConverter, proxyUrlsFromExternalFile, subConverterUrl } = currentSubscribe
     if (useSubConverter && proxyUrlsFromExternalFile) {
-      debugger
       const serviceUrl = subConverterUrl || SubConverterServiceUrls[0]
       if (!(await fse.exists(proxyUrlsFromExternalFile))) {
         throw new Error(`proxyUrlsFromExternalFile ${proxyUrlsFromExternalFile} 不存在`)
       }
       const proxyUrls = await fse.readFile(proxyUrlsFromExternalFile, 'utf8')
       const url = getConvertedUrl(proxyUrls, serviceUrl)
-      const newSubscribe = { ...currentSubscribe, proxyUrls, url }
-      state.list[index] = newSubscribe
-      currentSubscribe = newSubscribe
+      if (url !== currentSubscribe.url) {
+        const newSubscribe = { ...currentSubscribe, proxyUrls, url }
+        state.list[index] = newSubscribe
+        currentSubscribe = newSubscribe
+      }
     }
   }
 
