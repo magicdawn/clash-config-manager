@@ -10,18 +10,25 @@ import { md5 } from './hasher'
 
 const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 
-export function subscribeToClash({ url, forceUpdate, ua }: { url: string; forceUpdate: boolean; ua?: EUaType }) {
-  return urlToSubscribe({ url, forceUpdate, ua })
-}
-
-async function urlToSubscribe({ url, forceUpdate: force, ua }: { url: string; forceUpdate: boolean; ua?: EUaType }) {
+/**
+ * subscribe url to proxy nodes/servers
+ */
+export async function getSubscribeNodesByUrl({
+  url,
+  forceUpdate,
+  ua,
+}: {
+  url: string
+  forceUpdate: boolean
+  ua?: EUaType
+}) {
   const file = path.join(appCacheDir, 'readUrl', md5(url))
 
+  // 今天之内的更新不会再下载
   let shouldReuse = false
   let stat: fse.Stats
-  // 今天之内的更新不会再下载
   const isRecent = (mtime: Date) => moment(mtime).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')
-  if (!force && (await fse.pathExists(file)) && (stat = await fse.stat(file)) && isRecent(stat.mtime)) {
+  if (!forceUpdate && (await fse.pathExists(file)) && (stat = await fse.stat(file)) && isRecent(stat.mtime)) {
     shouldReuse = true
   }
 
@@ -43,7 +50,7 @@ async function urlToSubscribe({ url, forceUpdate: force, ua }: { url: string; fo
   // 自己解析
   // const servers = textToSubscribe(text)
 
-  // ua: clashx, 抽出 proxies 即可
+  // 从 yaml 抽出 proxies 即可
   const servers = extractProxiesFromClashYaml(text)
 
   return { servers, status }
@@ -54,11 +61,6 @@ const readUrl = async ({ url, file, ua }: { url: string; file: string; ua?: EUaT
    * user-agent matters
    * @see https://github.com/tindy2013/subconverter/blob/d47b8868e5a235ee99f07a0dece8f237d90109c8/src/handler/interfaces.cpp#L64
    */
-
-  // 'user-agent': 'electron',
-  // 'user-agent': 'Shadowrocket',
-  // 'user-agent': 'Quantumult',
-
   let userAgent = 'ClashX'
   if (ua && ua !== EUaType.Default) {
     userAgent = ua
@@ -66,9 +68,7 @@ const readUrl = async ({ url, file, ua }: { url: string; file: string; ua?: EUaT
 
   const res = await ky.get(url, {
     headers: {
-      'x-extra-headers': JSON.stringify({
-        'user-agent': userAgent,
-      }),
+      'x-extra-headers': JSON.stringify({ 'user-agent': userAgent }),
     },
   })
 

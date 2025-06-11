@@ -13,7 +13,7 @@ import { tldExists } from 'tldjs'
 import URI from 'urijs'
 import { useSnapshot } from 'valtio'
 import { message } from '$ui/store'
-import { genConfig } from '$ui/utility/gen'
+import { generateConfig } from '$ui/utility/generate'
 import { state } from './model'
 
 const { Option } = Select
@@ -134,7 +134,7 @@ export default function AddRuleModal(props: IProps) {
   }, [])
 
   const updateExtraTargets = useMemoizedFn(async () => {
-    const config = await genConfig()
+    const config = await generateConfig()
     const proxyGroupNames = (config['proxy-groups'] || []).map((x) => x.name)
     setExtraTargets(proxyGroupNames)
     await new Promise<void>((resolve) => setTimeout(resolve))

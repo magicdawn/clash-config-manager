@@ -1,10 +1,11 @@
 import { isEqual, pick, uniqWith } from 'es-toolkit'
+import { HTTPError } from 'ky'
 import { ref } from 'valtio'
 import { fse } from '$ui/libs'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
 import { message } from '$ui/store'
-import { subscribeToClash } from '$ui/utility/subscribe'
+import { getSubscribeNodesByUrl } from '$ui/utility/subscribe'
 import { valtioState } from '$ui/utility/valtio-helper'
 import type { ClashProxyItem } from '$clash-utils'
 import type { Subscribe } from '$ui/types'
@@ -122,7 +123,7 @@ export async function update({
   if (index === -1) return
   let currentSubscribe = state.list[index]
 
-  // update `proxyUrls`
+  // update external `proxyUrls`
   {
     const { useSubConverter, proxyUrlsFromExternalFile, subConverterUrl } = currentSubscribe
     if (useSubConverter && proxyUrlsFromExternalFile) {
@@ -142,6 +143,7 @@ export async function update({
 
   let servers: ClashProxyItem[] = []
   let status: string | undefined
+  let err: any
 
   // special nodefree
   if (currentSubscribe.specialType === 'nodefree') {
@@ -153,7 +155,7 @@ export async function update({
           let currentServers: ClashProxyItem[] = []
           let err: Error | undefined
           try {
-            ;({ servers: currentServers } = await subscribeToClash({
+            ;({ servers: currentServers } = await getSubscribeNodesByUrl({
               url,
               forceUpdate,
               ua: currentSubscribe.ua,
@@ -202,15 +204,31 @@ export async function update({
   // normal
   else {
     try {
-      ;({ servers, status } = await subscribeToClash({
+      ;({ servers, status } = await getSubscribeNodesByUrl({
         url: currentSubscribe.url,
         forceUpdate,
         ua: currentSubscribe.ua,
       }))
     } catch (e) {
-      message.error(`更新订阅出错: \n${e.stack || e}`, 10)
-      throw e
+      err = e
     }
+  }
+
+  if (err) {
+    let extraMessage: string | undefined
+    if (currentSubscribe.useSubConverter && err instanceof HTTPError && err.response.status === 400) {
+      const body = await err.response.text()
+      if (body) extraMessage = body
+    }
+    message.error(
+      <span className='break-all whitespace-pre-line'>
+        更新订阅出错: {extraMessage}
+        <br />
+        {err.message || err}
+      </span>,
+      10,
+    )
+    throw err
   }
 
   const keywords = currentSubscribe?.excludeKeywords || []

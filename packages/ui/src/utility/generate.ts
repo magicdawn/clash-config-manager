@@ -47,15 +47,9 @@ export function getUsingItems() {
   return { subscribeItems, ruleItems }
 }
 
-export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean } = {}) {
-  const {
-    name,
-    clashMeta,
-    generateAllProxyGroup,
-    generateSubNameProxyGroup,
-    generatedGroupNameEmoji,
-    generatedGroupNameLang,
-  } = rootState.currentConfig
+export async function generateConfig({ forceUpdate = false }: { forceUpdate?: boolean } = {}) {
+  const { generateAllProxyGroup, generateSubNameProxyGroup, generatedGroupNameEmoji, generatedGroupNameLang } =
+    rootState.currentConfig
   const { subscribeItems, ruleItems } = getUsingItems()
 
   // the config
@@ -342,8 +336,8 @@ export async function genConfig({ forceUpdate = false }: { forceUpdate?: boolean
   return config
 }
 
-export default async function genConfigThenWrite({ forceUpdate = false }: { forceUpdate?: boolean } = {}) {
-  const config = await genConfig({ forceUpdate })
+export async function generateConfigThenWrite({ forceUpdate = false }: { forceUpdate?: boolean } = {}) {
+  const config = await generateConfig({ forceUpdate })
 
   const { name, clashMeta } = rootState.currentConfig
   const configYaml = YAML.dump(config)

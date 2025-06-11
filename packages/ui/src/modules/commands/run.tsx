@@ -2,7 +2,7 @@ import { setTimeout as delay } from 'node:timers/promises'
 import { shell } from 'electron'
 import { createRef } from 'react'
 import { message, rootActions } from '$ui/store'
-import gen from '$ui/utility/gen'
+import { generateConfigThenWrite } from '$ui/utility/generate'
 import GlobalLoading from '../global-loading'
 
 export const commandPaletteRef = createRef<any>()
@@ -24,10 +24,10 @@ const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {
   // let loading show
   await delay(100)
 
-  let result: Awaited<ReturnType<typeof gen>> | undefined
+  let result: Awaited<ReturnType<typeof generateConfigThenWrite>> | undefined
   let err: any
   try {
-    result = await gen({ forceUpdate })
+    result = await generateConfigThenWrite({ forceUpdate })
   } catch (e) {
     err = e
   } finally {
@@ -37,7 +37,6 @@ const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {
 
   if (err) {
     console.error(err.stack || err)
-    message.error(`生成失败: ${err.message}`, 10)
     return
   }
 
