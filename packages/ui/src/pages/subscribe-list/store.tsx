@@ -226,7 +226,7 @@ export async function update({
         <br />
         {err.message || err}
       </span>,
-      10,
+      6,
     )
     throw err
   }

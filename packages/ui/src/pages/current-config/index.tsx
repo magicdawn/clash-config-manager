@@ -39,7 +39,7 @@ export default function ConfigList() {
     )
   })
 
-  const onOpenInFinder = useMemoizedFn(() => {
+  const onRevealInFinder = useMemoizedFn(() => {
     const file = getConfigFile(state.name, state.clashMeta)
     shell.showItemInFolder(file)
   })
@@ -180,8 +180,8 @@ export default function ConfigList() {
         <Button type='default' shape='round' onClick={() => onOpenConfigClick('subl')}>
           使用 subl 打开
         </Button>
-        <Button type='default' shape='round' onClick={() => onOpenInFinder()}>
-          在 Finder 中打开
+        <Button type='default' shape='round' onClick={() => onRevealInFinder()}>
+          在 Finder 中显示
         </Button>
       </div>
     </div>

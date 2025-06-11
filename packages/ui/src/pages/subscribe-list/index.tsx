@@ -466,6 +466,7 @@ function SubscribeItem({
         <Descriptions.Item label='操作'>
           <Space style={{ alignSelf: 'flex-end' }} wrap>
             <Button type='primary' onClick={() => onEdit?.(item, index)} onKeyDown={disableEnterAsClick}>
+              <IconParkOutlineEdit />
               编辑
             </Button>
 
@@ -478,17 +479,20 @@ function SubscribeItem({
                   loading={updateLoading}
                   onKeyDown={disableEnterAsClick}
                 >
+                  <IconParkOutlineRefresh />
                   更新
                 </Button>
               </Popover>
             ) : (
               <Button type='primary' onClick={handleUpdate} loading={updateLoading} onKeyDown={disableEnterAsClick}>
+                <IconParkOutlineRefresh />
                 更新
               </Button>
             )}
 
             <Popconfirm title={'确认删除?'} onConfirm={() => actions.del(index)}>
               <Button danger onKeyDown={disableEnterAsClick}>
+                <IconParkOutlineDelete />
                 删除
               </Button>
             </Popconfirm>
@@ -503,7 +507,10 @@ function SubscribeItem({
               }
               trigger='click'
             >
-              <Button icon={<IconAntDesignUnorderedListOutlined />}>查看节点</Button>
+              <Button>
+                <IconAntDesignUnorderedListOutlined />
+                查看节点
+              </Button>
             </Popover>
 
             {specialType === 'nodefree' && (

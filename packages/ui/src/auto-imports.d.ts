@@ -15,4 +15,7 @@ declare global {
   const IconAntDesignQuestionCircleFilled: typeof import('~icons/ant-design/question-circle-filled.jsx')['default']
   const IconAntDesignSettingFilled: typeof import('~icons/ant-design/setting-filled.jsx')['default']
   const IconAntDesignUnorderedListOutlined: typeof import('~icons/ant-design/unordered-list-outlined.jsx')['default']
+  const IconParkOutlineDelete: typeof import('~icons/icon-park-outline/delete.jsx')['default']
+  const IconParkOutlineEdit: typeof import('~icons/icon-park-outline/edit.jsx')['default']
+  const IconParkOutlineRefresh: typeof import('~icons/icon-park-outline/refresh.jsx')['default']
 }
