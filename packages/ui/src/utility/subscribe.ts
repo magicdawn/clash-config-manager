@@ -5,8 +5,8 @@ import fse from 'fs-extra'
 import YAML from 'js-yaml'
 import ky from 'ky'
 import moment from 'moment'
-import { md5 } from '$clash-utils'
 import { EUaType, type ClashConfig } from '$ui/types'
+import { md5 } from './hasher'
 
 const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 
@@ -24,8 +24,6 @@ async function urlToSubscribe({ url, forceUpdate: force, ua }: { url: string; fo
   if (!force && (await fse.pathExists(file)) && (stat = await fse.stat(file)) && isRecent(stat.mtime)) {
     shouldReuse = true
   }
-
-  // debugger
 
   let text: string
   let valuableHeaders: Record<string, string> | undefined

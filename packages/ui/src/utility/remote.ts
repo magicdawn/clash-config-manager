@@ -2,8 +2,8 @@ import path from 'node:path'
 import fse from 'fs-extra'
 import ky from 'ky'
 import moment from 'moment'
-import { md5 } from '$clash-utils'
 import { appCacheDir } from '$ui/common'
+import { md5 } from './hasher'
 
 export async function readUrlWithCache(url: string, forceUpdate = false) {
   const file = path.join(appCacheDir, 'readUrl', md5(url))

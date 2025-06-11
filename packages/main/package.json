@@ -11,7 +11,7 @@
     "debug": "^4.4.1",
     "electron-context-menu": "^4.1.0",
     "electron-debug": "^4.1.0",
-    "electron-log": "^5.4.0",
+    "electron-log": "^5.4.1",
     "electron-unhandled": "^5.0.0",
     "electron-updater": "^6.6.5",
     "electron-util": "^0.18.1",
