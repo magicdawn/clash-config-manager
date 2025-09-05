@@ -42,7 +42,7 @@ jobs:
 
       # v1.2.3 -> 1.2.3
       - id: github-script
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const version = context.ref.slice('refs/tags/v'.length)
