@@ -40,6 +40,7 @@ const storage = new Store({
         pass: '',
       },
       vscodeTheme: '',
+      useSystemProxy: false,
     },
   },
 })
@@ -77,6 +78,7 @@ export const storageDataDisplayNames: Record<string, string> = {
   'preference.syncConfig.user': '用户名',
   'preference.syncConfig.pass': '密码 (有泄露风险, 谨慎导出分享)',
   'preference.vscodeTheme': '内置 monaco 编辑器主题',
+  'preference.useSystemProxy': '使用系统代理',
 }
 
 // FIXME: debug only

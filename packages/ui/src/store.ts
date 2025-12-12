@@ -4,7 +4,6 @@ import { devtools } from 'valtio/utils'
 import { actions as globalActions } from './modules/global-model'
 import { state as currentConfig, actions as currentConfigActions } from './pages/current-config/model'
 import { state as libraryRuleList, actions as libraryRuleListActions } from './pages/partial-config-list/model'
-
 import { state as preference } from './pages/preference/model'
 import { state as librarySubscribe, actions as librarySubscribeActions } from './pages/subscribe-list/store'
 import type { ConfigOptions, MessageInstance } from 'antd/es/message/interface'

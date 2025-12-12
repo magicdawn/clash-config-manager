@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
 import { valtioState } from '$ui/utility/valtio-helper'
@@ -15,6 +16,7 @@ interface IState {
   }
   vscodeTheme?: string
   theme?: Theme
+  useSystemProxy?: boolean
 }
 
 const { state, init, load } = valtioState<IState>(
@@ -25,6 +27,7 @@ const { state, init, load } = valtioState<IState>(
       pass: '',
     },
     vscodeTheme: '',
+    useSystemProxy: false,
   },
   {
     load() {
@@ -43,4 +46,7 @@ export { state }
  */
 
 onInit(init)
+onInit(() => {
+  ipcRenderer.invoke('set-use-system-proxy', state.useSystemProxy)
+})
 onReload(load)

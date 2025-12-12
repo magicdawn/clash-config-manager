@@ -13,6 +13,7 @@ import storage, { customMerge, getExportData } from '$ui/storage'
 import { message, rootActions, rootState } from '$ui/store'
 import useImmerState from '$ui/utility/hooks/useImmerState'
 import helper, { STORAGE_FILE } from '$ui/utility/sync/webdav/helper'
+import { ConfigForUseSystemProxy } from './fragments'
 import styles from './index.module.less'
 import { pickDataFrom, SelectExportForStaticMethod } from './modal/SelectExport'
 import { state, type Theme } from './model'
@@ -115,7 +116,7 @@ export default function Preference() {
 
   const rowGutter = { xs: 8, sm: 16, md: 24 }
 
-  const { theme } = useSnapshot(state)
+  const { theme, useSystemProxy } = useSnapshot(state)
 
   return (
     <div className={styles.page}>
@@ -156,14 +157,15 @@ export default function Preference() {
         </Space>
       </Modal>
 
-      <Row>
-        <Radio.Group buttonStyle='solid' value={theme || 'light'} onChange={(e) => (state.theme = e.target.value)}>
-          <Radio.Button value={'light' satisfies Theme}>浅色模式</Radio.Button>
-          <Radio.Button value={'dark' satisfies Theme}>深色模式</Radio.Button>
-          <Radio.Button value={'follow-system' satisfies Theme}>跟随系统</Radio.Button>
-        </Radio.Group>
-
-        <Col flex={1}></Col>
+      <div className='flex items-center justify-between'>
+        <div className='flex items-center gap-x-25px'>
+          <Radio.Group buttonStyle='solid' value={theme || 'light'} onChange={(e) => (state.theme = e.target.value)}>
+            <Radio.Button value={'light' satisfies Theme}>浅色模式</Radio.Button>
+            <Radio.Button value={'dark' satisfies Theme}>深色模式</Radio.Button>
+            <Radio.Button value={'follow-system' satisfies Theme}>跟随系统</Radio.Button>
+          </Radio.Group>
+          <ConfigForUseSystemProxy />
+        </div>
 
         <Button
           type='primary'
@@ -174,7 +176,7 @@ export default function Preference() {
           <IconAntDesignSettingFilled />
           配置同步参数
         </Button>
-      </Row>
+      </div>
 
       <Row gutter={rowGutter} style={{ marginTop: 10 }}>
         {/* 上传区 */}
