@@ -1,5 +1,5 @@
 import { useMemoizedFn } from 'ahooks'
-import { Button, Checkbox, Col, Divider, Input, Row, Space, Tag, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Divider, Input, Row, Tag, Tooltip } from 'antd'
 import { shell } from 'electron'
 import launch from 'launch-editor'
 import { useSnapshot } from 'valtio'
@@ -17,6 +17,7 @@ export default function ConfigList() {
     clashMeta,
     generateAllProxyGroup,
     generateSubNameProxyGroup,
+    generateSubNameFallbackProxyGroup,
     generatedGroupNameEmoji,
     generatedGroupNameLang,
   } = useSnapshot(state)
@@ -109,7 +110,7 @@ export default function ConfigList() {
         </Col>
       </Row>
       <Row style={{ marginTop: 8 }}>
-        <Space size={'large'}>
+        <div className='flex items-center justify-start flex-wrap gap-x-15px gap-y-1'>
           <Checkbox
             checked={clashMeta}
             onChange={(e) => {
@@ -134,7 +135,20 @@ export default function ConfigList() {
               state.generateSubNameProxyGroup = e.target.checked
             }}
           >
-            生成 <Tag style={{ marginRight: 0 }}>订阅名同名</Tag> 组
+            <Tooltip title='默认会生成 SubName-最快 SubName-可用 SubName-选择, 是否再额外生成 SubName 组'>
+              生成 <Tag className='mr-0'>订阅名同名</Tag> 组
+            </Tooltip>
+          </Checkbox>
+
+          <Checkbox
+            checked={generateSubNameFallbackProxyGroup}
+            onChange={(e) => {
+              state.generateSubNameFallbackProxyGroup = e.target.checked
+            }}
+          >
+            <Tooltip title='Fallback 组不是很常用, 故可以省略'>
+              生成 <Tag className='mr-0'>SubName-可用</Tag> 组
+            </Tooltip>
           </Checkbox>
 
           <Checkbox
@@ -143,7 +157,7 @@ export default function ConfigList() {
               state.generatedGroupNameEmoji = e.target.checked
             }}
           >
-            <Tag style={{ marginRight: 0 }}>订阅组</Tag> emoji
+            <Tag className='mr-0'>订阅组</Tag> emoji
           </Checkbox>
 
           <Checkbox
@@ -167,7 +181,7 @@ export default function ConfigList() {
               <Tag style={{ marginRight: 0 }}>订阅组</Tag> 中文
             </Tooltip>
           </Checkbox>
-        </Space>
+        </div>
       </Row>
 
       <Button type='primary' block shape='round' style={{ marginTop: 8 }} onClick={onGenConfigClick}>

@@ -56,7 +56,7 @@ export enum ProxyGroupType {
 }
 
 /**
-  // 最快 / 可用 / 手选
+  // 最快 / 可用 / 选择
   // Fastest / Available / Select
   generatedGroupNameLocale: 'zh-CN', // possible: zh-CN | en-US
 
@@ -72,11 +72,11 @@ export const ProxyGroupTypeConfig: Record<ProxyGroupType, { emoji: string; nameZ
   [ProxyGroupType.Fallback]: {
     emoji: '🔍',
     nameZh: '可用',
-    nameEn: 'Available',
+    nameEn: 'Fallback',
   },
   [ProxyGroupType.Select]: {
     emoji: '✅', // ✅ ✔
-    nameZh: '手选',
+    nameZh: '选择',
     nameEn: 'Select',
   },
 }

@@ -2,29 +2,29 @@
   "name": "clash-proxy-parser",
   "version": "0.0.1",
   "description": "parse subscribe text to clash proxy server config",
-  "keywords": [
-    "clash",
-    "ssr",
-    "clashx"
-  ],
+  "author": "magicdawn",
   "license": "MIT",
   "homepage": "https://github.com/magicdawn/clash-config-manager",
   "repository": {
     "type": "git",
     "url": "https://github.com/magicdawn/clash-config-manager"
   },
-  "author": "magicdawn",
-  "files": [
-    "dist"
+  "keywords": [
+    "clash",
+    "ssr",
+    "clashx"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "tsc",
     "build": "tsc",
     "prepublishOnly": "tsc"
   },
   "devDependencies": {
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
   }
 }

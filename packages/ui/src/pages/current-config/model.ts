@@ -13,6 +13,7 @@ interface IState {
   clashMeta: boolean
   generateAllProxyGroup: boolean
   generateSubNameProxyGroup: boolean
+  generateSubNameFallbackProxyGroup: boolean
   generatedGroupNameLang: string
   generatedGroupNameEmoji: boolean
 }
@@ -22,6 +23,7 @@ const defaultState: IState = {
   name: '',
   generateAllProxyGroup: false,
   generateSubNameProxyGroup: false,
+  generateSubNameFallbackProxyGroup: false,
   clashMeta: false,
   generatedGroupNameLang: 'zh',
   generatedGroupNameEmoji: true,

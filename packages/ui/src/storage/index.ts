@@ -25,7 +25,7 @@ const storage = new Store({
       generateAllProxyGroup: false,
       generateSubNameProxyGroup: false,
 
-      // 最快 / 可用 / ✋🏻手选
+      // 最快 / 可用 / ✋🏻选择
       // Fastest / Available / Select
       generatedGroupNameLang: 'zh', // possible: zh | en
 
