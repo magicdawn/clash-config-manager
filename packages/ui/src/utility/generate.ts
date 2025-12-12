@@ -244,11 +244,11 @@ export async function generateConfig({ forceUpdate = false }: { forceUpdate?: bo
     }
     item.proxies = (config.proxies || []).map((server) => server.name).filter((serverName) => filterFn?.(serverName))
   })
-  proxyGroupsWithFilter = proxyGroupsWithFilter.filter((pg) => pg.proxies.length) // filter 完, 若 proxies 为空, 则去除 proxy-group
+  proxyGroupsWithFilter = proxyGroupsWithFilter.filter((pg) => pg.proxies?.length) // filter 完, 若 proxies 为空, 则去除 proxy-group
 
   // 明确标识为 `middle` 的 proxy-group, middle 表示 proxy chain 中间位置; 出口有 (sub generated + filtered)
   // config valid check
-  if (proxyGroups.some((pg) => pg.middle && (pg.type !== ProxyGroupType.Select || pg.proxies.length || pg.filter))) {
+  if (proxyGroups.some((pg) => pg.middle && (pg.type !== ProxyGroupType.Select || pg.proxies?.length || pg.filter))) {
     throw new Error('`middle` proxy-group 必须是 `select` 类型, proxies 和 filter 必须为空')
   }
   const middleProxyGroups = proxyGroups.filter((pg) => pg.type === ProxyGroupType.Select && pg.middle)
@@ -324,7 +324,7 @@ export async function generateConfig({ forceUpdate = false }: { forceUpdate?: bo
   const proxyProviderNames = Object.keys(config['proxy-providers'] || {})
   if (proxyProviderNames.length) {
     proxyGroups.forEach((pg) => {
-      if (!pg.proxies.length && !pg.use?.length) {
+      if (!pg.proxies?.length && !pg.use?.length) {
         pg.use ||= proxyProviderNames
       }
     })

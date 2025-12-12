@@ -42,7 +42,7 @@ export interface FallbackFilter {
 export interface ProxyGroup {
   name: string
   use?: string[]
-  proxies: string[]
+  proxies?: string[]
   type: ProxyGroupType
   url?: string
   interval?: number
