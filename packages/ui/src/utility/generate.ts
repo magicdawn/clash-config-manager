@@ -3,6 +3,7 @@ import { join as pathjoin } from 'node:path'
 import { omit } from 'es-toolkit'
 import fse from 'fs-extra'
 import moment from 'moment'
+import ms from 'ms'
 import pmap from 'promise.map'
 import { YAML } from '$ui/libs'
 import { rootActions, rootState } from '$ui/store'
@@ -144,6 +145,9 @@ export async function generateConfig({ forceUpdate = false }: { forceUpdate?: bo
   /* #region proxy-groups */
   // subscribe 自动生成 proxy groups
   const genGroupsForSubscribe = (label: string, proxies: string[]) => {
+    // TODO: make this configurable
+    const URL_TEST_INTERVAL = ms('10m')
+
     // 只有单个服务器时, 不用多个 group
     if (proxies.length <= 1) {
       return [
@@ -178,7 +182,7 @@ export async function generateConfig({ forceUpdate = false }: { forceUpdate?: bo
         type: ProxyGroupType.UrlTest,
         proxies,
         url: 'http://www.gstatic.com/generate_204',
-        interval: 150,
+        interval: URL_TEST_INTERVAL,
       },
       generateSubNameFallbackProxyGroup
         ? {
@@ -186,7 +190,7 @@ export async function generateConfig({ forceUpdate = false }: { forceUpdate?: bo
             type: ProxyGroupType.Fallback,
             proxies,
             url: 'http://www.gstatic.com/generate_204',
-            interval: 150,
+            interval: URL_TEST_INTERVAL,
           }
         : undefined,
       {
