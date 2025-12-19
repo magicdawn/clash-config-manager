@@ -6,6 +6,6 @@ export const sharedPageCss = {
     padding: 10px 0;
     display: flex;
     flex-direction: column;
-    overflow-y: hidden;
+    overflow: hidden;
   `,
 }

@@ -3,8 +3,6 @@ import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { css } from '@emotion/react'
-import IconParkOutlineCopy from '~icons/icon-park-outline/copy'
-import IconParkOutlineTips from '~icons/icon-park-outline/tips'
 import { useMemoizedFn, useRequest } from 'ahooks'
 import { FloatInput, FloatInputNumber } from 'ant-float-label'
 import {
@@ -39,6 +37,8 @@ import {
   type KeyboardEventHandler,
 } from 'react'
 import { useSnapshot } from 'valtio'
+import IconParkOutlineCopy from '~icons/icon-park-outline/copy'
+import IconParkOutlineTips from '~icons/icon-park-outline/tips'
 import { colorHighlightValue } from '$ui/common'
 import { MarkdownView } from '$ui/modules/markdown'
 import { message } from '$ui/store'
@@ -362,7 +362,7 @@ function SubscribeItem({
               </Tooltip>
             )}
           </div>
-          {status[url] ? status[url] : null}
+          {status[url]}
 
           <span
             css={css`
@@ -502,7 +502,11 @@ function SubscribeItem({
               title={`节点列表(${servers?.length})`}
               content={
                 <div style={{ maxHeight: '50vh', overflowY: 'scroll' }}>
-                  <ul>{servers?.map((s) => <li key={s.name}>{s.name}</li>)}</ul>
+                  <ul>
+                    {servers?.map((s) => (
+                      <li key={s.name}>{s.name}</li>
+                    ))}
+                  </ul>
                 </div>
               }
               trigger='click'
@@ -519,7 +523,11 @@ function SubscribeItem({
                 title={`链接列表(${specialData?.recentDays})`}
                 content={
                   <div style={{ maxHeight: '200px', overflowY: 'scroll' }}>
-                    <ul>{nodefreeGetUrls(item)?.map((url) => <li key={url}>{url}</li>)}</ul>
+                    <ul>
+                      {nodefreeGetUrls(item)?.map((url) => (
+                        <li key={url}>{url}</li>
+                      ))}
+                    </ul>
                   </div>
                 }
                 trigger='click'
