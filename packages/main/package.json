@@ -3,8 +3,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "tsup --watch",
-    "build": "NODE_ENV=production tsup"
+    "dev": "tsdown --watch",
+    "build": "NODE_ENV=production tsdown"
   },
   "dependencies": {
     "bytes": "^3.1.2",
@@ -24,6 +24,7 @@
     "@types/bytes": "^3.1.5",
     "@types/debug": "^4.1.12",
     "@types/ms": "^2.1.0",
-    "tsup": "^8.5.1"
+    "find-up-simple": "^1.0.1",
+    "tsdown": "^0.18.1"
   }
 }
