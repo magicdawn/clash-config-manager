@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Spin, Tag, Tooltip } from 'antd'
-import { useMemo, useRef, type CSSProperties, type MutableRefObject, type ReactNode } from 'react'
+import { useMemo, useRef, type CSSProperties, type ReactNode, type RefObject } from 'react'
 import MonacoEditor, { type EditorDidMount, type EditorWillMount, type monaco } from 'react-monaco-editor'
 import { useSnapshot } from 'valtio'
 import { state as preferenceState } from '$ui/pages/preference/model'
@@ -53,7 +53,7 @@ interface IProps {
   onChange?: (val: string) => void
   spinProps?: SpinProps
   header?: ReactNode
-  editorRef?: MutableRefObject<EditorRefInner | null>
+  editorRef?: RefObject<EditorRefInner | null>
 }
 
 const fontSize = 15

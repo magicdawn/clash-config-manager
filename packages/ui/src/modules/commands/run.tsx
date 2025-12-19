@@ -39,7 +39,7 @@ const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {
 
   const { success, msg, writed } = result || {}
   if (!success) {
-    notification.error({ message: '生成失败', description: msg })
+    notification.error({ placement: 'bottomRight', message: '生成失败', description: msg })
     return
   }
 

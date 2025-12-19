@@ -36,7 +36,7 @@ export async function getSubscribeNodesByUrl({
   let valuableHeaders: Record<string, string> | undefined
   let status: string | undefined
   if (shouldReuse) {
-    text = await fse.readFile(file, 'utf8')
+    text = await fse.readFile(file, 'utf-8')
   } else {
     ;({ text, valuableHeaders } = await readUrl({ url, file, ua }))
     if (valuableHeaders?.['subscription-userinfo']) {
@@ -70,6 +70,7 @@ const readUrl = async ({ url, file, ua }: { url: string; file: string; ua?: EUaT
     headers: {
       'x-extra-headers': JSON.stringify({ 'user-agent': userAgent }),
     },
+    timeout: 30_000, // 30s, api.ytools.cc 可直连, 但时间很久
   })
 
   const text = await res.text()

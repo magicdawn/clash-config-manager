@@ -4,7 +4,7 @@ import { ref } from 'valtio'
 import { fse } from '$ui/libs'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
-import { message } from '$ui/store'
+import { message, notification } from '$ui/store'
 import { getSubscribeNodesByUrl } from '$ui/utility/subscribe'
 import { valtioState } from '$ui/utility/valtio-helper'
 import type { ClashProxyItem } from '$clash-utils'
@@ -131,7 +131,7 @@ export async function update({
       if (!(await fse.exists(proxyUrlsFromExternalFile))) {
         throw new Error(`proxyUrlsFromExternalFile ${proxyUrlsFromExternalFile} 不存在`)
       }
-      const proxyUrls = await fse.readFile(proxyUrlsFromExternalFile, 'utf8')
+      const proxyUrls = await fse.readFile(proxyUrlsFromExternalFile, 'utf-8')
       const url = getConvertedUrl(proxyUrls, serviceUrl)
       if (url !== currentSubscribe.url) {
         const newSubscribe = { ...currentSubscribe, proxyUrls, url }
@@ -220,14 +220,19 @@ export async function update({
       const body = await err.response.text()
       if (body) extraMessage = body
     }
-    message.error(
-      <span className='break-all whitespace-pre-line'>
-        更新订阅出错: {extraMessage}
-        <br />
-        {err.message || err}
-      </span>,
-      6,
-    )
+    notification.error({
+      placement: 'bottomRight',
+      duration: false,
+      closable: true,
+      key: `update-subscribe-error:${currentSubscribe.id}`,
+      title: '更新订阅出错',
+      description: (
+        <>
+          {extraMessage}
+          <span className='break-all whitespace-pre-line line-clamp-5'>{err.message || err}</span>
+        </>
+      ),
+    })
     throw err
   }
 
@@ -266,7 +271,7 @@ export async function update({
   restartAutoUpdate(currentSubscribe)
 
   // 经过网络更新, status 一定是 string, 可能是空 string
-  if (typeof status !== 'undefined') {
+  if (status !== undefined) {
     state.status[idOrUrl] = status || ''
   }
 }

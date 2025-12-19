@@ -86,7 +86,7 @@ export default defineConfig({
     port: 7749,
   },
   build: {
-    target: 'modules',
+    // target: , // Default: baseline-widely-available
     minify: false,
     outDir: join(__dirname, '../../bundle/production/renderer/'),
     emptyOutDir: true,

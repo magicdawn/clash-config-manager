@@ -6,16 +6,16 @@
 // biome-ignore lint: disable
 export {}
 declare global {
-  const IconAntDesignCloudDownloadOutlined: typeof import('~icons/ant-design/cloud-download-outlined.jsx')['default']
-  const IconAntDesignCloudUploadOutlined: typeof import('~icons/ant-design/cloud-upload-outlined.jsx')['default']
-  const IconAntDesignEyeFilled: typeof import('~icons/ant-design/eye-filled.jsx')['default']
-  const IconAntDesignEyeInvisibleFilled: typeof import('~icons/ant-design/eye-invisible-filled.jsx')['default']
-  const IconAntDesignFileAddOutlined: typeof import('~icons/ant-design/file-add-outlined.jsx')['default']
-  const IconAntDesignInfoCircleOutlined: typeof import('~icons/ant-design/info-circle-outlined.jsx')['default']
-  const IconAntDesignQuestionCircleFilled: typeof import('~icons/ant-design/question-circle-filled.jsx')['default']
-  const IconAntDesignSettingFilled: typeof import('~icons/ant-design/setting-filled.jsx')['default']
-  const IconAntDesignUnorderedListOutlined: typeof import('~icons/ant-design/unordered-list-outlined.jsx')['default']
-  const IconParkOutlineDelete: typeof import('~icons/icon-park-outline/delete.jsx')['default']
-  const IconParkOutlineEdit: typeof import('~icons/icon-park-outline/edit.jsx')['default']
-  const IconParkOutlineRefresh: typeof import('~icons/icon-park-outline/refresh.jsx')['default']
+  const IconAntDesignCloudDownloadOutlined: typeof import('~icons/ant-design/cloud-download-outlined.jsx').default
+  const IconAntDesignCloudUploadOutlined: typeof import('~icons/ant-design/cloud-upload-outlined.jsx').default
+  const IconAntDesignEyeFilled: typeof import('~icons/ant-design/eye-filled.jsx').default
+  const IconAntDesignEyeInvisibleFilled: typeof import('~icons/ant-design/eye-invisible-filled.jsx').default
+  const IconAntDesignFileAddOutlined: typeof import('~icons/ant-design/file-add-outlined.jsx').default
+  const IconAntDesignInfoCircleOutlined: typeof import('~icons/ant-design/info-circle-outlined.jsx').default
+  const IconAntDesignQuestionCircleFilled: typeof import('~icons/ant-design/question-circle-filled.jsx').default
+  const IconAntDesignSettingFilled: typeof import('~icons/ant-design/setting-filled.jsx').default
+  const IconAntDesignUnorderedListOutlined: typeof import('~icons/ant-design/unordered-list-outlined.jsx').default
+  const IconParkOutlineDelete: typeof import('~icons/icon-park-outline/delete.jsx').default
+  const IconParkOutlineEdit: typeof import('~icons/icon-park-outline/edit.jsx').default
+  const IconParkOutlineRefresh: typeof import('~icons/icon-park-outline/refresh.jsx').default
 }
