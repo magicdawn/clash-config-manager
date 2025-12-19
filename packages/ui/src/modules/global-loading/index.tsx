@@ -51,7 +51,8 @@ function Loading({ visible }: { visible: boolean }) {
       centered
       closable={false}
       styles={{
-        content: { backgroundColor: 'transparent', padding: 0, boxShadow: 'none' },
+        // old `content`, new ?
+        container: { backgroundColor: 'transparent', padding: 0, boxShadow: 'none' },
         body: { backgroundColor: 'transparent', padding: 0 },
       }}
     >

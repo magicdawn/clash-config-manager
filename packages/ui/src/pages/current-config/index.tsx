@@ -52,7 +52,7 @@ export default function ConfigList() {
   // const subTitleFontSize = '1.5em'
   const createDivider = (text: string) => (
     <div>
-      <Divider orientation='left' orientationMargin={0}>
+      <Divider titlePlacement='left'>
         <span style={{ fontSize: dividerFontSize }}>{text}</span>
       </Divider>
     </div>
@@ -168,7 +168,7 @@ export default function ConfigList() {
             }}
           >
             <Tooltip
-              styles={{ body: { width: 'max-content' } }}
+              styles={{ container: { width: 'max-content' } }}
               title={
                 <>
                   ✅ 使用中文: {ProxyGroupTypeConfig['url-test'].nameZh} / {ProxyGroupTypeConfig.fallback.nameZh} /{' '}

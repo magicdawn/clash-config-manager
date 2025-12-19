@@ -1,5 +1,8 @@
 packages:
   - packages/**
+
+ignoreBuiltDependencies:
+  - less
 onlyBuiltDependencies:
   - '@swc/core'
   - core-js

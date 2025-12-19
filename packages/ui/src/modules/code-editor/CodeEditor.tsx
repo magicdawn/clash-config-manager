@@ -6,7 +6,7 @@ import MonacoEditor, { type EditorDidMount, type EditorWillMount, type monaco } 
 import { useSnapshot } from 'valtio'
 import { state as preferenceState } from '$ui/pages/preference/model'
 import type { SpinProps } from 'antd/lib/spin'
-import type * as EditorApi from 'monaco-editor/esm/vs/editor/editor.api'
+import type * as EditorApi from 'monaco-editor/esm/vs/editor/editor.api.js'
 
 export type EditorRefInner = monaco.editor.IStandaloneCodeEditor
 

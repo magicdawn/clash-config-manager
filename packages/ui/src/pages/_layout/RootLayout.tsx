@@ -30,7 +30,6 @@ export function RootLayout({ menuItems, getKey }: { menuItems: MenuProps['items'
     <ConfigProvider
       locale={zhCN}
       theme={{
-        cssVar: true,
         algorithm,
         token: {
           // colorPrimary: colorHighlightHex,

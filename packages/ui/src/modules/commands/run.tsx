@@ -1,4 +1,5 @@
 import { setTimeout as delay } from 'node:timers/promises'
+import { notification } from 'antd'
 import { shell } from 'electron'
 import { createRef } from 'react'
 import { message, rootActions } from '$ui/store'
@@ -34,20 +35,15 @@ const commandGen = async ({ forceUpdate = false }: { forceUpdate?: boolean } = {
     clearTimeout(delayShowTimer)
     GlobalLoading.hide()
   }
+  if (err) return console.error(err.stack || err)
 
-  if (err) {
-    console.error(err.stack || err)
-    return
-  }
-
-  const { success, msg, filename, writed } = result || {}
+  const { success, msg, writed } = result || {}
   if (!success) {
-    message.error(msg || '生成失败')
+    notification.error({ message: '生成失败', description: msg })
     return
   }
 
   message.success(msg)
-
   if (writed) {
     // reload config
     shell.openExternal('clash://update-config')

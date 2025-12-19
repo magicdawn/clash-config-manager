@@ -13,11 +13,11 @@
 import 'monaco-editor/esm/vs/basic-languages/yaml/yaml.contribution.js'
 import 'monaco-editor/esm/vs/editor/edcore.main.js'
 
-// for api usage
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js' // for api usage
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+
 export { monaco }
+
 self.MonacoEnvironment = {
   getWorker(_, label) {
     return new editorWorker()
