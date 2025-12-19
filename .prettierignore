@@ -1,5 +1,3 @@
-node_modules
+# .gitignore extra
 pnpm-lock.yaml
-/bundle
-/dist
 auto-imports.d.ts
