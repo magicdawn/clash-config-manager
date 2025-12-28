@@ -1,13 +1,4 @@
 {
-  "files.exclude": {
-    "**/.DS_Store": true,
-    "**/.git": true,
-    "**/.hg": true,
-    "**/.svn": true,
-    "**/CVS": true,
-    "**/node_modules": false,
-    "**/Thumbs.db": true
-  },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
@@ -15,6 +6,5 @@
   "typescript.preferences.organizeImports": {
     "typeOrder": "last"
   },
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "unocss.root": ["./packages/ui/"]
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
