@@ -5,8 +5,8 @@ import { useCallback, useState, type Key } from 'react'
 import { proxy, useSnapshot } from 'valtio'
 import { storageDataDisplayNames, type ExportData } from '$ui/storage'
 import { truthy } from '$ui/utility/ts-filter'
-import type { ConfigItem } from '$ui/types'
 import type { Merge } from 'type-fest'
+import type { ConfigItem } from '$ui/types'
 
 type SelectExportProps = {
   visible: boolean

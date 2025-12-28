@@ -14,9 +14,9 @@ import { message, rootActions, rootState } from '$ui/store'
 import useImmerState from '$ui/utility/hooks/useImmerState'
 import helper, { STORAGE_FILE } from '$ui/utility/sync/webdav/helper'
 import { ConfigForUseSystemProxy } from './fragments'
+import styles from './index.module.less'
 import { pickDataFrom, SelectExportForStaticMethod } from './modal/SelectExport'
 import { state, type Theme } from './model'
-import styles from './index.module.less'
 
 const debug = debugFactory('app:page:preference')
 

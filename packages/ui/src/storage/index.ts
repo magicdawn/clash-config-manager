@@ -2,8 +2,8 @@
 
 import Store from 'electron-store'
 import { omit } from 'es-toolkit'
-import type { ConfigItem, RuleItem, Subscribe } from '$ui/types'
 import { keysToOmit } from './config'
+import type { ConfigItem, RuleItem, Subscribe } from '$ui/types'
 
 export { customMerge } from './customMerge'
 

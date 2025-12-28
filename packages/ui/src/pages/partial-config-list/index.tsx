@@ -21,10 +21,10 @@ import { message } from '$ui/store'
 import { useIsDarkMode } from '$ui/utility/hooks/useIsDarkMode'
 import { getRuleItemContent } from '$ui/utility/remote-rules'
 import { firstLine, limitLines } from '$ui/utility/text-util'
-import type { LocalRuleItem, RuleItem } from '$ui/types'
 import RuleAddModal from './AddRuleModal'
 import styles from './index.module.less'
 import { actions, state } from './model'
+import type { LocalRuleItem, RuleItem } from '$ui/types'
 
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')

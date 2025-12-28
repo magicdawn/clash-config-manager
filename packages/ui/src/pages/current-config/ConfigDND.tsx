@@ -6,11 +6,11 @@ import { useEffect, useMemo, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useSnapshot } from 'valtio'
 import { limitLines } from '$ui/utility/text-util'
-import type { ConfigItem } from '$ui/types'
 import { state as libraryRuleListState } from '../partial-config-list/model'
 import { state as librarySubscribeState } from '../subscribe-list/store'
 import styles from './ConfigDND.module.less'
 import { state } from './model'
+import type { ConfigItem } from '$ui/types'
 
 const dndDebug = debugFactory('app:page:current-config:ConfigDND')
 

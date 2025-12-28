@@ -62,7 +62,7 @@
     "webdav-fs": "^4.0.1"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.417",
+    "@iconify/json": "^2.2.421",
     "@qiniu/typed-less-modules": "^0.1.2",
     "@svgr/core": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",

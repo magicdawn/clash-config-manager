@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",
-    "@magicdawn/eslint-config": "^1.5.15",
+    "@magicdawn/eslint-config": "^1.6.1",
     "@magicdawn/prettier-config": "^0.1.0",
     "@swc/core": "^1.15.7",
     "@swc/helpers": "^0.5.18",

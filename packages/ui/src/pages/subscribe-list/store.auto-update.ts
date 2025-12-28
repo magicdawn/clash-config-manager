@@ -5,9 +5,9 @@
 import { once } from 'es-toolkit'
 import ms from 'ms'
 import { runGenerate } from '$ui/modules/commands/run'
-import type { Subscribe } from '$ui/types'
 import { currentConfigUsingAndEnabled } from '../current-config/model'
 import { state, update } from './store'
+import type { Subscribe } from '$ui/types'
 
 const timerRegistry: Record<string, NodeJS.Timeout | undefined> = {}
 const cleanupTimer = (timerKey: string) => {

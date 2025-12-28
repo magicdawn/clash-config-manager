@@ -8,8 +8,8 @@ import { message } from '$ui/store'
 import { ProxyGroupTypeConfig } from '$ui/types/ClashConfig'
 import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/utility/generate'
 import { ConfigDND } from './ConfigDND'
-import { state } from './model'
 import styles from './index.module.less'
+import { state } from './model'
 
 export default function ConfigList() {
   const {
