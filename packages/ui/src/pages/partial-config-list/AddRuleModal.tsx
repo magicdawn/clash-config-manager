@@ -1,5 +1,4 @@
 import { css } from '@emotion/react'
-import LineMdConfirm from '~icons/line-md/confirm'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space } from 'antd'
 import AppleScript from 'applescript'
@@ -12,6 +11,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { tldExists } from 'tldjs'
 import URI from 'urijs'
 import { useSnapshot } from 'valtio'
+import LineMdConfirm from '~icons/line-md/confirm'
 import { message } from '$ui/store'
 import { generateConfig } from '$ui/utility/generate'
 import { state } from './model'
@@ -378,13 +378,11 @@ function getAutoCompletes(url: string) {
     cur = cur.replace(/^[\w-]+\./, '')
   } while (cur && cur !== tld)
 
-  const keywords = [
-    ...hostname
-      .slice(0, -tld.length)
-      .split('.')
-      .filter(Boolean)
-      .filter((x) => x !== 'www'),
-  ]
+  const keywords = hostname
+    .slice(0, -tld.length)
+    .split('.')
+    .filter(Boolean)
+    .filter((x) => x !== 'www')
 
   return {
     'DOMAIN-KEYWORD': keywords,

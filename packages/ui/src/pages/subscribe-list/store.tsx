@@ -7,10 +7,10 @@ import storage from '$ui/storage'
 import { message, notification } from '$ui/store'
 import { getSubscribeNodesByUrl } from '$ui/utility/subscribe'
 import { valtioState } from '$ui/utility/valtio-helper'
-import type { ClashProxyItem } from '$clash-utils'
-import type { Subscribe } from '$ui/types'
 import { nodefreeGetUrls } from './special/nodefree'
 import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './store.auto-update'
+import type { ClashProxyItem } from '$clash-utils'
+import type { Subscribe } from '$ui/types'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
@@ -131,7 +131,7 @@ export async function update({
       if (!(await fse.exists(proxyUrlsFromExternalFile))) {
         throw new Error(`proxyUrlsFromExternalFile ${proxyUrlsFromExternalFile} 不存在`)
       }
-      const proxyUrls = await fse.readFile(proxyUrlsFromExternalFile, 'utf-8')
+      const proxyUrls = await fse.readFile(proxyUrlsFromExternalFile, 'utf8')
       const url = getConvertedUrl(proxyUrls, serviceUrl)
       if (url !== currentSubscribe.url) {
         const newSubscribe = { ...currentSubscribe, proxyUrls, url }
@@ -229,7 +229,7 @@ export async function update({
       description: (
         <>
           {extraMessage}
-          <span className='break-all whitespace-pre-line line-clamp-5'>{err.message || err}</span>
+          <span className='whitespace-pre-line break-all line-clamp-5'>{err.message || err}</span>
         </>
       ),
     })

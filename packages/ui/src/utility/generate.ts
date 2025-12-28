@@ -8,9 +8,9 @@ import pmap from 'promise.map'
 import { YAML } from '$ui/libs'
 import { rootActions, rootState } from '$ui/store'
 import { ProxyGroupType, ProxyGroupTypeConfig } from '$ui/types/ClashConfig'
-import type { ClashConfig, RuleItem, Subscribe } from '$ui/types'
 import { getRuleItemContent } from './remote-rules'
 import { truthy } from './ts-filter'
+import type { ClashConfig, RuleItem, Subscribe } from '$ui/types'
 
 export function getUsingItems() {
   // subscribe
@@ -369,7 +369,7 @@ export async function generateConfigThenWrite({ forceUpdate = false }: { forceUp
   let stat: fse.Stats
   const unchangedSkipWrite =
     (await fse.exists(file)) &&
-    configYaml === (await fse.readFile(file, 'utf-8')) &&
+    configYaml === (await fse.readFile(file, 'utf8')) &&
     (stat = await fse.stat(file)) &&
     moment(stat.mtimeMs).startOf('day').valueOf() === moment().startOf('day').valueOf() // same day
 

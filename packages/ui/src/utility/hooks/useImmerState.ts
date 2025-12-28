@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 
 const reducer = produce((draft, payload) => {
   // invalid payload
-  if (typeof payload === 'undefined') return
+  if (payload === undefined) return
 
   if (typeof payload === 'object') {
     Object.assign(draft, payload)
@@ -22,9 +22,7 @@ const reducer = produce((draft, payload) => {
 type PayloadFn<T> = (draft: T) => T | void | undefined | null
 type Payload<T> = Partial<T> | PayloadFn<T>
 
-export default function useImmerState<T>(
-  initialState: T | (() => T),
-): [T, (payload: Payload<T>) => void] {
+export default function useImmerState<T>(initialState: T | (() => T)): [T, (payload: Payload<T>) => void] {
   const [state, setState] = useState(initialState)
   const modifyState = useCallback(
     (payload: Payload<T>) => {

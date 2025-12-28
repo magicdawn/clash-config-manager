@@ -36,7 +36,7 @@ export async function getSubscribeNodesByUrl({
   let valuableHeaders: Record<string, string> | undefined
   let status: string | undefined
   if (shouldReuse) {
-    text = await fse.readFile(file, 'utf-8')
+    text = await fse.readFile(file, 'utf8')
   } else {
     ;({ text, valuableHeaders } = await readUrl({ url, file, ua }))
     if (valuableHeaders?.['subscription-userinfo']) {

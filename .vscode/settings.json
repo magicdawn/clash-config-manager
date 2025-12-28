@@ -1,19 +1,20 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.locale": "en",
   "files.exclude": {
-    "**/.git": true,
-    "**/.svn": true,
-    "**/.hg": true,
-    "**/CVS": true,
     "**/.DS_Store": true,
-    "**/Thumbs.db": true,
-    "**/node_modules": false
-  },
-  "typescript.preferences.organizeImports": {
-    "typeOrder": "last"
+    "**/.git": true,
+    "**/.hg": true,
+    "**/.svn": true,
+    "**/CVS": true,
+    "**/node_modules": false,
+    "**/Thumbs.db": true
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
-  }
+  },
+  "typescript.locale": "en",
+  "typescript.preferences.organizeImports": {
+    "typeOrder": "last"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "unocss.root": ["./packages/ui/"]
 }

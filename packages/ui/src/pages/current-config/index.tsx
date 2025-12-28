@@ -8,8 +8,8 @@ import { message } from '$ui/store'
 import { ProxyGroupTypeConfig } from '$ui/types/ClashConfig'
 import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/utility/generate'
 import { ConfigDND } from './ConfigDND'
-import styles from './index.module.less'
 import { state } from './model'
+import styles from './index.module.less'
 
 export default function ConfigList() {
   const {
@@ -110,7 +110,7 @@ export default function ConfigList() {
         </Col>
       </Row>
       <Row style={{ marginTop: 8 }}>
-        <div className='flex items-center justify-start flex-wrap gap-x-15px gap-y-1'>
+        <div className='flex flex-wrap gap-x-15px gap-y-1 items-center justify-start'>
           <Checkbox
             checked={clashMeta}
             onChange={(e) => {

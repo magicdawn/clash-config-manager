@@ -14,9 +14,9 @@ import { message, rootActions, rootState } from '$ui/store'
 import useImmerState from '$ui/utility/hooks/useImmerState'
 import helper, { STORAGE_FILE } from '$ui/utility/sync/webdav/helper'
 import { ConfigForUseSystemProxy } from './fragments'
-import styles from './index.module.less'
 import { pickDataFrom, SelectExportForStaticMethod } from './modal/SelectExport'
 import { state, type Theme } from './model'
+import styles from './index.module.less'
 
 const debug = debugFactory('app:page:preference')
 
@@ -158,7 +158,7 @@ export default function Preference() {
       </Modal>
 
       <div className='flex items-center justify-between'>
-        <div className='flex items-center gap-x-25px'>
+        <div className='flex gap-x-25px items-center'>
           <Radio.Group buttonStyle='solid' value={theme || 'light'} onChange={(e) => (state.theme = e.target.value)}>
             <Radio.Button value={'light' satisfies Theme}>浅色模式</Radio.Button>
             <Radio.Button value={'dark' satisfies Theme}>深色模式</Radio.Button>
@@ -183,7 +183,7 @@ export default function Preference() {
         <Col span={12}>
           <Card
             title={
-              <span className='flex items-center gap-x-1'>
+              <span className='flex gap-x-1 items-center'>
                 <IconAntDesignCloudUploadOutlined /> 上传
               </span>
             }
@@ -206,7 +206,7 @@ export default function Preference() {
         <Col span={12}>
           <Card
             title={
-              <span className='flex items-center gap-x-1'>
+              <span className='flex gap-x-1 items-center'>
                 <IconAntDesignCloudDownloadOutlined /> 下载
               </span>
             }
@@ -230,7 +230,7 @@ export default function Preference() {
         <Col span={12}>
           <Card
             title={
-              <span className='flex items-center gap-x-1'>
+              <span className='flex gap-x-1 items-center'>
                 <IconAntDesignCloudUploadOutlined /> 导出
               </span>
             }
@@ -251,7 +251,7 @@ export default function Preference() {
         <Col span={12}>
           <Card
             title={
-              <span className='flex items-center gap-x-1'>
+              <span className='flex gap-x-1 items-center'>
                 <IconAntDesignCloudUploadOutlined />
                 导入
               </span>

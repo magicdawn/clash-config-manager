@@ -5,6 +5,7 @@ overrides:
   ant-float-label>antd: '6'
   ant-float-label>react: '19'
   ant-float-label>react-dom: '19'
+
 ignoreBuiltDependencies:
   - less
 
@@ -15,3 +16,6 @@ onlyBuiltDependencies:
   - esbuild
   - tldjs
   - unrs-resolver
+
+publicHoistPattern:
+  - '*unocss*' # place uno.config.ts anywhere

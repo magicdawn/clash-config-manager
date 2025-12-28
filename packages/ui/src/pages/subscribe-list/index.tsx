@@ -384,30 +384,28 @@ function SubscribeItem({
 
         {!!excludeKeywords?.length && (
           <Descriptions.Item label='排除关键词'>
-            {excludeKeywords.map((s) => (
-              <Tag key={s} color='warning'>
-                {s}
-              </Tag>
-            ))}
+            <div className='flex flex-wrap gap-x-10px gap-y-5px items-center'>
+              {excludeKeywords.map((s) => (
+                <Tag key={s} color='warning' variant='solid'>
+                  {s}
+                </Tag>
+              ))}
+            </div>
           </Descriptions.Item>
         )}
 
         {!specialType && (
           <Descriptions.Item label='链接'>
-            <Space
-              css={css`
-                display: flex;
-                .ant-space-item {
-                  line-height: 0;
-                }
-              `}
-            >
+            <div className={clsx('break-all text-ellipsis', { 'line-clamp-1': !urlVisible })}>
+              {urlVisible ? url : urlHided}
+            </div>
+
+            <Divider className='my-5px' />
+
+            <div className='flex gap-x-10px items-center'>
               <Tooltip title='复制链接' arrow={false}>
                 <IconParkOutlineCopy
-                  {...size(20)}
-                  css={css`
-                    cursor: pointer;
-                  `}
+                  className='size-18px cursor-pointer'
                   onClick={() => {
                     clipboard.writeText(url)
                     message.success('url 已复制')
@@ -417,44 +415,18 @@ function SubscribeItem({
 
               <Tooltip title='「显示/隐藏」完整URL' arrow={false} align={{ offset: [0, -10] }}>
                 <span
-                  css={css`
-                    cursor: pointer;
-                    svg {
-                      width: 20px;
-                      height: 20px;
-                    }
-                  `}
+                  className='cursor-pointer'
                   onClick={() => {
                     actions.toggleUrlVisible(index)
                   }}
                 >
-                  {urlVisible ? <IconAntDesignEyeFilled /> : <IconAntDesignEyeInvisibleFilled />}
+                  {urlVisible ? (
+                    <IconAntDesignEyeFilled className='size-18px block' />
+                  ) : (
+                    <IconAntDesignEyeInvisibleFilled className='size-18px block' />
+                  )}
                 </span>
               </Tooltip>
-            </Space>
-
-            <Divider
-              css={css`
-                margin-block: 5px;
-              `}
-            />
-
-            <div
-              css={[
-                css`
-                  word-break: break-all;
-                `,
-                !urlVisible &&
-                  css`
-                    display: -webkit-box;
-                    -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 1;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                  `,
-              ]}
-            >
-              {urlVisible ? url : urlHided}
             </div>
           </Descriptions.Item>
         )}
@@ -464,7 +436,7 @@ function SubscribeItem({
         )}
 
         <Descriptions.Item label='操作'>
-          <Space style={{ alignSelf: 'flex-end' }} wrap>
+          <Space className='self-end' wrap>
             <Button type='primary' onClick={() => onEdit?.(item, index)} onKeyDown={disableEnterAsClick}>
               <IconParkOutlineEdit />
               编辑
@@ -731,7 +703,7 @@ function ModalAddOrEdit({
 
   const useSubConverterSwitchId = useId()
   const useSubConverterSwitch = !isNodefree && (
-    <div className='inline-flex items-center ml-7xl'>
+    <div className='ml-7xl inline-flex items-center'>
       <Switch
         id={useSubConverterSwitchId}
         value={useSubConverter}
@@ -801,7 +773,7 @@ function ModalAddOrEdit({
             <div className='flex items-center'>
               SubConverter 后端
               <Select
-                className='flex-1 ml-2'
+                className='ml-2 flex-1'
                 options={SubConverterServiceUrls.map((url) => ({
                   key: url,
                   label: url,
@@ -812,7 +784,7 @@ function ModalAddOrEdit({
                 allowClear
               />
             </div>
-            <div className='flex items-center gap-x-2'>
+            <div className='flex gap-x-2 items-center'>
               <span className='flex-none'>proxyUrls 使用外部文件</span>
               <Switch
                 checked={typeof proxyUrlsFromExternalFile === 'string'}
@@ -830,7 +802,7 @@ function ModalAddOrEdit({
               <Input.TextArea
                 className={clsx(
                   typeof proxyUrlsFromExternalFile === 'string' &&
-                    'cursor-alias bg-gray/70 focus:bg-gray/10 hover:bg-gray/10',
+                    'bg-gray/70 cursor-alias focus:bg-gray/10 hover:bg-gray/10',
                 )}
                 value={proxyUrls}
                 onChange={(e) => setProxyUrls(e.target.value)}

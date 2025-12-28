@@ -25,11 +25,7 @@ export function useIsDarkMode() {
   const isDark = currentTheme === 'dark' || (currentTheme === 'follow-system' && systemIsDark)
 
   useLayoutEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
+    document.documentElement.classList.toggle('dark', isDark)
   }, [isDark])
 
   return isDark

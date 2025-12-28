@@ -1,8 +1,8 @@
 import { createHash } from 'node:crypto'
 
 export const B64 = {
-  encode: (s: string) => Buffer.from(s, 'utf-8').toString('base64'),
-  decode: (s: string) => Buffer.from(s, 'base64').toString('utf-8'),
+  encode: (s: string) => Buffer.from(s, 'utf8').toString('base64'),
+  decode: (s: string) => Buffer.from(s, 'base64').toString('utf8'),
 }
 
 export const md5 = (s: string) => createHash('md5').update(s, 'utf8').digest('hex')
