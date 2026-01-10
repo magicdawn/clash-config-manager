@@ -3,9 +3,9 @@ import * as remoteMain from '@electron/remote/main'
 import { app, BrowserWindow, Menu, session, shell, Tray, type Event } from 'electron'
 import { is } from 'electron-util'
 import windowStateKeeper from 'electron-window-state'
-import { initLoadDevtoolExtensions as loadDevExt } from './devtool-extensions'
-import { assetsDir } from './ipc/common'
-import setMenu from './menu'
+import { initLoadDevtoolExtensions as loadDevExt } from './modules/devtool-extensions'
+import { assetsDir } from './modules/ipc/common'
+import setMenu from './modules/menu'
 
 export let mainWindow: BrowserWindow
 export async function initMainWindow() {
