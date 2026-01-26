@@ -21,7 +21,20 @@ export const APP_DATA_DIR = '/AppData/clash-config-manager'
 export const STORAGE_FILE = `${APP_DATA_DIR}/data.txt`
 
 class DavHelper {
+  checkDavConfig() {
+    const { davServerUrl, user, pass } = rootState.preference?.syncConfig || {}
+    if (!davServerUrl || !user || !pass) {
+      this.emitError('请检查同步设置: davServerUrl & user & pass 不能为空')
+    }
+  }
+
+  emitError = (msg: string) => {
+    message.error(msg)
+    throw new Error(msg)
+  }
+
   get client() {
+    this.checkDavConfig()
     return getClient()
   }
 
@@ -38,10 +51,10 @@ class DavHelper {
     return ret
   }
 
-  private confirm(what: string): Promise<boolean> {
+  private confirm(title: string): Promise<boolean> {
     return new Promise((resolve) => {
       Modal.confirm({
-        title: what,
+        title,
         onOk() {
           resolve(true)
         },
@@ -73,6 +86,7 @@ class DavHelper {
   }
 
   async exists(path = STORAGE_FILE) {
+    this.checkDavConfig()
     // 如果 dir 不存在, 会报错 status code 409
     try {
       return await this.client.exists(path)
@@ -107,9 +121,7 @@ class DavHelper {
 
   async forceUpload() {
     const yes = await this.confirm('确认要上传并覆盖')
-    if (!yes) {
-      return
-    }
+    if (!yes) return
 
     const data = storage.store
     const remoteHasData = await this.exists()
@@ -124,12 +136,8 @@ class DavHelper {
 
   async download() {
     const remoteHasData = await this.exists()
-
     // 远程无数据
-    if (!remoteHasData) {
-      console.error('remoteData is empty')
-      return
-    }
+    if (!remoteHasData) return this.emitError('remoteData is empty')
 
     const yes = await this.confirm('将智能合并, 确认继续?')
     if (!yes) return
@@ -146,10 +154,8 @@ class DavHelper {
   }
 
   async forceDownload() {
-    const yes = await this.confirm('确认要上传并覆盖')
-    if (!yes) {
-      return
-    }
+    const yes = await this.confirm('确认要下载并覆盖?')
+    if (!yes) return
 
     const data = await this.read()
 
