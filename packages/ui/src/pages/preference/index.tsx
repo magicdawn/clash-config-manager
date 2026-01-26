@@ -116,7 +116,7 @@ export default function Preference() {
 
   const rowGutter = { xs: 8, sm: 16, md: 24 }
 
-  const { theme, useSystemProxy } = useSnapshot(state)
+  const { theme } = useSnapshot(state)
 
   return (
     <div className={styles.page}>
@@ -149,10 +149,10 @@ export default function Preference() {
           </Button>
           <Button
             onClick={() => {
-              openInEditor('atom')
+              openInEditor('subl')
             }}
           >
-            在 Atom 中打开
+            在 Sublime Text 中打开
           </Button>
         </Space>
       </Modal>
