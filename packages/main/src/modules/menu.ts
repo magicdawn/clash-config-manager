@@ -2,7 +2,7 @@ import path from 'node:path'
 import { app, Menu, shell, type MenuItemConstructorOptions } from 'electron'
 import { is, openNewGitHubIssue, openUrlMenuItem } from 'electron-util'
 import { aboutMenuItem, appMenu, debugInfo } from 'electron-util/main'
-import storage from '$ui/storage/index'
+import { mainWindow } from '$main/main-window'
 import { updateMenuItem } from './auto-update'
 
 const showPreferences = () => {
@@ -65,7 +65,7 @@ const macosTemplate = (options: { updateMenuItem: any }) =>
         {
           label: '在 Finder 中打开数据文件',
           click() {
-            shell.showItemInFolder(storage.path)
+            mainWindow?.webContents.send('open-electron-store-file')
           },
         },
       ].filter(Boolean),

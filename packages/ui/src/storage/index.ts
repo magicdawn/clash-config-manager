@@ -7,46 +7,53 @@ import type { ConfigItem, RuleItem, Subscribe } from '$ui/types'
 
 export { customMerge } from './customMerge'
 
-const storage = new Store({
-  name: 'data',
-  encryptionKey: 'clash-config-manager@@secret',
-  clearInvalidConfig: true,
+export function createStorage() {
+  return new Store({
+    name: 'data',
+    encryptionKey: 'clash-config-manager@@secret',
+    clearInvalidConfig: true,
 
-  defaults: {
-    subscribe_list: [] as Subscribe[],
-    subscribe_detail: {},
-    subscribe_status: {},
+    defaults: {
+      subscribe_list: [] as Subscribe[],
+      subscribe_detail: {},
+      subscribe_status: {},
 
-    rule_list: [] as RuleItem[],
+      rule_list: [] as RuleItem[],
 
-    current_config_v2: {
-      list: [] as ConfigItem[],
-      name: 'clash-config-manager',
-      generateAllProxyGroup: false,
-      generateSubNameProxyGroup: false,
+      current_config_v2: {
+        list: [] as ConfigItem[],
+        name: 'clash-config-manager',
+        generateAllProxyGroup: false,
+        generateSubNameProxyGroup: false,
 
-      // 最快 / 可用 / ✋🏻选择
-      // Fastest / Available / Select
-      generatedGroupNameLang: 'zh', // possible: zh | en
+        // 最快 / 可用 / ✋🏻选择
+        // Fastest / Available / Select
+        generatedGroupNameLang: 'zh', // possible: zh | en
 
-      // 🚀 ✅ ✋🏻
-      generatedGroupNameEmoji: true,
-    },
-
-    preference: {
-      syncConfig: {
-        davServerUrl: '',
-        user: '',
-        pass: '',
+        // 🚀 ✅ ✋🏻
+        generatedGroupNameEmoji: true,
       },
-      vscodeTheme: '',
-      useSystemProxy: false,
-    },
-  },
-})
 
+      preference: {
+        syncConfig: {
+          davServerUrl: '',
+          user: '',
+          pass: '',
+        },
+        vscodeTheme: '',
+        useSystemProxy: false,
+      },
+    },
+  })
+}
+
+const storage = createStorage()
 export default storage
-export type StorageData = typeof storage extends Store<infer T> ? T : never
+
+// FIXME: debug only
+// ;(global as any).estore = storage
+
+export type StorageData = ReturnType<typeof createStorage> extends Store<infer T> ? T : never
 
 /**
  * base data for export
@@ -80,6 +87,3 @@ export const storageDataDisplayNames: Record<string, string> = {
   'preference.vscodeTheme': '内置 monaco 编辑器主题',
   'preference.useSystemProxy': '使用系统代理',
 }
-
-// FIXME: debug only
-// ;(global as any).estore = storage

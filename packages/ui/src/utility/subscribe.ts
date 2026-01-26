@@ -92,6 +92,7 @@ const readUrl = async ({ url, file, ua }: { url: string; file: string; ua?: EUaT
 
 function extractProxiesFromClashYaml(text: string) {
   // type tag
+  // TODO: is this necessary?
   text = text.replaceAll('!<str>', '!!str')
 
   const config = YAML.load(text) as ClashConfig

@@ -11,8 +11,7 @@ export default defineConfig({
   outDir: path.join(REPO_ROOT, `bundle/${env}/main/`),
   clean: true,
   platform: 'node',
-  // TODO: get node version based on electron version
-  // output from `pnpm electron -i`: `Using: Node.js v22.15.1 and Electron.js v36.3.2`
+  // TODO: get node version based on electron version, output from `pnpm electron -i`
   target: 'node24',
   env: { NODE_ENV: env },
   external: ['electron'],

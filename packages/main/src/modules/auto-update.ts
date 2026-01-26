@@ -5,6 +5,7 @@ import { autoUpdater } from 'electron-updater'
 import { isDev } from 'electron-util/main'
 import { throttle } from 'es-toolkit'
 import ms from 'ms'
+import { mainWindow } from '$main/main-window'
 import setMenu from './menu'
 
 const debug = debugFactory('ccm:auto-update')
@@ -31,7 +32,7 @@ const menuItem = {
       debug('quit and install')
 
       // remove preventClose listener
-      globalThis.mainWindow?.stopPreventClose?.()
+      mainWindow?.stopPreventClose?.()
 
       setImmediate(() => autoUpdater.quitAndInstall())
     },

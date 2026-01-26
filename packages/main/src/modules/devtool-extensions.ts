@@ -16,11 +16,10 @@ async function loadExt(id: string) {
   return session.defaultSession.extensions.loadExtension(extVerDir, { allowFileAccess: true })
 }
 
-export function initLoadDevtoolExtensions() {
+export function loadDevtoolExtensions() {
   const ids = [
     'fmkadmapgofadopljbjfkapdkoienihi', // react-devtools
     'lmhkpmbekcpmknklioeibfkpmmfibljd', // redux
-    'nhdogjmejiglipccpnnnanhbledajbpd', // vue
   ]
   return Promise.all(ids.map((id) => loadExt(id)))
 }

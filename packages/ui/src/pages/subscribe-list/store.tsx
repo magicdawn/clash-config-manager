@@ -207,7 +207,7 @@ export async function update({
       ;({ servers, status } = await getSubscribeNodesByUrl({
         url: currentSubscribe.url,
         forceUpdate,
-        ua: currentSubscribe.ua,
+        ua: currentSubscribe.useSubConverter ? currentSubscribe.ua : undefined,
       }))
     } catch (e) {
       err = e
