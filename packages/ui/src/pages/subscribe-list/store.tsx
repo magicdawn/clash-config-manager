@@ -294,7 +294,12 @@ function toggleUrlVisible(index: number) {
   state.list[index].urlVisible = !cur
 }
 
-export const SubConverterServiceUrls = ['https://api.ytools.cc/sub']
+export const SubConverterServiceUrls = [
+  //
+  'https://api.ytools.cc/sub',
+  'https://api.v1.mk/sub',
+  'https://url.v1.mk/sub',
+]
 
 export function getConvertedUrl(sub: string, converter: string) {
   const subUrlJoined = sub
