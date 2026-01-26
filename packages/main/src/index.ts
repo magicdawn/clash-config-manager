@@ -40,7 +40,7 @@ async function main() {
   setMenu()
   setTray()
   addRequestExtraHeadersSupport()
-  await loadDevtoolExtensions()
+  loadDevtoolExtensions()
 
   await initMainWindow()
 }

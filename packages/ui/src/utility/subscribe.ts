@@ -16,11 +16,11 @@ const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 export async function getSubscribeNodesByUrl({
   url,
   forceUpdate,
-  ua,
+  uaType,
 }: {
   url: string
   forceUpdate: boolean
-  ua?: EUaType
+  uaType?: EUaType
 }) {
   const file = path.join(appCacheDir, 'readUrl', md5(url))
 
@@ -38,7 +38,7 @@ export async function getSubscribeNodesByUrl({
   if (shouldReuse) {
     text = await fse.readFile(file, 'utf8')
   } else {
-    ;({ text, valuableHeaders } = await readUrl({ url, file, ua }))
+    ;({ text, valuableHeaders } = await readUrl({ url, file, uaType }))
     if (valuableHeaders?.['subscription-userinfo']) {
       const val = valuableHeaders['subscription-userinfo']
       status = subscriptionUserinfoToStatus(val)
@@ -56,20 +56,26 @@ export async function getSubscribeNodesByUrl({
   return { servers, status }
 }
 
-const readUrl = async ({ url, file, ua }: { url: string; file: string; ua?: EUaType }) => {
+const readUrl = async ({ url, file, uaType }: { url: string; file: string; uaType?: EUaType }) => {
   /**
    * user-agent matters
    * @see https://github.com/tindy2013/subconverter/blob/d47b8868e5a235ee99f07a0dece8f237d90109c8/src/handler/interfaces.cpp#L64
    */
-  let userAgent = 'ClashX'
-  if (ua && ua !== EUaType.Default) {
-    userAgent = ua
-  }
+  uaType ??= EUaType.Default
+  const userAgent = (() => {
+    switch (uaType) {
+      case EUaType.Clash:
+      case EUaType.ClashMeta:
+        return uaType
+      case EUaType.Empty:
+        return undefined
+      case EUaType.Default:
+        return 'ClashX'
+    }
+  })()
 
   const res = await ky.get(url, {
-    headers: {
-      'x-extra-headers': JSON.stringify({ 'user-agent': userAgent }),
-    },
+    headers: userAgent ? { 'x-extra-headers': JSON.stringify({ 'user-agent': userAgent }) } : {},
     timeout: 30_000, // 30s, api.ytools.cc 可直连, 但时间很久
   })
 

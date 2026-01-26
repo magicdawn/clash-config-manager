@@ -5,12 +5,12 @@ import { fse } from '$ui/libs'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
 import { message, notification } from '$ui/store'
+import { EUaType, type Subscribe } from '$ui/types'
 import { getSubscribeNodesByUrl } from '$ui/utility/subscribe'
 import { valtioState } from '$ui/utility/valtio-helper'
 import { nodefreeGetUrls } from './special/nodefree'
 import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './store.auto-update'
 import type { ClashProxyItem } from '$clash-utils'
-import type { Subscribe } from '$ui/types'
 
 const SUBSCRIBE_LIST_STORAGE_KEY = 'subscribe_list'
 const SUBSCRIBE_DETAIL_STORAGE_KEY = 'subscribe_detail'
@@ -158,7 +158,7 @@ export async function update({
             ;({ servers: currentServers } = await getSubscribeNodesByUrl({
               url,
               forceUpdate,
-              ua: currentSubscribe.ua,
+              uaType: currentSubscribe.ua,
             }))
           } catch (e) {
             err = e
@@ -207,7 +207,7 @@ export async function update({
       ;({ servers, status } = await getSubscribeNodesByUrl({
         url: currentSubscribe.url,
         forceUpdate,
-        ua: currentSubscribe.useSubConverter ? currentSubscribe.ua : undefined,
+        uaType: currentSubscribe.useSubConverter ? EUaType.Empty : currentSubscribe.ua,
       }))
     } catch (e) {
       err = e

@@ -2,6 +2,7 @@ export { type ClashConfig } from './ClashConfig'
 
 export enum EUaType {
   Default = 'default',
+  Empty = 'empty',
   Clash = 'clash',
   ClashMeta = 'clash.meta',
 }
