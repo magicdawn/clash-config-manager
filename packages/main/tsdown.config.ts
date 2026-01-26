@@ -13,8 +13,9 @@ export default defineConfig({
   platform: 'node',
   // TODO: get node version based on electron version
   // output from `pnpm electron -i`: `Using: Node.js v22.15.1 and Electron.js v36.3.2`
-  target: 'node22',
+  target: 'node24',
   env: { NODE_ENV: env },
   external: ['electron'],
   noExternal: [/.*/],
+  inlineOnly: false, // false: Suppress all warnings about inlineOnly option.
 })
