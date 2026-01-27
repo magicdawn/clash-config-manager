@@ -8,7 +8,7 @@ import launch from 'launch-editor'
 import moment from 'moment'
 import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
-import { appTempDir, getAssetsDir } from '$ui/common'
+import { getAssetsDir, userDataPath } from '$ui/common'
 import storage, { customMerge, getExportData } from '$ui/storage'
 import { message, rootActions, rootState } from '$ui/store'
 import useImmerState from '$ui/utility/hooks/useImmerState'
@@ -41,7 +41,7 @@ export default function Preference() {
   const [exportSuccessFile, setExportSuccessFile] = useState('')
 
   const onExport = useMemoizedFn(async () => {
-    const file = path.join(appTempDir, `clash-config-manager ${moment().format('YYYY-MM-DD HH.mm')}.json`)
+    const file = path.join(userDataPath, 'Backups/Manual Export', `${moment().format('YYYY-MM-DD HH.mm')}.json`)
     const data = getExportData()
     await fse.outputJson(file, data, { spaces: 2 })
     setExportSuccessModalVisible(true)
@@ -49,7 +49,11 @@ export default function Preference() {
   })
 
   const onSelectExport = useMemoizedFn(async () => {
-    const file = path.join(appTempDir, `${moment().format('选择导出__YYYY_MM_DD__HH_mm')}.json`)
+    const file = path.join(
+      userDataPath,
+      'Backups/Manual Export',
+      `${moment().format('选择导出__YYYY_MM_DD__HH_mm')}.json`,
+    )
 
     // 选择数据
     const { cancel, data } = await pickDataFrom(getExportData())
