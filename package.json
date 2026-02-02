@@ -72,7 +72,6 @@
     "turbo": "^2.8.1",
     "type-fest": "^5.4.3",
     "typescript": "^5.9.3",
-    "typescript-plugin-css-modules": "^5.2.0",
     "unplugin-icons": "^23.0.1"
   },
   "lint-staged": {

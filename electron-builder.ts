@@ -1,6 +1,6 @@
 import { execSync } from 'node:child_process'
 import { once } from 'es-toolkit'
-import pkg from './package.json'
+import pkg from './package.json' with { type: 'json' }
 import type { Configuration } from 'electron-builder'
 
 function defineConfig(config: Configuration) {

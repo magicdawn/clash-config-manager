@@ -4,12 +4,8 @@
   "compilerOptions": {
     "baseUrl": "./packages",
     "paths": {
-      "$common": ["common/src/"],
-      "$common/*": ["common/src/*"],
-      "$main": ["main/src/"],
-      "$main/*": ["main/src/*"],
-      "$ui": ["ui/src/"],
-      "$ui/*": ["ui/src/*"],
+      "$main*": ["main/src/*"],
+      "$ui*": ["ui/src/*"],
       "$clash-utils": ["clash-utils/src/"],
       "$clash-utils/*": ["clash-utils/src/*"]
     },

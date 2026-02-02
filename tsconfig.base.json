@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2023",
-    "lib": ["ES2024", "DOM"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "target": "esnext",
+    "lib": ["ESNext", "DOM"],
+    "module": "preserve",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -11,17 +10,6 @@
     "types": ["node", "electron", "unplugin-icons/types/react"],
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react",
-    // "verbatimModuleSyntax": true, // import {type X} from 'type-fest' 会得到保留, 不使用 verbatimModuleSyntax
-    "experimentalDecorators": true,
-    "allowJs": true,
-    "useUnknownInCatchVariables": false,
-    "plugins": [
-      {
-        "name": "typescript-plugin-css-modules",
-        "options": {
-          "classnameTransform": "camelCaseOnly"
-        }
-      }
-    ]
+    "useUnknownInCatchVariables": false
   }
 }
