@@ -1,30 +1,14 @@
 node_modules
 report.*.json
 .DS_Store
+*.log
+.turbo
+src-tauri/target
+lib-tests/
 
 # build
 /bundle
-
-# the package
-/dist
-
-# tsc dist
-/packages/**/dist
+dist
 
 # changelog temp
 CHANGELOG.temp.md
-
-.yarn/*
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-.pnp.*
-
-*.log
-
-src-tauri/target
-
-.turbo
-
-lib-tests/
