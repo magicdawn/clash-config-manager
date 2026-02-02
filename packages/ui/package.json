@@ -31,6 +31,7 @@
     "ky": "^1.14.3",
     "launch-editor": "^2.12.0",
     "lodash": "^4.17.23",
+    "mac-helper": "^0.6.0",
     "memoize-one": "^6.0.0",
     "minimist": "^1.2.8",
     "moment": "^2.30.1",

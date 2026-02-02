@@ -1,12 +1,11 @@
 import { css } from '@emotion/react'
-import { useMemoizedFn, useUpdateEffect } from 'ahooks'
+import { useLockFn, useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space } from 'antd'
-import AppleScript from 'applescript'
 import { clipboard } from 'electron'
 import { attempt, uniq } from 'es-toolkit'
 import Yaml from 'js-yaml'
+import { Brave, Chrome } from 'mac-helper'
 import { size } from 'polished'
-import pify from 'promise.ify'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { tldExists } from 'tldjs'
 import URI from 'urijs'
@@ -15,8 +14,6 @@ import LineMdConfirm from '~icons/line-md/confirm'
 import { message } from '$ui/store'
 import { generateConfig } from '$ui/utility/generate'
 import { state } from './model'
-
-const { Option } = Select
 
 // from-rule: 从规则编辑中打开
 // from-global: 从主页中直接打开
@@ -125,13 +122,21 @@ export default function AddRuleModal(props: IProps) {
     }
   }, [])
 
-  const useChromeUrl = useCallback(async () => {
-    const url = await getChromeUrl()
+  const fetchBrowserState = useLockFn(async () => {
+    const brave = { running: await Brave.isRunning(), url: (await Brave.getActiveTab())?.url }
+    const chrome = { running: await Chrome.isRunning(), url: (await Chrome.getActiveTab())?.url }
+    const successTargets = [brave.url && 'brave', chrome.url && 'chrome'].filter(Boolean).join(', ')
+    if (successTargets) {
+      message.success(`获取 ${successTargets} url 成功`)
+    } else {
+      message.error('没有获取到 url')
+    }
+
+    const url = brave.url ?? chrome.url
     if (url) {
-      message.success('获取 chrome url 成功')
       changeProcessUrl(url)
     }
-  }, [])
+  })
 
   const updateExtraTargets = useMemoizedFn(async () => {
     const config = await generateConfig()
@@ -147,10 +152,9 @@ export default function AddRuleModal(props: IProps) {
 
   // default use chrome url
   useUpdateEffect(() => {
-    if (visible) {
-      useChromeUrl()
-      updateExtraTargets()
-    }
+    if (!visible) return
+    fetchBrowserState()
+    updateExtraTargets()
   }, [visible])
 
   const onSearchTargets = useMemoizedFn((text: string) => {
@@ -215,19 +219,15 @@ export default function AddRuleModal(props: IProps) {
       okText={mode === 'from-global' ? '添加并重新生成' : '确定'}
       destroyOnHidden
     >
-      <Input
-        style={{ flex: 1 }}
-        addonBefore='源URL'
-        value={processUrl}
-        onChange={(e) => setProcessUrl(e.target.value)}
-      />
-      <div style={{ marginTop: 10 }}>
-        <Space direction='horizontal'>
-          <Button onClick={useClipboardUrl}>从剪贴板读取</Button>
-          <Button type='primary' onClick={useChromeUrl}>
-            从 Google Chrome 读取
-          </Button>
-        </Space>
+      <Space.Compact block>
+        <Space.Addon>源URL</Space.Addon>
+        <Input style={{ flex: 1 }} value={processUrl} onChange={(e) => setProcessUrl(e.target.value)} />
+      </Space.Compact>
+      <div className='mt-10px flex flex-wrap gap-x-3 gap-y-1'>
+        <Button onClick={useClipboardUrl}>从剪贴板读取</Button>
+        <Button type='primary' onClick={fetchBrowserState}>
+          从 Brave 或 Chrome 中读取
+        </Button>
       </div>
 
       <Row gutter={8} style={{ marginTop: 24 }}>
@@ -238,13 +238,14 @@ export default function AddRuleModal(props: IProps) {
 
       <Row gutter={8} style={{ marginTop: 4 }}>
         <Col {...layout[0]}>
-          <Select value={type} onChange={(val) => setType(val)} style={{ width: '100%' }}>
-            {TYPES.map((t) => (
-              <Option key={t} value={t}>
-                {t}
-              </Option>
-            ))}
-          </Select>
+          <Select
+            value={type}
+            onChange={(val) => setType(val)}
+            style={{ width: '100%' }}
+            options={TYPES.map((t) => {
+              return { key: t, value: t, label: t }
+            })}
+          />
         </Col>
 
         <Col {...layout[1]}>
@@ -276,14 +277,6 @@ export default function AddRuleModal(props: IProps) {
           </Row>
           <Row gutter={8} style={{ marginTop: 4 }}>
             <Col span={24}>
-              {/* <Select style={{ width: '100%' }} value={ruleId} onChange={(val) => setRuleId(val)}>
-                {ruleList.map((t) => (
-                  <Option key={t.id} value={t.id}>
-                    {t.name}
-                  </Option>
-                ))}
-              </Select> */}
-
               <div
                 css={css`
                   display: flex;
@@ -349,17 +342,6 @@ export default function AddRuleModal(props: IProps) {
       )}
     </Modal>
   )
-}
-
-async function getChromeUrl() {
-  const script = `
-		tell application "Google Chrome"
-			get URL of active tab of first window
-		end tell
-	`
-  const result = (await pify(AppleScript.execString, AppleScript)(script.trim())) as string[]
-  const url = result && result[0]
-  return url
 }
 
 function getAutoCompletes(url: string) {
