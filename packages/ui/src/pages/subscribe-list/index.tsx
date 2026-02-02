@@ -26,7 +26,6 @@ import {
 import clsx from 'clsx'
 import { clipboard } from 'electron'
 import { omit } from 'es-toolkit'
-import { size } from 'polished'
 import {
   useCallback,
   useId,
@@ -352,13 +351,7 @@ function SubscribeItem({
                   </MarkdownView>
                 }
               >
-                <IconParkOutlineTips
-                  {...size(16)}
-                  css={css`
-                    margin-left: 5px;
-                    cursor: pointer;
-                  `}
-                />
+                <IconParkOutlineTips className='ml-5px size-16px cursor-pointer' />
               </Tooltip>
             )}
           </div>

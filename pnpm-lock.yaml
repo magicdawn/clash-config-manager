@@ -205,9 +205,6 @@ importers:
       antd:
         specifier: ^6.2.3
         version: 6.2.3(date-fns@2.30.0)(moment@2.30.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      applescript:
-        specifier: ^1.0.0
-        version: 1.0.0
       bytes:
         specifier: ^3.1.2
         version: 3.1.2
@@ -238,9 +235,6 @@ importers:
       launch-editor:
         specifier: ^2.12.0
         version: 2.12.0
-      lodash:
-        specifier: ^4.17.23
-        version: 4.17.23
       mac-helper:
         specifier: ^0.6.0
         version: 0.6.0
@@ -265,9 +259,6 @@ importers:
       p-memoize:
         specifier: ^8.0.0
         version: 8.0.0
-      polished:
-        specifier: ^4.3.1
-        version: 4.3.1
       promise.ify:
         specifier: ^0.4.0
         version: 0.4.0
@@ -356,9 +347,6 @@ importers:
       '@types/less':
         specifier: ^3.0.8
         version: 3.0.8
-      '@types/lodash':
-        specifier: ^4.17.23
-        version: 4.17.23
       '@types/minimist':
         specifier: ^1.2.5
         version: 1.2.5
@@ -1877,9 +1865,6 @@ packages:
   '@types/less@3.0.8':
     resolution: {integrity: sha512-Gjm4+H9noDJgu5EdT3rUw5MhPBag46fiOy27BefvWkNL8mlZnKnCaVVVTLKj6RYXed9b62CPKnPav9govyQDzA==}
 
-  '@types/lodash@4.17.23':
-    resolution: {integrity: sha512-RDvF6wTulMPjrNdCoYRC8gNR880JNGT8uB+REUpC2Ns4pRqQJhGz90wh7rgdXDPpCczF3VGktDuFGVnz8zP7HA==}
-
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
 
@@ -2296,9 +2281,6 @@ packages:
     peerDependencies:
       dmg-builder: 26.7.0
       electron-builder-squirrel-windows: 26.7.0
-
-  applescript@1.0.0:
-    resolution: {integrity: sha512-yvtNHdWvtbYEiIazXAdp/NY+BBb65/DAseqlNiJQjOx9DynuzOYDbVLBJvuc0ve0VL9x6B3OHF6eH52y9hCBtQ==}
 
   archiver-utils@2.1.0:
     resolution: {integrity: sha512-bEL/yUb/fNNiNTuUz979Z0Yg5L+LzLxGJz8x79lYmR54fmTIb6ob/hNQgkQnIUDWIFjZVQwl9Xs356I6BAMHfw==}
@@ -5032,10 +5014,6 @@ packages:
 
   pnpm-workspace-yaml@1.4.3:
     resolution: {integrity: sha512-Q8B3SWuuISy/Ciag4DFP7MCrJX07wfaekcqD2o/msdIj4x8Ql3bZ/NEKOXV7mTVh7m1YdiFWiMi9xH+0zuEGHw==}
-
-  polished@4.3.1:
-    resolution: {integrity: sha512-OBatVyC/N7SCW/FaDHrSd+vn0o5cS855TOmYi4OkdWUMSJCET/xip//ch8xGUvtr3i44X9LVyWwQlRMTN3pwSA==}
-    engines: {node: '>=10'}
 
   possible-typed-array-names@1.0.0:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
@@ -8006,8 +7984,6 @@ snapshots:
 
   '@types/less@3.0.8': {}
 
-  '@types/lodash@4.17.23': {}
-
   '@types/mdast@4.0.4':
     dependencies:
       '@types/unist': 3.0.2
@@ -8685,8 +8661,6 @@ snapshots:
       which: 5.0.0
     transitivePeerDependencies:
       - supports-color
-
-  applescript@1.0.0: {}
 
   archiver-utils@2.1.0:
     dependencies:
@@ -12000,10 +11974,6 @@ snapshots:
   pnpm-workspace-yaml@1.4.3:
     dependencies:
       yaml: 2.8.2
-
-  polished@4.3.1:
-    dependencies:
-      '@babel/runtime': 7.28.4
 
   possible-typed-array-names@1.0.0: {}
 

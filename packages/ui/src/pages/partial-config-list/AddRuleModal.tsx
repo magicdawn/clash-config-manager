@@ -5,7 +5,6 @@ import { clipboard } from 'electron'
 import { attempt, uniq } from 'es-toolkit'
 import Yaml from 'js-yaml'
 import { Brave, Chrome } from 'mac-helper'
-import { size } from 'polished'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { tldExists } from 'tldjs'
 import URI from 'urijs'
@@ -323,14 +322,7 @@ export default function AddRuleModal(props: IProps) {
                           `,
                       ]}
                     >
-                      {active && (
-                        <LineMdConfirm
-                          {...size(20)}
-                          css={css`
-                            margin-right: 5px;
-                          `}
-                        />
-                      )}
+                      {active && <LineMdConfirm className='mr-5px size-20px' />}
                       {t.name}
                     </div>
                   )

@@ -12,7 +12,6 @@ import './modules/code-editor/monaco'
 import '@total-typescript/ts-reset'
 import './ipc'
 import { trimStart } from 'es-toolkit'
-import { size } from 'polished'
 import { createRoot } from 'react-dom/client'
 import { createHashRouter, createRoutesFromElements, Link, Route } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
@@ -35,31 +34,31 @@ const routes = [
     path: '/',
     component: Home,
     title: '主页',
-    icon: <MingcuteHome4Line {...size(18)} />,
+    icon: <MingcuteHome4Line className='size-18px' />,
   },
   {
     path: '/subscribe-list',
     component: LibrarySubscribe,
     title: '',
-    icon: <ZondiconsServers {...size(14)} />,
+    icon: <ZondiconsServers className='size-14px' />,
   },
   {
     path: '/partial-config-list',
     component: LibraryRuleList,
     title: '',
-    icon: <MingcuteComponentsFill {...size(18)} />,
+    icon: <MingcuteComponentsFill className='size-18px' />,
   },
   {
     path: '/current-config',
     component: CurrentConfig,
     title: '',
-    icon: <MaterialSymbolsSettingsSuggestRounded {...size(18)} />,
+    icon: <MaterialSymbolsSettingsSuggestRounded className='size-18px' />,
   },
   {
     path: '/preference',
     component: Preference,
     title: '',
-    icon: <TablerCloudUp {...size(18)} />,
+    icon: <TablerCloudUp className='size-18px' />,
   },
 ]
 routes.forEach((r) => {
