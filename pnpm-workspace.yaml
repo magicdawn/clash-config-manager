@@ -1,16 +1,19 @@
 packages:
   - packages/**
 
-ignoreBuiltDependencies:
-  - less
-
-onlyBuiltDependencies:
-  - '@swc/core'
-  - core-js
-  - electron
-  - esbuild
-  - tldjs
-  - unrs-resolver
+allowBuilds:
+  '@swc/core': true
+  core-js: true
+  electron: true
+  electron-winstaller: false
+  esbuild: true
+  less: false
+  tldjs: true
+  unrs-resolver: true
+ignoreWorkspaceRootCheck: true
+includeWorkspaceRoot: true
+minimumReleaseAge: 1440 # for ncu
 
 publicHoistPattern:
   - '*unocss*' # place uno.config.ts anywhere
+

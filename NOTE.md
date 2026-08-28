@@ -1,11 +1,8 @@
 # Todos
 
-- electron-store upgrade
 - handle @deprecated `react-beautiful-dnd`
 - electron renderer esm + vite
-- electron app disable system proxy
 - 配置组装更多的设置项
-  - 是否生产 fallback 组, 实际体验 fallback 组不是很实用. 要么select, 要么最快.
   - config tooltip, 有些 checkbox 我自己都看不懂了
 
 ## Dependencies Issues

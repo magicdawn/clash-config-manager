@@ -146,7 +146,7 @@ export async function generateConfig({ forceUpdate = false }: { forceUpdate?: bo
   // subscribe 自动生成 proxy groups
   const genGroupsForSubscribe = (label: string, proxies: string[]) => {
     // TODO: make this configurable
-    const URL_TEST_INTERVAL = ms('10m')
+    const URL_TEST_INTERVAL = ms('3m')
 
     // 只有单个服务器时, 不用多个 group
     if (proxies.length <= 1) {

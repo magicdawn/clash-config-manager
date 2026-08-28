@@ -3,9 +3,9 @@ import { useLockFn, useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space } from 'antd'
 import { clipboard } from 'electron'
 import { attempt, uniq } from 'es-toolkit'
-import Yaml from 'js-yaml'
+import * as Yaml from 'js-yaml'
 import { Brave, Chrome } from 'mac-helper'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { tldExists } from 'tldjs'
 import URI from 'urijs'
 import { useSnapshot } from 'valtio'
@@ -114,12 +114,12 @@ export default function AddRuleModal(props: IProps) {
     setAutoCompletes(data)
   })
 
-  const useClipboardUrl = useCallback(() => {
-    const url = clipboard.readText()
+  const handleReadClipboardUrl = useMemoizedFn(async () => {
+    const url = await clipboard.readText()
     if (url) {
       changeProcessUrl(url)
     }
-  }, [])
+  })
 
   const fetchBrowserState = useLockFn(async () => {
     const brave = { running: await Brave.isRunning(), url: (await Brave.getActiveTab())?.url }
@@ -223,7 +223,7 @@ export default function AddRuleModal(props: IProps) {
         <Input style={{ flex: 1 }} value={processUrl} onChange={(e) => setProcessUrl(e.target.value)} />
       </Space.Compact>
       <div className='mt-10px flex flex-wrap gap-x-3 gap-y-1'>
-        <Button onClick={useClipboardUrl}>从剪贴板读取</Button>
+        <Button onClick={handleReadClipboardUrl}>从剪贴板读取</Button>
         <Button type='primary' onClick={fetchBrowserState}>
           从 Brave 或 Chrome 中读取
         </Button>

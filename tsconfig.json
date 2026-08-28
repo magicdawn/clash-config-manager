@@ -2,12 +2,11 @@
   "extends": "./tsconfig.base.json",
   "include": ["./packages/**/*.ts", "./packages/**/*.tsx"],
   "compilerOptions": {
-    "baseUrl": "./packages",
     "paths": {
-      "$main*": ["main/src/*"],
-      "$ui*": ["ui/src/*"],
-      "$clash-utils": ["clash-utils/src/"],
-      "$clash-utils/*": ["clash-utils/src/*"]
+      "$main*": ["./packages/main/src/*"],
+      "$ui*": ["./packages/ui/src/*"],
+      "$clash-utils": ["./packages/clash-utils/src/"],
+      "$clash-utils/*": ["./packages/clash-utils/src/*"]
     },
     "noEmit": true
   }

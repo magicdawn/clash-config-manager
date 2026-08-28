@@ -17,3 +17,9 @@ packages/ui
 │ └── ✕ unmet peer react@"^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0": found 18.2.0
 └─┬ recompose
 └── ✕ unmet peer react@"^0.14.0 || ^15.0.0 || ^16.0.0": found 18.2.0
+
+```
+<!-- 2026-08-28 15:40:21 -->
+vite-plugin-electron ^0.29.1 → ^1.1.1
+vite-plugin-electron-renderer ^0.14.7 → ^1.0.0
+```

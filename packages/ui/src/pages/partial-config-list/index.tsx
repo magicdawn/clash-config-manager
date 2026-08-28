@@ -11,7 +11,7 @@ import { useMemoizedFn } from 'ahooks'
 import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Select, Space, Tooltip } from 'antd'
 import debugFactory from 'debug'
 import fse from 'fs-extra'
-import Yaml from 'js-yaml'
+import * as Yaml from 'js-yaml'
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEventHandler } from 'react'
 import { proxy, useSnapshot } from 'valtio'
 import { colorHighlightValue } from '$ui/common'
@@ -510,11 +510,11 @@ function ModalAddOrEdit() {
   const onAddRule = useMemoizedFn((rule) => {
     let content = form.getFieldValue('content') || ''
 
-    if (content.split('\n').find((x: string) => x.includes(rule) && !x.trim().startsWith('#'))) {
+    if (content.split('\n').find((x: string) => x.includes(rule) && !x.trimStart().startsWith('#'))) {
       return message.error(`rule ${rule} 已存在`)
     }
 
-    content = `${content.trimEnd()}\n` + `  - ${rule}` + `\n`
+    content = `${content.trimEnd()}\n  - ${rule}\n`
     form.setFieldsValue({ content })
     message.success(`已添加规则 ${rule}`)
   })
@@ -527,7 +527,7 @@ function ModalAddOrEdit() {
     // wait edit
     setEditInEditorMaskVisible(true)
 
-    // execa can be be bundled:
+    // execa can not be bundled:
     // https://github.com/sindresorhus/execa/pull/1156
 
     let stdout: string
@@ -553,7 +553,7 @@ function ModalAddOrEdit() {
 
   const contentField = Form.useWatch('content', form)
   const showAddRuleButton = useMemo(() => {
-    return Boolean(contentField?.indexOf?.('rules:') > -1)
+    return contentField?.indexOf?.('rules:') > -1
   }, [contentField])
 
   // min={1} // 1h

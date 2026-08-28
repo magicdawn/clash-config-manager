@@ -7,7 +7,6 @@ import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
 import { defineConfig } from 'vite'
 import vitePluginElectronRenderer from 'vite-plugin-electron-renderer'
-import tsconfigPaths from 'vite-tsconfig-paths'
 
 const require = createRequire(import.meta.url)
 
@@ -20,10 +19,6 @@ export default defineConfig({
       resolve: {
         'fs-extra': { type: 'esm' },
       },
-    }),
-
-    tsconfigPaths({
-      root: join(__dirname, '../../'),
     }),
 
     AutoImport({
@@ -63,18 +58,17 @@ export default defineConfig({
   resolve: {
     alias: {
       'monaco-themes-json-dir': path.join(path.dirname(require.resolve('monaco-themes/package')), 'themes'),
+      // monaco-editor new version 写了 "exports"."./*" -> "./esm/vs/*"
+      'monaco-editor/esm/vs/editor/editor.api': 'monaco-editor/editor/editor.api',
+      'monaco-editor/esm/vs/editor/editor.api.js': 'monaco-editor/editor/editor.api.js',
     },
+    tsconfigPaths: true, // root: join(import.meta.dirname, '../../'),
+    conditions: ['module', 'node', 'browser', 'development|production'], // ['module', 'browser', 'development|production']
   },
 
   /**
    * dev
    */
-  optimizeDeps: {
-    esbuildOptions: {
-      logLevel: 'info',
-    },
-    // force: true,
-  },
   server: {
     port: 7749,
   },
@@ -88,7 +82,7 @@ export default defineConfig({
   build: {
     // target: , // Default: baseline-widely-available
     minify: false,
-    outDir: join(__dirname, '../../bundle/production/renderer/'),
+    outDir: join(import.meta.dirname, '../../bundle/production/renderer/'),
     emptyOutDir: true,
   },
 })
