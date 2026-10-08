@@ -52,6 +52,8 @@
     "@types/fs-extra": "^11.0.4",
     "@types/jake": "^0.0.39",
     "@types/node": "^26.6.4",
+    "@vitejs/devtools-rolldown": "^0.7.6",
+    "@vitejs/devtools-vite": "^0.7.6",
     "concurrently": "^10.0.5",
     "electron": "^44.6.0",
     "electron-builder": "^26.17.0",

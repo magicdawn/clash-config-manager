@@ -6,6 +6,7 @@ report.*.json
 src-tauri/target
 lib-tests/
 .idea
+.vite-inspect
 
 # build
 /bundle
