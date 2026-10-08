@@ -16,5 +16,5 @@ export default defineConfig({
   env: { NODE_ENV: env },
   external: ['electron'],
   noExternal: [/.*/],
-  inlineOnly: false, // false: Suppress all warnings about inlineOnly option.
+  // inlineOnly: false, // false: Suppress all warnings about inlineOnly option.
 })

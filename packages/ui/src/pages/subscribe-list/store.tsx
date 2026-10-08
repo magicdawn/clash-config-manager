@@ -1,7 +1,7 @@
+import { hfs } from '@humanfs/node'
 import { isEqual, pick, uniqWith } from 'es-toolkit'
 import { HTTPError } from 'ky'
 import { ref } from 'valtio'
-import { fse } from '$ui/libs'
 import { onInit, onReload } from '$ui/modules/global-model'
 import storage from '$ui/storage'
 import { message, notification } from '$ui/store'
@@ -43,11 +43,10 @@ const { state, load, init } = valtioState<IState>(
 
       // 只保留当前 list 存在的订阅
       const detail = pick(
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY) || ({} as IState['detail']),
+        (storage.get(SUBSCRIBE_DETAIL_STORAGE_KEY) || {}) as IState['detail'],
         list.map((item) => item.url).filter(Boolean),
       )
-      for (const [url, servers] of Object.entries(detail)) {
+      for (const servers of Object.values(detail)) {
         servers?.forEach((s) => ref(s)) // do not observe server object
       }
 
@@ -128,10 +127,10 @@ export async function update({
     const { useSubConverter, proxyUrlsFromExternalFile, subConverterUrl } = currentSubscribe
     if (useSubConverter && proxyUrlsFromExternalFile) {
       const serviceUrl = subConverterUrl || SubConverterServiceUrls[0]
-      if (!(await fse.exists(proxyUrlsFromExternalFile))) {
+      if (!(await hfs.isFile(proxyUrlsFromExternalFile))) {
         throw new Error(`proxyUrlsFromExternalFile ${proxyUrlsFromExternalFile} 不存在`)
       }
-      const proxyUrls = await fse.readFile(proxyUrlsFromExternalFile, 'utf8')
+      const proxyUrls = (await hfs.text(proxyUrlsFromExternalFile)) ?? ''
       const url = getConvertedUrl(proxyUrls, serviceUrl)
       if (url !== currentSubscribe.url) {
         const newSubscribe = { ...currentSubscribe, proxyUrls, url }
@@ -283,7 +282,7 @@ export async function update({
 onInit(() => {
   init()
   // wait all init done
-  process.nextTick(() => {
+  queueMicrotask(() => {
     scheduleAutoUpdate()
   })
 })

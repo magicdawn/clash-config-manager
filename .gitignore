@@ -5,6 +5,7 @@ report.*.json
 .turbo
 src-tauri/target
 lib-tests/
+.idea
 
 # build
 /bundle

@@ -1,5 +1,6 @@
 import './modules/init-meta'
 import path from 'node:path'
+import { registerIpcMain } from '@egoist/tipc/main'
 import { app, Menu, session, Tray } from 'electron'
 import contextMenu from 'electron-context-menu'
 import debug from 'electron-debug'
@@ -11,6 +12,7 @@ import { initMainWindow, mainWindow } from './main-window'
 import { loadDevtoolExtensions } from './modules/devtool-extensions'
 import { assetsDir } from './modules/ipc/common'
 import setMenu from './modules/menu'
+import { router } from './modules/tipc'
 
 main()
 async function main() {
@@ -29,12 +31,8 @@ async function main() {
 
   initAppEvents()
   ElectronStore.initRenderer()
-  await Promise.all([
-    //
-    import('./modules/fix-paste'),
-    import('./modules/ipc'),
-    app.whenReady(),
-  ])
+  registerIpcMain(router)
+  await Promise.all([import('./modules/fix-paste'), import('./modules/ipc'), app.whenReady()])
 
   // 需要 app.ready: menu | tray | session.defaultSession
   setMenu()

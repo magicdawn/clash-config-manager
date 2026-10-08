@@ -4,12 +4,12 @@ import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space } from 'ant
 import { clipboard } from 'electron'
 import { attempt, uniq } from 'es-toolkit'
 import * as Yaml from 'js-yaml'
-import { Brave, Chrome } from 'mac-helper'
 import { useEffect, useMemo, useState } from 'react'
 import { tldExists } from 'tldjs'
 import URI from 'urijs'
 import { useSnapshot } from 'valtio'
 import LineMdConfirm from '~icons/line-md/confirm'
+import { client } from '$ui/modules/rpc-client'
 import { message } from '$ui/store'
 import { generateConfig } from '$ui/utility/generate'
 import { state } from './model'
@@ -122,8 +122,7 @@ export default function AddRuleModal(props: IProps) {
   })
 
   const fetchBrowserState = useLockFn(async () => {
-    const brave = { running: await Brave.isRunning(), url: (await Brave.getActiveTab())?.url }
-    const chrome = { running: await Chrome.isRunning(), url: (await Chrome.getActiveTab())?.url }
+    const { brave, chrome } = await client.getRunningBrowserInfo()
     const successTargets = [brave.url && 'brave', chrome.url && 'chrome'].filter(Boolean).join(', ')
     if (successTargets) {
       message.success(`获取 ${successTargets} url 成功`)

@@ -1,7 +1,8 @@
+import fsp from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { join as pathjoin } from 'node:path'
+import { hfs } from '@humanfs/node'
 import { omit } from 'es-toolkit'
-import fse from 'fs-extra'
 import moment from 'moment'
 import ms from 'ms'
 import pmap from 'promise.map'
@@ -10,6 +11,7 @@ import { rootActions, rootState } from '$ui/store'
 import { ProxyGroupType, ProxyGroupTypeConfig } from '$ui/types/ClashConfig'
 import { getRuleItemContent } from './remote-rules'
 import { truthy } from './ts-filter'
+import type { Stats } from 'node:fs'
 import type { ClashConfig, RuleItem, Subscribe } from '$ui/types'
 
 export function getUsingItems() {
@@ -366,11 +368,11 @@ export async function generateConfigThenWrite({ forceUpdate = false }: { forceUp
   const configYaml = YAML.dump(config)
   const file = getConfigFile(name, clashMeta)
 
-  let stat: fse.Stats
+  let stat: Stats
   const unchangedSkipWrite =
-    (await fse.exists(file)) &&
-    configYaml === (await fse.readFile(file, 'utf8')) &&
-    (stat = await fse.stat(file)) &&
+    (await hfs.isFile(file)) &&
+    configYaml === (await hfs.text(file)) &&
+    (stat = await fsp.stat(file)) &&
     moment(stat.mtimeMs).startOf('day').valueOf() === moment().startOf('day').valueOf() // same day
 
   let writed = false
@@ -378,7 +380,7 @@ export async function generateConfigThenWrite({ forceUpdate = false }: { forceUp
   if (unchangedSkipWrite) {
     msg = `无变化, 已跳过生成`
   } else {
-    await fse.outputFile(file, configYaml)
+    await hfs.write(file, configYaml)
     writed = true
     msg = `生成成功: ${file} 已更新`
   }

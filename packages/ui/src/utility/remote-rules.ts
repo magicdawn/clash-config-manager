@@ -1,5 +1,5 @@
 import path from 'node:path'
-import fse from 'fs-extra'
+import { hfs } from '@humanfs/node'
 import { appCacheDir } from '$ui/common'
 import { readUrlWithCache } from './remote'
 import type { RemoteRuleItem } from '$ui/types'
@@ -12,13 +12,12 @@ export function externalFileForRuleItem(id: string) {
 
 async function saveRomoteRuleItem(id: string, content: string) {
   const file = externalFileForRuleItem(id)
-  await fse.outputFile(file, content, 'utf8')
+  await hfs.write(file, content)
 }
 
 export async function getRuleItemContent(id: string) {
   const file = externalFileForRuleItem(id)
-  if (!(await fse.pathExists(file))) return ''
-  return fse.readFile(file, 'utf8')
+  return (await hfs.text(file)) ?? ''
 }
 
 export async function updateRemoteConfig(item: RemoteRuleItem, forceUpdate = false) {

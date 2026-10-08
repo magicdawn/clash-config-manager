@@ -8,6 +8,7 @@ const isMac = process.platform === 'darwin'
 
 app.on('browser-window-created', (_, win) => {
   win.webContents.on('before-input-event', (event, input) => {
+    // eslint-disable-next-line unicorn/prefer-minimal-ternary
     const isCmdOrCtrl = isMac ? input.meta === true : input.control === true
 
     const hasShift = input.shift === true || input.modifiers.includes('shift')

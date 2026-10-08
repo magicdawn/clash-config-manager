@@ -1,9 +1,9 @@
 import path from 'node:path'
+import { hfs } from '@humanfs/node'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Alert, Button, Card, Col, Input, Modal, Radio, Row, Space, Tag } from 'antd'
 import debugFactory from 'debug'
 import { ipcRenderer, shell } from 'electron'
-import fse from 'fs-extra'
 import launch from 'launch-editor'
 import moment from 'moment'
 import { useCallback, useState } from 'react'
@@ -11,6 +11,7 @@ import { useSnapshot } from 'valtio'
 import { getAssetsDir, userDataPath } from '$ui/common'
 import storage, { customMerge, getExportData } from '$ui/storage'
 import { message, rootActions, rootState } from '$ui/store'
+import { outputJson } from '$ui/utility/fs'
 import useImmerState from '$ui/utility/hooks/useImmerState'
 import helper, { STORAGE_FILE } from '$ui/utility/sync/webdav/helper'
 import { ConfigForUseSystemProxy } from './fragments'
@@ -43,7 +44,7 @@ export default function Preference() {
   const onExport = useMemoizedFn(async () => {
     const file = path.join(userDataPath, 'Backups/Manual Export', `${moment().format('YYYY-MM-DD HH.mm')}.json`)
     const data = getExportData()
-    await fse.outputJson(file, data, { spaces: 2 })
+    await outputJson(file, data)
     setExportSuccessModalVisible(true)
     setExportSuccessFile(file)
   })
@@ -60,7 +61,7 @@ export default function Preference() {
     if (cancel) return
     console.log(data)
 
-    await fse.outputJson(file, data, { spaces: 2 })
+    await outputJson(file, data)
     setExportSuccessModalVisible(true)
     setExportSuccessFile(file)
   })
@@ -87,10 +88,10 @@ export default function Preference() {
   const importFile = async (file: string) => {
     let importData: any
     try {
-      importData = await fse.readJson(file)
+      importData = await hfs.json(file)
     } catch (e) {
       console.log(e.stack || e)
-      return message.error(`readJson fail: ` + `\n${e.stack}` || e)
+      return message.error(`readJson fail: \n${e.stack || e}`)
     }
     importAction(importData)
   }

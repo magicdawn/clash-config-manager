@@ -1,12 +1,15 @@
 import path from 'node:path'
+import { hfs } from '@humanfs/node'
 import bytes from 'bytes'
 import envPaths from 'env-paths'
-import fse from 'fs-extra'
 import * as YAML from 'js-yaml'
 import ky from 'ky'
 import moment from 'moment'
+import { fsp } from '$ui/libs'
 import { EUaType, type ClashConfig } from '$ui/types'
+import { exists } from './fs'
 import { md5 } from './hasher'
+import type { Stats } from 'node:fs'
 
 const appCacheDir = envPaths('clash-config-manager', { suffix: '' }).cache
 
@@ -26,9 +29,9 @@ export async function getSubscribeNodesByUrl({
 
   // 今天之内的更新不会再下载
   let shouldReuse = false
-  let stat: fse.Stats
+  let stat: Stats
   const isRecent = (mtime: Date) => moment(mtime).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')
-  if (!forceUpdate && (await fse.pathExists(file)) && (stat = await fse.stat(file)) && isRecent(stat.mtime)) {
+  if (!forceUpdate && (await exists(file)) && (stat = await fsp.stat(file)) && isRecent(stat.mtime)) {
     shouldReuse = true
   }
 
@@ -36,7 +39,7 @@ export async function getSubscribeNodesByUrl({
   let valuableHeaders: Record<string, string> | undefined
   let status: string | undefined
   if (shouldReuse) {
-    text = await fse.readFile(file, 'utf8')
+    text = (await hfs.text(file)) ?? ''
   } else {
     ;({ text, valuableHeaders } = await readUrl({ url, file, uaType }))
     if (valuableHeaders?.['subscription-userinfo']) {
@@ -80,7 +83,7 @@ const readUrl = async ({ url, file, uaType }: { url: string; file: string; uaTyp
   })
 
   const text = await res.text()
-  await fse.outputFile(file, text)
+  await hfs.write(file, text)
   console.log('File %s writed', file)
 
   const headers = res.headers

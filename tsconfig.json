@@ -3,8 +3,8 @@
   "include": ["./packages/**/*.ts", "./packages/**/*.tsx"],
   "compilerOptions": {
     "paths": {
-      "$main*": ["./packages/main/src/*"],
-      "$ui*": ["./packages/ui/src/*"],
+      "$main/*": ["./packages/main/src/*"],
+      "$ui/*": ["./packages/ui/src/*"],
       "$clash-utils": ["./packages/clash-utils/src/"],
       "$clash-utils/*": ["./packages/clash-utils/src/*"]
     },

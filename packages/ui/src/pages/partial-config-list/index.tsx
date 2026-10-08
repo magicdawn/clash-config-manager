@@ -6,11 +6,11 @@ import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } 
 import { CSS } from '@dnd-kit/utilities'
 import * as remote from '@electron/remote'
 import { css } from '@emotion/react'
+import { hfs } from '@humanfs/node'
 import { LinkTwo, SdCard } from '@icon-park/react'
 import { useMemoizedFn } from 'ahooks'
 import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Select, Space, Tooltip } from 'antd'
 import debugFactory from 'debug'
-import fse from 'fs-extra'
 import * as Yaml from 'js-yaml'
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEventHandler } from 'react'
 import { proxy, useSnapshot } from 'valtio'
@@ -522,7 +522,7 @@ function ModalAddOrEdit() {
   const [editInEditorMaskVisible, setEditInEditorMaskVisible] = useState(false)
   const editInEditor = useMemoizedFn(async (editor = 'code') => {
     const content = form.getFieldValue('content')
-    await fse.outputFile(TEMP_EDITING_FILE, content, 'utf8')
+    await hfs.write(TEMP_EDITING_FILE, content)
 
     // wait edit
     setEditInEditorMaskVisible(true)
@@ -544,7 +544,7 @@ function ModalAddOrEdit() {
     debug('exec: %o', { cmd, stdout })
 
     // read & set
-    const newContent = await fse.readFile(TEMP_EDITING_FILE, 'utf8')
+    const newContent = await hfs.text(TEMP_EDITING_FILE)
     if (newContent !== content) {
       form.setFieldsValue({ content: newContent })
       message.success('文件内容已更新')
