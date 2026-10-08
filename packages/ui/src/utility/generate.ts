@@ -230,7 +230,7 @@ export async function generateConfig({ forceUpdate = false }: { forceUpdate?: bo
       .flat(),
   ]
 
-  // yaml 中已定义的 proxy-groups
+  // yaml 中 手动定义的 proxy-groups
   let proxyGroups = config['proxy-groups']
 
   // 包含 filter 的 proxy-group
@@ -238,7 +238,6 @@ export async function generateConfig({ forceUpdate = false }: { forceUpdate?: bo
   proxyGroupsWithFilter.forEach((item) => {
     const { filter } = item
     delete item.filter // remove from final config `proxyGroup.filter`
-
     let filterFn: ((serverName: string) => boolean) | undefined
     if (filter) {
       if (filter.startsWith('/') && filter.endsWith('/')) {
@@ -252,8 +251,9 @@ export async function generateConfig({ forceUpdate = false }: { forceUpdate?: bo
   })
   proxyGroupsWithFilter = proxyGroupsWithFilter.filter((pg) => pg.proxies?.length) // filter 完, 若 proxies 为空, 则去除 proxy-group
 
-  // 明确标识为 `middle` 的 proxy-group, middle 表示 proxy chain 中间位置; 出口有 (sub generated + filtered)
-  // config valid check
+  // 明确标识为 `middle` 的 proxy-group, middle 表示 proxy chain 中间位置; 出口有 sub generated + filtered)
+  // config valid check: loop is detected in ProxyGroup
+  // Proxy & middle 可能循环引用, 不知如何思考
   if (proxyGroups.some((pg) => pg.middle && (pg.type !== ProxyGroupType.Select || pg.proxies?.length || pg.filter))) {
     throw new Error('`middle` proxy-group 必须是 `select` 类型, proxies 和 filter 必须为空')
   }

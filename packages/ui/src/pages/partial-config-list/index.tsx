@@ -30,6 +30,8 @@ const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')
 const TEMP_EDITING_FILE = path.join(remote.app.getPath('userData'), 'temp', '临时文件-关闭生效.yml')
 
+type ExternalEditor = 'code' | 'zed' | 'subl'
+
 const newUUID = () => crypto.randomUUID()
 
 const editModalData = proxy({
@@ -245,11 +247,7 @@ export function PartialConfigItem({ item, index }: { item: RuleItem; index: numb
 
         <div className='info'>
           {type === 'local' ? (
-            <Tooltip
-              title={
-                <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{limitLines(item.content, 10)}</div>
-              }
-            >
+            <Tooltip title={<div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{limitLines(item.content, 10)}</div>}>
               <div className='ellipsis'>内容: {firstLine(item.content)}</div>
             </Tooltip>
           ) : (
@@ -520,7 +518,7 @@ function ModalAddOrEdit() {
   })
 
   const [editInEditorMaskVisible, setEditInEditorMaskVisible] = useState(false)
-  const editInEditor = useMemoizedFn(async (editor = 'code') => {
+  const editInEditor = useMemoizedFn(async (editor: ExternalEditor = 'code') => {
     const content = form.getFieldValue('content')
     await hfs.write(TEMP_EDITING_FILE, content)
 
@@ -640,12 +638,7 @@ function ModalAddOrEdit() {
         </Form.Item>
 
         <Form.Item label='名称' name='name' rules={[{ required: true, message: '名称不能为空' }]}>
-          <Input
-            className='input-row'
-            onPressEnter={onInputPressEnter}
-            style={{ width: '200px' }}
-            disabled={readonly}
-          />
+          <Input className='input-row' onPressEnter={onInputPressEnter} style={{ width: '200px' }} disabled={readonly} />
         </Form.Item>
 
         {type === 'local' && (
@@ -656,12 +649,15 @@ function ModalAddOrEdit() {
               readonly={readonly}
               header={
                 <Row style={{ alignItems: 'center' }}>
-                  <Space direction='horizontal'>
+                  <Space orientation='horizontal'>
                     <Button disabled={readonly || editInEditorMaskVisible} onClick={() => editInEditor('code')}>
-                      使用 vscode 编辑
+                      使用 VSCode 编辑
                     </Button>
-                    <Button disabled={readonly || editInEditorMaskVisible} onClick={() => editInEditor('atom')}>
-                      使用 Atom 编辑
+                    <Button disabled={readonly || editInEditorMaskVisible} onClick={() => editInEditor('zed')}>
+                      使用 Zed 编辑
+                    </Button>
+                    <Button disabled={readonly || editInEditorMaskVisible} onClick={() => editInEditor('subl')}>
+                      使用 Sublime Text 编辑
                     </Button>
                   </Space>
 
@@ -698,13 +694,7 @@ function ModalAddOrEdit() {
               />
             </Form.Item>
 
-            <Form.Item
-              name='autoUpdate'
-              label=''
-              wrapperCol={{ offset: 3 }}
-              className='auto-update'
-              valuePropName='checked'
-            >
+            <Form.Item name='autoUpdate' label='' wrapperCol={{ offset: 3 }} className='auto-update' valuePropName='checked'>
               <Checkbox style={{ marginLeft: 0 }}>自动更新</Checkbox>
             </Form.Item>
 
