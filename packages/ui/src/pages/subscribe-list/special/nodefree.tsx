@@ -1,5 +1,5 @@
 import moment from 'moment'
-import type { Subscribe } from '$ui/types'
+import type { Subscribe } from '$ui/models'
 
 export type NodefreeData = {
   recentDays: number
@@ -28,8 +28,7 @@ export function nodefreeGetUrls(subscribe: NodefreeSubscribe): string[] {
   }
 
   // https://nodefree.org/dy/2023/01/2023010x.yaml
-  const tpl = (m: moment.Moment) =>
-    `https://nodefree.org/dy/${m.format('YYYY')}/${m.format('MM')}/${m.format('YYYYMMDD')}.yaml`
+  const tpl = (m: moment.Moment) => `https://nodefree.org/dy/${m.format('YYYY')}/${m.format('MM')}/${m.format('YYYYMMDD')}.yaml`
 
   const urls: string[] = []
   for (let i = 0; i < recentDays; i++) {

@@ -7,7 +7,7 @@ import ms from 'ms'
 import { runGenerate } from '$ui/modules/commands/run'
 import { currentConfigUsingAndEnabled } from '../current-config/model'
 import { state, updateRemote } from './model'
-import type { RuleItem } from '$ui/types'
+import type { RuleItem } from '$ui/models'
 
 const timerRegistry: Record<string, NodeJS.Timeout | undefined> = {}
 const cleanupTimer = (timerKey: string) => {

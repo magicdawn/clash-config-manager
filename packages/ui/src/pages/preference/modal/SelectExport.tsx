@@ -6,7 +6,7 @@ import { proxy, useSnapshot } from 'valtio'
 import { storageDataDisplayNames, type ExportData } from '$ui/storage'
 import { truthy } from '$ui/utility/ts-filter'
 import type { Merge } from 'type-fest'
-import type { ConfigItem } from '$ui/types'
+import type { ConfigItem } from '$ui/models'
 
 type SelectExportProps = {
   visible: boolean
@@ -206,8 +206,7 @@ export async function pickDataFrom(dataFrom: any) {
   if (treeSource?.current_config_v2?.list) {
     treeSource.current_config_v2.list.forEach((item, i) => {
       const { id } = item
-      const target =
-        treeSource?.subscribe_list?.find((i) => i.id === id) || treeSource?.rule_list?.find((i) => i.id === id)
+      const target = treeSource?.subscribe_list?.find((i) => i.id === id) || treeSource?.rule_list?.find((i) => i.id === id)
       item.name = target?.name
     })
     treeSource.current_config_v2.list = treeSource.current_config_v2.list.filter((item) => {

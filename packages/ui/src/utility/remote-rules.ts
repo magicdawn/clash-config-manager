@@ -2,7 +2,7 @@ import path from 'node:path'
 import { hfs } from '@humanfs/node'
 import { appCacheDir } from '$ui/common'
 import { readUrlWithCache } from './remote'
-import type { RemoteRuleItem } from '$ui/types'
+import type { RemoteRuleItem } from '$ui/models'
 
 // use cacheDir because this is cleanable
 // you can recover from url settings

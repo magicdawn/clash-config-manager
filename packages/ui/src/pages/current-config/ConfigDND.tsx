@@ -10,7 +10,7 @@ import { state as libraryRuleListState } from '../partial-config-list/model'
 import { state as librarySubscribeState } from '../subscribe-list/store'
 import styles from './ConfigDND.module.less'
 import { state } from './model'
-import type { ConfigItem } from '$ui/types'
+import type { ConfigItem } from '$ui/models'
 
 const dndDebug = debugFactory('app:page:current-config:ConfigDND')
 
@@ -183,13 +183,7 @@ export function ConfigDND() {
                   {provided.placeholder}
                   {subscribeSourceList.map((item, index) => {
                     return (
-                      <Source
-                        type='source'
-                        key={item.id}
-                        item={item}
-                        index={index}
-                        isDragDisabled={resultIdSet.has(item.id)}
-                      />
+                      <Source type='source' key={item.id} item={item} index={index} isDragDisabled={resultIdSet.has(item.id)} />
                     )
                   })}
                 </div>
@@ -205,13 +199,7 @@ export function ConfigDND() {
                   {provided.placeholder}
                   {ruleSourceList.map((item, index) => {
                     return (
-                      <Source
-                        type='source'
-                        key={item.id}
-                        item={item}
-                        index={index}
-                        isDragDisabled={resultIdSet.has(item.id)}
-                      />
+                      <Source type='source' key={item.id} item={item} index={index} isDragDisabled={resultIdSet.has(item.id)} />
                     )
                   })}
                 </div>
@@ -268,9 +256,7 @@ const Source = ({ item, type, isDragDisabled, index }: SourceProps) => {
             <Tooltip
               classNames={{ root: styles.tooltipDetailOverlay }}
               placement={type === 'result' ? 'right' : 'left'}
-              title={
-                <div className={clsx(styles.tooltipDetail, { [styles.yaml]: item.tooltipIsYaml })}>{item.tooltip}</div>
-              }
+              title={<div className={clsx(styles.tooltipDetail, { [styles.yaml]: item.tooltipIsYaml })}>{item.tooltip}</div>}
             >
               <IconAntDesignInfoCircleOutlined className='help-icon' />
             </Tooltip>

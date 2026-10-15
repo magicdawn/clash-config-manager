@@ -4,7 +4,7 @@ import { message } from '$ui/store'
 import { updateRemoteConfig } from '$ui/utility/remote-rules'
 import { valtioState } from '$ui/utility/valtio-helper'
 import { restartAutoUpdate, scheduleAutoUpdate, stopAutoUpdate } from './model.auto-update'
-import type { RuleItem } from '$ui/types'
+import type { RuleItem } from '$ui/models'
 
 const RULE_LIST_STORAGE_KEY = 'rule_list'
 
@@ -55,7 +55,7 @@ export const actions = { check, add, del, edit, updateRemote }
 onInit(() => {
   init()
   // wait all init done
-  process.nextTick(() => {
+  queueMicrotask(() => {
     scheduleAutoUpdate()
   })
 })

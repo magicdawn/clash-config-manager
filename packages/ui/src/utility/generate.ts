@@ -7,12 +7,12 @@ import moment from 'moment'
 import ms from 'ms'
 import pmap from 'promise.map'
 import { YAML } from '$ui/libs'
+import { ProxyGroupType, ProxyGroupTypeConfig } from '$ui/models/ClashConfig'
 import { rootActions, rootState } from '$ui/store'
-import { ProxyGroupType, ProxyGroupTypeConfig } from '$ui/types/ClashConfig'
 import { getRuleItemContent } from './remote-rules'
 import { truthy } from './ts-filter'
 import type { Stats } from 'node:fs'
-import type { ClashConfig, RuleItem, Subscribe } from '$ui/types'
+import type { ClashConfig, RuleItem, Subscribe } from '$ui/models'
 
 export function getUsingItems() {
   // subscribe

@@ -39,9 +39,9 @@ import { useSnapshot } from 'valtio'
 import IconParkOutlineCopy from '~icons/icon-park-outline/copy'
 import IconParkOutlineTips from '~icons/icon-park-outline/tips'
 import { colorHighlightValue } from '$ui/common'
+import { EUaType, type Subscribe, type SubscribeSpecialType } from '$ui/models'
 import { MarkdownView } from '$ui/modules/markdown'
 import { message } from '$ui/store'
-import { EUaType, type Subscribe, type SubscribeSpecialType } from '$ui/types'
 import { sharedPageCss } from '../_layout/_shared'
 import { defaultNodefreeSubscribe, nodefreeGetUrls, type NodefreeData } from './special/nodefree'
 import { actions, getConvertedUrl, state, SubConverterServiceUrls } from './store'
@@ -389,9 +389,7 @@ function SubscribeItem({
 
         {!specialType && (
           <Descriptions.Item label='链接'>
-            <div className={clsx('break-all text-ellipsis', { 'line-clamp-1': !urlVisible })}>
-              {urlVisible ? url : urlHided}
-            </div>
+            <div className={clsx('break-all text-ellipsis', { 'line-clamp-1': !urlVisible })}>{urlVisible ? url : urlHided}</div>
 
             <Divider className='my-5px' />
 
@@ -424,9 +422,7 @@ function SubscribeItem({
           </Descriptions.Item>
         )}
 
-        {specialType === 'nodefree' && (
-          <Descriptions.Item label='抓取天数'>{specialData?.recentDays}</Descriptions.Item>
-        )}
+        {specialType === 'nodefree' && <Descriptions.Item label='抓取天数'>{specialData?.recentDays}</Descriptions.Item>}
 
         <Descriptions.Item label='操作'>
           <Space className='self-end' wrap>
@@ -437,13 +433,7 @@ function SubscribeItem({
 
             {updateError ? (
               <Popover placement='top' title={<>update error: {updateError?.stack || updateError?.message}</>}>
-                <Button
-                  type='primary'
-                  danger
-                  onClick={handleUpdate}
-                  loading={updateLoading}
-                  onKeyDown={disableEnterAsClick}
-                >
+                <Button type='primary' danger onClick={handleUpdate} loading={updateLoading} onKeyDown={disableEnterAsClick}>
                   <IconParkOutlineRefresh />
                   更新
                 </Button>
@@ -567,15 +557,7 @@ const defaultModalState: ModalState = {
   index: null,
 }
 
-function ModalAddOrEdit({
-  visible,
-  onClose,
-  modalState,
-}: {
-  visible: boolean
-  onClose: () => void
-  modalState: ModalState
-}) {
+function ModalAddOrEdit({ visible, onClose, modalState }: { visible: boolean; onClose: () => void; modalState: ModalState }) {
   const editItem = modalState.item
   const editItemIndex = modalState.index
   const mode = modalState.mode
@@ -609,9 +591,7 @@ function ModalAddOrEdit({
   // max={240} // 240h = 10d
   const [autoUpdateIntervalMin, autoUpdateIntervalMax] = [1, 240]
   const autoUpdateIntervalDefault = 12
-  const [autoUpdateInterval, setAutoUpdateInterval] = useState(
-    () => editItem?.autoUpdateInterval || autoUpdateIntervalDefault,
-  ) // 小时
+  const [autoUpdateInterval, setAutoUpdateInterval] = useState(() => editItem?.autoUpdateInterval || autoUpdateIntervalDefault) // 小时
 
   type OnChange = ChangeEventHandler<HTMLInputElement>
   const onUrlChange: OnChange = useCallback((e) => {
@@ -784,18 +764,14 @@ function ModalAddOrEdit({
                 onChange={(checked) => setProxyUrlsFromExternalFile(checked ? '' : undefined)}
               />
               {typeof proxyUrlsFromExternalFile === 'string' && (
-                <Input
-                  value={proxyUrlsFromExternalFile}
-                  onChange={(e) => setProxyUrlsFromExternalFile(e.target.value)}
-                />
+                <Input value={proxyUrlsFromExternalFile} onChange={(e) => setProxyUrlsFromExternalFile(e.target.value)} />
               )}
             </div>
             <div>
               proxyUrls:
               <Input.TextArea
                 className={clsx(
-                  typeof proxyUrlsFromExternalFile === 'string' &&
-                    'bg-gray/70 cursor-alias focus:bg-gray/10 hover:bg-gray/10',
+                  typeof proxyUrlsFromExternalFile === 'string' && 'bg-gray/70 cursor-alias focus:bg-gray/10 hover:bg-gray/10',
                 )}
                 value={proxyUrls}
                 onChange={(e) => setProxyUrls(e.target.value)}

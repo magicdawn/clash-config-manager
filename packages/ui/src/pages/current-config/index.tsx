@@ -3,9 +3,9 @@ import { Button, Checkbox, Col, Divider, Input, Row, Tag, Tooltip } from 'antd'
 import { shell } from 'electron'
 import launch from 'launch-editor'
 import { useSnapshot } from 'valtio'
+import { ProxyGroupTypeConfig } from '$ui/models/ClashConfig'
 import { runGenerate } from '$ui/modules/commands/run'
 import { message } from '$ui/store'
-import { ProxyGroupTypeConfig } from '$ui/types/ClashConfig'
 import { DEFAULT_NAME, getConfigFile, getConfigFileDisplay } from '$ui/utility/generate'
 import { ConfigDND } from './ConfigDND'
 import styles from './index.module.less'
@@ -173,8 +173,8 @@ export default function ConfigList() {
                 <>
                   ✅ 使用中文: {ProxyGroupTypeConfig['url-test'].nameZh} / {ProxyGroupTypeConfig.fallback.nameZh} /{' '}
                   {ProxyGroupTypeConfig.select.nameZh}
-                  <br />❎ 使用英文: {ProxyGroupTypeConfig['url-test'].nameEn} / {ProxyGroupTypeConfig.fallback.nameEn}{' '}
-                  / {ProxyGroupTypeConfig.select.nameEn}
+                  <br />❎ 使用英文: {ProxyGroupTypeConfig['url-test'].nameEn} / {ProxyGroupTypeConfig.fallback.nameEn} /{' '}
+                  {ProxyGroupTypeConfig.select.nameEn}
                 </>
               }
             >

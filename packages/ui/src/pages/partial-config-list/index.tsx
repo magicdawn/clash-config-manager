@@ -24,7 +24,7 @@ import { firstLine, limitLines } from '$ui/utility/text-util'
 import RuleAddModal from './AddRuleModal'
 import styles from './index.module.less'
 import { actions, state } from './model'
-import type { LocalRuleItem, RuleItem } from '$ui/types'
+import type { LocalRuleItem, RuleItem } from '$ui/models'
 
 const { Option } = Select
 const debug = debugFactory('app:libraryRuleList')

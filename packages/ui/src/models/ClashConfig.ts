@@ -66,7 +66,7 @@ export enum ProxyGroupType {
  */
 export const ProxyGroupTypeConfig: Record<ProxyGroupType, { emoji: string; nameZh: string; nameEn: string }> = {
   [ProxyGroupType.UrlTest]: {
-    emoji: '🚀',
+    emoji: '⚡',
     nameZh: '最快',
     nameEn: 'Fastest',
   },
@@ -76,7 +76,7 @@ export const ProxyGroupTypeConfig: Record<ProxyGroupType, { emoji: string; nameZ
     nameEn: 'Fallback',
   },
   [ProxyGroupType.Select]: {
-    emoji: '✅', // ✅ ✔
+    emoji: '✅', // ✅ ✔ ☑️
     nameZh: '选择',
     nameEn: 'Select',
   },
