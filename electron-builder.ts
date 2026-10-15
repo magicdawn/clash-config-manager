@@ -63,6 +63,8 @@ export default defineConfig({
   artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
 
   mac: {
+    forceCodeSigning: false,
+    identity: null,
     category: 'public.app-category.developer-tools',
     publish: {
       provider: 'github',

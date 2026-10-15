@@ -76,7 +76,7 @@ export const ProxyGroupTypeConfig: Record<ProxyGroupType, { emoji: string; nameZ
     nameEn: 'Fallback',
   },
   [ProxyGroupType.Select]: {
-    emoji: '✔', // ✅ ✔
+    emoji: '✅', // ✅ ✔
     nameZh: '选择',
     nameEn: 'Select',
   },
