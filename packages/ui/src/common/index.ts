@@ -1,7 +1,7 @@
 import * as remote from '@electron/remote'
-import { ipcRenderer } from 'electron'
 import envPaths from 'env-paths'
 import pMemoize from 'p-memoize'
+import { client } from '$ui/modules/rpc-client'
 
 export const APP_NAME = 'clash-config-manager'
 
@@ -22,7 +22,7 @@ export const appTempDir = appEnvPaths.temp
 
 // bundled assets
 export const getAssetsDir = pMemoize(async () => {
-  return await ipcRenderer.invoke('getAssetsDir')
+  return (await client.getDirs()).assetsDir
 })
 
 export const __DEV__ = import.meta.env.DEV

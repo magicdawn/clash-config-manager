@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron'
 import { proxy, useSnapshot } from 'valtio'
 import { runGenerate } from '$ui/modules/commands/run'
+import { client } from '$ui/modules/rpc-client'
 import { message, rootActions, rootState } from '$ui/store'
 import AddRuleModal, { type Mode } from '../partial-config-list/AddRuleModal'
 
@@ -10,11 +11,11 @@ const state = proxy({ modalVisible: false })
 
 const _setVisible = (val: boolean) => {
   state.modalVisible = val
-  ipcRenderer.invoke('set-top-most', val)
+  client.setTopMost(val)
   if (val) {
     document.title += ` - 已置顶`
   } else {
-    document.title = document.title.split(' - ')[0]
+    document.title = document.title.split(' - ', 1)[0]
   }
 }
 
@@ -33,9 +34,7 @@ export const addRuleModalActions = {
 
 export function useAddRuleModal({ handleAdd, mode }: { handleAdd: HandleAdd; mode: Mode }) {
   const { modalVisible } = useSnapshot(state)
-  const modal = (
-    <AddRuleModal visible={modalVisible} setVisible={addRuleModalActions.setVisible} onOk={handleAdd} mode={mode} />
-  )
+  const modal = <AddRuleModal visible={modalVisible} setVisible={addRuleModalActions.setVisible} onOk={handleAdd} mode={mode} />
   return { open, close, modal }
 }
 
@@ -66,7 +65,7 @@ export function useAddRuleModalFromGlobal() {
       const content = ruleItem.content || ''
       const contentLines = content.split('\n')
       function checkInclude(s: string) {
-        return !!contentLines.find((x) => !x.trim().startsWith('#') && x.includes(s))
+        return !!contentLines.find((x) => !x.trimStart().startsWith('#') && x.includes(s))
       }
 
       const check = rule.split(',').slice(0, 2).join(',')
@@ -82,11 +81,11 @@ export function useAddRuleModalFromGlobal() {
         }
 
         // target 不同
-        const idx = contentLines.findIndex((x) => !x.trim().startsWith('#') && x.includes(check))
+        const idx = contentLines.findIndex((x) => !x.trimStart().startsWith('#') && x.includes(check))
         newContent = contentLines.with(idx, `  - ${rule}`).join('\n')
         msg = `已替换规则 ${rule} 至 ${ruleItem.name}`
       } else {
-        newContent = `${content.trimEnd()}\n` + `  - ${rule}` + `\n`
+        newContent = `${content.trimEnd()}\n  - ${rule}\n`
         msg = `已添加规则 ${rule} 至 ${ruleItem.name}`
       }
 

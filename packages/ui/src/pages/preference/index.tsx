@@ -3,12 +3,13 @@ import { hfs } from '@humanfs/node'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { Alert, Button, Card, Col, Input, Modal, Radio, Row, Space, Tag } from 'antd'
 import debugFactory from 'debug'
-import { ipcRenderer, shell } from 'electron'
+import { shell } from 'electron'
 import launch from 'launch-editor'
 import moment from 'moment'
 import { useCallback, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import { getAssetsDir, userDataPath } from '$ui/common'
+import { client } from '$ui/modules/rpc-client'
 import storage, { customMerge, getExportData } from '$ui/storage'
 import { message, rootActions, rootState } from '$ui/store'
 import { outputJson } from '$ui/utility/fs'
@@ -50,11 +51,7 @@ export default function Preference() {
   })
 
   const onSelectExport = useMemoizedFn(async () => {
-    const file = path.join(
-      userDataPath,
-      'Backups/Manual Export',
-      `${moment().format('选择导出__YYYY_MM_DD__HH_mm')}.json`,
-    )
+    const file = path.join(userDataPath, 'Backups/Manual Export', `${moment().format('选择导出__YYYY_MM_DD__HH_mm')}.json`)
 
     // 选择数据
     const { cancel, data } = await pickDataFrom(getExportData())
@@ -97,7 +94,7 @@ export default function Preference() {
   }
 
   const onSelectFileAndImport = useMemoizedFn(async () => {
-    const file = await ipcRenderer.invoke('select-file')
+    const file = await client.selectFile()
     if (!file) return
     await importFile(file)
   })
@@ -320,14 +317,7 @@ function ModalSyncConfig(props: ModalSyncConfigProps) {
   })
 
   return (
-    <Modal
-      width={'80vw'}
-      className={styles.modal}
-      title='服务器设置'
-      open={visible}
-      onOk={handleOk}
-      onCancel={handleCancel}
-    >
+    <Modal width={'80vw'} className={styles.modal} title='服务器设置' open={visible} onOk={handleOk} onCancel={handleCancel}>
       <Alert
         type='success'
         message='同步服务'
@@ -341,8 +331,8 @@ function ModalSyncConfig(props: ModalSyncConfigProps) {
                 </a>
               </li>
               <li style={{ lineHeight: 1.5 }}>
-                存放在文件 <Tag color='warning'>{STORAGE_FILE}</Tag> 中, 以
-                <Tag color='default'>to-base64(to-json(config))</Tag> 形式保存
+                存放在文件 <Tag color='warning'>{STORAGE_FILE}</Tag> 中, 以<Tag color='default'>to-base64(to-json(config))</Tag>{' '}
+                形式保存
               </li>
             </ul>
           </span>

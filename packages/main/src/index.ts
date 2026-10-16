@@ -10,9 +10,9 @@ import { is } from 'electron-util'
 import fixPath from 'fix-path'
 import { initMainWindow, mainWindow } from './main-window'
 import { loadDevtoolExtensions } from './modules/devtool-extensions'
-import { assetsDir } from './modules/ipc/common'
+import { initFixPaste } from './modules/fix-paste'
 import setMenu from './modules/menu'
-import { router } from './modules/tipc'
+import { assetsDir, router } from './modules/tipc'
 
 main()
 async function main() {
@@ -32,7 +32,8 @@ async function main() {
   initAppEvents()
   ElectronStore.initRenderer()
   registerIpcMain(router)
-  await Promise.all([import('./modules/fix-paste'), import('./modules/ipc'), app.whenReady()])
+  initFixPaste()
+  await app.whenReady()
 
   // 需要 app.ready: menu | tray | session.defaultSession
   setMenu()

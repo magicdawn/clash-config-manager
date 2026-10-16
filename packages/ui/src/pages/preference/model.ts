@@ -1,5 +1,5 @@
-import { ipcRenderer } from 'electron'
 import { onInit, onReload } from '$ui/modules/global-model'
+import { client } from '$ui/modules/rpc-client'
 import storage from '$ui/storage'
 import { valtioState } from '$ui/utility/valtio-helper'
 
@@ -47,6 +47,6 @@ export { state }
 
 onInit(init)
 onInit(() => {
-  ipcRenderer.invoke('set-use-system-proxy', state.useSystemProxy)
+  client.setUseSystemProxy(!!state.useSystemProxy)
 })
 onReload(load)

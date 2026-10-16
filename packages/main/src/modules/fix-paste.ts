@@ -6,24 +6,26 @@ import { app } from 'electron'
 
 const isMac = process.platform === 'darwin'
 
-app.on('browser-window-created', (_, win) => {
-  win.webContents.on('before-input-event', (event, input) => {
-    // eslint-disable-next-line unicorn/prefer-minimal-ternary
-    const isCmdOrCtrl = isMac ? input.meta === true : input.control === true
+export function initFixPaste() {
+  app.on('browser-window-created', (_, win) => {
+    win.webContents.on('before-input-event', (event, input) => {
+      // eslint-disable-next-line unicorn/prefer-minimal-ternary
+      const isCmdOrCtrl = isMac ? input.meta === true : input.control === true
 
-    const hasShift = input.shift === true || input.modifiers.includes('shift')
+      const hasShift = input.shift === true || input.modifiers.includes('shift')
 
-    const hasAlt = input.alt === true || input.modifiers.includes('alt')
+      const hasAlt = input.alt === true || input.modifiers.includes('alt')
 
-    // Prefer code (layout-agnostic)
-    const isV = input.code === 'KeyV' || input.key === 'v'
+      // Prefer code (layout-agnostic)
+      const isV = input.code === 'KeyV' || input.key === 'v'
 
-    const shouldPaste = input.type === 'keyDown' && isCmdOrCtrl && !hasShift && !hasAlt && isV
+      const shouldPaste = input.type === 'keyDown' && isCmdOrCtrl && !hasShift && !hasAlt && isV
 
-    if (shouldPaste) {
-      // Native paste path (works with Monaco)
-      win.webContents.paste()
-      event.preventDefault()
-    }
+      if (shouldPaste) {
+        // Native paste path (works with Monaco)
+        win.webContents.paste()
+        event.preventDefault()
+      }
+    })
   })
-})
+}
