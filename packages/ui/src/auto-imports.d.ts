@@ -18,7 +18,13 @@ declare global {
   const IconAntDesignSettingFilled: typeof import('~icons/ant-design/setting-filled.jsx').default
   const IconAntDesignUnorderedListOutlined: typeof import('~icons/ant-design/unordered-list-outlined.jsx').default
   const IconIcSharpSync: typeof import('~icons/ic/sharp-sync.jsx').default
+  const IconLogosChrome: typeof import('~icons/logos/chrome.jsx').default
+  const IconLucideClipboardList: typeof import('~icons/lucide/clipboard-list.jsx').default
   const IconParkOutlineDelete: typeof import('~icons/icon-park-outline/delete.jsx').default
   const IconParkOutlineEdit: typeof import('~icons/icon-park-outline/edit.jsx').default
   const IconParkOutlineRefresh: typeof import('~icons/icon-park-outline/refresh.jsx').default
+  const IconSelfhstBrave: typeof import('~icons/selfhst/brave.jsx').default
+  const IconSelfhstChrome: typeof import('~icons/selfhst/chrome.jsx').default
+  const IconSelfhstGoogleChrome: typeof import('~icons/selfhst/google-chrome.jsx').default
+  const IconStreamlineUltimateNetworkBrowser: typeof import('~icons/streamline-ultimate/network-browser.jsx').default
 }

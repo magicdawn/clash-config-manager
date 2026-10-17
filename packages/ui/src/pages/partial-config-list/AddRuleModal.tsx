@@ -1,7 +1,6 @@
 import { css } from '@emotion/react'
 import { useLockFn, useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space } from 'antd'
-import { clipboard } from 'electron'
+import { AutoComplete, Button, Col, Input, Modal, Row, Select, Space, Tooltip } from 'antd'
 import { attempt, uniq } from 'es-toolkit'
 import * as Yaml from 'js-yaml'
 import { useEffect, useMemo, useState } from 'react'
@@ -85,10 +84,7 @@ export default function AddRuleModal(props: IProps) {
   const [extraTargets, setExtraTargets] = useState<string[]>([])
   const [targetAutoCompleteList, setTargetAutoCompleteList] = useState<string[]>([])
 
-  const allTargets = useMemo(
-    () => uniq([target, ...DEFAULT_TARGETS, ...extraTargets].filter(Boolean)),
-    [target, extraTargets],
-  )
+  const allTargets = useMemo(() => uniq([target, ...DEFAULT_TARGETS, ...extraTargets].filter(Boolean)), [target, extraTargets])
 
   /**
    * source url
@@ -115,7 +111,7 @@ export default function AddRuleModal(props: IProps) {
   })
 
   const handleReadClipboardUrl = useMemoizedFn(async () => {
-    const url = await clipboard.readText()
+    const url = await navigator.clipboard.readText()
     if (url) {
       changeProcessUrl(url)
     }
@@ -129,11 +125,20 @@ export default function AddRuleModal(props: IProps) {
     } else {
       message.error('没有获取到 url')
     }
-
     const url = brave.url ?? chrome.url
     if (url) {
       changeProcessUrl(url)
     }
+  })
+  const fetchBraveState = useLockFn(async () => {
+    const { brave } = await client.getRunningBrowserInfo()
+    const url = brave.url
+    if (url) changeProcessUrl(url)
+  })
+  const fetchChromeState = useLockFn(async () => {
+    const { chrome } = await client.getRunningBrowserInfo()
+    const url = chrome.url
+    if (url) changeProcessUrl(url)
   })
 
   const updateExtraTargets = useMemoizedFn(async () => {
@@ -222,9 +227,21 @@ export default function AddRuleModal(props: IProps) {
         <Input style={{ flex: 1 }} value={processUrl} onChange={(e) => setProcessUrl(e.target.value)} />
       </Space.Compact>
       <div className='mt-10px flex flex-wrap gap-x-3 gap-y-1'>
-        <Button onClick={handleReadClipboardUrl}>从剪贴板读取</Button>
-        <Button type='primary' onClick={fetchBrowserState}>
-          从 Brave 或 Chrome 中读取
+        <Button onClick={handleReadClipboardUrl}>
+          <IconLucideClipboardList className='size-1.2em' />
+          从剪贴板读取
+        </Button>
+        <Tooltip title={<>Brave then Chrome</>}>
+          <Button type='primary' onClick={fetchBrowserState}>
+            <IconStreamlineUltimateNetworkBrowser className='size-1.2em' />
+            从浏览器中读取
+          </Button>
+        </Tooltip>
+        <Button onClick={fetchBraveState}>
+          <IconSelfhstBrave className='size-1.2em' />从 Brave 中读取
+        </Button>
+        <Button onClick={fetchChromeState}>
+          <IconSelfhstGoogleChrome className='size-1.2em' />从 Chrome 中读取
         </Button>
       </div>
 
