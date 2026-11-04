@@ -14,7 +14,9 @@ export default defineConfig({
   // TODO: get node version based on electron version, output from `pnpm electron -i`
   target: 'node24',
   env: { NODE_ENV: env },
-  external: ['electron'],
-  noExternal: [/.*/],
-  // inlineOnly: false, // false: Suppress all warnings about inlineOnly option.
+  deps: {
+    neverBundle: ['electron'],
+    alwaysBundle: [/.*/],
+    onlyBundle: false,
+  },
 })

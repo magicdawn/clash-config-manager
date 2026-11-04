@@ -10,7 +10,6 @@ import { is } from 'electron-util'
 import fixPath from 'fix-path'
 import { initMainWindow, mainWindow } from './main-window'
 import { loadDevtoolExtensions } from './modules/devtool-extensions'
-import { initFixPaste } from './modules/fix-paste'
 import setMenu from './modules/menu'
 import { assetsDir, router } from './modules/tipc'
 
@@ -32,10 +31,9 @@ async function main() {
   initAppEvents()
   ElectronStore.initRenderer()
   registerIpcMain(router)
-  initFixPaste()
-  await app.whenReady()
 
   // 需要 app.ready: menu | tray | session.defaultSession
+  await app.whenReady()
   setMenu()
   setTray()
   addRequestExtraHeadersSupport()
@@ -105,9 +103,7 @@ function setTray() {
       type: 'normal',
       click: restoreWindow,
     },
-    {
-      type: 'separator',
-    },
+    { type: 'separator' },
     {
       type: 'normal',
       label: '更新订阅并重新生成配置',
@@ -123,9 +119,7 @@ function setTray() {
         mainWindow?.webContents.send('add-rule')
       },
     },
-    {
-      type: 'separator',
-    },
+    { type: 'separator' },
     {
       type: 'normal',
       label: '退出 clash-config-manager',

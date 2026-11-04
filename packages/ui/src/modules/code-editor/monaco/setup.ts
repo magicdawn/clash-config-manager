@@ -9,12 +9,19 @@
 // 简单包含所有功能
 // import 'monaco-editor'
 
-import 'monaco-editor/languages/definitions/yaml/register.js'
+// 轻量一点的
+import 'monaco-editor/editor/editor.main.js' // 新版没有
+
 // 也可以更为详细的定制
+// import 'monaco-editor/languages/definitions/yaml/register.js'
+// import 'monaco-editor/features/codicon/register.js'
+// import 'monaco-editor/features/folding/register.js'
+// import 'monaco-editor/features/clipboard/register.js'
+// import 'monaco-editor/features/find/register.js'
+// import 'monaco-editor/features/linesOperations/register.js'
+
 import * as monaco from 'monaco-editor/editor/editor.api.js' // for api usage
 import editorWorker from 'monaco-editor/editor/editor.worker?worker'
-// import 'monaco-editor/editor/edcore.main.js' // 新版没有
-
 export { monaco }
 
 self.MonacoEnvironment = {

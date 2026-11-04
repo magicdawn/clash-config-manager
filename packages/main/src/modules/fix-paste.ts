@@ -6,7 +6,7 @@ import { app } from 'electron'
 
 const isMac = process.platform === 'darwin'
 
-export function initFixPaste() {
+export function setupMonacoEditorPasteFix() {
   app.on('browser-window-created', (_, win) => {
     win.webContents.on('before-input-event', (event, input) => {
       // eslint-disable-next-line unicorn/prefer-minimal-ternary

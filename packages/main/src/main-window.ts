@@ -9,6 +9,7 @@ export interface AppMainWindow extends BrowserWindow {
 }
 
 export let mainWindow: AppMainWindow | undefined
+
 export async function initMainWindow() {
   mainWindow = createMainWindow()
 
@@ -23,7 +24,7 @@ export async function initMainWindow() {
   }
 }
 
-const createMainWindow = () => {
+function createMainWindow() {
   // Load the previous state with fallback to defaults
   const mainWindowState = windowStateKeeper({
     defaultWidth: 800,
